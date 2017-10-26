@@ -19,7 +19,6 @@ export const styles = StyleSheet.create({
     width: 300,
     resizeMode: 'contain'
   },
-
   sponsor: {
     marginTop:200,
     height:150,
@@ -46,18 +45,21 @@ export const styles = StyleSheet.create({
     textAlign:'center',
     fontSize:20
   },
-  input: {
-    width: 200,
-    paddingLeft:5,
-    paddingRight:5,
-    color:'white',
-    borderWidth: 1 ,
-    borderColor:'white',
-    borderRadius: 4,
-  },
+
   loginButton: {
     width:200,
     color:'#003366',
     backgroundColor: 'white',
-  }
+  },container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    input: {
+        width: 200,
+        paddingLeft:20,
+        height: 50,
+        borderWidth: 1,
+        borderColor: "red",
+    }
 })

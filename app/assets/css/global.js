@@ -8,7 +8,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   justifyStretch: {
-  justifyContent: 'space-between'
+    justifyContent: 'space-around',
+    paddingTop:50,
+    paddingBottom:50
+ },
+ justifyMiddle: {
+   justifyContent: 'center'
  },
   mainColorBG: {
     backgroundColor: '#003366',
@@ -47,19 +52,30 @@ export const styles = StyleSheet.create({
   },
 
   loginButton: {
-    width:200,
-    color:'#003366',
-    backgroundColor: 'white',
-  },container: {
+    width:300,
+    backgroundColor: '#ffffff',
+    borderColor: 'white',
+    display:'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35,
+  },
+  logginText : {
+    color:'#003366'
+  },
+  container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
+
     input: {
-        width: 200,
+        width: 300,
         paddingLeft:20,
-        height: 50,
+        height: 35,
         borderWidth: 1,
-        borderColor: "red",
+        marginBottom:15,
+        borderColor: "white",
+        color: "white",
     }
 })

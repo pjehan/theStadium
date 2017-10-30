@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import { Text, View, Image, TextInput } from 'react-native';
+import { Text, View, Image, TextInput, Keyboard } from 'react-native';
 export default class CustomInput extends Component {
 
     constructor(props) {

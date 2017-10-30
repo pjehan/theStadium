@@ -22,6 +22,8 @@ export const styles = StyleSheet.create({
   },
   middleLogo: {
     width: 300,
+    alignSelf: 'center',
+    paddingLeft:50,
     resizeMode: 'contain'
   },
   sponsor: {
@@ -45,7 +47,8 @@ export const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   slogant: {
-    width: 250,
+    width:250,
+      alignSelf: 'center',
     color:'white',
     textAlign:'center',
     fontSize:20
@@ -60,7 +63,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     height: 35,
   },
-  logginText : {
+  loginText : {
     color:'#003366'
   },
   container: {
@@ -72,7 +75,7 @@ export const styles = StyleSheet.create({
     input: {
         width: 300,
         paddingLeft:20,
-        height: 35,
+        height: 40,
         borderWidth: 1,
         marginBottom:15,
         borderColor: "white",

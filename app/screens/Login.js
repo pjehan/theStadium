@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Text, View, Image, TextInput, Button } from 'react-native';
+import {
+    Dimensions,
+    TouchableOpacity,
+    Text,
+    View,
+    Image,
+    TextInput,
+    Button,
+    KeyboardAvoidingView,
+    ScrollView
+} from 'react-native';
+
+import orientation from '../config/orientation';
 import { styles } from '../assets/css/global';
 import CustomInput from '../components/CustomInput';
+
+
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -10,19 +24,30 @@ export default class Login extends Component {
       email: '',
       password: '',
       databse: '',
-    }
+        orientation: orientation.isPortrait() ? 'portrait' : 'landscape',
+        devicetype: orientation.isTablet() ? 'tablet' : 'phone'
+    };
+    Dimensions.addEventListener('change', () => {
+          this.setState({
+              orientation: orientation.isPortrait() ? 'portrait' : 'landscape'
+          });
+      })
   }
 
   onChange(state, newvalue) {
     this.setState({[state]: newvalue})
   }
-  logginIn() {
+  loginIn() {
     //fetch to databse
 
   }
   render() {
+      var {navigate} = this.props.navigation;
+
     return (
-      <View style={[styles.mainColorBG, styles.justifyStretch]}>
+        <ScrollView contentContainerStyle={[styles.mainColorBG, styles.justifyStretch]} >
+      <KeyboardAvoidingView
+          behavior="padding">
       <View>
         <Image style={styles.middleLogo} source={require('../assets/img/logo-blanc.png')} />
         <Text style={styles.slogant}>Partagez et suivez lactualité du foot amateur</Text>
@@ -49,13 +74,15 @@ export default class Login extends Component {
                     <Text>Connexion</Text>
                   </TouchableOpacity>
         </View>
+
+      </KeyboardAvoidingView>
         <View>
-          <Text>Pas encore inscrit ?</Text>
-          <TouchableOpacity style={styles.loginButton} onPress={() => {this.logginIn()}}>
-            <Text>Démmarer l'inscription</Text>
+          <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("SignIn", {})} >Pas encore inscrit ?</Text>
+          <TouchableOpacity onPress={() => navigate("SignIn", {})} disabled={!!(this.state.email && this.state.password)} style={styles.loginButton} >
+            <Text style={styles.loginText}>Démmarer l'inscription</Text>
           </TouchableOpacity>
         </View>
-      </View>
+        </ScrollView>
     )
   }
 };

@@ -46,13 +46,14 @@ export default class Login extends Component {
 
     return (
         <ScrollView contentContainerStyle={[styles.mainColorBG, styles.justifyStretch]} >
+            <View >
+                <Image style={styles.middleLogo} source={require('../assets/img/logo-blanc.png')} />
+                <Text style={styles.slogant}>Partagez et suivez l'actualité du foot amateur</Text>
+            </View>
       <KeyboardAvoidingView
           behavior="padding">
-      <View>
-        <Image style={styles.middleLogo} source={require('../assets/img/logo-blanc.png')} />
-        <Text style={styles.slogant}>Partagez et suivez lactualité du foot amateur</Text>
-      </View>
-        <View >
+
+        <View>
         <Text>{this.state.databse}</Text>
           <CustomInput
               container={''}
@@ -70,7 +71,7 @@ export default class Login extends Component {
                   state={'password'}
                   onChangeParent={(state,newvalue) => this.onChange(state,newvalue)}
                   />
-                  <TouchableOpacity style={styles.loginButton} onPress={() => {this.logginIn()}}>
+                  <TouchableOpacity style={styles.loginButton} onPress={() => {this.loginIn()}}>
                     <Text>Connexion</Text>
                   </TouchableOpacity>
         </View>

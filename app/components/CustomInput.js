@@ -17,10 +17,11 @@ export default class CustomInput extends Component {
         return(
             <View style={this.props.container}>
                 <TextInput
+                    {...this.props}
                     onChangeText={(value) => this.onChange(value)}
                     placeholder={this.props.placeholder}
                     style={this.props.input}
-                    securityTextEntry={this.props.security}
+                    secureTextEntry={this.props.security}
                     underlineColorAndroid="transparent"
                 />
             </View>

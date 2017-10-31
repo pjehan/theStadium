@@ -8,8 +8,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   justifyStretch: {
-    justifyContent: 'space-around',
-    paddingTop:50,
+    justifyContent: 'space-between',
+    paddingTop:70,
     paddingBottom:50
  },
  justifyMiddle: {
@@ -26,6 +26,11 @@ export const styles = StyleSheet.create({
     paddingLeft:50,
     resizeMode: 'contain'
   },
+    headerMiddleLogo: {
+        width: 200,
+        alignSelf: 'center',
+        resizeMode: 'contain'
+    },
   sponsor: {
     marginTop:200,
     height:150,
@@ -80,5 +85,19 @@ export const styles = StyleSheet.create({
         marginBottom:15,
         borderColor: "white",
         color: "white",
+    },
+    innerContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    outerContainer: {
+
+        backgroundColor: '#003366',
+        borderBottomColor: '#f2f2f2',
+        borderBottomWidth: 1,
+        padding: 15,
+        height: 70,
     }
 })

@@ -15,6 +15,25 @@ export const styles = StyleSheet.create({
  justifyMiddle: {
    justifyContent: 'center'
  },
+    h1: {
+        fontSize: 25,
+        textAlign:'center',
+        fontWeight: '400',
+    },
+    description: {
+        fontSize: 16,
+        textAlign:'center',
+        fontWeight: '500',
+    },
+    miniDescription: {
+        fontSize: 10,
+        textAlign:'center',
+        fontWeight: '100',
+        color: '#333'
+    },
+    mainColor: {
+      color: '#003366'
+    },
   mainColorBG: {
     backgroundColor: '#003366',
     flex:1,
@@ -27,9 +46,8 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
     headerMiddleLogo: {
-        width: 200,
-        alignSelf: 'center',
-        resizeMode: 'contain'
+        width: 150,
+        resizeMode: 'contain',
     },
   sponsor: {
     marginTop:200,
@@ -89,15 +107,14 @@ export const styles = StyleSheet.create({
     innerContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        justifyContent:'center'
     },
     outerContainer: {
-
         backgroundColor: '#003366',
         borderBottomColor: '#f2f2f2',
         borderBottomWidth: 1,
-        padding: 15,
+        padding: 5,
         height: 70,
     }
-})
+});

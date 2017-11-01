@@ -80,7 +80,7 @@ export default class Login extends Component {
         <View>
           <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("SignIn", {})} >Pas encore inscrit ?</Text>
           <TouchableOpacity onPress={() => navigate("SignIn", {})} disabled={!!(this.state.email && this.state.password)} style={styles.loginButton} >
-            <Text style={styles.loginText}>Démmarer l'inscription</Text>
+            <Text style={styles.loginText}>Démarrer l'inscription</Text>
           </TouchableOpacity>
         </View>
         </ScrollView>

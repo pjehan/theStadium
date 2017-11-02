@@ -12,10 +12,18 @@ import SignIn from '../../screens/SignIn/SignIn';
 import PlayerSignIn from '../../screens/SignIn/Player/Player'
 import Header from '../../layout/Header.js';
 import PlayerSignInTabView from '../../screens/SignIn/Player/PlayerSignInTabView';
+import PlayerInfos from '../../screens/SignIn/Player/PlayerInfos';
 
 export const PlayerSignInStack = TabNavigator({
         Player: {
             screen: PlayerSignIn,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header {...props} />,
+
+            })
+        },
+        PlayerInfosfrom: {
+            screen: PlayerInfos,
             navigationOptions: ({navigation}) => ({
                 header: props => <Header {...props} />,
 
@@ -25,6 +33,7 @@ export const PlayerSignInStack = TabNavigator({
     {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
         tabBarVisible: false,
+        tabBarPosition: 'bottom'
     });
 export const Navigator = StackNavigator({
         Loading: {

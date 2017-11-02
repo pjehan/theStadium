@@ -28,7 +28,7 @@ export default class PlayerSignIn extends Component {
     }
     render() {
         return (
-            <View style={{flex: 6, justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
+            <View style={{flex: 7, justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
                 <View style={{flex: 2, justifyContent: 'center'}}>
                     <Text style={[styles.h1, styles.mainColor]}>Création de votre profil</Text>
@@ -38,6 +38,7 @@ export default class PlayerSignIn extends Component {
                 </View>
 
                 <KeyboardAvoidingView
+                    style={{flex:3, justifyContent: 'space-around', alignItems:'center'}}
                     behavior="padding">
                     <CustomInput
                         container={''}
@@ -61,6 +62,7 @@ export default class PlayerSignIn extends Component {
                         onChangeParent={() => {}}
                     />
                 </KeyboardAvoidingView>
+                <View style={{flex:2}}></View>
             </View>
         )
     }

@@ -17,17 +17,17 @@ export default class SignIn extends Component {
                     <Button
                         onPress={() => {navigate('',{})}}
                         title="Supporter"
-                        color="#cccccc"
+                        color="#003366"
                     />
                     <Button
                         onPress={() => {navigate('PlayerSignIn',{})}}
                         title="Joueur"
-                        color="#cccccc"
+                        color="#003366"
                     />
                     <Button
                         onPress={() => {}}
                         title="Entraineur"
-                        color="#cccccc"
+                        color="#003366"
                     />
                 </View>
                 <View style={{flex:1}}></View>

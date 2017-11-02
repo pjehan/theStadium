@@ -20,18 +20,31 @@ export default class PlayerSignInTabView extends Component {
 
     render() {
         const { routes } = this.props.navigation.state;
+        const index = this.props.navigation.state.index;
             return (
+<View>
+            <Text>{index + 1}/{routes.length}</Text>
                 <View style={styles.tabContainer}>
-                    {routes.map(route => (
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate(route.routeName)}
-                            style={styles.tab}
-                            key={route.routeName}
-                        >
-                            <Text>{route.routeName} rfeajfneoafeaub</Text>
-                        </TouchableOpacity>
+
+                    {routes.map((route, Index) => (
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 10/2,
+                                backgroundColor: 'red'
+                            }} />
+                        <View style={[{
+                            backgroundColor: index+1 === Index ? '#cccccc' : '#003366'
+                        },{width: 30,
+                            marginTop:4,
+                            height:2,
+                            }]}/>
+                            <Text>{Index}</Text>
+                        </View>
                     ))}
                 </View>
+</View>
             );
     }
 }

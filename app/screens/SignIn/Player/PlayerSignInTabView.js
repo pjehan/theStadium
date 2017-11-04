@@ -4,16 +4,9 @@ import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity} from 'react
 const styles = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
-        height: 48,
     },
     tab: {
-        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-        margin: 4,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 4,
     },
 });
 export default class PlayerSignInTabView extends Component {
@@ -22,7 +15,7 @@ export default class PlayerSignInTabView extends Component {
         const { routes } = this.props.navigation.state;
         const index = this.props.navigation.state.index;
             return (
-<View>
+<View style={styles.tab}>
             <Text>{index + 1}/{routes.length}</Text>
                 <View style={styles.tabContainer}>
 
@@ -32,15 +25,16 @@ export default class PlayerSignInTabView extends Component {
                                 width: 10,
                                 height: 10,
                                 borderRadius: 10/2,
-                                backgroundColor: 'red'
+                                backgroundColor:  index +1 === Index ? '#cccccc' : '#003366'
                             }} />
                         <View style={[{
-                            backgroundColor: index+1 === Index ? '#cccccc' : '#003366'
+                            backgroundColor: index <= Index ? '#cccccc' : '#003366'
                         },{width: 30,
                             marginTop:4,
                             height:2,
+                            display: Index === (routes.length - 1) ? 'none' : 'flex'
                             }]}/>
-                            <Text>{Index}</Text>
+
                         </View>
                     ))}
                 </View>

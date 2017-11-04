@@ -3,21 +3,7 @@ import React, {Component} from 'react';
 import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
 import {styles} from '../../../assets/css/global';
 import CustomInput from '../../../components/CustomInput';
-const style = StyleSheet.create({
-    tabContainer: {
-        flexDirection: 'row',
-        height: 48,
-    },
-    tab: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: 4,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 4,
-    },
-});
+import TabView from 'react-navigation'
 export default class PlayerSignIn extends Component {
 
     constructor(props){
@@ -62,7 +48,7 @@ export default class PlayerSignIn extends Component {
                         onChangeParent={() => {}}
                     />
                 </KeyboardAvoidingView>
-                <View style={{flex:2}}></View>
+                <TabView style={{flex:2}}/>
             </View>
         )
     }

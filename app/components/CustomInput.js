@@ -15,7 +15,7 @@ export default class CustomInput extends Component {
 
     render() {
         return(
-            <View style={this.props.container}>
+            <View style={[this.props.container,this.props.inputContainer]}>
                 <TextInput
                     {...this.props}
                     onChangeText={(value) => this.onChange(value)}
@@ -24,6 +24,7 @@ export default class CustomInput extends Component {
                     secureTextEntry={this.props.security}
                     underlineColorAndroid="transparent"
                 />
+                <Text style={{width: 300}}>{this.props.description}</Text>
             </View>
         )
     }

@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     },
 });
 export default class PlayerSignInTabView extends Component {
-
     render() {
         const { routes } = this.props.navigation.state;
         const index = this.props.navigation.state.index;
@@ -25,7 +24,7 @@ export default class PlayerSignInTabView extends Component {
                                 width: 10,
                                 height: 10,
                                 borderRadius: 10/2,
-                                backgroundColor:  index +1 === Index ? '#cccccc' : '#003366'
+                                backgroundColor:  index >= Index ? '#003366' : '#cccccc'
                             }} />
                         <View style={[{
                             backgroundColor: index <= Index ? '#cccccc' : '#003366'
@@ -37,6 +36,22 @@ export default class PlayerSignInTabView extends Component {
 
                         </View>
                     ))}
+                </View>
+                <View style={{flexDirection: 'row', height: 80, width:250, justifyContent:'space-between', alignItems:'center'}}>
+                <TouchableOpacity onPress={() => {
+                  if(index > 0) {
+                  this.props.navigation.navigate(routes[index - 1].key, {});
+                }
+              }}>
+                  <Text>{index == 0 ? '' : 'Precedent'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                  if(index + 1 != routes.length){
+                  this.props.navigation.navigate(routes[index + 1].key, {})}
+                }
+                }>
+                <Text>{index + 1 == routes.length ? 'Fin' : 'Suivant'}</Text>
+                </TouchableOpacity>
                 </View>
 </View>
             );

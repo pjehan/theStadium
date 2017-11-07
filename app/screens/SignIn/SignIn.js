@@ -15,7 +15,7 @@ export default class SignIn extends Component {
                 </View>
                 <View  style={{flex:3, justifyContent:'space-around'}}>
                     <Button
-                        onPress={() => {navigate('',{})}}
+                        onPress={() => {navigate('FanSignIn',{})}}
                         title="Supporter"
                         color="#003366"
                     />
@@ -25,7 +25,10 @@ export default class SignIn extends Component {
                         color="#003366"
                     />
                     <Button
-                        onPress={() => {}}
+                        onPress={() => {
+                          navigate('CoachSignIn',{coach: true})
+                        }
+                      }
                         title="Entraineur"
                         color="#003366"
                     />

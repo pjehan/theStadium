@@ -94,13 +94,14 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
+inputContainer: {
+  marginBottom: 15,
+},
     input: {
         width: 300,
         paddingLeft:20,
         height: 40,
         borderWidth: 1,
-        marginBottom:15,
         borderColor: "white",
         color: "white",
     },

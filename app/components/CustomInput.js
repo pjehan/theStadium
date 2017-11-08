@@ -9,8 +9,8 @@ export default class CustomInput extends Component {
         this.onChange = this.onChange.bind(this);
     }
 
-    onChange(test) {
-      this.props.onChangeParent(this.props.state, test)
+    onChange(value) {
+      this.props.onChangeParent(this.props.state, value)
     }
 
     render() {

@@ -13,6 +13,7 @@ export default class userBasic extends Component {
           firstname: '',
           date: '',
         }
+        this.onChangeInfos = this.onChangeInfos.bind(this)
     }
     onChangeInfos(state, newvalue) {
       console.log(state,newvalue)

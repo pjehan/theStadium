@@ -6,7 +6,7 @@ export default class CustomInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          date = '';
+          date: ''
         }
         this.onChange = this.onChange.bind(this);
         this.openDatePicker = this.openDatePicker.bind(this);
@@ -32,6 +32,7 @@ export default class CustomInput extends Component {
   }
     onDatePicked({action, year, month, day}) {
     if (action !== DatePickerAndroid.dismissedAction) {
+      this.props.onChangeParent(day + '/' + (month+1) + '/' + year);
     } else {
      console.log('non')
     }
@@ -43,7 +44,8 @@ export default class CustomInput extends Component {
         Input = <TouchableOpacity
         onPress={() => this.openDatePicker()}
         style={this.props.input}
-        ><Text>{this.props.placeholder}</Text></TouchableOpacity>
+        ><Text>{(this.state.date ? this.state.date :this.props.state.placeholder)}</Text>
+        </TouchableOpacity>
       } else {
         Input =  <TextInput
             {...this.props}

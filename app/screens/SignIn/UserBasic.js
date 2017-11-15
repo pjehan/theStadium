@@ -19,6 +19,7 @@ export default class userBasic extends Component {
       console.log(state,newvalue)
       this.setState({[state]: newvalue})
     }
+
     render() {
       var Coach = null;
       if(this.props.navigation.state.params.coach) {
@@ -56,20 +57,13 @@ export default class userBasic extends Component {
                         state={'name'}
                         onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                     />
-                    <Button onPress={() => {
-                      try {
-                          const {action, year, month, day} = DatePickerAndroid.open({
-                            // Use `new Date()` for current date.
-                            // May 25 2020. Month 0 is January.
-                            date: new Date(2020, 4, 25)
-                          });
-                          if (action !== DatePickerAndroid.dismissedAction) {
-                            // Selected year, month (0-11), day
-                          }
-                        } catch ({code, message}) {
-                          console.warn('Cannot open date picker', message);
-                        }
-                    }} title="Date de naissance"
+                    <CustomInput
+                    type={'date'}
+                    container={''}
+                    placeholder={'Date de naissance'}
+                    state={'birthdate'}
+                    input={styles.input}
+                    onChangeParent={(state,newvalue) => {this.onChangeInfos(state,newvalue)}}
                     />
                     {Coach}
                 </KeyboardAvoidingView>

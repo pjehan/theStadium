@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {View,StyleSheet,Button,DatePickerAndroid,Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
 import {styles} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
-import TabView from 'react-navigation'
 export default class userBasic extends Component {
 
     constructor(props){
@@ -11,17 +10,16 @@ export default class userBasic extends Component {
         this.state = {
           lastname: '',
           firstname: '',
-          date: '',
-        }
+          birthdate: '',
+        };
         this.onChangeInfos = this.onChangeInfos.bind(this)
     }
     onChangeInfos(state, newvalue) {
-      console.log(state,newvalue)
       this.setState({[state]: newvalue})
     }
 
     render() {
-      var Coach = null;
+      let Coach = null;
       if(this.props.navigation.state.params.coach) {
         Coach = <CustomInput
         container={''}
@@ -63,6 +61,7 @@ export default class userBasic extends Component {
                     placeholder={'Date de naissance'}
                     state={'birthdate'}
                     input={styles.input}
+                    format={'date'}
                     onChangeParent={(state,newvalue) => {this.onChangeInfos(state,newvalue)}}
                     />
                     {Coach}

@@ -23,11 +23,11 @@ export default class PlayerInfos extends Component {
     super(props);
     this.state={
       email : ''
-    }
+    };
     this.onChangeInfos = this.onChangeInfos.bind(this)
   }
   onChangeInfos(state, newvalue) {
-    console.log(this.props)
+    console.log(this.state);
     this.setState({[state]: newvalue})
   }
     render() {

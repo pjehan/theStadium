@@ -103,7 +103,7 @@ inputContainer: {
         height: 40,
         borderWidth: 1,
         borderColor: "white",
-        color: "white",
+        justifyContent: 'center'
     },
     innerContainer: {
         flex: 1,

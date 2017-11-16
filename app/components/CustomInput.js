@@ -12,6 +12,9 @@ import {
     Platform,
     Animated
 } from 'react-native';
+
+import { Icon } from 'react-native-elements';
+
 import Moment from 'moment';
 
 const date = new Date();
@@ -29,7 +32,9 @@ const FORMATS = {
  * placeholder : placeholder of the input
  * input : style of the input
  * state : Name of the state to modify on the parents component;
- *
+ * borderColor: Color of the border$
+ * textColor: color of the text and the placeholder
+ * backgroundColor: color of the background
  * type : type of the input [date, text, etc]
  * format : if the input is of type date, it is the format of the date (c.f. FORMATS const)
  *
@@ -42,12 +47,17 @@ export default class CustomInput extends Component {
             date: date,
             displayDate: '',
         };
+        if(!this.props.borderColor) {
+          this.props.borderColor = 'transparent'
+        }
         this.onChange = this.onChange.bind(this);
         this.openDatePicker = this.openDatePicker.bind(this);
         this.onDatePicked = this.onDatePicked.bind(this);
         this.getDateString = this.getDateString.bind(this);
     }
+    componentWillMount() {
 
+    }
     onChange(value) {
         this.props.onChangeParent(this.props.state, value)
     }
@@ -87,15 +97,16 @@ export default class CustomInput extends Component {
         if (this.props.type === 'date') {
             Input = <TouchableOpacity
                 onPress={() => this.openDatePicker()}
-                style={this.props.input}
-            ><Text>{datePlaceholder}</Text>
+                style={[this.props.input, {backgroundColor: this.props.backgroundColor}]}
+            ><Text>{datePlaceholder}</Text><Icon name={'expand-more'} size={30} color='#333333' />
             </TouchableOpacity>
         } else {
             Input = <TextInput
                 {...this.props}
+                placeholderTextColor={this.props.textColor}
                 onChangeText={(value) => this.onChange(value)}
                 placeholder={this.props.placeholder}
-                style={this.props.input}
+                style={[this.props.input, {backgroundColor: this.props.backgroundColor, borderColor: this.props.borderColor}]}
                 secureTextEntry={this.props.security}
                 underlineColorAndroid="transparent"
             />
@@ -103,7 +114,7 @@ export default class CustomInput extends Component {
         return (
             <View style={[this.props.container, this.props.inputContainer]}>
                 {Input}
-                <Text style={{width: 300}}>{this.props.description}</Text>
+                <Text style={{color:'#c8c8c8',fontSize:12,width: 300}}>{this.props.description}</Text>
             </View>
         )
     }

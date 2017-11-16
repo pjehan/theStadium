@@ -32,7 +32,7 @@ export default class PlayerInfos extends Component {
   }
     render() {
         return (
-          <View style={{flex: 7, justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
+          <View style={{flex: 7,backgroundColor:'white', justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
               <View style={{flex: 2, justifyContent: 'center'}}>
                   <Text style={[styles.h1, styles.mainColor]}>Création de votre profil</Text>
@@ -49,6 +49,9 @@ export default class PlayerInfos extends Component {
                       placeholder={'Adresse e-mail'}
                       input={styles.input}
                       state={'email'}
+                      textColor={'#333333'}
+                      borderColor={'transparent'}
+                      backgroundColor={'#eeeeee'}
                       onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                   />
                   <CustomInput
@@ -56,6 +59,9 @@ export default class PlayerInfos extends Component {
                       placeholder={'Mot de passe'}
                       input={styles.input}
                       state={'password'}
+                      textColor={'#333333'}
+                      borderColor={'transparent'}
+                      backgroundColor={'#eeeeee'}
                       security={true}
                       onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                       description={'Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.'}
@@ -65,6 +71,9 @@ export default class PlayerInfos extends Component {
                       placeholder={'Confirmer le mot de passe'}
                       input={styles.input}
                       state={'password'}
+                      textColor={'#333333'}
+                      borderColor={'transparent'}
+                      backgroundColor={'#eeeeee'}
                       security={true}
                       onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                   />

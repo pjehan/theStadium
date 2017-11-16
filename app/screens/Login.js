@@ -48,7 +48,7 @@ export default class Login extends Component {
         <ScrollView contentContainerStyle={[styles.mainColorBG, styles.justifyStretch]} >
             <View >
                 <Image style={styles.middleLogo} source={require('../assets/img/logo-blanc.png')} />
-                <Text style={styles.slogant}>Partagez et suivez l'actualité du foot amateur</Text>
+                <Text style={styles.slogant}>Partagez et suivez lactualité du foot amateur</Text>
             </View>
       <KeyboardAvoidingView
           behavior="padding">
@@ -58,6 +58,8 @@ export default class Login extends Component {
           <CustomInput
               container={''}
               placeholder={'Votre Identifiant'}
+              textColor={'white'}
+              borderColor={'white'}
               input={styles.input}
               state={'email'}
               security={false}
@@ -65,6 +67,8 @@ export default class Login extends Component {
               />
           <CustomInput
                   container={''}
+                  textColor={'white'}
+                  borderColor={'white'}
                   placeholder={'Votre Mot de Passe'}
                   input={styles.input}
                   security={true}
@@ -79,8 +83,8 @@ export default class Login extends Component {
       </KeyboardAvoidingView>
         <View>
           <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("SignIn", {})} >Pas encore inscrit ?</Text>
-          <TouchableOpacity onPress={() => navigate("SignIn", {})} disabled={!!(this.state.email && this.state.password)} style={styles.loginButton} >
-            <Text style={styles.loginText}>Démarrer l'inscription</Text>
+          <TouchableOpacity onPress={() => navigate("SignIn", {})} style={styles.loginButton} >
+            <Text style={styles.loginText}>Démarrer linscription</Text>
           </TouchableOpacity>
         </View>
         </ScrollView>

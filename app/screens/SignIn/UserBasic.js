@@ -26,10 +26,13 @@ export default class userBasic extends Component {
         placeholder={'Nom du club'}
         input={styles.input}
         state={'club'}
+        textColor={'#333333'}
+        borderColor={'transparent'}
+        backgroundColor={'#eeeeee'}
         onChangeParent={() => {(state,newvalue) => {this.onChangeInfos(state, newvalue)}}}/>
       }
         return (
-            <View style={{flex: 7, justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
+            <View style={{flex: 7, backgroundColor:'white',justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
                 <View style={{flex: 2, justifyContent: 'center'}}>
                     <Text style={[styles.h1, styles.mainColor]}>Création de votre profil</Text>
@@ -43,6 +46,9 @@ export default class userBasic extends Component {
                     behavior="padding">
                     <CustomInput
                         container={''}
+                        textColor={'#333333'}
+                        borderColor={'transparent'}
+                        backgroundColor={'#eeeeee'}
                         placeholder={'Nom'}
                         input={styles.input}
                         state={'lastname'}
@@ -50,6 +56,9 @@ export default class userBasic extends Component {
                     />
                     <CustomInput
                         container={''}
+                        textColor={'#333333'}
+                        borderColor={'transparent'}
+                        backgroundColor={'#eeeeee'}
                         placeholder={'Prénom'}
                         input={styles.input}
                         state={'name'}
@@ -58,6 +67,9 @@ export default class userBasic extends Component {
                     <CustomInput
                     type={'date'}
                     container={''}
+                    textColor={'#333333'}
+                    borderColor={'transparent'}
+                    backgroundColor={'#eeeeee'}
                     placeholder={'Date de naissance'}
                     state={'birthdate'}
                     input={styles.input}

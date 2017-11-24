@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     h1: {
         fontSize: 25,
         textAlign:'center',
-        fontWeight: '400',
+        fontWeight: '600',
     },
     description: {
         fontSize: 16,
@@ -105,10 +105,14 @@ inputContainer: {
     input: {
         width: 300,
         paddingLeft:20,
+        paddingRight: 20,
         height: 40,
         borderWidth: 1,
-        borderColor: "white",
-        color: "white",
+        borderColor: 'transparent',
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     innerContainer: {
         flex: 1,

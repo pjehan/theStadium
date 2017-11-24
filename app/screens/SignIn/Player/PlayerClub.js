@@ -53,8 +53,8 @@ const programmingLanguages = [
   }
 ];
 export default class PlayerInfos extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       team: '',
       poste: '',
@@ -62,10 +62,10 @@ export default class PlayerInfos extends Component {
   }
     render() {
         return (
-          <View style={{flex: 7, justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
+          <View style={{flex: 7,backgroundColor:'white', justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
               <View style={{flex: 2, justifyContent: 'center'}}>
-                  <Text style={[styles.h1, styles.mainColor]}>Création de votre profil</Text>
+                  <Text style={[styles.h1, styles.mainColor]}>Le football et vous</Text>
                   <Text style={[styles.miniDescription]}>
                       Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
                   </Text>
@@ -79,9 +79,12 @@ export default class PlayerInfos extends Component {
                       placeholder={'Nom de votre club'}
                       input={styles.input}
                       state={'club'}
-                      onChangeParent={() => {}}
+                      textColor={'#333333'}
+                      borderColor={'transparent'}
+                      backgroundColor={'#eeeeee'}
+                      onChangeParent={() => {console.log(this.state)}}
                   />
-                    <View style={[this.props.container,this.props.inputContainer]}>
+                    <View style={{backgroundColor:'#eeeeee'}}>
                   <Picker style={styles.input}
                     selectedValue={this.state.team}
                     prompt="Votre équipe"
@@ -91,7 +94,7 @@ export default class PlayerInfos extends Component {
                     ))}
               </Picker>
             </View>
-            <View style={[this.props.container,this.props.inputContainer]}>
+            <View style={{backgroundColor:'#eeeeee'}}>
           <Picker style={styles.input}
           prompt="Poste joué"
     selectedValue={this.state.poste}
@@ -100,6 +103,10 @@ export default class PlayerInfos extends Component {
       <Picker.Item key={index} label={i.label} value={i.value} />
     ))}
       </Picker>
+    </View>
+    <View style={{justifyContent:'flex-start', alignItems: 'flex-start'}}>
+      <Text style={{fontSize:12}}>Le nom de votre club napparait pas dans la liste </Text>
+      <Text style={{fontSize:12}}>Signalez un problème </Text>
     </View>
               </KeyboardAvoidingView>
           </View>

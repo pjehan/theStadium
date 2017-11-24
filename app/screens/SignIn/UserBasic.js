@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {View,StyleSheet,Button,DatePickerAndroid,Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
 import {styles} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
-import TabView from 'react-navigation'
 export default class userBasic extends Component {
 
     constructor(props){
@@ -12,25 +11,29 @@ export default class userBasic extends Component {
           lastname: '',
           firstname: '',
           date: '',
+          birthdate: '',
         };
         this.onChangeInfos = this.onChangeInfos.bind(this)
     }
     onChangeInfos(state, newvalue) {
-      console.log(state,newvalue)
       this.setState({[state]: newvalue})
     }
+
     render() {
-      var Coach = null;
+      let Coach = null;
       if(this.props.navigation.state.params.coach) {
         Coach = <CustomInput
         container={''}
         placeholder={'Nom du club'}
         input={styles.input}
         state={'club'}
+        textColor={'#333333'}
+        borderColor={'transparent'}
+        backgroundColor={'#eeeeee'}
         onChangeParent={() => {(state,newvalue) => {this.onChangeInfos(state, newvalue)}}}/>
       }
         return (
-            <View style={{flex: 7, justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
+            <View style={{flex: 7, backgroundColor:'white',justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
                 <View style={{flex: 2, justifyContent: 'center'}}>
                     <Text style={[styles.h1, styles.mainColor]}>Création de votre profil</Text>
@@ -44,6 +47,9 @@ export default class userBasic extends Component {
                     behavior="padding">
                     <CustomInput
                         container={''}
+                        textColor={'#333333'}
+                        borderColor={'transparent'}
+                        backgroundColor={'#eeeeee'}
                         placeholder={'Nom'}
                         input={styles.input}
                         state={'lastname'}
@@ -51,26 +57,25 @@ export default class userBasic extends Component {
                     />
                     <CustomInput
                         container={''}
+                        textColor={'#333333'}
+                        borderColor={'transparent'}
+                        backgroundColor={'#eeeeee'}
                         placeholder={'Prénom'}
                         input={styles.input}
                         state={'name'}
                         onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                     />
-                    <Button onPress={() => {
-                      try {
-                          const {action, year, month, day} = DatePickerAndroid.open({
-                            // Use `new Date()` for current date.
-                            // May 25 2020. Month 0 is January.
-                            date: new Date(2000, 0, 1),
-                              mode: 'spinner',
-                          });
-                          if (action !== DatePickerAndroid.dismissedAction) {
-                            // Selected year, month (0-11), day
-                          }
-                        } catch ({code, message}) {
-                          console.warn('Cannot open date picker', message);
-                        }
-                    }} title="Date de naissance"
+                    <CustomInput
+                    type={'date'}
+                    container={''}
+                    textColor={'#333333'}
+                    borderColor={'transparent'}
+                    backgroundColor={'#eeeeee'}
+                    placeholder={'Date de naissance'}
+                    state={'birthdate'}
+                    input={styles.input}
+                    format={'date'}
+                    onChangeParent={(state,newvalue) => {this.onChangeInfos(state,newvalue)}}
                     />
                     {Coach}
                 </KeyboardAvoidingView>

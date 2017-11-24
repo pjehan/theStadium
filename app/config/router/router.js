@@ -20,6 +20,9 @@ const SignInTabBar = {
         tabBarPosition: 'bottom'
       };
 
+/** TimeLine **/
+import TimeLine from '../../screens/TimeLine';
+
 export const PlayerSignInStack = TabNavigator({
         Player: {
             screen: UserBasic,
@@ -60,7 +63,7 @@ export const FanSignInStack = TabNavigator({
       })
   },
 },
-  SignInTabBar)
+  SignInTabBar);
 
   export const CoachSignInStack = TabNavigator({
     Coach: {
@@ -78,7 +81,7 @@ export const FanSignInStack = TabNavigator({
         })
     },
   },
-    SignInTabBar)
+    SignInTabBar);
 
 export const Navigator = StackNavigator({
         Loading: {
@@ -96,13 +99,13 @@ export const Navigator = StackNavigator({
         SignIn: {
             screen: SignIn,
             navigationOptions: ({navigation}) => ({
-                header: props => <Header {...props} />
+                header: props => <Header headerType="logo" backIcon={true} {...props} />
             })
         },
         PlayerSignIn: {
             screen: PlayerSignInStack,
             navigationOptions: ({navigation}) => ({
-                header: props => <Header {...props} />,
+                header: props => <Header headerType="logo" backIcon={true} {...props} />,
                 tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
                 tabBarVisible: false,
 
@@ -111,7 +114,7 @@ export const Navigator = StackNavigator({
         FanSignIn: {
           screen: FanSignInStack,
           navigationOptions: ({navigation}) => ({
-              header: props => <Header {...props} />,
+              header: props => <Header headerType="logo" backIcon={true} {...props} />,
               tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
               tabBarVisible: false,
 
@@ -120,11 +123,17 @@ export const Navigator = StackNavigator({
         CoachSignIn: {
           screen: CoachSignInStack,
           navigationOptions: ({navigation}) => ({
-              header: props => <Header {...props} />,
+              header: props => <Header headerType="logo" backIcon={true} {...props} />,
               tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
               tabBarVisible: false,
 
           }),
+        },
+        TimeLine: {
+            screen: TimeLine,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header headerType="text" backIcon={false} {...props} />,
+            })
         }
     },
     {

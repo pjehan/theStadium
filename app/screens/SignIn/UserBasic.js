@@ -12,7 +12,7 @@ export default class userBasic extends Component {
           lastname: '',
           firstname: '',
           date: '',
-        }
+        };
         this.onChangeInfos = this.onChangeInfos.bind(this)
     }
     onChangeInfos(state, newvalue) {
@@ -61,7 +61,8 @@ export default class userBasic extends Component {
                           const {action, year, month, day} = DatePickerAndroid.open({
                             // Use `new Date()` for current date.
                             // May 25 2020. Month 0 is January.
-                            date: new Date(2020, 4, 25)
+                            date: new Date(2000, 0, 1),
+                              mode: 'spinner',
                           });
                           if (action !== DatePickerAndroid.dismissedAction) {
                             // Selected year, month (0-11), day

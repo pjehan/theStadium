@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
         fontWeight: '500',
     },
     miniDescription: {
-        fontSize: 10,
+        fontSize: 14,
         textAlign:'center',
         fontWeight: '100',
         color: '#333'
@@ -38,6 +38,11 @@ export const styles = StyleSheet.create({
     backgroundColor: '#003366',
     flex:1,
     alignItems: 'center',
+  },
+  greyColorBG: {
+      backgroundColor: '#cccccc',
+      flex:1,
+      alignItems: 'center',
   },
   middleLogo: {
     width: 300,
@@ -113,9 +118,7 @@ inputContainer: {
     },
     outerContainer: {
         backgroundColor: '#003366',
-        borderBottomColor: '#f2f2f2',
-        borderBottomWidth: 1,
         padding: 5,
-        height: 70,
+        height: 85,
     }
 });

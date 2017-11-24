@@ -17,7 +17,6 @@ export default class CustomInput extends Component {
         return(
             <View style={[this.props.container,this.props.inputContainer]}>
                 <TextInput
-                    {...this.props}
                     onChangeText={(value) => this.onChange(value)}
                     placeholder={this.props.placeholder}
                     style={this.props.input}

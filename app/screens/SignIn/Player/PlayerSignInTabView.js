@@ -14,9 +14,9 @@ export default class PlayerSignInTabView extends Component {
         const { routes } = this.props.navigation.state;
         const index = this.props.navigation.state.index;
             return (
-<View style={styles.tab}>
-            <Text>{index + 1}/{routes.length}</Text>
-                <View style={styles.tabContainer}>
+                <View style={styles.tab}>
+                    <Text>{index + 1}/{routes.length}</Text>
+                    <View style={styles.tabContainer}>
 
                     {routes.map((route, Index) => (
                         <View style={{flexDirection: 'row'}}>

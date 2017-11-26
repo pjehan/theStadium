@@ -16,7 +16,7 @@ render() {
     var icon;
     if(this.props.headerType === 'logo') {
         headerText = <Image style={[styles.headerMiddleLogo]}
-                            source={require('../assets/img/logo-blanc.png')} />;
+                            source={require('../assets/img/thestadium/logo-blanc.png')} />;
     } else {
         headerText = <Text>TheStadium</Text>
     }

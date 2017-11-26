@@ -67,7 +67,7 @@ export default class Login extends Component {
                 </View>
             </Modal>
             <View >
-                <Image style={styles.middleLogo} source={require('../assets/img/logo-blanc.png')} />
+                <Image style={styles.middleLogo} source={require('../assets/img/thestadium/logo-blanc.png')} />
                 <Text style={styles.slogant}>Partagez et suivez lactualité du foot amateur</Text>
             </View>
       <KeyboardAvoidingView

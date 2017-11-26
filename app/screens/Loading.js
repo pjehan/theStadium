@@ -34,11 +34,11 @@ componentDidMount() {
     }
     return (
       <View style={[styles.mainColorBG, styles.justifyEnd]}>
-        <Image style={styles.middleLogo} source={require('../assets/img/logo-blanc.png')} />
+        <Image style={styles.middleLogo} source={require('../assets/img/thestadium/logo-blanc.png')} />
 
         <View style={styles.sponsor}>
           <Text style={styles.sponsorText}> Partenaire principal </Text>
-          <Image style={styles.sponsorI} source={require('../assets/img/logo-blanc.png')} />
+          <Image style={styles.sponsorI} source={require('../assets/img/thestadium/logo-blanc.png')} />
         </View>
       </View>
     )

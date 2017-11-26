@@ -7,16 +7,17 @@ import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-import AppReducer from './src/reducers';
+import appReducer from './app/_reducers';
 
 import { styles } from './app/assets/css/global';
 
+
 export default class App extends Component {
-  let store = createStore(AppReducer);
 
   render() {
+      let store = createStore(appReducer);
     return (
-      <Provider store={this.store}>
+      <Provider store={store}>
       <Navigator />
       </Provider>
     );

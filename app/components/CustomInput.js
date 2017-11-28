@@ -103,6 +103,7 @@ export default class CustomInput extends Component {
         } else {
             Input = <TextInput
                 {...this.props}
+                style={{color: '#ffffff'}}
                 placeholderTextColor={this.props.textColor}
                 onChangeText={(value) => this.onChange(value)}
                 placeholder={this.props.placeholder}

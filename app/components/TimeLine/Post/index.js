@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
 import UserActions from './UserActions';
+import OwnerHeader from './OwnerHeader';
 import { styles } from '../../../assets/css/global';
 import { StyleSheet, Image } from 'react-native';
 const PostStyle = StyleSheet.create({
@@ -75,27 +76,7 @@ export default class Post extends Component {
     render() {
         return (
          <View style={PostStyle.container}>
-            <View style={PostStyle.ownerStyle}>
-                <Image style={PostStyle.profilePic} source={require('../../../assets/img/TA-Rennes.jpg')}/>
-                <View>
-                  <Text style={PostStyle.title}>Cheunn Nourry</Text>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View style={PostStyle.teamBackground}>
-                    <Text style={PostStyle.teamText}>U13 DRH</Text>
-                  </View>
-                  <View style={{height:8, width:8, backgroundColor: '#cccccc', borderRadius: 8, marginLeft:6, marginRight:6}}></View>
-                  <View style={{flexDirection: 'row'}}>
-                    <Image resizeMode="contain" style={{height:15, width:15}} source={require('../../../assets/img/picto/actualite/picto-time-gris.png')} />
-                    <Text style={PostStyle.timeText}>15 min </Text>
-                    </View>
-                  </View>
-                </View>
-                <TouchableOpacity style={{flexDirection: 'row', alignItems:'center', marginLeft: 'auto', marginRight:8}}>
-                  <View style={{height:8, width:8, backgroundColor: '#cccccc', borderRadius: 8}}></View>
-                  <View style={{height:8, width:8, backgroundColor: '#cccccc', borderRadius: 8, marginLeft:2, marginRight:2}}></View>
-                  <View style={{height:8, width:8, backgroundColor: '#cccccc', borderRadius: 8}}></View>
-                </TouchableOpacity>
-            </View>
+             <OwnerHeader Owner={'Cheunn Nourry'} postDate={new Date(2017, 10, 30, 23-5, 0, 0, 0)}></OwnerHeader>
             
             <View>
               <Text style={{padding:10, paddingLeft:5, paddingRight:5}}>

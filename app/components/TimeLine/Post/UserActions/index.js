@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 
-import { styles } from '../../../../assets/css/global';
 import { StyleSheet, Image } from 'react-native';
 const PostStyle = StyleSheet.create({
     container: {

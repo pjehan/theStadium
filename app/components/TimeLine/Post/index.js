@@ -3,6 +3,7 @@ import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
 import UserActions from './UserActions';
 import OwnerHeader from './OwnerHeader';
+import Content from './Content';
 import { styles } from '../../../assets/css/global';
 import { StyleSheet, Image } from 'react-native';
 const PostStyle = StyleSheet.create({
@@ -64,6 +65,9 @@ const PostStyle = StyleSheet.create({
       marginLeft:2
     }
 });
+let media = [{
+    url :'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'
+}];
 export default class Post extends Component {
     constructor(props) {
       super(props);
@@ -78,11 +82,7 @@ export default class Post extends Component {
          <View style={PostStyle.container}>
              <OwnerHeader Owner={'Cheunn Nourry'} postDate={new Date(2017, 10, 30, 23-5, 0, 0, 0)}></OwnerHeader>
             
-            <View>
-              <Text style={{padding:10, paddingLeft:5, paddingRight:5}}>
-                Les jeunes du club ont été entraîné par l'ancien professionel Jonh Bertrand cette après-midi
-              </Text>
-            </View>
+             <Content type={'simple'} content={'oui la vie des ouf'} media={media}></Content>
 
             <UserActions></UserActions>
              <View style={PostStyle.userActionText}>

@@ -203,4 +203,4 @@ OwnerHeader.defaultProps = {
     postDate: new Date(), /* getaccesstoken of Facebook API */
     Owner: 'Cheunn Nzorjai', /* SecretToken of Facebook API */
 };
-export default OwnerHeader;2017, 11, 30, 23, 0, 0 , 0
+export default OwnerHeader;

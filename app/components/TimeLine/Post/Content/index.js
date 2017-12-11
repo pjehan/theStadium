@@ -69,15 +69,15 @@ export default class Content extends Component {
             assists_nbr = assists + ' passe décisive';
         }
         if(owner.sex === 'female'){
-            scored = ' marquée';
+            scored = ' réalisée';
         }else {
-            scored = ' marqué';
+            scored = ' réalisé';
         }
         postContent = (
-            <View>
+            <View style={{alignItems:'center',marginBottom:20}}>
                 <View style={PostStyle.assist_and_goals}>
-                    <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain' source={require('../../../../assets/img/picto/menu/actions/white_goal.png')}/>
-                    <Text>Passe Décisive</Text>
+                    <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain' source={require('../../../../assets/img/picto/menu/actions/white_assist.png')}/>
+                    <Text style={PostStyle.assist_and_goals_text}>Passe Décisive</Text>
                 </View>
                 <Text>
                     {owner.firstName} a {scored} {assists_nbr} contre {club}
@@ -95,14 +95,14 @@ export default class Content extends Component {
             goals_nbr = goals + ' but';
         }
         if(owner.sex === 'female'){
-            scored = 'réalisée';
+            scored = 'marquée';
         }else {
-            scored = 'réalisé';
+            scored = 'marqué';
         }
         postContent = (
             <View style={{alignItems:'center',marginBottom:20}}>
                 <View style={PostStyle.assist_and_goals}>
-                    <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain' source={require('../../../../assets/img/picto/menu/actions/white_assist.png')}/>
+                    <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain' source={require('../../../../assets/img/picto/menu/actions/white_goal.png')}/>
                     <Text style={PostStyle.assist_and_goals_text}>Passe Décisive</Text>
                 </View>
                 <Text>

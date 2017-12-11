@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Modal,Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { StyleSheet, Image } from 'react-native';
 
 import { styles } from '../assets/css/global';
@@ -35,6 +35,9 @@ const timeLineStyle = StyleSheet.create({
         height:'70%',
         width:1,
         backgroundColor:'#cccccc'
+    },
+    singlePost: {
+        marginBottom: 200
     }
 });
 
@@ -78,11 +81,11 @@ let PostList= [
             sex: 'female',
             team: ''
         },
-        type:'assist',
+        type:'assists',
         assist: 1,
         postDate: new Date(2017, 11, 9, 8, 2, 5),
-        post_likes: 40,
-        post_comments: 20,
+        post_likes: 1,
+        post_comments: 202,
         post_shares: 5
     },
     {
@@ -97,8 +100,8 @@ let PostList= [
         content:'Jaime la teub très très fort',
         media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'},{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
         postDate: new Date(2017, 11, 8, 10, 2, 5),
-        post_likes: 40,
-        post_comments: 20,
+        post_likes: 4,
+        post_comments: 220,
         post_shares: 5
     },
 ];
@@ -106,29 +109,49 @@ let PostList= [
 export default class TimeLine extends Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            goalsModal : false
+        }
+        this.toggleModal = this.toggleModal.bind(this)
+    }
+    toggleModal(visible, content) {
+        let modal = content + 'Modal';
+        this.setState({[modal]: visible});
     }
     render() {
           return (
             <View contentContainerStyle={[styles.greyColorBG]}>
+
                 <View style={timeLineStyle.tabContainer}>
-                    <TouchableOpacity style={timeLineStyle.tabButton} onPres={() => {}}>
+                    <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {this.toggleModal(true, 'assist')}}>
                         <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain' source={require('../assets/img/picto/menu/actions/assist.png')} />
                         <Text style={timeLineStyle.tabButtonText}>Passe dé.</Text>
                     </TouchableOpacity>
                     <View style={timeLineStyle.buttonBorder}></View>
-                    <TouchableOpacity style={timeLineStyle.tabButton} onPres={() => {}}>
+                    <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {this.toggleModal(true, 'goals')}}>
                         <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain' source={require('../assets/img/picto/menu/actions/goal.png')} />
                         <Text style={timeLineStyle.tabButtonText}>But</Text>
                     </TouchableOpacity>
                     <View style={timeLineStyle.buttonBorder}></View>
-                    <TouchableOpacity style={timeLineStyle.tabButton} onPres={() => {}}>
+                    <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {this.toggleModal(true, 'simple')}}>
                         <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain' source={require('../assets/img/picto/menu/actions/post.png')} />
                         <Text style={timeLineStyle.tabButtonText}>Publier</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={{padding:10, paddingLeft: 5, paddingRight:5}}>
-                    <Post post={PostList[1]}></Post>
+                <Modal animationType = {"slide"} transparent = {false}
+                       visible = {this.state.goalsModal}
+                       onRequestClose = {() => { console.log("Modal has been closed.") } }>
+                    <View style = {styles.modal}>
+                        <Text style = {styles.text}>Modal is open!</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => {this.toggleModal(false, 'goals')}}>
+                        <Text>fkenozno</Text>
+                    </TouchableOpacity>
+                </Modal>
+                <ScrollView style={{padding:10, paddingLeft: 5, paddingRight:5, paddingBottom:35}}>
+                    <Post style={timeLineStyle.singlePost} post={PostList[1]}></Post>
+                    <Post style={timeLineStyle.singlePost} post={PostList[0]}></Post>
+                    <Post style={timeLineStyle.singlePost} post={PostList[2]}></Post>
                     {PostList.map((post,index) => {
                         <Post key={index} post={post}></Post>
                     })}

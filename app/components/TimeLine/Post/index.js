@@ -12,7 +12,8 @@ const PostStyle = StyleSheet.create({
         borderRadius: 10,
         width:'100%',
         paddingTop:5,
-        paddingBottom: 5
+        paddingBottom: 5,
+        marginBottom: 10,
     },
     profilePic: {
         width: 45,

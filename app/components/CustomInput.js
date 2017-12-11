@@ -3,14 +3,11 @@ import React, {Component} from 'react';
 import {
     Text,
     View,
-    Image,
     TextInput,
     Keyboard,
     DatePickerAndroid,
     TouchableOpacity,
-    DatePickerIOS,
     Platform,
-    Animated
 } from 'react-native';
 
 import { Icon } from 'react-native-elements';
@@ -103,11 +100,10 @@ export default class CustomInput extends Component {
         } else {
             Input = <TextInput
                 {...this.props}
-                style={{color: '#ffffff'}}
                 placeholderTextColor={this.props.textColor}
                 onChangeText={(value) => this.onChange(value)}
                 placeholder={this.props.placeholder}
-                style={[this.props.input, {backgroundColor: this.props.backgroundColor, borderColor: this.props.borderColor}]}
+                style={[this.props.input, {backgroundColor: this.props.backgroundColor, borderColor: this.props.borderColor,color: '#ffffff'}]}
                 secureTextEntry={this.props.security}
                 underlineColorAndroid="transparent"
             />

@@ -64,11 +64,6 @@ const PostStyle = StyleSheet.create({
 export default class UserActions extends Component {
     constructor(props) {
       super(props);
-      this.state = {
-        post_likes: 32,
-        post_shares: 12,
-        post_comments: 1,
-      }
     }
     render() {
         return (
@@ -77,21 +72,21 @@ export default class UserActions extends Component {
               <TouchableOpacity style={{marginLeft:10}}>
               <View style={{alignItems:'center'}}>
                 <Image resizeMode="contain" style={{height:20, width:20}} source={require('../../../../assets/img/picto/actualite/like.png')}/>
-                <Text style={PostStyle.actionText}>{this.state.post_likes}</Text>
+                <Text style={PostStyle.actionText}>{this.props.likes}</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity style={{marginLeft:20,marginRight:20}}>
                 <View style={{alignItems:'center'}}>
                   <Image resizeMode="contain" style={{height:15, width:20}} source={require('../../../../assets/img/picto/actualite/comment.png')}/>
-                  <Text style={PostStyle.actionText}>{this.state.post_comments}</Text>
+                  <Text style={PostStyle.actionText}>{this.props.comments}</Text>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity style={{marginRight:10}}>
                   <View style={{alignItems:'center'}}>
                   <Image resizeMode="contain" style={{height:15, width:15}} source={require('../../../../assets/img/picto/actualite/partage.png')}/>
-                  <Text style={PostStyle.actionText}>{this.state.post_shares}</Text>
+                  <Text style={PostStyle.actionText}>{this.props.shares}</Text>
                 </View>
               </TouchableOpacity>
               <View style={{height:0.5, backgroundColor:'#cccccc', width: '100%'}}></View>

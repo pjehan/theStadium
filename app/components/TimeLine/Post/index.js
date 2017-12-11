@@ -63,28 +63,27 @@ const PostStyle = StyleSheet.create({
       color:'#cccccc',
       fontWeight: '500',
       marginLeft:2
+    },
+    assist_and_goals: {
+        backgroundColor: '#00A65B',
     }
 });
-let media = [{
-    url :'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'
-}];
 export default class Post extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        post_likes: 32,
-        post_shares: 12,
-        post_comments: 1,
+        post: this.props.post
       }
+      console.log(this.state.post)
     }
     render() {
         return (
          <View style={PostStyle.container}>
-             <OwnerHeader Owner={'Cheunn Nourry'} postDate={new Date(2017, 10, 30, 23-5, 0, 0, 0)}></OwnerHeader>
+             <OwnerHeader Owner={this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName} postDate={this.state.post.postDate}></OwnerHeader>
             
-             <Content type={'simple'} content={'oui la vie des ouf'} media={media}></Content>
+             <Content {...this.state.post}></Content>
 
-            <UserActions></UserActions>
+            <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares} comments={this.state.post.post_comments}></UserActions>
              <View style={PostStyle.userActionText}>
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity>

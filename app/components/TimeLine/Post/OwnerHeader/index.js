@@ -59,7 +59,7 @@ const PostStyle = StyleSheet.create({
     timeText: {
         fontSize:12,
         color:'#cccccc',
-        fontWeight: '500',
+        fontWeight: '400',
         marginLeft:2
     }
 });

@@ -37,6 +37,72 @@ const timeLineStyle = StyleSheet.create({
         backgroundColor:'#cccccc'
     }
 });
+
+let PostList= [
+    {
+        owner: {
+            lastName: 'Maradou',
+            firstName: 'Pierre',
+            profilePic: '',
+            sex: 'male',
+            team: ''
+        },
+        type:'simple',
+        media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
+        content: 'Bonjour je suis zinedine zidanisme',
+        postDate: new Date(),
+        post_likes: 42,
+        post_comments: 10,
+        post_shares: 1
+    },
+    {
+        owner: {
+            lastName: 'Segara',
+            firstName: 'Sophie',
+            profilePic: '',
+            sex: 'female',
+            team: ''
+        },
+        type:'goals',
+        goals: 5,
+        postDate: new Date(2017, 11, 9, 10, 2, 5),
+        post_likes: 40,
+        post_comments: 20,
+        post_shares: 5
+    },
+    {
+        owner: {
+            lastName: 'Segara',
+            firstName: 'Sophie',
+            profilePic: '',
+            sex: 'female',
+            team: ''
+        },
+        type:'assist',
+        assist: 1,
+        postDate: new Date(2017, 11, 9, 8, 2, 5),
+        post_likes: 40,
+        post_comments: 20,
+        post_shares: 5
+    },
+    {
+        owner: {
+            lastName: 'Segara',
+            firstName: 'Sophie',
+            profilePic: '',
+            sex: 'female',
+            team: 'Senior FD3'
+        },
+        type:'simple',
+        content:'Jaime la teub très très fort',
+        media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'},{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
+        postDate: new Date(2017, 11, 8, 10, 2, 5),
+        post_likes: 40,
+        post_comments: 20,
+        post_shares: 5
+    },
+];
+
 export default class TimeLine extends Component {
     constructor(props) {
         super(props);
@@ -62,7 +128,10 @@ export default class TimeLine extends Component {
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={{padding:10, paddingLeft: 5, paddingRight:5}}>
-                    <Post></Post>
+                    <Post post={PostList[1]}></Post>
+                    {PostList.map((post,index) => {
+                        <Post key={index} post={post}></Post>
+                    })}
                 </ScrollView>
             </View>
         )

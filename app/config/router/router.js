@@ -137,6 +137,6 @@ export const Navigator = StackNavigator({
         }
     },
     {
-        initialRouteName: "Loading",
+        initialRouteName: "TimeLine",
         headerMode: "screen"
     });

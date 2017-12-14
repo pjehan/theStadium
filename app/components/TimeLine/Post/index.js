@@ -75,7 +75,6 @@ export default class Post extends Component {
       this.state = {
         post: this.props.post
       }
-      console.log(this.state.post)
     }
     render() {
         return (

@@ -82,7 +82,7 @@ export default class PlayerInfos extends Component {
                       textColor={'#333333'}
                       borderColor={'transparent'}
                       backgroundColor={'#eeeeee'}
-                      onChangeParent={() => {console.log(this.state)}}
+                      onChangeParent={() => {}}
                   />
                     <View style={{backgroundColor:'#eeeeee'}}>
                   <Picker style={styles.input}

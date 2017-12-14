@@ -27,7 +27,6 @@ export default class PlayerInfos extends Component {
     this.onChangeInfos = this.onChangeInfos.bind(this)
   }
   onChangeInfos(state, newvalue) {
-    console.log(this.state);
     this.setState({[state]: newvalue})
   }
     render() {

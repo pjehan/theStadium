@@ -63,7 +63,7 @@ const timeLineStyle = StyleSheet.create({
         fontWeight: '500'
     },
 });
-let Test;
+let SelectedMedia;
 class PostModal extends Component {
     constructor(props) {
         super(props);
@@ -93,15 +93,15 @@ class PostModal extends Component {
         this.props.toggleModal(false, type);
         console.log(this.state)
     }
-    _addMedia = async () => {
-            let result = await Expo.ImagePicker.launchImageLibraryAsync('All');
+    _addMedia() {
+            let result = Expo.ImagePicker.launchImageLibraryAsync('All');
             this.setState({media:result});
-
-        Test = (<Image style={{height:this.state.media.height,width:this.state.media.width}} source={{uri:this.state.media.uri}}/>)
+            console.log(result)
+        SelectedMedia = (<Image style={{height:this.state.media.height,width:this.state.media.width}} source={{uri:this.state.media.uri}}/>)
             if (!result.cancelled) {
-                console.log(result.uri)
+                console.log('uri', result.uri)
                 //this.setState({ image: result.uri });
-            }
+            } else {console.log('uri', result.uri, this.state.media.uri)}
         };
     componentWillMount() {
         switch(this.props.type) {
@@ -129,7 +129,7 @@ class PostModal extends Component {
                 this.displayGoalsAssists(TypeEnum.assists);
                 break;
             case TypeEnum.simple:
-                this.displaySimpleArticle(TypeEnum.simple);
+                this.displaySimpleArticle(TypeEnum.simple, this.props.visible);
                 break;
             case TypeEnum.article:
                 this.displaySimpleArticle();
@@ -203,9 +203,9 @@ class PostModal extends Component {
         )
     }
 
-    displaySimpleArticle(type) {
+    displaySimpleArticle(type, visible) {
         ModalContent = (<Modal animationType={"slide"} transparent={false}
-                               visible={this.props.visible}
+                               visible={visible}
 
                                onRequestClose={() => {
                                    console.log("Modal has been closed.")
@@ -245,16 +245,16 @@ class PostModal extends Component {
                              this.onChangeInfos(state, newvalue)
                          }}/>
                 <View >
-                    {Test}
+                    {SelectedMedia}
                 </View>
             <View style={{}}>
-                <TouchableOpacity style={{borderColor:'#cccccc',borderTopWidth:0.5,height:50, alignItems:'center',flexDirection:'row', justifyContent:'space-between'}}>
+                <TouchableOpacity onPress={() => {this.toggleModal(true, TypeEnum.goals)}} style={{borderColor:'#cccccc',borderTopWidth:0.5,height:50, alignItems:'center',flexDirection:'row', justifyContent:'space-between'}}>
 
                     <Image style={{marginLeft:20, marginRight:20,height:20, width:20}} resizeMode={'contain'} source={require('../../../../assets/img/picto/menu/actions/goal.png')}/>
                     <Text style={{color:'green'}}>Partagez un But</Text>
                     <Text style={{marginRight:20}}> > </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{borderColor:'#cccccc',borderTopWidth:0.5,borderBottomWidth:0.5,height:50, alignItems:'center', flexDirection:'row',justifyContent:'space-between'}}>
+                <TouchableOpacity onPress={() => {this.toggleModal(true, TypeEnum.assists)}} style={{borderColor:'#cccccc',borderTopWidth:0.5,borderBottomWidth:0.5,height:50, alignItems:'center', flexDirection:'row',justifyContent:'space-between'}}>
 
                     <Image style={{marginLeft:20, marginRight:20,height:20, width:20}} resizeMode={'contain'} source={require('../../../../assets/img/picto/menu/actions/assist.png')}/>
                     <Text style={{color:'green'}}>Partagez une Passe Décisive</Text>

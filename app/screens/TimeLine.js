@@ -56,8 +56,15 @@ const timeLineStyle = StyleSheet.create({
     },
 });
 
-let PostList = [];
+let postList = [];
 let Modal = null;
+@connect((store) => {
+    return {
+        posts: store.postList.post,
+        postsFetched: store.postList.fetched,
+    };
+})
+
 export default class TimeLine extends Component {
     constructor(props) {
         super(props);
@@ -65,18 +72,28 @@ export default class TimeLine extends Component {
             modalVisible : false,
             modalType:'',
         };
+
         this.onToggleModal = this.onToggleModal.bind(this)
     }
     componentWillMount() {
-        console.log(this.props.dispatch(postActions.getAll()))
+        const {postsFetched, posts }= this.props;
+        this.props.dispatch(postActions.getAll());
+        if(postsFetched) {
+            postList = posts.posts;
+            console.log(postList)
+        } else {
+            return
+        }
+
     }
     onToggleModal(visible, type) {
+
         this.setState({modalVisible: visible});
         this.setState({modalType: type});
-        console.log('oui')
     }
 
     render() {
+
           return (
             <View contentContainerStyle={[styles.greyColorBG]}>
                 <PostModal owner={ {lastName:'Segara',
@@ -102,8 +119,8 @@ export default class TimeLine extends Component {
                 </View>
 
                 <ScrollView style={{padding:10, paddingLeft: 5, paddingRight:5, paddingBottom:35}}>
-
-                    {PostList.map((post,index) => {
+                    {postList.map((post, index) => {
+                        console.log(post);
                         <Post style={timeLineStyle.singlePost} key={index} post={post}></Post>
                     })}
                 </ScrollView>

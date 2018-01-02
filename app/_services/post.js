@@ -66,13 +66,22 @@ let postList = [
     },
 ];
 function getAll() {
+    return Promise.resolve({
+        then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
+    });
 
-    return postList;
+    /*const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch('/users', requestOptions).then(handleResponse);*/
+    //return handleResponse(true, postList);
 }
-function handleResponse(response) {
-    if (!response.ok) {
+function handleResponse(test, response) {
+    if (!test) {
         return Promise.reject(response.statusText);
     }
 
-    return response.json();
+    return response;
 }

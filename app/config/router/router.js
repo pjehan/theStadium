@@ -6,12 +6,14 @@ import {Button, Text} from 'react-native';
 
 import Login from '../../screens/Login';
 import Loading from '../../screens/Loading';
-
+import MainTabView from '../../components/Main/TabBar'
+import  Menu from '../../components/Main/Menu'
 /** SIGN IN**/
 import SignIn from '../../screens/SignIn/SignIn';
 import UserBasic from '../../screens/SignIn/UserBasic'
 import Header from '../../layout/Header.js';
 import PlayerSignInTabView from '../../screens/SignIn/Player/PlayerSignInTabView';
+
 import UserInfos from '../../screens/SignIn/UserInfos';
 import PlayerClub from '../../screens/SignIn/Player/PlayerClub';
 const SignInTabBar = {
@@ -19,10 +21,31 @@ const SignInTabBar = {
         tabBarVisible: false,
         tabBarPosition: 'bottom'
       };
-
+const MAINTABBAR = {
+    tabBarComponent: ({navigation}) => <MainTabView navigation={navigation}/>,
+    tabBarVisible: false,
+    tabBarPosition: 'bottom'
+}
 /** TimeLine **/
 import TimeLine from '../../screens/TimeLine';
 
+export const MainStack = TabNavigator({
+    TimeLine: {
+        screen: TimeLine,
+        navigationOptions: ({navigation}) => ({
+            header: props => <Header headerType="text" backIcon={false} {...props} />,
+        })
+    },
+    Rechercher: {
+        screen: TimeLine,
+    },
+    Notifications: {
+        screen: TimeLine,
+    },
+    Menu: {
+        screen: Menu,
+    }
+},MAINTABBAR)
 export const PlayerSignInStack = TabNavigator({
         Player: {
             screen: UserBasic,
@@ -129,14 +152,12 @@ export const Navigator = StackNavigator({
 
           }),
         },
-        TimeLine: {
-            screen: TimeLine,
-            navigationOptions: ({navigation}) => ({
-                header: props => <Header headerType="text" backIcon={false} {...props} />,
-            })
+        Main: {
+            screen: MainStack,
+
         }
     },
     {
-        initialRouteName: "TimeLine",
+        initialRouteName: "Login",
         headerMode: "screen"
     });

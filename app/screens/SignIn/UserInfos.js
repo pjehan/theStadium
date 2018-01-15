@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
 import {styles} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
+import {connect} from 'react-redux';
 const style = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
@@ -18,7 +19,7 @@ const style = StyleSheet.create({
         borderRadius: 4,
     },
 });
-export default class PlayerInfos extends Component {
+class PlayerInfos extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -27,6 +28,7 @@ export default class PlayerInfos extends Component {
     this.onChangeInfos = this.onChangeInfos.bind(this)
   }
   onChangeInfos(state, newvalue) {
+      this.props.user[state] = newvalue;
     this.setState({[state]: newvalue})
   }
     render() {
@@ -82,3 +84,9 @@ export default class PlayerInfos extends Component {
     }
 
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.registeringUser
+    };
+};
+export default connect(mapStateToProps)(PlayerInfos);

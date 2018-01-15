@@ -1,11 +1,25 @@
 import { userConstants } from '../_constants';
 
-export function registration(state = {}, action) {
+export function registeringUser(state = {
+    firstname:'',
+    lastname:'',
+    birthdate: '',
+    password: '',
+    email:'',
+    type:null,
+    sexe:0,
+    club:'',
+    team: '',
+    error: '',
+    poste: '',
+}, action) {
   switch (action.type) {
-    case userConstants.REGISTER_REQUEST:
-      return { registering: true };
+    case userConstants.REGISTER_ADD_INFOS_REQUEST:
+        return {...state};
+        break;
     case userConstants.REGISTER_SUCCESS:
-      return {};
+        return {...state};
+        break;
     case userConstants.REGISTER_FAILURE:
       return {};
     default:

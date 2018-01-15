@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 import {View,StyleSheet,Button,DatePickerAndroid,Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
 import {styles} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
-export default class userBasic extends Component {
+import {connect} from 'react-redux';
+class userBasic extends Component {
 
     constructor(props){
         super(props);
@@ -16,6 +17,7 @@ export default class userBasic extends Component {
         this.onChangeInfos = this.onChangeInfos.bind(this)
     }
     onChangeInfos(state, newvalue) {
+        this.props.user[state] = newvalue;
       this.setState({[state]: newvalue})
     }
 
@@ -62,7 +64,7 @@ export default class userBasic extends Component {
                         backgroundColor={'#eeeeee'}
                         placeholder={'Prénom'}
                         input={styles.input}
-                        state={'name'}
+                        state={'first'}
                         onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                     />
                     <CustomInput
@@ -83,3 +85,9 @@ export default class userBasic extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.registeringUser
+    };
+};
+export default connect(mapStateToProps)(userBasic);

@@ -2,12 +2,8 @@ import { authHeader } from '../_helpers';
 
 export const userService = {
     login,
-    logout,
-    register,
-    getAll,
-    getById,
-    update,
-    delete: _delete
+    addInfos,
+
 };
 
 function login(username, password) {
@@ -34,4 +30,18 @@ function login(username, password) {
 
             return user;
         });
+}
+function addInfos(user) {
+    console.log(user)
+    return Promise.resolve({
+        then: function(onFulfill, onReject) { onFulfill(user);onReject('erreur') }
+    });
+
+}
+function handleResponse(test, response) {
+    if (!test) {
+        return Promise.reject(response.statusText);
+    }
+
+    return response;
 }

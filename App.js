@@ -9,7 +9,7 @@ import { applyMiddleware, createStore } from "redux"
 import thunk from "redux-thunk"
 import promise from "redux-promise-middleware"
 import appReducer from './app/_reducers';
-import { createLogger } from 'redux-logger'
+import createLogger from 'redux-logger'
 
 
 import { styles } from './app/assets/css/global';

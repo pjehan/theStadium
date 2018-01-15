@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
 import { Button, Text, View, StatusBar } from 'react-native';
 import { styles } from '../../assets/css/global';
-import {Col} from 'react-native-elements'
+import {userActions} from '../../_actions';
+import {connect} from 'react-redux';
 
-export default class SignIn extends Component {
+class SignIn extends Component {
 
+    typeSelected(route,type,params) {
+        const USER = this.props.user;
+        USER.type = type;
+        this.props.dispatch(userActions.addInfos(USER));
+        this.props.navigation.navigate(route,params);
+    }
     render() {
         var {navigate} = this.props.navigation
         return (
@@ -15,18 +22,17 @@ export default class SignIn extends Component {
                 </View>
                 <View  style={{flex:3, justifyContent:'space-around'}}>
                     <Button
-                        onPress={() => {navigate('FanSignIn',{})}}
+                        onPress={() => {this.typeSelected('FanSignIn',0,{});}}
                         title="Supporter"
                         color="#003366"
                     />
                     <Button
-                        onPress={() => {navigate('PlayerSignIn',{})}}
+                        onPress={() => {this.typeSelected('PlayerSignIn',1,{});}}
                         title="Joueur"
                         color="#003366"
                     />
                     <Button
-                        onPress={() => {
-                          navigate('CoachSignIn',{coach: true})
+                        onPress={() => {this.typeSelected('CoachSignIn',2,{coach: true});
                         }
                       }
                         title="Entraineur"
@@ -38,3 +44,9 @@ export default class SignIn extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.registeringUser
+    };
+};
+export default connect(mapStateToProps)(SignIn);

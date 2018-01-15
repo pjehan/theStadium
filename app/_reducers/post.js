@@ -1,7 +1,7 @@
-import { postConstants } from '../_constants';
+import {postConstants} from '../_constants';
 
 export function postList(state = {
-    post: [{
+    posts: [{
         owner: null,
         type: null,
         media: [{url: null}],
@@ -11,18 +11,18 @@ export function postList(state = {
         post_comments: null,
         post_shares: null,
     }],
-                             fetching: false,
-                             fetched: false,
-                             error: null,} , action) {
-    switch(action.type) {
+    fetching: false,
+    fetched: false,
+    error: null,
+}, action) {
+    switch (action.type) {
         case postConstants.GETALL_REQUEST:
             return {...state, fetching: true, fetched: false};
             break;
         case postConstants.GETALL_FAILURE:
             return {...state, fetching: false, error: action.payload};
         case postConstants.GETALL_SUCCESS:
-            return {...state, fetching: false, fetched: true, post: action.payload}
-            ;
+            return {...state, fetching: false, fetched: true, posts: action.payload};
             break;
         default:
             return state;

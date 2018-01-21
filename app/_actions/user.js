@@ -6,7 +6,7 @@ import { alertActions } from './';
 export const userActions = {
     login,
     register,
-    addInfos
+    addInfos,
 };
 
 function login(username, password) {
@@ -31,14 +31,16 @@ function login(username, password) {
     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
 }
 function register(user) {
+
     return dispatch => {
+        console.log(user);
         dispatch(request(user));
 
         userService.register(user)
             .then(
                 user => {
-                    dispatch(success());
-                    history.push('/login');
+                    dispatch(success(user));
+                    //history.push('/login');
                     dispatch(alertActions.success('Registration successful'));
                 },
                 error => {

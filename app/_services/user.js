@@ -3,7 +3,7 @@ import { authHeader } from '../_helpers';
 export const userService = {
     login,
     addInfos,
-
+    register,
 };
 
 function login(username, password) {
@@ -33,6 +33,12 @@ function login(username, password) {
 }
 function addInfos(user) {
     console.log(user)
+    return Promise.resolve({
+        then: function(onFulfill, onReject) { onFulfill(user);onReject('erreur') }
+    });
+
+}
+function register(user) {
     return Promise.resolve({
         then: function(onFulfill, onReject) { onFulfill(user);onReject('erreur') }
     });

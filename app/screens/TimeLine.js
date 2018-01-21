@@ -124,8 +124,8 @@ class TimeLine extends Component {
                 </View>
                 <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35}}>
                     {this.props.posts.posts ? posts.posts.map((post, index) => {
-                        <Post style={timeLineStyle.singlePost} key={index} post={post}></Post>
-                    }) : console.log(this.props,posts)}
+                        <Post style={timeLineStyle.singlePost} key={index} post={post} />
+                    }) : console.log(this.props,posts, '***********************************')}
                 </ScrollView>
             </View>
         )

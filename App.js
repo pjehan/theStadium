@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Navigator } from './app/config/router/router';
+import AppNavigation from './app/config/router/router';
 
-
-import { AppRegistry } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { applyMiddleware, createStore } from "redux"
 import thunk from "redux-thunk"
@@ -26,7 +24,7 @@ export default class App extends Component {
 
     return (
       <Provider store={store}>
-      <Navigator />
+      <AppNavigation />
       </Provider>
     );
   }

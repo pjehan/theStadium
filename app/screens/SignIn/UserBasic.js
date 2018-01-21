@@ -18,8 +18,9 @@ class userBasic extends Component {
     }
     onChangeInfos(state, newvalue) {
         this.props.user[state] = newvalue;
-      this.setState({[state]: newvalue})
+      this.setState({[state]: newvalue});
     }
+
 
     render() {
       let Coach = null;
@@ -64,7 +65,7 @@ class userBasic extends Component {
                         backgroundColor={'#eeeeee'}
                         placeholder={'Prénom'}
                         input={styles.input}
-                        state={'first'}
+                        state={'firstname'}
                         onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                     />
                     <CustomInput

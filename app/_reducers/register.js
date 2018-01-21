@@ -17,10 +17,10 @@ export function registeringUser(state = {
     case userConstants.REGISTER_ADD_INFOS_REQUEST:
         return {...state};
         break;
-    case userConstants.REGISTER_SUCCESS:
+    case userConstants.REGISTER_ADD_INFOS_SUCCESS:
         return {...state};
         break;
-    case userConstants.REGISTER_FAILURE:
+    case userConstants.REGISTER_ADD_INFOS_FAILURE:
       return {};
     default:
       return state

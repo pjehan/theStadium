@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import { Icon } from 'react-native-elements';
-
+import {connect} from 'react-redux';
 import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
+
+import {userActions} from '../../../_actions';
 const styles = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
@@ -11,7 +13,7 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
     },
 });
-export default class PlayerSignInTabView extends Component {
+class PlayerSignInTabView extends Component {
     render() {
         const { routes } = this.props.navigation.state;
         const index = this.props.navigation.state.index;
@@ -49,7 +51,10 @@ export default class PlayerSignInTabView extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                   if(index + 1 != routes.length){
-                  this.props.navigation.navigate(routes[index + 1].key, {})}
+                    this.props.navigation.navigate(routes[index + 1].key, {});
+                  } else if(index + 1 == routes.length){
+                      this.props.navigation.dispatch(userActions.register(this.props.user));
+                  }
                 }
                 }>
                 <Text>{index + 1 == routes.length ? 'Fin' : 'Suivant'}</Text>
@@ -60,3 +65,10 @@ export default class PlayerSignInTabView extends Component {
             );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.registeringUser
+    };
+};
+export default connect(mapStateToProps)(PlayerSignInTabView);

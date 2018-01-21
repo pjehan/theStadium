@@ -1,21 +1,24 @@
 import React from 'react';
-import {StackNavigator, TabNavigator} from 'react-navigation';
-
+import {Component} from 'react';
+import {StackNavigator, TabNavigator,addNavigationHelpers} from 'react-navigation';
+import {connect} from 'react-redux';
 import {Button, Text} from 'react-native';
 //import { Icon } from 'react-native-elements';
 
 import Login from '../../screens/Login';
 import Loading from '../../screens/Loading';
-import MainTabView from '../../components/Main/TabBar'
+
 import  Menu from '../../components/Main/Menu'
 /** SIGN IN**/
 import SignIn from '../../screens/SignIn/SignIn';
 import UserBasic from '../../screens/SignIn/UserBasic'
 import Header from '../../layout/Header.js';
-import PlayerSignInTabView from '../../screens/SignIn/Player/PlayerSignInTabView';
-
 import UserInfos from '../../screens/SignIn/UserInfos';
 import PlayerClub from '../../screens/SignIn/Player/PlayerClub';
+/** Tab **/
+import PlayerSignInTabView from '../../screens/SignIn/Player/PlayerSignInTabView';
+import MainTabView from '../../components/Main/TabBar'
+
 const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
         tabBarVisible: false,
@@ -25,28 +28,36 @@ const MAINTABBAR = {
     tabBarComponent: ({navigation}) => <MainTabView navigation={navigation}/>,
     tabBarVisible: false,
     tabBarPosition: 'bottom'
-}
+};
 /** TimeLine **/
 import TimeLine from '../../screens/TimeLine';
 
-export const MainStack = TabNavigator({
+const MainStack = TabNavigator({
     TimeLine: {
         screen: TimeLine,
         navigationOptions: ({navigation}) => ({
             header: props => <Header headerType="text" backIcon={false} {...props} />,
-        })
+        }),
+        icon: 'theStadium/app/assets/img/picto/tabbar/timeline.png',
+        iconOn: 'theStadium/app/assets/img/picto/tabbar/timeline-on.png'
     },
     Rechercher: {
         screen: TimeLine,
+        icon: 'theStadium/app/assets/img/picto/tabbar/search.png',
+        iconOn: 'theStadium/app/assets/img/picto/tabbar/search-on.png'
     },
     Notifications: {
         screen: TimeLine,
+        icon: 'theStadium/app/assets/img/picto/tabbar/notification.png',
+        iconOn: 'theStadium/app/assets/img/picto/tabbar/notification-on.png'
     },
     Menu: {
         screen: Menu,
+        icon: 'theStadium/app/assets/img/picto/tabbar/menu.png',
+        iconOn: 'theStadium/app/assets/img/picto/tabbar/menu-on.png'
     }
 },MAINTABBAR)
-export const PlayerSignInStack = TabNavigator({
+const PlayerSignInStack = TabNavigator({
         Player: {
             screen: UserBasic,
             navigationOptions: ({navigation}) => ({
@@ -70,7 +81,7 @@ export const PlayerSignInStack = TabNavigator({
     },
     SignInTabBar);
 
-export const FanSignInStack = TabNavigator({
+const FanSignInStack = TabNavigator({
   Fan: {
       screen: UserBasic,
       navigationOptions: ({navigation}) => ({
@@ -88,7 +99,7 @@ export const FanSignInStack = TabNavigator({
 },
   SignInTabBar);
 
-  export const CoachSignInStack = TabNavigator({
+  const CoachSignInStack = TabNavigator({
     Coach: {
         screen: UserBasic,
         navigationOptions: ({navigation}) => ({
@@ -132,6 +143,7 @@ export const Navigator = StackNavigator({
                 tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
                 tabBarVisible: false,
 
+
             }),
         },
         FanSignIn: {
@@ -154,10 +166,25 @@ export const Navigator = StackNavigator({
         },
         Main: {
             screen: MainStack,
-
         }
     },
     {
-        initialRouteName: "Login",
+        initialRouteName: "Main",
         headerMode: "screen"
     });
+class AppNavigation extends Component {
+    render() {
+        const { navigationState, dispatch } = this.props;
+        return (
+            <Navigator
+                navigation={addNavigationHelpers({ dispatch, state: navigationState })}
+            />
+        );
+    }
+}
+const mapStateToProps = state => {
+    return {
+        navigationState: state.NavigationReducer
+    };
+};
+export default connect(mapStateToProps)(AppNavigation);

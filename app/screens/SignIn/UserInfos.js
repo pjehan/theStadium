@@ -29,8 +29,9 @@ class PlayerInfos extends Component {
   }
   onChangeInfos(state, newvalue) {
       this.props.user[state] = newvalue;
-    this.setState({[state]: newvalue})
+      this.setState({[state]: newvalue});
   }
+
     render() {
         return (
           <View style={{flex: 7,backgroundColor:'white', justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>

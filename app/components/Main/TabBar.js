@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View,StyleSheet, Text,TouchableOpacity} from 'react-native';
+import {Image, View,StyleSheet, Text,TouchableOpacity} from 'react-native';
 const styles = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
@@ -13,6 +13,7 @@ export default class MainTabView extends Component {
     render() {
         const {routes} = this.props.navigation.state;
         const index = this.props.navigation.state.index;
+        console.log(this.props)
         return (
             <View style={styles.tab}>
                 <View style={styles.tabContainer}>

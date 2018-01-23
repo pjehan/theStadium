@@ -1,5 +1,6 @@
 import React from 'react';
 import {Component} from 'react';
+import {Image} from 'react-native';
 import {StackNavigator, TabNavigator,addNavigationHelpers} from 'react-navigation';
 import {connect} from 'react-redux';
 import {Button, Text} from 'react-native';
@@ -19,6 +20,9 @@ import PlayerClub from '../../screens/SignIn/Player/PlayerClub';
 import PlayerSignInTabView from '../../screens/SignIn/Player/PlayerSignInTabView';
 import MainTabView from '../../components/Main/TabBar'
 
+
+import Profil from '../../screens/Profil';
+
 const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
         tabBarVisible: false,
@@ -37,26 +41,75 @@ const MainStack = TabNavigator({
         screen: TimeLine,
         navigationOptions: ({navigation}) => ({
             header: props => <Header headerType="text" backIcon={false} {...props} />,
+            tabBarIcon: ({focused}) => {
+                return <Image
+                    resizeMode='contain'
+                    source={!focused ? require('../../assets/img/picto/menu/tabbar/timeline.png') : require('../../assets/img/picto/menu/tabbar/timeline-on.png')} style={{ height: 20 }}/>
+            },
+            showLabel: true,
+            tabBarLabel: 'Actualitée'
         }),
-        icon: 'theStadium/app/assets/img/picto/tabbar/timeline.png',
-        iconOn: 'theStadium/app/assets/img/picto/tabbar/timeline-on.png'
     },
     Rechercher: {
         screen: TimeLine,
-        icon: 'theStadium/app/assets/img/picto/tabbar/search.png',
-        iconOn: 'theStadium/app/assets/img/picto/tabbar/search-on.png'
+        navigationOptions: ({navigation}) => ({
+            tabBarIcon: ({focused}) => {
+                return <Image
+                    resizeMode='contain'
+                    source={!focused ? require('../../assets/img/picto/menu/tabbar/search.png') : require('../../assets/img/picto/menu/tabbar/search-on.png')}
+                    style={{height: 20}}/>
+            },
+            showLabel: true,
+            tabBarLabel: 'Rechercher'
+        })
     },
     Notifications: {
         screen: TimeLine,
-        icon: 'theStadium/app/assets/img/picto/tabbar/notification.png',
-        iconOn: 'theStadium/app/assets/img/picto/tabbar/notification-on.png'
+        navigationOptions: ({navigation}) => ({
+        tabBarIcon: ({focused}) => {
+            return <Image
+                resizeMode='contain'
+                source={!focused ? require('../../assets/img/picto/menu/tabbar/notification.png') : require('../../assets/img/picto/menu/tabbar/notification-on.png')} style={{ height: 20 }}/>
+        },
+        showLabel: true,
+        tabBarLabel: 'Notifications'
+        })
     },
     Menu: {
         screen: Menu,
-        icon: 'theStadium/app/assets/img/picto/tabbar/menu.png',
-        iconOn: 'theStadium/app/assets/img/picto/tabbar/menu-on.png'
+        navigationOptions: ({navigation}) => ({
+            tabBarIcon: ({focused}) => {
+                return <Image
+                    resizeMode='contain'
+                    source={!focused ? require('../../assets/img/picto/menu/tabbar/menu.png') : require('../../assets/img/picto/menu/tabbar/menu-on.png')}
+                    style={{height: 20}}/>
+            },
+            showLabel: true,
+            tabBarLabel: 'Menu'
+        })
     }
-},MAINTABBAR)
+}, {
+    tabBarPosition: 'bottom',
+    animationEnabled: true,
+
+    tabBarOptions: { showIcon: true,
+        activeTintColor:'#003366',
+        inactiveTintColor: '#cccccc',
+        upperCaseLabel: false,
+        labelStyle: {
+            fontSize: 12,
+            marginTop:5,
+            marginBottom:0,
+        },
+        tabStyle: {
+        paddingTop:10,
+            height:60,
+        },
+        indicatorStyle: { backgroundColor: 'transparent', },
+        style: {
+            backgroundColor: '#ffffff',
+    }, }
+})
 const PlayerSignInStack = TabNavigator({
         Player: {
             screen: UserBasic,
@@ -166,6 +219,9 @@ export const Navigator = StackNavigator({
         },
         Main: {
             screen: MainStack,
+        },
+        Profil: {
+            screen: Profil,
         }
     },
     {

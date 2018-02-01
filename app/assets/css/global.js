@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const GLOBAL_STYLE = StyleSheet.create({
   justifyEnd: {
     justifyContent: 'flex-end'
   },
@@ -44,6 +44,11 @@ export const styles = StyleSheet.create({
       flex:1,
       alignItems: 'center',
   },
+
+    whiteColorBG: {
+        backgroundColor: '#ffffff',
+        alignItems: 'center',
+    },
   middleLogo: {
     width: 300,
     alignSelf: 'center',
@@ -125,4 +130,53 @@ inputContainer: {
         padding: 5,
         height: 85,
     }
+});
+export const timeLineStyle = StyleSheet.create({
+    tabContainer: {
+        justifyContent: 'space-between',
+        backgroundColor: '#ffffff',
+        flexDirection: 'row',
+        width: '100%',
+        height: 40
+    },
+    tabButton: {
+        backgroundColor: 'white',
+        flex: 1,
+        height: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    tabButtonText: {
+        color: '#003366',
+        fontWeight: '400',
+    },
+    tabButtonPicto: {
+        height: 15,
+        width: 15,
+        marginRight: 5
+    },
+    buttonBorder: {
+        alignSelf: 'center',
+        height: '70%',
+        width: 1,
+        backgroundColor: '#cccccc'
+    },
+    singlePost: {
+        marginBottom: 200
+    }, profilePic: {
+        width: 45,
+        height: 45,
+        borderRadius: 45,
+        marginRight: 5
+    },
+    text: {
+        color: 'black',
+        fontSize: 12
+    },
+    title: {
+        color: 'black',
+        fontSize: 16,
+        fontWeight: '500'
+    },
 });

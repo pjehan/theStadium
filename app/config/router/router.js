@@ -22,19 +22,62 @@ import MainTabView from '../../components/Main/TabBar'
 
 
 import Profil from '../../screens/Profil';
+import ProfileTabBar from '../../components/Profil/profilTab';
+import Actus from '../../screens/Actus'
 
 const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
         tabBarVisible: false,
         tabBarPosition: 'bottom'
       };
-const MAINTABBAR = {
-    tabBarComponent: ({navigation}) => <MainTabView navigation={navigation}/>,
-    tabBarVisible: false,
-    tabBarPosition: 'bottom'
-};
+const PROFILETAB = {
+    tabBarComponent: ({navigation}) => <ProfileTabBar focused={'focused'}
+                                                      activeLabelColor="#333333"
+                                                      activeIndicatorColor="#333333"
+                                                      inactiveLabelColor="#CCCCCC"
+                                                      inactiveIndicatorColor="transparent"
+                                                      indicatorHeight={2}
+                                                      navigation={navigation}/>,
+
+    tabBarPosition: 'top'
+}
 /** TimeLine **/
 import TimeLine from '../../screens/TimeLine';
+
+const ProfileTab = TabNavigator({
+    Infos: {
+        screen: Profil,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    Actus: {
+        screen: Actus,
+        navigationOptions: {
+            header: null,
+        }
+    }
+
+},PROFILETAB);
+
+const MenuStack = StackNavigator({
+    Menu: {
+        screen: Menu,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    Profile: {
+        screen: ProfileTab,
+        navigationOptions: {
+            header: null,
+        }
+    }
+},{
+    lazy:true,
+    initialRouteName: "Menu",
+
+});
 
 const MainStack = TabNavigator({
     TimeLine: {
@@ -76,7 +119,7 @@ const MainStack = TabNavigator({
         })
     },
     Menu: {
-        screen: Menu,
+        screen: MenuStack,
         navigationOptions: ({navigation}) => ({
             tabBarIcon: ({focused}) => {
                 return <Image
@@ -109,7 +152,7 @@ const MainStack = TabNavigator({
         style: {
             backgroundColor: '#ffffff',
     }, }
-})
+});
 const PlayerSignInStack = TabNavigator({
         Player: {
             screen: UserBasic,
@@ -220,9 +263,6 @@ export const Navigator = StackNavigator({
         Main: {
             screen: MainStack,
         },
-        Profil: {
-            screen: Profil,
-        }
     },
     {
         initialRouteName: "Main",

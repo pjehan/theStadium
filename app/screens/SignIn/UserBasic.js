@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {View,StyleSheet,Button,DatePickerAndroid,Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
-import {styles} from '../../assets/css/global';
+import {GLOBAL_STYLE} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
 class userBasic extends Component {
@@ -28,7 +28,7 @@ class userBasic extends Component {
         Coach = <CustomInput
         container={''}
         placeholder={'Nom du club'}
-        input={styles.input}
+        input={GLOBAL_STYLE.input}
         state={'club'}
         textColor={'#333333'}
         borderColor={'transparent'}
@@ -39,8 +39,8 @@ class userBasic extends Component {
             <View style={{flex: 7, backgroundColor:'white',justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
                 <View style={{flex: 2, justifyContent: 'center'}}>
-                    <Text style={[styles.h1, styles.mainColor]}>Création de votre profil</Text>
-                    <Text style={[styles.miniDescription]}>
+                    <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Création de votre profil</Text>
+                    <Text style={[GLOBAL_STYLE.miniDescription]}>
                         Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
                     </Text>
                 </View>
@@ -54,7 +54,7 @@ class userBasic extends Component {
                         borderColor={'transparent'}
                         backgroundColor={'#eeeeee'}
                         placeholder={'Nom'}
-                        input={styles.input}
+                        input={GLOBAL_STYLE.input}
                         state={'lastname'}
                         onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                     />
@@ -64,7 +64,7 @@ class userBasic extends Component {
                         borderColor={'transparent'}
                         backgroundColor={'#eeeeee'}
                         placeholder={'Prénom'}
-                        input={styles.input}
+                        input={GLOBAL_STYLE.input}
                         state={'firstname'}
                         onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                     />
@@ -76,7 +76,7 @@ class userBasic extends Component {
                     backgroundColor={'#eeeeee'}
                     placeholder={'Date de naissance'}
                     state={'birthdate'}
-                    input={styles.input}
+                    input={GLOBAL_STYLE.input}
                     format={'date'}
                     onChangeParent={(state,newvalue) => {this.onChangeInfos(state,newvalue)}}
                     />

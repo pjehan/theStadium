@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity, Picker, Item} from 'react-native';
-import {styles} from '../../../assets/css/global';
+import {GLOBAL_STYLE} from '../../../assets/css/global';
 import CustomInput from '../../../components/CustomInput';
 const style = StyleSheet.create({
     tabContainer: {
@@ -65,8 +65,8 @@ export default class PlayerInfos extends Component {
           <View style={{flex: 7,backgroundColor:'white', justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
               <View style={{flex: 2, justifyContent: 'center'}}>
-                  <Text style={[styles.h1, styles.mainColor]}>Le football et vous</Text>
-                  <Text style={[styles.miniDescription]}>
+                  <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Le football et vous</Text>
+                  <Text style={[GLOBAL_STYLE.miniDescription]}>
                       Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
                   </Text>
               </View>
@@ -77,7 +77,7 @@ export default class PlayerInfos extends Component {
                   <CustomInput
                       container={''}
                       placeholder={'Nom de votre club'}
-                      input={styles.input}
+                      input={GLOBAL_STYLE.input}
                       state={'club'}
                       textColor={'#333333'}
                       borderColor={'transparent'}
@@ -85,7 +85,7 @@ export default class PlayerInfos extends Component {
                       onChangeParent={() => {}}
                   />
                     <View style={{backgroundColor:'#eeeeee'}}>
-                  <Picker style={styles.input}
+                  <Picker style={GLOBAL_STYLE.input}
                     selectedValue={this.state.team}
                     prompt="Votre équipe"
                     onValueChange={itemValue => this.setState({ team: itemValue })}>
@@ -95,7 +95,7 @@ export default class PlayerInfos extends Component {
               </Picker>
             </View>
             <View style={{backgroundColor:'#eeeeee'}}>
-          <Picker style={styles.input}
+          <Picker style={GLOBAL_STYLE.input}
           prompt="Poste joué"
     selectedValue={this.state.poste}
     onValueChange={itemValue => this.setState({ poste: itemValue })}>

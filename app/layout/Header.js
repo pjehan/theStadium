@@ -3,10 +3,10 @@
  */
 import React, {Component} from 'react';
 import { View, Platform, StatusBar, Image,Text, TouchableHighlight } from 'react-native';
-import { styles } from '../assets/css/global';
+import { GLOBAL_STYLE } from '../assets/css/global';
 import {Icon} from 'react-native-elements';
 import Expo from 'expo';
-//[styles.outerContainer]}
+//[GLOBAL_STYLE.outerContainer]}
 export default class Header extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +15,7 @@ render() {
     var headerText;
     var icon;
     if(this.props.headerType === 'logo') {
-        headerText = <Image style={[styles.headerMiddleLogo]}
+        headerText = <Image style={[GLOBAL_STYLE.headerMiddleLogo]}
                             source={require('../assets/img/thestadium/logo-blanc.png')} />;
     } else {
         headerText = <Text>TheStadium</Text>
@@ -32,9 +32,9 @@ render() {
     return (
 
         <View
-            style={[styles.outerContainer, {paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight}]}>
+            style={[GLOBAL_STYLE.outerContainer, {paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight}]}>
             <StatusBar translucent={false} />
-            <View style={styles.innerContainer}>
+            <View style={GLOBAL_STYLE.innerContainer}>
                 {icon}
                 {headerText}
             </View>

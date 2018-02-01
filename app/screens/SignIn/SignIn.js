@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Text, View, StatusBar } from 'react-native';
-import { styles } from '../../assets/css/global';
+import { GLOBAL_STYLE } from '../../assets/css/global';
 import {userActions} from '../../_actions';
 import {connect} from 'react-redux';
 
@@ -17,8 +17,8 @@ class SignIn extends Component {
         return (
             <View style={{flex: 6, justifyContent:'flex-start', paddingLeft:60, paddingRight:60}}>
                 <View style={{flex:2, justifyContent:'center'}}>
-                    <Text style={[styles.h1, styles.mainColor]}>Bienvenue</Text>
-                    <Text style={[styles.description, styles.mainColor]}>Quel profil êtes-vous ?</Text>
+                    <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Bienvenue</Text>
+                    <Text style={[GLOBAL_STYLE.description, GLOBAL_STYLE.mainColor]}>Quel profil êtes-vous ?</Text>
                 </View>
                 <View  style={{flex:3, justifyContent:'space-around'}}>
                     <Button

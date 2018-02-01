@@ -4,7 +4,7 @@ import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import UserActions from './UserActions';
 import OwnerHeader from './OwnerHeader';
 import Content from './Content';
-import { styles } from '../../../assets/css/global';
+import { GLOBAL_STYLE } from '../../../assets/css/global';
 import { StyleSheet, Image } from 'react-native';
 const PostStyle = StyleSheet.create({
     container: {

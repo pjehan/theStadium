@@ -13,7 +13,7 @@ import {
     ActivityIndicator
 } from 'react-native';
 import orientation from '../config/orientation';
-import { styles } from '../assets/css/global';
+import { GLOBAL_STYLE } from '../assets/css/global';
 import CustomInput from '../components/CustomInput';
 
 export default class Login extends Component {
@@ -54,21 +54,21 @@ export default class Login extends Component {
 
       var {navigate} = this.props.navigation;
     return (
-        <ScrollView contentContainerStyle={[styles.mainColorBG, styles.justifyStretch]} >
+        <ScrollView contentContainerStyle={[GLOBAL_STYLE.mainColorBG, GLOBAL_STYLE.justifyStretch]} >
             <Modal
                 animationType="slide"
                 transparent={false}
                 visible={this.state.modalVisible}
                 onRequestClose={() => this.setModalVisible(false)}
             >
-                <View style={[styles.mainColorBG, styles.justifyMiddle]}>
+                <View style={[GLOBAL_STYLE.mainColorBG, GLOBAL_STYLE.justifyMiddle]}>
                 <ActivityIndicator color="#ffffff" size="large" />
                 <Text style={{color: '#ffffff', fontSize: 16}}>Connexion</Text>
                 </View>
             </Modal>
             <View >
-                <Image style={styles.middleLogo} source={require('../assets/img/thestadium/logo-blanc.png')} />
-                <Text style={styles.slogant}>Partagez et suivez lactualité du foot amateur</Text>
+                <Image style={GLOBAL_STYLE.middleLogo} source={require('../assets/img/thestadium/logo-blanc.png')} />
+                <Text style={GLOBAL_STYLE.slogant}>Partagez et suivez lactualité du foot amateur</Text>
             </View>
       <KeyboardAvoidingView
           behavior="padding">
@@ -80,7 +80,7 @@ export default class Login extends Component {
               placeholder={'Votre Identifiant'}
               textColor={'white'}
               borderColor={'white'}
-              input={styles.input}
+              input={GLOBAL_STYLE.input}
               state={'email'}
               security={false}
               onChangeParent={(state,newvalue) => this.onChange(state,newvalue)}
@@ -90,13 +90,13 @@ export default class Login extends Component {
                   textColor={'white'}
                   borderColor={'white'}
                   placeholder={'Votre Mot de Passe'}
-                  input={styles.input}
+                  input={GLOBAL_STYLE.input}
                   security={true}
                   state={'password'}
                   onChangeParent={(state,newvalue) => this.onChange(state,newvalue)}
                   />
                   <TouchableOpacity disabled={(this.state.email && this.state.password ? false : true)}
-                                    style={[styles.loginButton, {backgroundColor:this.state.email && this.state.password ? '#ffffff' : '#cccccc'}]}
+                                    style={[GLOBAL_STYLE.loginButton, {backgroundColor:this.state.email && this.state.password ? '#ffffff' : '#cccccc'}]}
                                     onPress={() => {this.loginIn()}}>
                     <Text>Connexion</Text>
                   </TouchableOpacity>
@@ -105,8 +105,8 @@ export default class Login extends Component {
       </KeyboardAvoidingView>
         <View>
           <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("SignIn", {})} >Pas encore inscrit ?</Text>
-          <TouchableOpacity onPress={() => navigate("SignIn", {})} style={styles.loginButton} >
-            <Text style={styles.loginText}>Démarrer linscription</Text>
+          <TouchableOpacity onPress={() => navigate("SignIn", {})} style={GLOBAL_STYLE.loginButton} >
+            <Text style={GLOBAL_STYLE.loginText}>Démarrer linscription</Text>
           </TouchableOpacity>
         </View>
         </ScrollView>

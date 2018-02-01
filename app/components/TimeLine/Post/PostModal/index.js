@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import  {TypeEnum} from "../contentType";
 import Spinner from 'react-native-number-spinner';
 import CustomInput from '../../../CustomInput';
-import { styles } from '../../../../assets/css/global';
+import { GLOBAL_STYLE } from '../../../../assets/css/global';
 let ModalContent;
 const timeLineStyle = StyleSheet.create({
     tabContainer: {
@@ -166,12 +166,12 @@ class PostModal extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={{ paddingLeft:20, paddingRight:20}}>
-                    <View style={[styles.modal,{alignItems:'center'}]}>
+                    <View style={[GLOBAL_STYLE.modal,{alignItems:'center'}]}>
                         <View style={[timeLineStyle.ownerStyle, {flexDirection:'row', marginTop:20, marginBottom:20}]}>
                             <Image style={timeLineStyle.profilePic} source={require('../../../../assets/img/TA-Rennes.jpg')}/>
                             <Text style={timeLineStyle.title}>{this.props.owner.firstName + '\n' + this.props.owner.lastName}</Text>
                         </View>
-                        <Text style={styles.text}>{Description}</Text>
+                        <Text style={GLOBAL_STYLE.text}>{Description}</Text>
                     </View>
                 <View style={{flexDirection:'row',marginTop:40, marginBottom:40}}>
                     <Text style={{marginRight:20}}>{Label}</Text>
@@ -185,7 +185,7 @@ class PostModal extends Component {
                     <CustomInput
                         container={''}
                         placeholder={'L\' équipe que vous avez affronté'}
-                        input={[styles.input,{marginBottom:10}]}
+                        input={[GLOBAL_STYLE.input,{marginBottom:10}]}
                         description={'Ecrivez le nom complet de l\' équipe \nEx: CPB Bréquigny'}
                         state={'club'}
                         textColor={'#000000'}
@@ -223,12 +223,12 @@ class PostModal extends Component {
                 </TouchableOpacity>
             </View>
             <View style={{ flex:1,paddingLeft:20, paddingRight:20}}>
-                <View style={[styles.modal,{alignItems:'center'}]}>
+                <View style={[GLOBAL_STYLE.modal,{alignItems:'center'}]}>
                     <View style={[timeLineStyle.ownerStyle, {flexDirection:'row', marginTop:20, marginBottom:20}]}>
                         <Image style={timeLineStyle.profilePic} source={require('../../../../assets/img/TA-Rennes.jpg')}/>
                         <Text style={timeLineStyle.title}>{this.props.owner.firstName + '\n' + this.props.owner.lastName}</Text>
                     </View>
-                    <Text style={styles.text}>Partager en toute simplicié</Text>
+                    <Text style={GLOBAL_STYLE.text}>Partager en toute simplicié</Text>
                 </View>
 
             </View>

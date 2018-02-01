@@ -36,10 +36,12 @@ export default class Menu extends Component {
     }
 
     onPressHandler(action, params) {
-        if(action != 'profil'){
-            this.props.navigation.navigate(action);
+        var {navigate} = this.props.navigation;
+        console.log(this.props.navigation, action)
+        if(action !== 'Profil'){
+            navigate(action);
         } else {
-            this.props.navigation.navigate(action, params);
+            navigate("Profile", {});
         }
     }
 

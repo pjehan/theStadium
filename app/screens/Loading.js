@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Image, Button } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
-import { styles } from '../assets/css/global';
+import { GLOBAL_STYLE } from '../assets/css/global';
 
 const navigateAction = NavigationActions.navigate({
   routeName: 'Login',
@@ -33,12 +33,12 @@ componentDidMount() {
       navigate("Login", {})
     }
     return (
-      <View style={[styles.mainColorBG, styles.justifyEnd]}>
-        <Image style={styles.middleLogo} source={require('../assets/img/thestadium/logo-blanc.png')} />
+      <View style={[GLOBAL_STYLE.mainColorBG, GLOBAL_STYLE.justifyEnd]}>
+        <Image style={GLOBAL_STYLE.middleLogo} source={require('../assets/img/thestadium/logo-blanc.png')} />
 
-        <View style={styles.sponsor}>
-          <Text style={styles.sponsorText}> Partenaire principal </Text>
-          <Image style={styles.sponsorI} source={require('../assets/img/thestadium/logo-blanc.png')} />
+        <View style={GLOBAL_STYLE.sponsor}>
+          <Text style={GLOBAL_STYLE.sponsorText}> Partenaire principal </Text>
+          <Image style={GLOBAL_STYLE.sponsorI} source={require('../assets/img/thestadium/logo-blanc.png')} />
         </View>
       </View>
     )

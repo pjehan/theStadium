@@ -1,61 +1,12 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
-import {styles} from '../assets/css/global';
+import {GLOBAL_STYLE,timeLineStyle} from '../assets/css/global';
 import Post from '../components/TimeLine/Post';
 import PostModal from '../components/TimeLine/Post/PostModal';
 import {connect} from 'react-redux';
 import {postActions} from '../_actions';
 
-const timeLineStyle = StyleSheet.create({
-    tabContainer: {
-        justifyContent: 'space-between',
-        backgroundColor: '#ffffff',
-        flexDirection: 'row',
-        width: '100%',
-        height: 40
-    },
-    tabButton: {
-        backgroundColor: 'white',
-        flex: 1,
-        height: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    tabButtonText: {
-        color: '#003366',
-        fontWeight: '400',
-    },
-    tabButtonPicto: {
-        height: 15,
-        width: 15,
-        marginRight: 5
-    },
-    buttonBorder: {
-        alignSelf: 'center',
-        height: '70%',
-        width: 1,
-        backgroundColor: '#cccccc'
-    },
-    singlePost: {
-        marginBottom: 200
-    }, profilePic: {
-        width: 45,
-        height: 45,
-        borderRadius: 45,
-        marginRight: 5
-    },
-    text: {
-        color: 'black',
-        fontSize: 12
-    },
-    title: {
-        color: 'black',
-        fontSize: 16,
-        fontWeight: '500'
-    },
-});
 
 let postList ;
 let Modal = null;
@@ -89,7 +40,7 @@ class TimeLine extends Component {
         const {posts} = this.props;
         console.log(posts.posts)
         return (
-            <View contentContainerStyle={[styles.greyColorBG]}>
+            <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 <PostModal owner={{
                     lastName: 'Segara',
                     firstName: 'Sophie'

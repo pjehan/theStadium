@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
-import {styles} from '../../assets/css/global';
+import {GLOBAL_STYLE} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
 const style = StyleSheet.create({
@@ -37,8 +37,8 @@ class PlayerInfos extends Component {
           <View style={{flex: 7,backgroundColor:'white', justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
               <View style={{flex: 2, justifyContent: 'center'}}>
-                  <Text style={[styles.h1, styles.mainColor]}>Création de votre profil</Text>
-                  <Text style={[styles.miniDescription]}>
+                  <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Création de votre profil</Text>
+                  <Text style={[GLOBAL_STYLE.miniDescription]}>
                       Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
                   </Text>
               </View>
@@ -49,7 +49,7 @@ class PlayerInfos extends Component {
                   <CustomInput
                       container={''}
                       placeholder={'Adresse e-mail'}
-                      input={styles.input}
+                      input={GLOBAL_STYLE.input}
                       state={'email'}
                       textColor={'#333333'}
                       borderColor={'transparent'}
@@ -59,7 +59,7 @@ class PlayerInfos extends Component {
                   <CustomInput
                       container={''}
                       placeholder={'Mot de passe'}
-                      input={styles.input}
+                      input={GLOBAL_STYLE.input}
                       state={'password'}
                       textColor={'#333333'}
                       borderColor={'transparent'}
@@ -71,7 +71,7 @@ class PlayerInfos extends Component {
                   <CustomInput
                       container={''}
                       placeholder={'Confirmer le mot de passe'}
-                      input={styles.input}
+                      input={GLOBAL_STYLE.input}
                       state={'password'}
                       textColor={'#333333'}
                       borderColor={'transparent'}

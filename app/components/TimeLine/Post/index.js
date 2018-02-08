@@ -76,6 +76,9 @@ export default class Post extends Component {
         post: this.props.post
       }
     }
+    componentWillMount() {
+        console.log(this.state.post)
+    }
     render() {
         return (
          <View style={PostStyle.container}>

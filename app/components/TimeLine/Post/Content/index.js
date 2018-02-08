@@ -48,8 +48,12 @@ export default class Content extends Component {
                     break;
             }*/
         }
-        if(this.props.media.length = 1){
+        console.log(this.props.content);
+        console.log('*************************')
+        if(this.props.media.length > 0){
             Media = (<LocalImage source={this.props.media[0].url}/>)
+        } else {
+            Media = null;
         }
         postContent = (
             <View>

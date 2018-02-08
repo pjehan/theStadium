@@ -22,6 +22,7 @@ import MainTabView from '../../components/Main/TabBar'
 
 
 import Profil from '../../screens/Profil';
+import Gallery from '../../screens/Gallery';
 import ProfileTabBar from '../../components/Profil/profilTab';
 import Actus from '../../screens/Actus'
 
@@ -53,6 +54,12 @@ const ProfileTab = TabNavigator({
     },
     Actus: {
         screen: Actus,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    gallery: {
+        screen: Gallery,
         navigationOptions: {
             header: null,
         }

@@ -29,16 +29,18 @@ class TimeLine extends Component {
     componentDidUpdate(nextProps) {
         const POST = nextProps.posts.posts;
     }
+
     onToggleModal(visible, type) {
         this.setState({modalVisible: visible});
         this.setState({modalType: type});
 
         this.forceUpdate();
     }
-
+    componentWillReceiveProps() {
+        this.forceUpdate();
+    }
     render() {
         const {posts} = this.props;
-        console.log(posts.posts)
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 <PostModal owner={{
@@ -74,9 +76,9 @@ class TimeLine extends Component {
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35}}>
-                    {this.props.posts.posts ? posts.posts.map((post, index) => {
-                        <Post style={timeLineStyle.singlePost} key={index} post={post} />
-                    }) : console.log(this.props,posts, '***********************************')}
+                    {this.props.posts.posts ?  posts.posts.map((post) => {
+                        return <Post style={timeLineStyle.singlePost} key={post.id} post={post} />
+                    }) : null}
                 </ScrollView>
             </View>
         )

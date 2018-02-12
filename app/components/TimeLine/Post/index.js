@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import {StyleSheet, Image,Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
 import UserActions from './UserActions';
 import OwnerHeader from './OwnerHeader';
 import Content from './Content';
-import { GLOBAL_STYLE } from '../../../assets/css/global';
-import { StyleSheet, Image } from 'react-native';
+import CommentModal from './CommentModal';
+
+
 const PostStyle = StyleSheet.create({
     container: {
         backgroundColor: '#ffffff',
@@ -73,23 +74,33 @@ export default class Post extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        post: this.props.post
-      }
+        post: this.props.post,
+          modalVisible: false,
+      };
+      this.onToggleComment = this.onToggleComment.bind(this);
+    }
+    onToggleComment(visible) {
+        this.setState({modalVisible: visible});
     }
     render() {
         return (
          <View style={PostStyle.container}>
-             <OwnerHeader Owner={this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName} postDate={this.state.post.postDate}></OwnerHeader>
+             <CommentModal visible={this.state.modalVisible}
+                           post={this.state.post}
+                           toggleCommentModal={(visible) => {
+                            this.onToggleComment(visible)
+                        }}/>
+             <OwnerHeader Owner={this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName} postDate={this.state.post.postDate} />
             
-             <Content {...this.state.post}></Content>
+             <Content {...this.state.post} />
 
-            <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares} comments={this.state.post.post_comments}></UserActions>
+            <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares} comments={this.state.post.post_comments.length} />
              <View style={PostStyle.userActionText}>
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity>
                       <Text style={PostStyle.text}>Jaime</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => {this.onToggleComment(true)}}>
                       <Text style={[PostStyle.text, {marginLeft: 5,marginRight:5}]}>Commenter</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>

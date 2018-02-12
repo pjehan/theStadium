@@ -51,10 +51,10 @@ export default class Content extends Component {
         if(this.props.media.length = 1){
             Media = (<LocalImage source={this.props.media[0].url}/>)
         }
-        postContent = (
+        return (
             <View>
             <Text style={{padding:10, paddingLeft:5, paddingRight:5}}>
-                {this.content}
+                {this.props.content}
             </Text>
                 {Media}
             </View>);
@@ -73,7 +73,7 @@ export default class Content extends Component {
         }else {
             scored = ' réalisé';
         }
-        postContent = (
+        return(
             <View style={{alignItems:'center',marginBottom:20}}>
                 <View style={PostStyle.assist_and_goals}>
                     <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain' source={require('../../../../assets/img/picto/menu/actions/white_assist.png')}/>
@@ -99,7 +99,7 @@ export default class Content extends Component {
         }else {
             scored = 'marqué';
         }
-        postContent = (
+        return (
             <View style={{alignItems:'center',marginBottom:20}}>
                 <View style={PostStyle.assist_and_goals}>
                     <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain' source={require('../../../../assets/img/picto/menu/actions/white_goal.png')}/>
@@ -112,7 +112,7 @@ export default class Content extends Component {
         )
     }
     returnArticle() {
-        postContent = (
+        return (
             <View>
                 <View>
                     <Text>
@@ -123,11 +123,7 @@ export default class Content extends Component {
         )
     }
     componentWillMount(){
-        const TYPE = this.props.type;
-        if(TYPE === TypeEnum.simple){this.returnSimplePost()}
-        else if (TYPE === TypeEnum.article){this.returnArticle()}
-        else if (TYPE === TypeEnum.goals){this.returnGoalPost(this.props.owner, this.props.goals, this.props.club)}
-        else if (TYPE === TypeEnum.assists){this.returnAssistPost(this.props.owner, this.props.assist, this.props.club)}
+
         /*
         switch(TYPE) {
             case (TYPE === TypeEnum.simple):
@@ -147,9 +143,14 @@ export default class Content extends Component {
         }
 
     render() {
+        const TYPE = this.props.type;
+
         return (
                 <View>
-                    {postContent}
+                    {TYPE === TypeEnum.simple ? this.returnSimplePost() :
+                        TYPE === TypeEnum.article ? this.returnArticle() :
+                        TYPE === TypeEnum.goals ? this.returnGoalPost(this.props.owner, this.props.goals, this.props.club) :
+                        this.returnAssistPost(this.props.owner, this.props.assist, this.props.club)}
                 </View>
         )
     }

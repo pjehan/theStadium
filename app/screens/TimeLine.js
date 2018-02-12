@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet,FlatList, Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
 import {GLOBAL_STYLE,timeLineStyle} from '../assets/css/global';
 import Post from '../components/TimeLine/Post';
@@ -20,6 +20,8 @@ class TimeLine extends Component {
             modalType: '',
         };
         this.onToggleModal = this.onToggleModal.bind(this);
+        this.renderItem = this.renderItem.bind(this);
+        this.renderList = this.renderList.bind(this);
     }
 
     componentWillMount() {
@@ -34,6 +36,17 @@ class TimeLine extends Component {
         this.setState({modalType: type});
 
         this.forceUpdate();
+    }
+    renderItem(item) {
+       return <Post style={timeLineStyle.singlePost} key={item.id} post={item} />
+    }
+    renderList() {
+        return (
+            <FlatList
+                data={this.props.posts.posts}
+                renderItem={({item}) => this.renderItem(item)}
+            />
+        );
     }
 
     render() {
@@ -74,9 +87,7 @@ class TimeLine extends Component {
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35}}>
-                    {this.props.posts.posts ? posts.posts.map((post, index) => {
-                        <Post style={timeLineStyle.singlePost} key={index} post={post} />
-                    }) : console.log(this.props,posts, '***********************************')}
+                    {this.renderList()}
                 </ScrollView>
             </View>
         )

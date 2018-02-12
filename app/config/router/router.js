@@ -24,6 +24,7 @@ import MainTabView from '../../components/Main/TabBar'
 import Profil from '../../screens/Profil';
 import ProfileTabBar from '../../components/Profil/profilTab';
 import Actus from '../../screens/Actus'
+import Gallery from '../../screens/Gallery'
 
 const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
@@ -53,6 +54,12 @@ const ProfileTab = TabNavigator({
     },
     Actus: {
         screen: Actus,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    _Gallery: {
+        screen: Gallery,
         navigationOptions: {
             header: null,
         }

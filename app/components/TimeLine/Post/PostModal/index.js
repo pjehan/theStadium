@@ -91,7 +91,6 @@ class PostModal extends Component {
     }
     publishModal(type) {
         this.props.toggleModal(false, type);
-        console.log(this.state)
     }
     _addMedia() {
             let result = Expo.ImagePicker.launchImageLibraryAsync('All');

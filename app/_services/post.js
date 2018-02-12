@@ -3,6 +3,7 @@ export const postService = {
 };
 let postList = [
     {
+        id:1,
         owner: {
             lastName: 'Maradou',
             firstName: 'Pierre',
@@ -11,7 +12,7 @@ let postList = [
             team: ''
         },
         type:'simple',
-        media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
+        media:[{url:'https://fthmb.tqn.com/2fD48rBEXUFqoGZd4NIXYzRXcdQ=/768x0/filters:no_upscale()/Mario_Luigi_Wallpaper_screenshot-59b77f1b396e5a00103bdd39.jpg'}],
         content: 'Bonjour je suis zinedine zidanisme',
         postDate: new Date(),
         post_likes: 42,
@@ -19,6 +20,7 @@ let postList = [
         post_shares: 1
     },
     {
+        id:2,
         owner: {
             lastName: 'Segara',
             firstName: 'Sophie',
@@ -34,6 +36,7 @@ let postList = [
         post_shares: 5
     },
     {
+        id:3,
         owner: {
             lastName: 'Segara',
             firstName: 'Sophie',
@@ -49,6 +52,7 @@ let postList = [
         post_shares: 5
     },
     {
+        id:4,
         owner: {
             lastName: 'Segara',
             firstName: 'Sophie',

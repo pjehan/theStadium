@@ -68,7 +68,7 @@ export default class UserActions extends Component {
     render() {
         return (
 <View style={PostStyle.userAction}>
-            <View style={{height:0.5, backgroundColor:'#cccccc', width: '100%'}}></View>
+            <View style={{height:0.5, backgroundColor:'#cccccc', width: '100%'}} />
               <TouchableOpacity style={{marginLeft:10}}>
               <View style={{alignItems:'center'}}>
                 <Image resizeMode="contain" style={{height:20, width:20}} source={require('../../../../assets/img/picto/actualite/like.png')}/>
@@ -89,7 +89,7 @@ export default class UserActions extends Component {
                   <Text style={PostStyle.actionText}>{this.props.shares}</Text>
                 </View>
               </TouchableOpacity>
-              <View style={{height:0.5, backgroundColor:'#cccccc', width: '100%'}}></View>
+              <View style={{height:0.5, backgroundColor:'#cccccc', width: '100%'}} />
             </View>
             )
           }

@@ -69,24 +69,22 @@ const PostStyle = StyleSheet.create({
         backgroundColor: '#00A65B',
     }
 });
+let post;
 export default class Post extends Component {
     constructor(props) {
-      super(props);
-      this.state = {
-        post: this.props.post
-      }
-    }
-    componentWillMount() {
-        console.log(this.state.post)
+        super(props);
+        this.state = {
+            post: this.props.post
+        }
     }
     render() {
         return (
          <View style={PostStyle.container}>
-             <OwnerHeader Owner={this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName} postDate={this.state.post.postDate}></OwnerHeader>
-            
-             <Content {...this.state.post}></Content>
+             <OwnerHeader Owner={this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName} postDate={this.state.post.postDate} />
 
-            <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares} comments={this.state.post.post_comments}></UserActions>
+             <Content {...this.state.post} />
+
+            <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares} comments={this.state.post.post_comments} />
              <View style={PostStyle.userActionText}>
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity>

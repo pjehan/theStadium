@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, FlatList,Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
 import {GLOBAL_STYLE,timeLineStyle} from '../assets/css/global';
 import Post from '../components/TimeLine/Post';
@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {postActions} from '../_actions';
 
 
-let postList ;
+let postList = null;
 let Modal = null;
 
 
@@ -20,14 +20,13 @@ class TimeLine extends Component {
             modalType: '',
         };
         this.onToggleModal = this.onToggleModal.bind(this);
+        this._renderItem = this._renderItem.bind(this);
     }
 
     componentWillMount() {
         const {postsFetched, posts} = this.props;
         this.props.dispatch(postActions.getAll());
-    }
-    componentDidUpdate(nextProps) {
-        const POST = nextProps.posts.posts;
+        postList = posts.posts;
     }
 
     onToggleModal(visible, type) {
@@ -36,11 +35,31 @@ class TimeLine extends Component {
 
         this.forceUpdate();
     }
-    componentWillReceiveProps() {
-        this.forceUpdate();
+    shouldComponentUpdate(nextProps, nextState) {
+        const {post} = this.props;
+        if(JSON.stringify(post) !== JSON.stringify(nextProps.post)){
+            this.props.dispatch(postActions.getAll());
+        }
+        return true;
+    }
+    _renderItem(item) {
+        return (
+            <Post style={timeLineStyle.singlePost}  post={item} />
+        )
+    }
+    _renderList(){
+        const {posts} = this.props;
+
+        return(
+            <FlatList
+                style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35}}
+                data={posts.posts}
+                renderItem={({item}) => this._renderItem(item)}
+                keyExtractor={item => item.id}
+            />
+        )
     }
     render() {
-        const {posts} = this.props;
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 <PostModal owner={{
@@ -58,7 +77,7 @@ class TimeLine extends Component {
                                source={require('../assets/img/picto/menu/actions/assist.png')}/>
                         <Text style={timeLineStyle.tabButtonText}>Passe dé.</Text>
                     </TouchableOpacity>
-                    <View style={timeLineStyle.buttonBorder}></View>
+                    <View style={timeLineStyle.buttonBorder} />
                     <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                         this.onToggleModal(true, 'goals')
                     }}>
@@ -66,7 +85,7 @@ class TimeLine extends Component {
                                source={require('../assets/img/picto/menu/actions/goal.png')}/>
                         <Text style={timeLineStyle.tabButtonText}>But</Text>
                     </TouchableOpacity>
-                    <View style={timeLineStyle.buttonBorder}></View>
+                    <View style={timeLineStyle.buttonBorder} />
                     <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                         this.onToggleModal(true, 'simple')
                     }}>
@@ -75,11 +94,7 @@ class TimeLine extends Component {
                         <Text style={timeLineStyle.tabButtonText}>Publier</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35}}>
-                    {this.props.posts.posts ?  posts.posts.map((post) => {
-                        return <Post style={timeLineStyle.singlePost} key={post.id} post={post} />
-                    }) : null}
-                </ScrollView>
+                {this.state.postsFetching ? <Text>...</Text> : this._renderList()}
             </View>
         )
     }
@@ -88,6 +103,7 @@ const mapStateToProps = (state) => {
     return {
         posts: state.postList.posts,
         postsFetched: state.postList.fetched,
+        postsFetching: state.postList.fetching,
     };
 };
 export default connect(mapStateToProps)(TimeLine);

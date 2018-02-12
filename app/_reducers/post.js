@@ -2,6 +2,7 @@ import {postConstants} from '../_constants';
 
 export function postList(state = {
     posts: [{
+        id: null,
         owner: null,
         type: null,
         media: [{url: null}],

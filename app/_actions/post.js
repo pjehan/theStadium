@@ -5,6 +5,7 @@ export const postActions = {
     getAll,
     addComment,
     getComments,
+    deleteComment
 };
 function getAll() {
 
@@ -33,9 +34,27 @@ function addComment(id, comment) {
         dispatch(request());
         postService.addComment(id, comment)
             .then(
-                newComments => {console.log(id,comment);dispatch(success({newComments}))},
+                comments => {console.log(id,comment);dispatch(success({comments}))},
                 error => {
                     console.log(error);
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request() {return { type: postConstants.ADD_COMMENT_REQUEST } }
+    function success(posts) { return { type: postConstants.ADD_COMMENT_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.ADD_COMMENT_FAILURE, payload: error} }
+}
+
+function deleteComment(id, commentID) {
+    return (dispatch) => {
+        dispatch(request());
+        postService.deleteComment(id, commentID)
+            .then(
+                comments => {dispatch(success({comments}))},
+                error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }
@@ -52,7 +71,8 @@ function getComments(id) {
         dispatch(request());
         postService.getComments(id)
             .then(
-                comments => {dispatch(success({comments}))},
+                comments => {
+                    console.log('******************', comments);dispatch(success({comments}))},
                 error=>{
                     dispatch(failure(error));
                 }

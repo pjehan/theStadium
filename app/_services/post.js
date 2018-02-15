@@ -2,10 +2,10 @@ export const postService = {
     getAll,
     addComment,
     getComments,
+    deleteComment
 };
 let postList = [
     {
-        id:1,
         owner: {
             lastName: 'Maradou',
             firstName: 'Pierre',
@@ -14,14 +14,14 @@ let postList = [
             team: ''
         },
         type:'simple',
-        media:[{url:'https://fthmb.tqn.com/2fD48rBEXUFqoGZd4NIXYzRXcdQ=/768x0/filters:no_upscale()/Mario_Luigi_Wallpaper_screenshot-59b77f1b396e5a00103bdd39.jpg'}],
+        media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
         content: 'Bonjour je suis zinedine zidanisme',
         postDate: new Date(),
         post_likes: 42,
         post_comments: [
             {
                 user:{
-                    lastName: 'Bink',
+                    lastName: 'Jesus',
                     firstName: 'JarJar',
                     profilePic: 'https://static1.squarespace.com/static/51b3dc8ee4b051b96ceb10de/51ce6099e4b0d911b4489b79/527a724ce4b008de58b3ea68/1383764526315/jar-jar-binks-dies-in-star-wars-deleted-scene-preview.jpg?format=300w',
                     sex: 'male',
@@ -43,7 +43,6 @@ let postList = [
         post_shares: 1
     },
     {
-        id:2,
         owner: {
             lastName: 'Segara',
             firstName: 'Sophie',
@@ -80,7 +79,6 @@ let postList = [
         post_shares: 5
     },
     {
-        id:3,
         owner: {
             lastName: 'Segara',
             firstName: 'Sophie',
@@ -117,7 +115,6 @@ let postList = [
         post_shares: 5
     },
     {
-        id:4,
         owner: {
             lastName: 'Segara',
             firstName: 'Sophie',
@@ -165,26 +162,46 @@ function getAll() {
         method: 'GET',
         headers: authHeader()
     };
-
     return fetch('/users', requestOptions).then(handleResponse);*/
     //return handleResponse(true, postList);
 }
 function addComment(id, comment) {
-    let postListNew = postList;
     postList[id].post_comments.push(comment);
-    console.log(comment);
-    console.log('////////////////////:::')
     return Promise.resolve({
-        then: function(onFullfill, onReject) {onFullfill(postList[id].post_comments);onReject('erreur')}
+        then: function(onFulfill, onReject) {onFulfill(postList[id].post_comments);onReject('erreur')}
+    })
+}
+function deleteComment(id, commentID) {
+    postList[id].post_comments.splice(commentID,1);
+    return Promise.resolve({
+        then: function(onFulfill, onReject) {onFulfill(postList[id].post_comments);onReject('erreur')}
     })
 }
 function getComments(id) {
-    return Promise.resolve({
-        then: function (onFullfill, onReject) {
-            onFullfill(postList[id].post_comments);
-            onReject('erreur')
-        }
-    });
+    if(id === undefined) {
+        return Promise.resolve({
+            then: function(onFullfill, onReject) {
+                onFullfill([{
+                    user: {
+                        lastName: null,
+                        firstName: null,
+                        profilePic: null,
+                        sex: null,
+                        team: null
+                    }, comment: null
+                }]);
+                onReject('erreur');
+            }
+        })
+    }else {
+        return Promise.resolve({
+            then: function (onFulfill, onReject) {
+                onFulfill(postList[id].post_comments);
+                onReject('erreur')
+            }
+        });
+
+    }
 }
 function handleResponse(test, response) {
     if (!test) {

@@ -4,6 +4,7 @@ import {alertActions} from './alert'
 export const postActions = {
     getAll,
     addComment,
+    getComments,
 };
 function getAll() {
 
@@ -32,7 +33,7 @@ function addComment(id, comment) {
         dispatch(request());
         postService.addComment(id, comment)
             .then(
-                newPosts => {console.log(id,comment);dispatch(success({newPosts}))},
+                newComments => {console.log(id,comment);dispatch(success({newComments}))},
                 error => {
                     console.log(error);
                     dispatch(failure(error));
@@ -44,4 +45,21 @@ function addComment(id, comment) {
     function request() {return { type: postConstants.ADD_COMMENT_REQUEST } }
     function success(posts) { return { type: postConstants.ADD_COMMENT_SUCCESS, payload: posts} }
     function failure(error) { return { type: postConstants.ADD_COMMENT_FAILURE, payload: error} }
+}
+
+function getComments(id) {
+    return (dispatch) => {
+        dispatch(request());
+        postService.getComments(id)
+            .then(
+                comments => {dispatch(success({comments}))},
+                error=>{
+                    dispatch(failure(error));
+                }
+            )
+    };
+
+    function request() {return { type: postConstants.GETALL_COMMENTS_REQUEST } }
+    function success(comments) { return { type: postConstants.GETALL_COMMENTS_SUCCESS, payload: comments} }
+    function failure(error) { return { type: postConstants.GETALL_COMMENTS_FAILURE, payload: error} }
 }

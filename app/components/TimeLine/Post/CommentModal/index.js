@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import CustomInput from "../../../CustomInput";
-import {GLOBAL_STYLE} from "../../../../assets/css/global";
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from 'redux';
@@ -83,7 +82,6 @@ class CommentModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            comments : this.props.post.post_comments || null,
             userMessage:'',
             refreshComments: null,
         };
@@ -93,27 +91,30 @@ class CommentModal extends Component {
         };
 
     renderItem(item){
-        return (
-            <View style={PostStyle.container}>
-                <View style={PostStyle.ownerStyle}>
-                <Image style={PostStyle.profilePic} source={{uri: item.user.profilePic}}/>
-                    <View>
-                    <Text style={PostStyle.title}>{item.user.firstName} {item.user.lastName}</Text>
-                        <Text style={PostStyle.content}>{item.comment}</Text>
+        if(item != null) {
+            console.log(item)
+            return (
+                <View style={PostStyle.container}>
+                    <View style={PostStyle.ownerStyle}>
+                        <Image style={PostStyle.profilePic} source={{uri: item.user.profilePic}}/>
+                        <View>
+                            <Text style={PostStyle.title}>{item.user.firstName} {item.user.lastName}</Text>
+                            <Text style={PostStyle.content}>{item.comment}</Text>
+                        </View>
                     </View>
                 </View>
-            </View>
-        )
+            )
+        }
     }
     renderList() {
 
             return (
                 <FlatList
+                    data={null}
                     extraData={this.state.comments}
                     renderItem={({item}) => this.renderItem(item)}
                 />
-            )
-
+            );
     }
     toggleModal(visible) {
         this.props.toggleCommentModal(visible);
@@ -140,6 +141,7 @@ onSendComment() {
             <View>
                 <Modal animationType={"slide"} transparent={false}
                        visible={this.props.visible}
+                       onShow={ this.props.dispatch(postActions.getComments(this.props.id))}
                        onRequestClose={() => {
                            console.log("Modal has been closed.")
                        }}>
@@ -154,7 +156,7 @@ onSendComment() {
                         <Text style={{color:'#003366'}}>Revenir à l'article</Text>
                     </TouchableOpacity>
                     </View>
-                    {this.renderList()}
+                    {this.props.visible ? this.renderList() : null}
                     <View style={{justifyContent:'center', backgroundColor:'#cccccc', padding:5}}>
                     <CustomInput
                         ref={input => { this.textInput = input }}
@@ -175,7 +177,9 @@ onSendComment() {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return { actions: bindActionCreators({}, dispatch) }
-}
-export default connect(mapDispatchToProps)(CommentModal);
+const mapStateToProps = (state) => {
+    return {
+        comments: state.commentList,
+    };
+};
+export default connect(mapStateToProps)(CommentModal);

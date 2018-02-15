@@ -1,6 +1,7 @@
 export const postService = {
     getAll,
     addComment,
+    getComments,
 };
 let postList = [
     {
@@ -151,6 +152,7 @@ let postList = [
     },
 ];
 function getAll() {
+
     return Promise.resolve({
         then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
     });
@@ -171,6 +173,14 @@ function addComment(id, comment) {
     return Promise.resolve({
         then: function(onFullfill, onReject) {onFullfill(postList[id].post_comments);onReject('erreur')}
     })
+}
+function getComments(id) {
+    return Promise.resolve({
+        then: function (onFullfill, onReject) {
+            onFullfill(postList[id].post_comments);
+            onReject('erreur')
+        }
+    });
 }
 function handleResponse(test, response) {
     if (!test) {

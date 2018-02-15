@@ -48,7 +48,6 @@ class TimeLine extends Component {
             />
         );
     }
-
     render() {
         const {posts} = this.props;
         console.log(posts.posts)

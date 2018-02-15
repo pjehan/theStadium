@@ -111,6 +111,7 @@ export default class Content extends Component {
         }
         return (
             <View style={{alignItems: 'center', marginBottom: 20}}>
+
                 <View style={PostStyle.assist_and_goals}>
                     <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain'
                            source={require('../../../../assets/img/picto/menu/actions/white_goal.png')}/>
@@ -124,7 +125,7 @@ export default class Content extends Component {
     }
 
     returnArticle() {
-        postContent = (
+        return (
             <View>
                 <View>
                     <Text>

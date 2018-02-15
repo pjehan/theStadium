@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, FlatList,Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
+
 import {GLOBAL_STYLE,timeLineStyle} from '../assets/css/global';
 import Post from '../components/TimeLine/Post';
 import PostModal from '../components/TimeLine/Post/PostModal';
@@ -19,7 +20,6 @@ class TimeLine extends Component {
             modalVisible: false,
             modalType: '',
         };
-        this.onToggleModal = this.onToggleModal.bind(this);
         this._renderItem = this._renderItem.bind(this);
     }
 

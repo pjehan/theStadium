@@ -59,7 +59,9 @@ export default class CustomInput extends Component {
         this.props.onChangeParent(this.props.state, value)
     }
 
-
+    onTriggeredAction() {
+        this.props.onTriggeredAction();
+    }
     openDatePicker() {
         if (Platform.OS === 'ios') {
             // do ios job
@@ -89,8 +91,16 @@ export default class CustomInput extends Component {
     }
 
     render() {
+        let Action;
         let Input;
+        let Description
         let datePlaceholder = this.state.displayDate ? this.state.displayDate : this.props.placeholder;
+        if(this.props.action) {
+           Action = (<Icon color='#003366' name={this.props.action} style={{marginHorizontal:5}} onPress={() => this.onTriggeredAction()} />)
+        }
+        if(this.props.description) {
+            Description = (<Text style={{color:'#c8c8c8',fontSize:12,width: 300}}>{this.props.description}</Text>)
+        }
         if (this.props.type === 'date') {
             Input = <TouchableOpacity
                 onPress={() => this.openDatePicker()}
@@ -108,11 +118,13 @@ export default class CustomInput extends Component {
                 secureTextEntry={this.props.security}
                 underlineColorAndroid="transparent"
             />
+
         }
         return (
             <View style={[this.props.container, this.props.inputContainer]}>
                 {Input}
-                <Text style={{color:'#c8c8c8',fontSize:12,width: 300}}>{this.props.description}</Text>
+                {Action}
+                {Description}
             </View>
         )
     }

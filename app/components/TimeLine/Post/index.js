@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import {StyleSheet, Image,Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
 import UserActions from './UserActions';
 import OwnerHeader from './OwnerHeader';
 import Content from './Content';
-import { GLOBAL_STYLE } from '../../../assets/css/global';
-import { StyleSheet, Image } from 'react-native';
+
+
 const PostStyle = StyleSheet.create({
     container: {
         backgroundColor: '#ffffff',
@@ -85,6 +85,7 @@ export default class Post extends Component {
              <Content {...this.state.post} />
 
             <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares} comments={this.state.post.post_comments} />
+
              <View style={PostStyle.userActionText}>
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity>

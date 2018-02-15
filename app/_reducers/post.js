@@ -17,6 +17,8 @@ export function postList(state = {
     error: null,
 }, action) {
     switch (action.type) {
+
+        // POSTS HANDLING
         case postConstants.GETALL_REQUEST:
             return {...state, fetching: true, fetched: false};
             break;
@@ -25,6 +27,51 @@ export function postList(state = {
         case postConstants.GETALL_SUCCESS:
             return {...state, fetching: false, fetched: true, posts: action.payload};
             break;
+
+
+
+
+        default:
+            return state;
+    }
+}
+
+export function commentList(state = {
+    post_comments: [{
+        user: {
+            lastName: null,
+            firstName: null,
+            profilePic: null,
+            sex: null,
+            team: null
+        }, comment: null
+    }],
+    fetching: false,
+    fetched: false,
+    error: null,
+}, action) {
+    switch(action.type) {
+        // COMMENTS HANDLING
+        case postConstants.GETALL_COMMENTS_REQUEST:
+            return {...state, fetching: true, fetched: false};
+            break;
+        case postConstants.GETALL_COMMENTS_FAILURE:
+            return {...state, fetching:false, fetched:false, error:action.payload};
+            break;
+        case postConstants.GETALL_COMMENTS_SUCCESS:
+            return {...state, fetching:false, fetched:true};
+            break;
+
+        case postConstants.ADD_COMMENT_REQUEST:
+            return {...state, fetching: true, fetched: false};
+            break;
+        case postConstants.ADD_COMMENT_FAILURE:
+            return {...state, fetching:false, fetched: false, error: action.payload};
+            break
+        case postConstants.ADD_COMMENT_SUCCESS:
+            return {...state, fetching:false, fetched:true, posts: action.payload};
+            break;
+
         default:
             return state;
     }

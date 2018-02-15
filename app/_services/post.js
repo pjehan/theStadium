@@ -1,5 +1,6 @@
 export const postService = {
     getAll,
+    addComment,
 };
 let postList = [
     {
@@ -161,6 +162,15 @@ function getAll() {
 
     return fetch('/users', requestOptions).then(handleResponse);*/
     //return handleResponse(true, postList);
+}
+function addComment(id, comment) {
+    let postListNew = postList;
+    postList[id].post_comments.push(comment);
+    console.log(comment);
+    console.log('////////////////////:::')
+    return Promise.resolve({
+        then: function(onFullfill, onReject) {onFullfill(postList[id].post_comments);onReject('erreur')}
+    })
 }
 function handleResponse(test, response) {
     if (!test) {

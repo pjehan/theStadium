@@ -11,6 +11,9 @@ import {
 import {Icon} from 'react-native-elements';
 import CustomInput from "../../../CustomInput";
 import {GLOBAL_STYLE} from "../../../../assets/css/global";
+import {postActions} from "../../../../_actions";
+import {connect} from "react-redux";
+import {bindActionCreators} from 'redux';
 
 const PostStyle = StyleSheet.create({
     container: {
@@ -76,12 +79,13 @@ const PostStyle = StyleSheet.create({
         marginLeft:2
     }
 });
-export default class CommentModal extends Component {
+class CommentModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
             comments : this.props.post.post_comments || null,
             userMessage:'',
+            refreshComments: null,
         };
         this.toggleModal = this.toggleModal.bind(this);
         this.renderItem = this.renderItem.bind(this);
@@ -105,7 +109,7 @@ export default class CommentModal extends Component {
 
             return (
                 <FlatList
-                    data={this.state.comments}
+                    extraData={this.state.comments}
                     renderItem={({item}) => this.renderItem(item)}
                 />
             )
@@ -119,7 +123,16 @@ onChange(state, newvalue) {
     this.setState({[state]: newvalue})
 }
 onSendComment() {
-console.log('send');
+        const COMMENTTOADD = {
+            user:{lastName: 'Bink',
+                firstName: 'AOJFEHFIE',
+                profilePic: 'https://static1.squarespace.com/static/51b3dc8ee4b051b96ceb10de/51ce6099e4b0d911b4489b79/527a724ce4b008de58b3ea68/1383764526315/jar-jar-binks-dies-in-star-wars-deleted-scene-preview.jpg?format=300w',
+                sex: 'male',
+                team: 'Senior FD3'},
+            comment:this.state.userMessage,
+        };
+        this.props.dispatch(postActions.addComment(this.props.id,COMMENTTOADD));
+        this.forceUpdate();
 }
 
     render() {
@@ -161,3 +174,8 @@ console.log('send');
         )
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return { actions: bindActionCreators({}, dispatch) }
+}
+export default connect(mapDispatchToProps)(CommentModal);

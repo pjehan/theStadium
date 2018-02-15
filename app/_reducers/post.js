@@ -20,6 +20,8 @@ export function postList(state = {
     error: null,
 }, action) {
     switch (action.type) {
+
+        // POSTS HANDLING
         case postConstants.GETALL_REQUEST:
             return {...state, fetching: true, fetched: false};
             break;
@@ -28,6 +30,19 @@ export function postList(state = {
         case postConstants.GETALL_SUCCESS:
             return {...state, fetching: false, fetched: true, posts: action.payload};
             break;
+
+            // COMMENTS HANDLING
+        case postConstants.ADD_COMMENT_REQUEST:
+            return {...state, fetching: true, fetched: false};
+            break;
+        case postConstants.ADD_COMMENT_FAILURE:
+            return {...state, fetching:false, fetched: false, error: action.payload};
+            break
+        case postConstants.ADD_COMMENT_SUCCESS:
+            return {...state, fetching:false, fetched:true, posts: action.payload};
+            break;
+
+
         default:
             return state;
     }

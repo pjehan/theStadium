@@ -87,6 +87,7 @@ export default class Post extends Component {
          <View style={PostStyle.container}>
              <CommentModal visible={this.state.modalVisible}
                            post={this.state.post}
+                           id={this.props.id}
                            toggleCommentModal={(visible) => {
                             this.onToggleComment(visible)
                         }}/>

@@ -25,7 +25,6 @@ import Profil from '../../screens/Profil';
 import Gallery from '../../screens/Gallery';
 import ProfileTabBar from '../../components/Profil/profilTab';
 import Actus from '../../screens/Actus'
-import Gallery from '../../screens/Gallery'
 
 const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,

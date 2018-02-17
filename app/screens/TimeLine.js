@@ -44,7 +44,7 @@ class TimeLine extends Component {
     }
     _renderItem(item) {
         return (
-            <Post style={timeLineStyle.singlePost}  post={item} />
+            <Post style={timeLineStyle.singlePost} key={this.props.posts.posts.indexOf(item)} post={item} />
         )
     }
     _renderList(){
@@ -55,7 +55,6 @@ class TimeLine extends Component {
                 style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35}}
                 data={posts.posts}
                 renderItem={({item}) => this._renderItem(item)}
-                keyExtractor={item => item.id}
             />
         )
     }

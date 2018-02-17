@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, FlatList,Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
-
+import {StyleSheet,FlatList, Image, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
 import {GLOBAL_STYLE,timeLineStyle} from '../assets/css/global';
 import Post from '../components/TimeLine/Post';
@@ -9,7 +8,7 @@ import {connect} from 'react-redux';
 import {postActions} from '../_actions';
 
 
-let postList = null;
+let postList ;
 let Modal = null;
 
 
@@ -20,33 +19,28 @@ class TimeLine extends Component {
             modalVisible: false,
             modalType: '',
         };
+        this.onToggleModal = this.onToggleModal.bind(this);
         this._renderItem = this._renderItem.bind(this);
+        this._renderList = this._renderList.bind(this);
     }
 
     componentWillMount() {
         const {postsFetched, posts} = this.props;
         this.props.dispatch(postActions.getAll());
-        postList = posts.posts;
     }
-
+    componentDidUpdate(nextProps) {
+        const POST = nextProps.posts.posts;
+    }
     onToggleModal(visible, type) {
         this.setState({modalVisible: visible});
         this.setState({modalType: type});
 
         this.forceUpdate();
     }
-    shouldComponentUpdate(nextProps, nextState) {
-        const {post} = this.props;
-        if(JSON.stringify(post) !== JSON.stringify(nextProps.post)){
-            this.props.dispatch(postActions.getAll());
-        }
-        return true;
-    }
     _renderItem(item) {
-        return (
-            <Post style={timeLineStyle.singlePost} key={this.props.posts.posts.indexOf(item)} post={item} />
-        )
+        return <Post style={timeLineStyle.singlePost} key={this.props.posts.posts.indexOf(item)} id={this.props.posts.posts.indexOf(item)} post={item} />
     }
+
     _renderList(){
         const {posts} = this.props;
 
@@ -56,9 +50,11 @@ class TimeLine extends Component {
                 data={posts.posts}
                 renderItem={({item}) => this._renderItem(item)}
             />
-        )
+        );
     }
     render() {
+        const {posts} = this.props;
+        console.log(posts.posts)
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 <PostModal owner={{
@@ -84,7 +80,7 @@ class TimeLine extends Component {
                                source={require('../assets/img/picto/menu/actions/goal.png')}/>
                         <Text style={timeLineStyle.tabButtonText}>But</Text>
                     </TouchableOpacity>
-                    <View style={timeLineStyle.buttonBorder} />
+                    <View style={timeLineStyle.buttonBorder}/>
                     <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                         this.onToggleModal(true, 'simple')
                     }}>
@@ -93,7 +89,9 @@ class TimeLine extends Component {
                         <Text style={timeLineStyle.tabButtonText}>Publier</Text>
                     </TouchableOpacity>
                 </View>
-                {this.state.postsFetching ? <Text>...</Text> : this._renderList()}
+                <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35, height:'95%'}}>
+                    {this._renderList()}
+                </ScrollView>
             </View>
         )
     }
@@ -102,7 +100,6 @@ const mapStateToProps = (state) => {
     return {
         posts: state.postList.posts,
         postsFetched: state.postList.fetched,
-        postsFetching: state.postList.fetching,
     };
 };
 export default connect(mapStateToProps)(TimeLine);

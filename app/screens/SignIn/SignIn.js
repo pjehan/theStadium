@@ -39,7 +39,7 @@ class SignIn extends Component {
                         color="#003366"
                     />
                 </View>
-                <View style={{flex:1}}></View>
+                <View style={{flex:1}} />
             </View>
         )
     }

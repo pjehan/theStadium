@@ -80,11 +80,11 @@ class Post extends Component {
             modalVisible: false,
         };
         this.onToggleComment = this.onToggleComment.bind(this);
+        this._renderCommentModal = this._renderCommentModal.bind(this);
     }
 
     onToggleComment(visible) {
         if (visible) {
-            console.log(this.props.id)
             this.props.dispatch(postActions.getComments(this.props.id));
             this.setState({modalVisible: visible});
         } else {
@@ -92,15 +92,21 @@ class Post extends Component {
         }
 
     }
-
+    _renderCommentModal() {
+        if(this.state.modalVisible){
+           return ( <CommentModal visible={this.state.modalVisible}
+                          id={this.props.id}
+                          toggleCommentModal={(visible) => {
+                              this.onToggleComment(visible)
+                          }}/>)
+        } else {
+            return null;
+        }
+    }
     render() {
         return (
             <View style={PostStyle.container}>
-                <CommentModal visible={this.state.modalVisible}
-                              id={this.props.id}
-                              toggleCommentModal={(visible) => {
-                                  this.onToggleComment(visible)
-                              }}/>
+                {this._renderCommentModal()}
                 <OwnerHeader Owner={this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName}
                              postDate={this.state.post.postDate}/>
 

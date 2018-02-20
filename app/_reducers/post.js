@@ -28,7 +28,17 @@ export function postList(state = {
             return {...state, fetching: false, fetched: true, posts: action.payload};
             break;
 
+            //ADD
 
+        case postConstants.ADD_POST_REQUEST:
+            return {...state, fetching: true, fetched: false};
+            break;
+        case postConstants.ADD_POST_FAILURE:
+            return {...state, fetching: false, error: action.payload};
+            break;
+        case postConstants.ADD_POST_SUCCESS:
+            return {...state, fetching: false, fetched: true};
+            break;
 
 
         default:

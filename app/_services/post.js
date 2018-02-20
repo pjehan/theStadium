@@ -1,5 +1,6 @@
 export const postService = {
     getAll,
+    add,
     addComment,
     getComments,
     deleteComment
@@ -165,6 +166,31 @@ function getAll() {
     return fetch('/users', requestOptions).then(handleResponse);*/
     //return handleResponse(true, postList);
 }
+function add(post){
+    console.log(post)
+    let postToAdd = {
+        owner: {
+            lastName: 'Marabou',
+            firstName: 'Zizi',
+            profilePic: '',
+            sex: 'female',
+            team: 'Senior FD3'
+        },
+        type:'',
+        content:'',
+        media:[],
+        postDate: new Date(),
+        post_likes: 0,
+        post_comments:  0,
+        post_shares: 0
+    };
+    Object.assign(postToAdd, post);
+    postList.push(postToAdd);
+    return Promise.resolve({
+        then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
+    })
+}
+
 function addComment(id, comment) {
     postList[id].post_comments.push(comment);
     return Promise.resolve({

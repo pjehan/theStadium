@@ -66,7 +66,7 @@ export default class Actus extends Component {
                                        source={require('../assets/img/picto/menu/actions/assist.png')}/>
                                 <Text style={timeLineStyle.tabButtonText}>Passe dé.</Text>
                             </TouchableOpacity>
-                            <View style={timeLineStyle.buttonBorder}></View>
+                            <View style={timeLineStyle.buttonBorder} />
                             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                                 this.onToggleModal(true, 'goals')
                             }}>
@@ -74,7 +74,7 @@ export default class Actus extends Component {
                                        source={require('../assets/img/picto/menu/actions/goal.png')}/>
                                 <Text style={timeLineStyle.tabButtonText}>But</Text>
                             </TouchableOpacity>
-                            <View style={timeLineStyle.buttonBorder}></View>
+                            <View style={timeLineStyle.buttonBorder}/>
                             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                                 this.onToggleModal(true, 'simple')
                             }}>

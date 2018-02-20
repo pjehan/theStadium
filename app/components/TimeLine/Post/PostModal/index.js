@@ -6,13 +6,15 @@ import {
     StyleSheet,
     Modal,
     Image,
-    TextInput
 } from 'react-native';
 import PropTypes from 'prop-types';
 import  {TypeEnum} from "../contentType";
 import Spinner from 'react-native-number-spinner';
 import CustomInput from '../../../CustomInput';
 import { GLOBAL_STYLE } from '../../../../assets/css/global';
+import { ImagePicker } from 'expo';
+import {postActions} from "../../../../_actions";
+import {connect} from "react-redux";
 let ModalContent;
 const timeLineStyle = StyleSheet.create({
     tabContainer: {
@@ -63,19 +65,21 @@ const timeLineStyle = StyleSheet.create({
         fontWeight: '500'
     },
 });
-let SelectedMedia;
+let SelectedMedia = <View />;
 class PostModal extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            goals_nbr: 0,
-            assists_nbr: 0,
+            goals: 0,
+            assists: 0,
             goals_assists: false,
             number:0,
             club:'',
             post:'',
-            media:'',
+            media:{
+                uri:'https://vignette.wikia.nocookie.net/cardfight/images/a/af/Bobo_Bunny.jpeg/revision/latest?cb=20170811201219'
+            },
         };
         this.displayGoalsAssists = this.displayGoalsAssists.bind(this);
         this.displaySimpleArticle = this.displaySimpleArticle.bind(this);
@@ -90,18 +94,13 @@ class PostModal extends Component {
         this.props.toggleModal(visible, type);
     }
     publishModal(type) {
-        this.props.toggleModal(false, type);
+        let post = this.state;
+        post.type = type;
+        this.props.dispatch(postActions.add(post));
+        //TODO when dispatch is good toggle modal
+        this.toggleModal(false, type);
     }
-    _addMedia() {
-            let result = Expo.ImagePicker.launchImageLibraryAsync('All');
-            this.setState({media:result});
-            console.log(result)
-        SelectedMedia = (<Image style={{height:this.state.media.height,width:this.state.media.width}} source={{uri:this.state.media.uri}}/>)
-            if (!result.cancelled) {
-                console.log('uri', result.uri)
-                //this.setState({ image: result.uri });
-            } else {console.log('uri', result.uri, this.state.media.uri)}
-        };
+
     componentWillMount() {
         switch(this.props.type) {
             case TypeEnum.goals:
@@ -179,7 +178,7 @@ class PostModal extends Component {
                              default={1}
                              color="#f60"
                              numColor="#f60"
-                             onNumChange={(num)=>{this.setState({[type + '_nbr']: num})}} />
+                             onNumChange={(num)=>{this.setState({[type]: num})}} />
                 </View>
                     <CustomInput
                         container={''}
@@ -244,7 +243,7 @@ class PostModal extends Component {
                              this.onChangeInfos(state, newvalue)
                          }}/>
                 <View >
-                    {SelectedMedia}
+                    <Image style={{height:169,width:298}} source={{uri:this.state.media.uri}}/>
                 </View>
             <View style={{}}>
                 <TouchableOpacity onPress={() => {this.toggleModal(true, TypeEnum.goals)}} style={{borderColor:'#cccccc',borderTopWidth:0.5,height:50, alignItems:'center',flexDirection:'row', justifyContent:'space-between'}}>
@@ -276,6 +275,20 @@ class PostModal extends Component {
             </View>
             )
     }
+    _addMedia = async () =>{
+        let result =  await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+        console.log(result)
+
+        if (!result.cancelled) {
+            this.setState({media:result});
+            SelectedMedia = <Image style={{height:this.state.media.height,width:this.state.media.width}} source={{uri:this.state.media.uri}}/>;
+        } else {
+            console.log('uri', result.uri, this.state.media.uri)
+        }
+    };
 }
 /**
  * Props
@@ -285,4 +298,4 @@ PostModal.propTypes = {
     /* visible or not */
     type: PropTypes.string, /* Content Type */
 };
-export default PostModal;
+export default connect()(PostModal);

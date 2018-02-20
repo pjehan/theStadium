@@ -22,6 +22,7 @@ class TimeLine extends Component {
         this.onToggleModal = this.onToggleModal.bind(this);
         this._renderItem = this._renderItem.bind(this);
         this._renderList = this._renderList.bind(this);
+        this._renderModal = this._renderModal.bind(this);
     }
 
     componentWillMount() {
@@ -52,18 +53,27 @@ class TimeLine extends Component {
             />
         );
     }
+
+    _renderModal() {
+        if(this.state.modalVisible && this.state.modalType){
+            return (<PostModal owner={{
+                lastName: 'Segara',
+                firstName: 'Sophie'
+            }} type={this.state.modalType} visible={this.state.modalVisible}
+                               toggleModal={(visible, type) => {
+                                   this.onToggleModal(visible, type)
+                               }}/>)
+        } else {
+            return null;
+        }
+    }
+
     render() {
         const {posts} = this.props;
         console.log(posts.posts)
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
-                <PostModal owner={{
-                    lastName: 'Segara',
-                    firstName: 'Sophie'
-                }} type={this.state.modalType} visible={this.state.modalVisible}
-                           toggleModal={(visible, type) => {
-                               this.onToggleModal(visible, type)
-                           }}/>
+                {this._renderModal()}
                 <View style={timeLineStyle.tabContainer}>
                     <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                         this.onToggleModal(true, 'assists')

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Image, View,StyleSheet, Text,TouchableOpacity} from 'react-native';
-import { SearchBar } from 'react-native-elements'
-
+import {Image,Platform, View,StyleSheet, Text,TouchableOpacity} from 'react-native';
+import { SearchBar, Icon } from 'react-native-elements'
+import Expo from 'expo';
 
 const styles = StyleSheet.create({
     tabContainer: {
@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     },
     tab: {
         backgroundColor:'#003366',
-
     },
 
 });
@@ -29,12 +28,18 @@ export default class ProfileTabBar extends Component {
         const index = this.props.navigation.state.index;
         console.log(this.props)
         return (
-            <View style={styles.tab}>
-                <View style={{borderWidth:0}}>
+            <View style={[styles.tab,  {paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight}]}>
+                <View style={{borderWidth:0, flexDirection:'row'}}>
+                    <Icon
+                          color='white'
+                          size={40}
+                          name={'chevron-left'}
+                          onPress={() => this.props.navigation.goBack(null)}/>
                     <SearchBar
                         lightTheme
                         round
-                        containerStyle={{backgroundColor:'rgba(0,0,0,0)',borderBottomWidth:0,borderTopWidth:0}}
+
+                        containerStyle={{width:'90%', backgroundColor:'rgba(0,0,0,0)',borderBottomWidth:0,borderTopWidth:0}}
                         placeholder='Rechercher' />
                 </View>
 

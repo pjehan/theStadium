@@ -1,6 +1,5 @@
-import React from 'react';
-import {Component} from 'react';
-import {Image} from 'react-native';
+import React, {Component} from 'react';
+import {Image,View} from 'react-native';
 import {StackNavigator, TabNavigator,addNavigationHelpers} from 'react-navigation';
 import {connect} from 'react-redux';
 import {Button, Text} from 'react-native';
@@ -23,8 +22,13 @@ import MainTabView from '../../components/Main/TabBar'
 
 import Profil from '../../screens/Profil';
 import ProfileTabBar from '../../components/Profil/profilTab';
-import Actus from '../../screens/Actus'
-import Gallery from '../../screens/Gallery'
+import Actus from '../../screens/Actus';
+import Gallery from '../../screens/Gallery';
+
+/** PostModal **/
+import Setup from '../../components/TimeLine/Post/PostModal/postArticle/setup';
+import FirstHalf from '../../components/TimeLine/Post/PostModal/postArticle/firsthalf';
+import SecondHalf from '../../components/TimeLine/Post/PostModal/postArticle/secondhalf';
 
 const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
@@ -41,9 +45,30 @@ const PROFILETAB = {
                                                       navigation={navigation}/>,
 
     tabBarPosition: 'top'
-}
+};
 /** TimeLine **/
 import TimeLine from '../../screens/TimeLine';
+
+const ArticleTab = TabNavigator({
+    Setup: {
+        screen: Setup,
+        navigationOptions: {
+            header:null,
+        }
+    },
+    firstHalf: {
+        screen: FirstHalf,
+        navigationOptions: {
+            header:null,
+        }
+    },
+    secondHalf: {
+        screen: SecondHalf,
+        navigationOptions: {
+            header:null,
+        }
+    }
+}, {tabBarComponent: ({navigation}) => <View/>});
 
 const ProfileTab = TabNavigator({
     Infos: {
@@ -54,9 +79,10 @@ const ProfileTab = TabNavigator({
     },
     Actus: {
         screen: Actus,
-        navigationOptions: {
+        navigationOptions: ({navigation}) => ({
             header: null,
-        }
+            tabBarLabel: 'Actualitées'
+        })
     },
     gallery: {
         screen: Gallery,
@@ -74,12 +100,7 @@ const MenuStack = StackNavigator({
             header: null,
         }
     },
-    Profile: {
-        screen: ProfileTab,
-        navigationOptions: {
-            header: null,
-        }
-    }
+
 },{
     lazy:true,
     initialRouteName: "Menu",
@@ -90,7 +111,7 @@ const MainStack = TabNavigator({
     TimeLine: {
         screen: TimeLine,
         navigationOptions: ({navigation}) => ({
-            header: props => <Header headerType="text" backIcon={false} {...props} />,
+            header: props => <Header headerType="logo" backIcon={false} {...props} />,
             tabBarIcon: ({focused}) => {
                 return <Image
                     resizeMode='contain'
@@ -137,7 +158,8 @@ const MainStack = TabNavigator({
             showLabel: true,
             tabBarLabel: 'Menu'
         })
-    }
+    },
+
 }, {
     tabBarPosition: 'bottom',
     animationEnabled: true,
@@ -154,11 +176,15 @@ const MainStack = TabNavigator({
         tabStyle: {
         paddingTop:10,
             height:60,
+            shadowColor: 'black',
+            shadowOpacity: 1, elevation: 4,
+
         },
         indicatorStyle: { backgroundColor: 'transparent', },
         style: {
             backgroundColor: '#ffffff',
-    }, }
+            borderTopWidth: 2,borderTopColor:'#cccccc'
+        }, }
 });
 const PlayerSignInStack = TabNavigator({
         Player: {
@@ -229,6 +255,18 @@ export const Navigator = StackNavigator({
         },
         Login: {
             screen: Login,
+            navigationOptions: {
+                header: null,
+            }
+        },
+        Article: {
+            screen: ArticleTab,
+            navigationOptions: {
+                header:null,
+            }
+        },
+        Profile: {
+            screen: ProfileTab,
             navigationOptions: {
                 header: null,
             }

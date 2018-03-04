@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { StyleSheet, Image } from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, Image} from 'react-native';
 import moment from 'moment'
 import PropTypes from 'prop-types';
 
@@ -8,18 +8,18 @@ const PostStyle = StyleSheet.create({
     container: {
         backgroundColor: '#ffffff',
         borderRadius: 10,
-        width:'100%',
-        paddingTop:5,
+        width: '100%',
+        paddingTop: 5,
         paddingBottom: 5
     },
     profilePic: {
         width: 45,
         height: 45,
-        borderRadius:45,
+        borderRadius: 45,
         marginRight: 5
     },
     text: {
-        color:'black',
+        color: 'black',
         fontSize: 12
     },
     title: {
@@ -31,39 +31,40 @@ const PostStyle = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop:10
+        marginTop: 10
     },
     ownerStyle: {
         flexDirection: 'row',
-        padding:5,
+        padding: 5,
     },
     userActionText: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding:10
+        padding: 10
     },
     actionText: {
         fontSize: 12
     },
     teamText: {
         color: "white",
-        fontSize:12
+        fontSize: 12
     },
     teamBackground: {
         backgroundColor: '#003366',
         padding: 10,
-        paddingTop:2,
-        paddingBottom:2
+        paddingTop: 2,
+        paddingBottom: 2
     },
     timeText: {
-        fontSize:12,
-        color:'#cccccc',
+        fontSize: 12,
+        color: '#cccccc',
         fontWeight: '400',
-        marginLeft:2
+        marginLeft: 2
     }
 });
 let team = null;
+
 class OwnerHeader extends Component {
 
     constructor(props) {
@@ -76,7 +77,7 @@ class OwnerHeader extends Component {
 
     componentWillMount() {
         this.calculatePostTime();
-        if(this.props.team) {
+        if (this.props.team) {
             /*<View style={PostStyle.teamBackground}>
                     <Text style={PostStyle.teamText}>U13 DRH</Text>
                 </View>
@@ -103,8 +104,8 @@ class OwnerHeader extends Component {
         let month = now.diff(postDate, 'month');
         let years = now.diff(postDate, 'years');
 
-        if(seconds < 100) {
-            switch(true) {
+        if (seconds < 100) {
+            switch (true) {
                 case seconds < 2:
                     this.state.displayDate = seconds + ' seconde';
                     break;
@@ -113,7 +114,7 @@ class OwnerHeader extends Component {
                     break
             }
         } else if (minutes < 60) {
-            switch(true) {
+            switch (true) {
                 case minutes < 2:
                     this.state.displayDate = minutes + ' minute';
                     break;
@@ -121,8 +122,8 @@ class OwnerHeader extends Component {
                     this.state.displayDate = minutes + ' minutes';
                     break;
             }
-        }else if(hours < 24) {
-            switch(true) {
+        } else if (hours < 24) {
+            switch (true) {
                 case hours < 2:
                     this.state.displayDate = hours + ' heure';
                     break;
@@ -130,8 +131,8 @@ class OwnerHeader extends Component {
                     this.state.displayDate = hours + ' heures';
                     break;
             }
-        }else if(days < 7) {
-            switch(true) {
+        } else if (days < 7) {
+            switch (true) {
                 case days < 2:
                     this.state.displayDate = days + ' jour';
                     break;
@@ -139,8 +140,8 @@ class OwnerHeader extends Component {
                     this.state.displayDate = days + ' jours';
                     break;
             }
-        }else if(weeks < 4) {
-            switch(true) {
+        } else if (weeks < 4) {
+            switch (true) {
                 case weeks < 2:
                     this.state.displayDate = weeks + ' semaine';
                     break;
@@ -148,10 +149,10 @@ class OwnerHeader extends Component {
                     this.state.displayDate = weeks + ' semaines';
                     break;
             }
-        }else if(month < 12) {
+        } else if (month < 12) {
             this.state.displayDate = month + ' mois';
-        }else{
-            switch(true) {
+        } else {
+            switch (true) {
                 case years < 2:
                     this.state.displayDate = years + ' an';
                     break;
@@ -168,7 +169,14 @@ class OwnerHeader extends Component {
             <View>
                 <Text style={PostStyle.title}>{this.props.Owner}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    {this.team}
+                    {this.props.team ?
+                        <Text style={{
+                        paddingVertical: 2,
+                        paddingHorizontal: 15,
+                        backgroundColor: '#003366',
+                        color: '#ffffff',
+                        marginRight: 10
+                    }}>{this.props.team}</Text>: null}
                     <View style={{flexDirection: 'row'}}>
                         <Image resizeMode="contain" style={{height: 15, width: 15}}
                                source={require('../../../../assets/img/picto/actualite/picto-time-gris.png')}/>
@@ -177,20 +185,21 @@ class OwnerHeader extends Component {
                 </View>
             </View>
             <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', marginLeft: 'auto', marginRight: 8}}>
-                <View style={{height: 8, width: 8, backgroundColor: '#cccccc', borderRadius: 8}}></View>
+                <View style={{height: 5, width: 5, backgroundColor: '#cccccc', borderRadius: 8}}/>
                 <View style={{
-                    height: 8,
-                    width: 8,
+                    height: 5,
+                    width: 5,
                     backgroundColor: '#cccccc',
                     borderRadius: 8,
                     marginLeft: 2,
                     marginRight: 2
-                }}></View>
-                <View style={{height: 8, width: 8, backgroundColor: '#cccccc', borderRadius: 8}}></View>
+                }}/>
+                <View style={{height: 5, width: 5, backgroundColor: '#cccccc', borderRadius: 8}}/>
             </TouchableOpacity>
         </View> )
     }
 }
+
 /**
  * Props
  */

@@ -12,12 +12,17 @@ let postList = [
             firstName: 'Pierre',
             profilePic: '',
             sex: 'male',
-            team: ''
+            team:'Sénior DSE',
         },
-        type:'simple',
+        type:'article',
         media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
-        content: 'Bonjour je suis zinedine zidanisme',
+        title: 'Le retour de ZIZOU !!',
         postDate: new Date(),
+
+        oponentClub:'US Saint-Malo',
+        oponentScore:2,
+        score:3,
+        club:'CPB Bréquigny',
         post_likes: 42,
         post_comments: [
             {
@@ -125,7 +130,7 @@ let postList = [
         },
         type:'simple',
         content:'Jaime la teub très très fort',
-        media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'},{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
+        media:[{url:'https://le10static.com/img/a/2/4/0/3/0/4/240304-large.jpg'},{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
         postDate: new Date(2017, 11, 8, 10, 2, 5),
         post_likes: 4,
         post_comments:  [

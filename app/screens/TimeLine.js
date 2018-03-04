@@ -70,7 +70,6 @@ class TimeLine extends Component {
 
     render() {
         const {posts} = this.props;
-        console.log(posts.posts)
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 {this._renderModal()}
@@ -92,7 +91,7 @@ class TimeLine extends Component {
                     </TouchableOpacity>
                     <View style={timeLineStyle.buttonBorder}/>
                     <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                        this.onToggleModal(true, 'simple')
+                        this.onToggleModal(true, 'article')
                     }}>
                         <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
                                source={require('../assets/img/picto/menu/actions/post.png')}/>

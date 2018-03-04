@@ -30,14 +30,13 @@ export default class Menu extends Component {
         super(props);
         this.state = {
             post: this.props.post
-        }
+        };
 
         this.onPressHandler = this.onPressHandler.bind(this);
     }
 
     onPressHandler(action, params) {
-        var {navigate} = this.props.navigation;
-        console.log(this.props.navigation, action)
+        let {navigate} = this.props.navigation;
         if(action !== 'Profil'){
             navigate(action);
         } else {
@@ -45,6 +44,9 @@ export default class Menu extends Component {
         }
     }
 
+    componentDidUpdate() {
+        console.log(this.props)
+    }
     render() {
         return (
             <View style={{flex:1,backgroundColor:'#ffffff'}}>

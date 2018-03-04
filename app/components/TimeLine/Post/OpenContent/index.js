@@ -108,8 +108,8 @@ class OpenContent extends Component {
                     <Text style={{marginLeft: '10%', width: '80%', marginTop: 20, marginBottom: 20, color: '#ffffff'}}>
                         Les jeunes du club on été entrainé par l'ancien pro du club MR BIBOU
                     </Text>
-                    <LocalImage source={'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}/>
-                    <View style={{justifyItems: 'flex-end', justifyContent: 'space-around', height: '20%'}}>
+                    <LocalImage source={this.props.media}/>
+                    <View style={{ justifyContent: 'space-around', height: '20%'}}>
                         <View style={{
                             flexDirection: 'row',
                             alignItems: 'center',

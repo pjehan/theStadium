@@ -96,6 +96,7 @@ class Post extends Component {
         if(this.state.modalVisible){
            return ( <CommentModal visible={this.state.modalVisible}
                           id={this.props.id}
+                                  post={this.state.post}
                           toggleCommentModal={(visible) => {
                               this.onToggleComment(visible)
                           }}/>)
@@ -105,10 +106,13 @@ class Post extends Component {
     }
     render() {
         return (
-            <View style={PostStyle.container}>
+            <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
+                shadowColor: 'black',
+                shadowOpacity: 1,
+                elevation: 4,}]}>
                 {this._renderCommentModal()}
-                <OwnerHeader Owner={this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName}
-                             postDate={this.state.post.postDate}/>
+                <OwnerHeader Owner={ this.state.post.club ? this.state.post.club : this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName}
+                             postDate={this.state.post.postDate} team={this.state.post.owner.team}/>
 
                 <Content {...this.state.post} />
 
@@ -122,7 +126,7 @@ class Post extends Component {
                         <TouchableOpacity onPress={() => {
                             this.onToggleComment(true)
                         }}>
-                            <Text style={[PostStyle.text, {marginLeft: 5, marginRight: 5}]}>Commenter</Text>
+                            <Text style={[PostStyle.text, {marginHorizontal:10}]}>Commenter</Text>
                         </TouchableOpacity>
                         <TouchableOpacity>
                             <Text style={PostStyle.text}>Partager</Text>

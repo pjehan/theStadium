@@ -5,6 +5,7 @@ import LocalImage from './LocalImage';
 import {View, Image, Dimensions, StyleSheet, Button, DatePickerAndroid, Text} from 'react-native';
 
 let postContent;
+let {height} = Dimensions.get('window');
 const PostStyle = StyleSheet.create({
     assist_and_goals: {
         backgroundColor: '#00A65B',
@@ -125,14 +126,28 @@ export default class Content extends Component {
     }
 
     returnArticle() {
+        let url = null;
+        if (this.props.media.length > 0) {
+            url = this.props.media[0].url;
+        }
         return (
-            <View>
                 <View>
-                    <Text>
-                        foekaéifneaiknfikeanf
-                    </Text>
+                    {url ?
+                        <View>
+                        <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10,height:150, backgroundColor:'rgba(0,0,0,0.5)'}}>
+                            <View style={{borderRadius:5,width:100,backgroundColor:'#00A65B',paddingHorizontal:2,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
+                                <Text style={{color:'#ffffff'}}>Article</Text>
+                            </View>
+                            <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
+                            <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
+                            <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{this.props.club} {this.props.score} - {this.props.oponentScore} {this.props.oponentClub}</Text>
+                            <Text  style={{color:'#ffffff',fontSize:12}}>Merveilleuse Victoire des joueurs !!! Ce fût un match intense du début à la fin, et c'est finalement avec un peu de ...</Text>
+                            </View>
+                            </View>
+                        <LocalImage source={url} />
+                        </View>
+                        : null}
                 </View>
-            </View>
         )
     }
 

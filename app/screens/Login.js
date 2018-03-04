@@ -15,8 +15,10 @@ import {
 import orientation from '../config/orientation';
 import { GLOBAL_STYLE } from '../assets/css/global';
 import CustomInput from '../components/CustomInput';
+import {connect} from 'react-redux';
+import {userActions} from "../_actions/user";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -44,11 +46,13 @@ export default class Login extends Component {
   loginIn() {
     //fetch to databse
       var {navigate} = this.props.navigation;
-    this.setModalVisible(true);
-    setTimeout(() => {
+    this.props.dispatch(userActions.login(this.state.email, this.state.password))
+      //this.setModalVisible(true);
+    /*setTimeout(() => {
         this.setModalVisible(false);
         navigate("TimeLine", {})}
-        , 2000)
+        , 2000)*/
+
   }
   render() {
 
@@ -113,3 +117,5 @@ export default class Login extends Component {
     )
   }
 };
+
+export default connect()(Login);

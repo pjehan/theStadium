@@ -13,9 +13,7 @@ import {Icon} from 'react-native-elements';
 import CustomInput from "../../../CustomInput";
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
-import UserActions from '../UserActions';
-import OwnerHeader from '../OwnerHeader';
-import Content from '../Content';
+import {bindActionCreators} from 'redux';
 
 const PostStyle = StyleSheet.create({
     container: {
@@ -81,7 +79,6 @@ const PostStyle = StyleSheet.create({
         marginLeft: 2
     }
 });
-let toolsModal = null;
 
 class CommentModal extends Component {
     constructor(props) {
@@ -94,68 +91,18 @@ class CommentModal extends Component {
         this.toggleModal = this.toggleModal.bind(this);
         this.renderItem = this.renderItem.bind(this);
         this.renderList = this.renderList.bind(this);
-        this.renderPost = this.renderPost.bind(this);
     };
-
-    _displayTools() {
-        toolsModal = (
-            <View style={{position: 'absolute', backgroundColor: '#ffffff'}}>
-                <TouchableOpacity style={{height: 20, borderTopColor: '#cccccc', borderTopWidth: 2}} onPress={() => {
-                    this.props.dispatch(postActions.deleteComment(this.props.id, this.props.comments.comments.indexOf(item)));
-                }}>
-                    <Text style={{color: '#003366'}}>Supprimer</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{height: 20, borderTopColor: '#cccccc', borderTopWidth: 2}} onPress={() => {
-                }}>
-                    <Text style={{color: '#003366'}}>Signalez un abus</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
-
-    renderPost() {
-        return (
-            <View>
-                <OwnerHeader
-                    Owner={this.props.post.club ? this.props.post.club : this.props.post.owner.firstName + ' ' + this.props.post.owner.lastName}
-                    postDate={this.props.post.postDate} team={this.props.post.owner.team}/>
-
-                <Content {...this.props.post} />
-
-                <UserActions likes={this.props.post.post_likes} shares={this.props.post.post_shares}
-                             comments={this.props.post.post_comments.length}/>
-            </View>
-        )
-    }
 
     renderItem(item) {
         if (item !== null) {
             return (
-                <TouchableOpacity onPress={() => {
-                    this._displayTools();
-                }} style={PostStyle.container}>
+                <TouchableOpacity onPress={() => {this.props.dispatch(postActions.deleteComment(this.props.id, this.props.comments.comments.indexOf(item)));}} style={PostStyle.container}>
                     <View style={PostStyle.ownerStyle}>
                         <Image style={PostStyle.profilePic} source={{uri: item.user.profilePic}}/>
                         <View>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <Text style={PostStyle.title}>{item.user.firstName} {item.user.lastName}</Text>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <View style={{height: 5, width: 5, backgroundColor: '#cccccc', borderRadius: 8}}/>
-                                    <View style={{
-                                        height: 5,
-                                        width: 5,
-                                        backgroundColor: '#cccccc',
-                                        borderRadius: 8,
-                                        marginLeft: 2,
-                                        marginRight: 2
-                                    }}/>
-                                    <View style={{height: 5, width: 5, backgroundColor: '#cccccc', borderRadius: 8}}/>
-
-                                </View>
-                            </View>
+                            <Text style={PostStyle.title}>{item.user.firstName} {item.user.lastName}</Text>
                             <Text style={PostStyle.content}>{item.comment}</Text>
                         </View>
-                        {toolsModal}
                     </View>
                 </TouchableOpacity>
             )
@@ -166,7 +113,7 @@ class CommentModal extends Component {
     renderList() {
         if (!this.props.comments.comments) {
             return null;
-        } else {
+        }else {
             return (
                 <FlatList
                     data={this.props.comments.comments}
@@ -217,19 +164,17 @@ class CommentModal extends Component {
                         alignItems: 'center',
                         height: 70
                     }}>
-                        <TouchableOpacity onPress={() => {
-                            this.toggleModal(false)
-                        }}>
+                        <TouchableOpacity>
                             <Icon color='#003366'
                                   size={25}
                                   name={'expand-less'}
-                            />
-                            <Text style={{color: '#003366'}}>Retour</Text>
+                                  onPress={() => {
+                                      this.toggleModal(false)
+                                  }}/>
+                            <Text style={{color: '#003366'}}>Revenir à l'article</Text>
                         </TouchableOpacity>
                     </View>
-                    {this.props.visible ? this.renderPost() : null}
-                    {this.props.visible && this.props.comments ? this.renderList() :
-                        <ActivityIndicator color="#ffffff" size="large"/>}
+                    {this.props.visible && this.props.comments ? this.renderList() : <ActivityIndicator color="#ffffff" size="large" />}
                     <View style={{justifyContent: 'center', backgroundColor: '#cccccc', padding: 5}}>
                         <CustomInput
                             ref={input => {

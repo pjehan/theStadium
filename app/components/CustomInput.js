@@ -116,6 +116,7 @@ export default class CustomInput extends Component {
                 placeholder={this.props.placeholder}
                 style={[this.props.input, {backgroundColor: this.props.backgroundColor, borderColor: this.props.borderColor,color: this.props.textColor}]}
                 secureTextEntry={this.props.security}
+                keyboardType={this.props.keyboardType}
                 underlineColorAndroid="transparent"
             />
 

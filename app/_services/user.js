@@ -1,19 +1,39 @@
-import { authHeader } from '../_helpers';
-
+import setAuthorizationToken from '../config/setAuthorizationToken';
+import axios from "axios";
+import * as AsyncStorage from "react-native/Libraries/Storage/AsyncStorage";
 export const userService = {
     login,
     addInfos,
     register,
 };
+const STORAGE_KEY = 'jwtToken';
+
+_onTokenChange = async(item, selectedValue) => {
+    try {
+        await AsyncStorage.setItem(item, selectedValue);
+    } catch (error) {
+        console.log('AsyncStorage error: ' + error.message);
+    }
+};
 
 function login(username, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-                    'Autorization': 'Bearer token'},
-        body: JSON.stringify({ username, password })
-    };
-
+    console.log('là')
+        return axios.post("http://192.168.20.2:8001/api/login_check", JSON.stringify({
+                _username: username,
+                _password: password
+            }),{
+                headers: { Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data; charset=UTF-8',}
+            })
+            .then((response) => {
+                console.log('oui')
+                const token = response.data.token;
+                setAuthorizationToken(token);
+                console.log(jwt_decode(token));
+            }).catch((error) => {
+        console.log(error);
+            })
+/*
     return fetch('http://172.24.219.225a/api/login', requestOptions)
         .then(response => {
             if (!response.ok) {
@@ -30,10 +50,15 @@ console.log(response.json());
             }
 
             return user;
-        });
+        });*/
 }
+
+function getUser(user) {
+
+}
+
 function addInfos(user) {
-    console.log(user)
+    console.log(user);
     return Promise.resolve({
         then: function(onFulfill, onReject) { onFulfill(user);onReject('erreur') }
     });

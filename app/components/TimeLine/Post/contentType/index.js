@@ -1,6 +1,6 @@
 export const TypeEnum = {
-    goals: 'goals',
-    assists: 'assists',
-    article: 'article',
-    simple: 'simple'
+    goals: 2,
+    assists: 3,
+    article: 4,
+    simple: 1
 }

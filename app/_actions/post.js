@@ -29,10 +29,10 @@ function getAll() {
 
 
 }
-function add(post) {
+function add(user, post) {
     return (dispatch) => {
         dispatch(request());
-        postService.add(post)
+        postService.add(user, post)
             .then(
                 posts => dispatch(success({posts})),
                 error => {

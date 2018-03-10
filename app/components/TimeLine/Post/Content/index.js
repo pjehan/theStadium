@@ -152,7 +152,7 @@ export default class Content extends Component {
     }
 
     checkType() {
-        const TYPE = this.props.type;
+        const TYPE = this.props.postType;
         if (TYPE === TypeEnum.simple) {
             this.returnSimplePost()
         }
@@ -172,7 +172,7 @@ export default class Content extends Component {
     }
 
     render() {
-        const TYPE = this.props.type;
+        const TYPE = this.props.postType;
         return (
             <View>
                 {TYPE === TypeEnum.simple ? this.returnSimplePost() :
@@ -189,7 +189,7 @@ export default class Content extends Component {
 Content.propTypes = {
     owner: PropTypes.object,
     club: PropTypes.string,
-    type: PropTypes.string, /* Content Type */
+    postType: PropTypes.number, /* Content Type */
     content: PropTypes.string, /* Content */
     goals_nbr: PropTypes.number, /* number of goals */
     assist_nbr: PropTypes.number, /* number of assists */

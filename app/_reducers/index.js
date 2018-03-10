@@ -2,6 +2,7 @@ import {registeringUser} from './register';
 import {postList,commentList} from './post'
 import NavigationReducer from './navigation'
 import { combineReducers } from 'redux';
+import {currentUser} from "./user";
 
 
 const appReducer = combineReducers({
@@ -9,6 +10,7 @@ const appReducer = combineReducers({
     postList,
     NavigationReducer,
     commentList,
+    currentUser,
 });
 
 

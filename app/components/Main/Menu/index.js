@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import {Icon} from 'react-native-elements';
+import connect from "react-redux/es/connect/connect";
 
 const MENU = [
     {
@@ -25,7 +26,7 @@ const MENU = [
     },
 ]
 
-export default class Menu extends Component {
+class Menu extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,15 +38,18 @@ export default class Menu extends Component {
 
     onPressHandler(action, params) {
         let {navigate} = this.props.navigation;
+        const users = {
+            currentUser: this.props.currentUser,
+            inspectedUser: this.props.inspectedUser,
+        }
         if(action !== 'Profil'){
-            navigate(action);
+            navigate(action, users);
         } else {
-            navigate("Profile", {});
+            navigate("Profile", users);
         }
     }
 
     componentDidUpdate() {
-        console.log(this.props)
     }
     render() {
         return (
@@ -64,4 +68,10 @@ export default class Menu extends Component {
             </View>
         )
     }
-}
+}const mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser.user,
+        inspectedUser: state.inspectedUser,
+    };
+};
+export default connect(mapStateToProps)(Menu);

@@ -13,6 +13,7 @@ import {Icon} from 'react-native-elements';
 
 import Spinner from 'react-native-number-spinner';
 import CustomInput from "../components/CustomInput";
+import {userActions} from "../_actions/user";
 
 const STYLE = StyleSheet.create({
     tab: {
@@ -34,55 +35,76 @@ const STYLE = StyleSheet.create({
     },
 });
 let strongFoot = ['Gauche', 'Droit', 'Ambidextre'];
-let stats = null;
+
+
+let stats = {};
+let statsComponent = null;
 export default class Profil extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            goals: 0,
-            assist: 0,
+            goalsNbr: null,
+            passNbr: null,
             strongFoot: strongFoot[1],
-            weight: 0,
-            height: 100,
-        }
+            weight: null,
+            height: null,
+        };
         this._renderStats = this._renderStats.bind(this);
         this._renderChange = this._renderChange.bind(this);
         this._confirmChange = this._renderStats.bind(this);
+        this.stateSetting = this.stateSetting.bind(this);
     }
 
     componentWillMount() {
+
+        this.stateSetting();
         this._renderStats();
+        this.forceUpdate();
+    }
+
+    stateSetting(){
+        const {navigation} = this.props;
+        const state = navigation.state.params;
+        stats = state.inspectedUser.stats;
+
+        this.setState({goalsNbr: state.stats.goalsNbr});
+        this.setState({passNbr: state.stats.passNbr});
+        this.setState({weight: state.stats.weight});
+        this.setState({height: state.stats.height});
+        this.setState({id: state.stats.id});
     }
 
     _renderStats() {
-        stats = (
+        const {navigation} = this.props;
+        const state = navigation.state.params;
+        statsComponent = (
             <View>
                 <TouchableOpacity onPress={() => {
-                    this._renderChange()
+                    state.currentUser === state.inspectedUser ? this._renderChange() : null
                 }} style={[STYLE.tab, {justifyContent: 'center'}]}>
                     <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
-                    <Icon style={{right: 20, position: 'absolute'}} name="create" size={20} color="#003366"/>
+                    {state.currentUser === state.inspectedUser ? <Icon style={{right: 20, position: 'absolute'}} name="create" size={20} color="#003366"/> : null}
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>But</Text>
-                    <Text>{this.state.goals}</Text>
+                    <Text>{stats.goalsNbr}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab]}>
                     <Text style={STYLE.tabText}>Passe Décisive</Text>
-                    <Text>{this.state.assist}</Text>
+                    <Text>{stats.passNbr}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>Poids</Text>
-                    <Text>{this.state.weight} kg</Text>
+                    <Text>{stats.weight} kg</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab]}>
                     <Text style={STYLE.tabText}>Taille</Text>
-                    <Text>{this.state.height} cm</Text>
+                    <Text>{stats.height} cm</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>Pied fort</Text>
-                    <Text>{this.state.strongFoot}</Text>
+                    <Text>{stats.strongFoot}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -90,16 +112,19 @@ export default class Profil extends Component {
     }
 
     _confirmChange() {
+        this.props.dispatch(userActions.putPlayer(stats));
         this._renderStats();
-        this.forceUpdate();
     }
-
     onChange(state, newvalue) {
-        this.setState({[state]: newvalue})
+        this.setState({[state]: newvalue});
+
+       stats[state] = newvalue;
     }
 
     _renderChange() {
-        stats = (
+        const {navigation} = this.props;
+        const state = navigation.state.params;
+        statsComponent = (
             <View>
                 <TouchableOpacity onPress={() => {
                     this._confirmChange()
@@ -111,22 +136,22 @@ export default class Profil extends Component {
                     <Text style={STYLE.tabText}>Nombre de buts</Text>
                     <Spinner max={1000}
                              min={0}
-                             default={this.state.goals}
+                             default={stats.goalsNbr}
                              color="#003366"
                              numColor="#003366"
                              onNumChange={(num) => {
-                                 this.setState({goals: num})
+                                 stats.goalsNbr = num
                              }}/>
                 </View>
                 <TouchableOpacity style={[STYLE.tab]}>
                     <Text style={STYLE.tabText}>Nombre de passe décisives</Text>
                     <Spinner max={1000}
                              min={0}
-                             default={this.state.assist}
+                             default={stats.passNbr}
                              color="#003366"
                              numColor="#003366"
                              onNumChange={(num) => {
-                                 this.setState({assist: num})
+                                 stats.passNbr = num;
                              }}/>
                 </TouchableOpacity>
                 <View style={[STYLE.tab, STYLE.even, {justifyContent: 'space-between'}]}>
@@ -137,7 +162,7 @@ export default class Profil extends Component {
                         textColor={'#333333'}
                         input={{width: 50}}
                         container={{justifyContent: 'flex-end'}}
-                        placeholder={this.state.weight.toString()}
+                        placeholder={stats.weight}
                         state={'weight'}/>
 
                 </View>
@@ -149,7 +174,7 @@ export default class Profil extends Component {
                         textColor={'#333333'}
                         input={{width: 50}}
                         container={{justifyContent: 'flex-end'}}
-                        placeholder={this.state.height.toString()}
+                        placeholder={stats.height}
                         state={'height'}/>
 
                 </View>
@@ -169,7 +194,7 @@ export default class Profil extends Component {
                     }}
                             onValueChange={itemValue => this.setState({strongFoot: itemValue}, function () {
                                 this.forceUpdate();
-                            })} selectedValue={this.state.strongFoot}
+                            })} selectedValue={stats.strongFoot}
                             prompt="Pied Fort">
 
 
@@ -179,6 +204,12 @@ export default class Profil extends Component {
 
                     </Picker>
                 </View>
+                <TouchableOpacity style={{flex:2/4, alignItems:'center', justifyContent:'center', marginTop:50,padding:10, backgroundColor:'#003366'}} onPress={() => {
+                    this.props.navigation.dispatch(userActions.putPlayer(stats));
+                    this._renderStats();
+                }}>
+                    <Text>Valider</Text>
+                </TouchableOpacity>
             </View>
         );
         this.forceUpdate();
@@ -190,7 +221,7 @@ export default class Profil extends Component {
             <View style={{backgroundColor: '#ffffff'}}>
                 <Image style={{height: 200, width: width}} resizeMode={'cover'}
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
-                {stats}
+                {statsComponent}
             </View>
         )
     }

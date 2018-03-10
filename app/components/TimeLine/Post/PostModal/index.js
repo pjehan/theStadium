@@ -73,15 +73,18 @@ class PostModal extends Component {
         super(props);
 
         this.state = {
-            goals: 0,
-            assists: 0,
-            goals_assists: false,
-            number: 0,
-            club: '',
-            post: '',
-            media: {
-                uri: 'https://vignette.wikia.nocookie.net/cardfight/images/a/af/Bobo_Bunny.jpeg/revision/latest?cb=20170811201219'
+            post: {
+                title:'',
+                goalsNbr: 0,
+                passNbr: 0,
+                content:'',
+                medias: [
+                     'https://vignette.wikia.nocookie.net/cardfight/images/a/af/Bobo_Bunny.jpeg/revision/latest?cb=20170811201219',
+                ],
+                postType: null,
             },
+            goals_assists: false,
+
         };
         this.displayGoalsAssists = this.displayGoalsAssists.bind(this);
         this.displaySimpleArticle = this.displaySimpleArticle.bind(this);
@@ -91,7 +94,7 @@ class PostModal extends Component {
     }
 
     onChangeInfos(state, newvalue) {
-        this.setState({[state]: newvalue})
+        this.setState({post:{...this.state.post,[state]: newvalue}});
     }
 
     toggleModal(visible, type) {
@@ -99,14 +102,16 @@ class PostModal extends Component {
     }
 
     publishModal(type) {
-        let post = this.state;
-        post.type = type;
-        this.props.dispatch(postActions.add(post));
+        let post = this.state.post;
+        post.postType = type;
+        console.log(this.props)
+        this.props.dispatch(postActions.add(this.props.owner.id, post));
         //TODO when dispatch is good toggle modal
         this.toggleModal(false, type);
     }
 
     componentWillMount() {
+        console.log(this.props)
         switch (this.props.type) {
             case TypeEnum.goals:
                 this.displayGoalsAssists(TypeEnum.goals);
@@ -139,6 +144,7 @@ class PostModal extends Component {
                 this.displayArticle(TypeEnum.article);
                 break;
         }
+        this.forceUpdate();
     }
 
     displayGoalsAssists(type) {
@@ -186,7 +192,7 @@ class PostModal extends Component {
                             <Image style={timeLineStyle.profilePic}
                                    source={require('../../../../assets/img/TA-Rennes.jpg')}/>
                             <Text
-                                style={timeLineStyle.title}>{this.props.owner.firstName + '\n' + this.props.owner.lastName}</Text>
+                                style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text>
                         </View>
                         <Text style={GLOBAL_STYLE.text}>{Description}</Text>
                     </View>
@@ -198,7 +204,7 @@ class PostModal extends Component {
                                  color="#f60"
                                  numColor="#f60"
                                  onNumChange={(num) => {
-                                     this.setState({[type]: num})
+                                     this.setState({post:{...this.state.post,[type]: num}})
                                  }}/>
                     </View>
                     <CustomInput
@@ -257,7 +263,7 @@ class PostModal extends Component {
                             <Image style={timeLineStyle.profilePic}
                                    source={require('../../../../assets/img/TA-Rennes.jpg')}/>
                             <Text
-                                style={timeLineStyle.title}>{this.props.owner.firstName + '\n' + this.props.owner.lastName}</Text>
+                                style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text>
                         </View>
                         <Text style={GLOBAL_STYLE.text}>Partager en toute simplicié</Text>
                     </View>
@@ -267,7 +273,7 @@ class PostModal extends Component {
                              container={{flex: 3, justifyContent: 'flex-start'}}
                              placeholder={'Écrivez votre message'}
                              input={[{flex: 1, padding: 20, marginTop: 10}]}
-                             state={'post'}
+                             state={'content'}
                              textColor={'#000000'}
                              borderColor={'transparent'}
                              backgroundColor={'#ffffff'}
@@ -276,7 +282,7 @@ class PostModal extends Component {
                                  this.onChangeInfos(state, newvalue)
                              }}/>
                 <View>
-                    <Image style={{height: 169, width: 298}} source={{uri: this.state.media.uri}}/>
+                    <Image style={{height: 169, width: 298}} source={{uri: this.state.post.medias[0]}}/>
                 </View>
                 <View style={{}}>
                     <TouchableOpacity onPress={() => {
@@ -379,11 +385,11 @@ class PostModal extends Component {
         if (!result.cancelled) {
         this.setState({media:result});
         SelectedMedia = <Image style={{
-            height: this.state.media.height,
-            width: this.state.media.width
-        }} source={{uri: this.state.media.uri}}/>;
+            height: this.state.post.medias.height,
+            width: this.state.post.medias.width
+        }} source={{uri: this.state.post.medias[0]}}/>;
     } else {
-        console.log('uri', result.uri, this.state.media.uri)
+        console.log('uri', result.uri, this.state.post.medias[0])
     }
     };
     }

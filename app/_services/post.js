@@ -5,6 +5,7 @@ export const postService = {
     getComments,
     deleteComment
 };
+import axios from 'axios';
 let postList = [
     {
         owner: {
@@ -14,7 +15,7 @@ let postList = [
             sex: 'male',
             team:'Sénior DSE',
         },
-        type:'article',
+        postType:4,
         media:[{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
         title: 'Le retour de ZIZOU !!',
         postDate: new Date(),
@@ -56,7 +57,7 @@ let postList = [
             sex: 'female',
             team: ''
         },
-        type:'goals',
+        postType:2,
         goals: 5,
         postDate: new Date(2017, 11, 9, 10, 2, 5),
         post_likes: 40,
@@ -92,7 +93,7 @@ let postList = [
             sex: 'female',
             team: ''
         },
-        type:'assists',
+        postType:3,
         assist: 1,
         postDate: new Date(2017, 11, 9, 8, 2, 5),
         post_likes: 1,
@@ -128,7 +129,7 @@ let postList = [
             sex: 'female',
             team: 'Senior FD3'
         },
-        type:'simple',
+        postType:1,
         content:'Jaime la teub très très fort',
         media:[{url:'https://le10static.com/img/a/2/4/0/3/0/4/240304-large.jpg'},{url:'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}],
         postDate: new Date(2017, 11, 8, 10, 2, 5),
@@ -164,36 +165,40 @@ function getAll() {
         then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
     });
 
-    /*const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-    return fetch('/users', requestOptions).then(handleResponse);*/
+    /*return axios.get("http://192.168.1.95:8001/api/users/"+id)
+        .then(response => {
+            Object.assign(currentUser, response.data["hydra:member"][0]);
+            return this.getUserType(currentUser.id);
+
+        }).catch((error) => {
+            console.error(error);
+        })*/
     //return handleResponse(true, postList);
 }
-function add(post){
+function add(user, post){
     console.log(post)
     let postToAdd = {
-        owner: {
-            lastName: 'Marabou',
-            firstName: 'Zizi',
-            profilePic: '',
-            sex: 'female',
-            team: 'Senior FD3'
-        },
-        type:'',
-        content:'',
-        media:[],
-        postDate: new Date(),
-        post_likes: 0,
-        post_comments:  0,
-        post_shares: 0
+        title: null,
+        creationDate: new Date(),
+        content: null,
+        goalsNbr: null,
+        passNbr: null,
+        postType: null,
+        medias: [],
+        comments: [],
+        owner: "api/users/"+ user,
     };
     Object.assign(postToAdd, post);
-    postList.push(postToAdd);
-    return Promise.resolve({
-        then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
+    //postList.push(postToAdd);
+    console.log(postToAdd)
+    return axios.post("http://192.168.1.95:8001/api/posts",postToAdd).then(response => {
+        console.log(response)
+    }).catch(err => {
+        console.log(err)
     })
+    /*return Promise.resolve({
+        then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
+    })*/
 }
 
 function addComment(id, comment) {

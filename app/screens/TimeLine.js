@@ -6,6 +6,7 @@ import Post from '../components/TimeLine/Post';
 import PostModal from '../components/TimeLine/Post/PostModal';
 import {connect} from 'react-redux';
 import {postActions} from '../_actions';
+import {TypeEnum} from "../components/TimeLine/Post/contentType/index";
 
 
 let postList ;
@@ -56,10 +57,7 @@ class TimeLine extends Component {
 
     _renderModal() {
         if(this.state.modalVisible && this.state.modalType){
-            return (<PostModal owner={{
-                lastName: 'Segara',
-                firstName: 'Sophie'
-            }} type={this.state.modalType} visible={this.state.modalVisible}
+            return (<PostModal owner={this.props.currentUser} type={this.state.modalType} visible={this.state.modalVisible}
                                toggleModal={(visible, type) => {
                                    this.onToggleModal(visible, type)
                                }}/>)
@@ -68,36 +66,40 @@ class TimeLine extends Component {
         }
     }
 
+    _renderPlayerHeader() {
+        return (<View style={timeLineStyle.tabContainer}><TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
+                this.onToggleModal(true, TypeEnum.assists)
+            }}>
+                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
+                       source={require('../assets/img/picto/menu/actions/assist.png')}/>
+                <Text style={timeLineStyle.tabButtonText}>Passe dé.</Text>
+            </TouchableOpacity>
+            <View style={timeLineStyle.buttonBorder} />
+        <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
+            this.onToggleModal(true, TypeEnum.goals)
+        }}>
+            <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
+                   source={require('../assets/img/picto/menu/actions/goal.png')}/>
+            <Text style={timeLineStyle.tabButtonText}>But</Text>
+        </TouchableOpacity>
+        <View style={timeLineStyle.buttonBorder}/>
+        <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
+            this.onToggleModal(true, TypeEnum.simple)
+        }}>
+            <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
+                   source={require('../assets/img/picto/menu/actions/post.png')}/>
+            <Text style={timeLineStyle.tabButtonText}>Publier</Text>
+        </TouchableOpacity>
+        </View>)
+    }
+
     render() {
         const {posts} = this.props;
+        console.log(this.props)
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 {this._renderModal()}
-                <View style={timeLineStyle.tabContainer}>
-                    <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                        this.onToggleModal(true, 'assists')
-                    }}>
-                        <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                               source={require('../assets/img/picto/menu/actions/assist.png')}/>
-                        <Text style={timeLineStyle.tabButtonText}>Passe dé.</Text>
-                    </TouchableOpacity>
-                    <View style={timeLineStyle.buttonBorder} />
-                    <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                        this.onToggleModal(true, 'goals')
-                    }}>
-                        <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                               source={require('../assets/img/picto/menu/actions/goal.png')}/>
-                        <Text style={timeLineStyle.tabButtonText}>But</Text>
-                    </TouchableOpacity>
-                    <View style={timeLineStyle.buttonBorder}/>
-                    <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                        this.onToggleModal(true, 'article')
-                    }}>
-                        <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                               source={require('../assets/img/picto/menu/actions/post.png')}/>
-                        <Text style={timeLineStyle.tabButtonText}>Publier</Text>
-                    </TouchableOpacity>
-                </View>
+                {this.props.currentUser.userType === "/api/types/3" ? this._renderPlayerHeader() : null}
                 <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35, height:'95%'}}>
                     {this._renderList()}
                 </ScrollView>
@@ -109,6 +111,7 @@ const mapStateToProps = (state) => {
     return {
         posts: state.postList.posts,
         postsFetched: state.postList.fetched,
+        currentUser: state.currentUser.user,
     };
 };
 export default connect(mapStateToProps)(TimeLine);

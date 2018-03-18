@@ -1,6 +1,6 @@
 export const TypeEnum = {
-    goals: 2,
-    assists: 3,
-    article: 4,
-    simple: 1
+    goals: '/api/post_types/2',
+    assists: '/api/post_types/3',
+    article: '/api/post_types/4',
+    simple: '/api/post_types/1'
 }

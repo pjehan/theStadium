@@ -31,7 +31,7 @@ function login(username, password) {
             setAuthorizationToken(token);
             return token;
         }).then(responseJSON => {
-            return this.getUser(jwt_decode(responseJSON).id)
+            return this.getUser("/api/users/"+ jwt_decode(responseJSON).id)
         }).catch((error) => {
             console.log(error);
         })
@@ -39,7 +39,7 @@ function login(username, password) {
 
 function getUser(id) {
 
-    return axios.get("http://192.168.1.95:8001/api/users/"+id)
+    return axios.get("http://192.168.1.95:8001"+id)
         .then(response => {
             Object.assign(currentUser, response.data);
                return this.getUserType(currentUser.id);
@@ -52,6 +52,7 @@ function getUserType(id) {
     return axios.get("http://192.168.1.95:8001/api/players?user=" + id)
         .then(response => {
             Object.assign(currentUser.stats, response.data["hydra:member"][0]);
+            console.log(currentUser);
             return currentUser;
         }).catch(err => console.log(err))
 }

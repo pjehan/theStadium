@@ -81,11 +81,12 @@ class Post extends Component {
         };
         this.onToggleComment = this.onToggleComment.bind(this);
         this._renderCommentModal = this._renderCommentModal.bind(this);
+        this.buttonPress = this.buttonPress.bind(this);
     }
 
     onToggleComment(visible) {
         if (visible) {
-            this.props.dispatch(postActions.getComments(this.props.id));
+            this.props.dispatch(postActions.getComments(this.props.id+1));
             this.setState({modalVisible: visible});
         } else {
             this.setState({modalVisible: visible});
@@ -104,20 +105,29 @@ class Post extends Component {
             return null;
         }
     }
+    buttonPress() {
+        const users = {
+            currentUser: this.props.currentUser,
+            inspectedUser: this.state.post.owner,
+        };this.props.navigation.navigate('Profile', users);
+    }
     render() {
+
         return (
             <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
                 shadowColor: 'black',
                 shadowOpacity: 1,
                 elevation: 4,}]}>
                 {this._renderCommentModal()}
-                <OwnerHeader Owner={ this.state.post.club ? this.state.post.club : this.state.post.owner.firstName + ' ' + this.state.post.owner.lastName}
-                             postDate={this.state.post.postDate} team={this.state.post.owner.team}/>
+                <TouchableOpacity onPress={() => {this.buttonPress()}}>
+                <OwnerHeader Owner={ this.state.post.club ? this.state.post.club : this.state.post.owner.firstname + ' ' + this.state.post.owner.lastname}
+                             postDate={this.state.post.creationDate} team={this.state.post.owner.team}/>
+                </TouchableOpacity>
 
                 <Content {...this.state.post} />
 
-                <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares}
-                             comments={this.state.post.post_comments.length}/>
+               <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares}
+                             comments={this.state.post.comments.length}/>
                 <View style={PostStyle.userActionText}>
                     <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity>
@@ -138,8 +148,9 @@ class Post extends Component {
         )
     }
 }
-
-function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators({}, dispatch)}
-}
-export default connect(mapDispatchToProps)(Post);
+mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser.user,
+    };
+};
+export default connect(mapStateToProps)(Post);

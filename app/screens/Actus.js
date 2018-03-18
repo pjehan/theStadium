@@ -33,6 +33,7 @@ const STYLE = StyleSheet.create({
 });
 let ImageCover = null;
 let {width} = Dimensions.get('window');
+
 export default class Actus extends Component {
     constructor(props) {
         super(props);
@@ -55,9 +56,19 @@ export default class Actus extends Component {
 
         }
     };
+    _isUser(user, inspected){
+        return user.id === inspected.id;
+    }
 
+    _isLiked(user, inspected){
+        return user.players.includes('/api/players/' + inspected.id);
+    }
+    toggleFollow(){
+
+    }
     _renderHeader() {
-
+        const {navigation} = this.props;
+        const state = navigation.state.params;
         let type = 0;
         if (type === 1) {
             return (
@@ -116,9 +127,10 @@ export default class Actus extends Component {
         }
     }
     _renderActions() {
+        const {navigation} = this.props;
+        const state = navigation.state.params;
         let type = 0;
-        let isUser =null;
-        if(isUser) {
+        if(this._isUser(state.currentUser, state.inspectedUser)) {
             if (type === 1) {
                 return (
                     <View style={{width: width / 1.25}}>
@@ -181,23 +193,26 @@ export default class Actus extends Component {
                 )
             }
         }else {
+            console.log(state.currentUser);
             let isLiked = true;
             return (
                 <View style={{width: width / 2}}>
-                    <TouchableOpacity style={{alignItems:'center',backgroundColor:'#003366', paddingVertical:10,paddingHorizontal:10,justifyContent:'center'}} onPress={() => {}}>
-                        <Text style={{fontSize:18, fontWeight:'500',color:'#ffffff'}}>{isLiked ? 'Je suis abonné' : 'S\'abonner'}</Text>
+                    <TouchableOpacity style={{alignItems:'center',backgroundColor:'#003366', paddingVertical:10,paddingHorizontal:10,justifyContent:'center'}} onPress={() => {this.toggleFollow()}}>
+                        <Text style={{fontSize:18, fontWeight:'500',color:'#ffffff'}}>{this._isLiked(state.currentUser, state.inspectedUser) ? 'Je suis abonné' : 'S\'abonner'}</Text>
                     </TouchableOpacity>
                 </View>
             )
         }
     }
     render() {
+        const {navigation} = this.props;
+        const state = navigation.state.params;
         return (
             <View>
                 {this._renderHeader()}
                 <View style={[{padding: 15}, GLOBAL_STYLE.whiteColorBG]}>
                     <Text style={{fontWeight: 'bold', marginBottom: 5, fontSize: 16}}>
-                        Hugo Rousseau
+                        {state.inspectedUser.firstname} {state.inspectedUser.lastname}
                     </Text>
                     <Text style={{fontSize: 14, marginBottom: 10}}>OCC Cesson - Sénior DH</Text>
                     {this._renderActions()}

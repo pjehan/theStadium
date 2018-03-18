@@ -1,9 +1,12 @@
+import {userService} from "./user";
+
 export const postService = {
     getAll,
     add,
     addComment,
     getComments,
-    deleteComment
+    deleteComment,
+    getOwnerList
 };
 import axios from 'axios';
 let postList = [
@@ -161,19 +164,36 @@ let postList = [
 ];
 function getAll() {
 
-    return Promise.resolve({
-        then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
-    });
-
-    /*return axios.get("http://192.168.1.95:8001/api/users/"+id)
+    let post = [];
+    return axios.get("http://192.168.1.95:8001/api/posts/1")
         .then(response => {
-            Object.assign(currentUser, response.data["hydra:member"][0]);
-            return this.getUserType(currentUser.id);
+            post.push(response.data);
+            return userService.getUser(response.data.owner).then(
+                user => {
+                    post[0].owner = user;
+                    return post;
+                }
+            );
 
         }).catch((error) => {
             console.error(error);
-        })*/
-    //return handleResponse(true, postList);
+        });
+}
+function getOwnerList(id){
+    let post = [];
+    return axios.get("http://192.168.1.95:8001/api/posts?owner=" + id)
+        .then(response => {
+            post.push(response.data);
+            return userService.getUser(response.data.owner).then(
+                user => {
+                    post[0].owner = user;
+                    return post;
+                }
+            );
+
+        }).catch((error) => {
+            console.error(error);
+        });
 }
 function add(user, post){
     console.log(post)
@@ -201,11 +221,17 @@ function add(user, post){
     })*/
 }
 
-function addComment(id, comment) {
-    postList[id].post_comments.push(comment);
+function addComment(comment) {
+    /*postList[id].post_comments.push(comment);
     return Promise.resolve({
         then: function(onFulfill, onReject) {onFulfill(postList[id].post_comments);onReject('erreur')}
-    })
+    })*/
+    return axios.post("http://192.168.1.95:8001/api/comments", comment)
+        .then(response => {
+            return response.data["hydra:member"];
+        }).catch((error) => {
+            console.error(error);
+        });
 }
 function deleteComment(id, commentID) {
     postList[id].post_comments.splice(commentID,1);
@@ -214,7 +240,7 @@ function deleteComment(id, commentID) {
     })
 }
 function getComments(id) {
-    if(id === undefined) {
+   /* if(id === undefined) {
         return Promise.resolve({
             then: function(onFullfill, onReject) {
                 onFullfill([{
@@ -237,7 +263,23 @@ function getComments(id) {
             }
         });
 
-    }
+    }*/
+   let comments = [];
+    return axios.get("http://192.168.1.95:8001/api/comments?post=" + id)
+        .then(response => {
+            console.log(response)
+            comments.push(response.data["hydra:member"]);
+            /*return userService.getUser(response.data.user).then(
+                user => {
+                    comments[0].user = user;
+                    return comments;
+                }
+            );*/
+            return comments;
+
+        }).catch((error) => {
+            console.error(error);
+        });
 }
 function handleResponse(test, response) {
     if (!test) {

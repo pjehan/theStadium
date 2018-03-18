@@ -42,7 +42,7 @@ export default class Content extends Component {
 
     returnSimplePost() {
         let url = null;
-        if (this.props.media) {
+        if (this.props.medias) {
             /*switch(this.props.media) {
                 case this.props.media.length = 1:
                     Media = (<LocalImage source={this.props.media[0].url} />)
@@ -52,8 +52,8 @@ export default class Content extends Component {
                     break;
             }*/
         }
-        if (this.props.media.length > 0) {
-            url = this.props.media[0].url;
+        if (this.props.medias.length > 0) {
+            url = this.props.medias[0].url;
         }
         return (
             <View>
@@ -153,6 +153,7 @@ export default class Content extends Component {
 
     checkType() {
         const TYPE = this.props.postType;
+        console.log(TYPE)
         if (TYPE === TypeEnum.simple) {
             this.returnSimplePost()
         }
@@ -189,8 +190,8 @@ export default class Content extends Component {
 Content.propTypes = {
     owner: PropTypes.object,
     club: PropTypes.string,
-    postType: PropTypes.number, /* Content Type */
-    content: PropTypes.string, /* Content */
+    //postType: PropTypes.number, /* Content Type */
+    //content: PropTypes.string, /* Content */
     goals_nbr: PropTypes.number, /* number of goals */
     assist_nbr: PropTypes.number, /* number of assists */
 };

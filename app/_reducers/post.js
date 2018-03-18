@@ -49,12 +49,15 @@ export function postList(state = {
 export function commentList(state = {
     post_comments: [{
         user: {
-            lastName: null,
-            firstName: null,
-            profilePic: null,
-            sex: null,
+            id:null,
+            lastname: null,
+            firstname: null,
+            profilepicture: null,
             team: null
-        }, comment: null
+        },
+        contenu: null,
+        createdAt:null,
+        id:null,
     }],
     fetching: false,
     fetched: false,
@@ -69,6 +72,7 @@ export function commentList(state = {
             return {...state, fetching:false, fetched:false, error:action.payload};
             break;
         case postConstants.GETALL_COMMENTS_SUCCESS:
+
             return {...state, fetching:false, fetched:true, comments: action.payload};
             break;
         // ADD

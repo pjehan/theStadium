@@ -14,6 +14,7 @@ import {Icon} from 'react-native-elements';
 import Spinner from 'react-native-number-spinner';
 import CustomInput from "../components/CustomInput";
 import {userActions} from "../_actions/user";
+import Moment from "moment";
 
 const STYLE = StyleSheet.create({
     tab: {
@@ -68,11 +69,12 @@ export default class Profil extends Component {
         const state = navigation.state.params;
         stats = state.inspectedUser.stats;
 
-        this.setState({goalsNbr: state.stats.goalsNbr});
-        this.setState({passNbr: state.stats.passNbr});
-        this.setState({weight: state.stats.weight});
-        this.setState({height: state.stats.height});
-        this.setState({id: state.stats.id});
+        this.setState({goalsNbr: stats.goalsNbr});
+        this.setState({passNbr: stats.passNbr});
+        this.setState({weight: stats.weight});
+        this.setState({height: stats.height});
+        this.setState({id: stats.id});
+
     }
 
     _renderStats() {

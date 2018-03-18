@@ -87,7 +87,6 @@ function getUser(id){
         userService.getUser(id)
             .then(
                 user => {
-                    console.log(user)
                     dispatch(success(user));
                     //history.push('/');
                 },

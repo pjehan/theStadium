@@ -40,7 +40,7 @@ class TimeLine extends Component {
         this.forceUpdate();
     }
     _renderItem(item) {
-        return <Post style={timeLineStyle.singlePost} key={this.props.posts.posts.indexOf(item)} id={this.props.posts.posts.indexOf(item)} post={item} />
+        return <Post style={timeLineStyle.singlePost} navigation={this.props.navigation} key={this.props.posts.posts.indexOf(item)} id={this.props.posts.posts.indexOf(item)} post={item} />
     }
 
     _renderList(){

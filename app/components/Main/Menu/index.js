@@ -40,7 +40,7 @@ class Menu extends Component {
         let {navigate} = this.props.navigation;
         const users = {
             currentUser: this.props.currentUser,
-            inspectedUser: this.props.inspectedUser,
+            inspectedUser: this.props.currentUser,
         }
         if(action !== 'Profil'){
             navigate(action, users);

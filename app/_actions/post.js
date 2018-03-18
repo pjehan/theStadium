@@ -3,6 +3,7 @@ import {postService} from '../_services';
 import {alertActions} from './alert'
 export const postActions = {
     getAll,
+    getOwnerList,
     add,
     addComment,
     getComments,
@@ -29,6 +30,26 @@ function getAll() {
 
 
 }
+
+function getOwnerList(id) {
+    return (dispatch) => {
+        dispatch(request());
+        postService.getOwnerList(id)
+            .then(
+                posts => dispatch(success({posts})),
+                error => {
+                    console.error(error);
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error))
+                }
+            );
+    };
+
+    function request() {return { type: postConstants.GETALL_OWNER_REQUEST } }
+    function success(posts) { return { type: postConstants.GETALL_OWNER_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.GETALL_OWNER_FAILURE, payload: error} }
+}
+
 function add(user, post) {
     return (dispatch) => {
         dispatch(request());
@@ -47,12 +68,12 @@ function add(user, post) {
     function failure(error) { return { type: postConstants.ADD_POST_FAILURE, payload: error} }
 }
 
-function addComment(id, comment) {
+function addComment(comment) {
     return (dispatch) => {
         dispatch(request());
-        postService.addComment(id, comment)
+        postService.addComment(comment)
             .then(
-                comments => {console.log(id,comment);dispatch(success({comments}))},
+                comments => {dispatch(success({comments}))},
                 error => {
                     console.log(error);
                     dispatch(failure(error));
@@ -62,7 +83,7 @@ function addComment(id, comment) {
     };
 
     function request() {return { type: postConstants.ADD_COMMENT_REQUEST } }
-    function success(posts) { return { type: postConstants.ADD_COMMENT_SUCCESS, payload: posts} }
+    function success(comments) { return { type: postConstants.ADD_COMMENT_SUCCESS, payload: comments} }
     function failure(error) { return { type: postConstants.ADD_COMMENT_FAILURE, payload: error} }
 }
 
@@ -90,7 +111,7 @@ function getComments(id) {
         postService.getComments(id)
             .then(
                 comments => {
-                    console.log('******************', comments);dispatch(success({comments}))},
+                   dispatch(success({comments}))},
                 error=>{
                     dispatch(failure(error));
                 }

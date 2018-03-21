@@ -152,7 +152,7 @@ export default class Content extends Component {
     }
 
     checkType() {
-        const TYPE = this.props.postType;
+        const TYPE = this.props.postType.label;
         console.log(TYPE)
         if (TYPE === TypeEnum.simple) {
             this.returnSimplePost()

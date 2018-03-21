@@ -95,7 +95,6 @@ class TimeLine extends Component {
 
     render() {
         const {posts} = this.props;
-        console.log(this.props)
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 {this._renderModal()}
@@ -112,6 +111,7 @@ const mapStateToProps = (state) => {
         posts: state.postList.posts,
         postsFetched: state.postList.fetched,
         currentUser: state.currentUser.user,
+
     };
 };
 export default connect(mapStateToProps)(TimeLine);

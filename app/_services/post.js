@@ -168,13 +168,7 @@ function getAll() {
     return axios.get("http://192.168.1.95:8001/api/posts/1")
         .then(response => {
             post.push(response.data);
-            return userService.getUser(response.data.owner).then(
-                user => {
-                    post[0].owner = user;
-                    return post;
-                }
-            );
-
+            return post;
         }).catch((error) => {
             console.error(error);
         });
@@ -184,13 +178,7 @@ function getOwnerList(id){
     return axios.get("http://192.168.1.95:8001/api/posts?owner=" + id)
         .then(response => {
             post.push(response.data);
-            return userService.getUser(response.data.owner).then(
-                user => {
-                    post[0].owner = user;
-                    return post;
-                }
-            );
-
+            return post;
         }).catch((error) => {
             console.error(error);
         });

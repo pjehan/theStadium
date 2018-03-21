@@ -8,19 +8,32 @@ export const userActions = {
     register,
     addInfos,
     putPlayer,
-    getUser,
+    getInspected,
+    removePlayer
 };
 
 function login(username, password) {
+    let currentUser = {stats:{}}
     return dispatch => {
         dispatch(request({ username, password }));
 
         userService.login(username, password)
             .then(
                 user => {
-                    console.log(user)
-                    dispatch(success(user));
-                    //history.push('/');
+                    userService.getUserType(user.id)
+                        .then(
+                            userStats => {
+                                Object.assign(currentUser, user);
+                                currentUser.stats = userStats;
+                                console.log(userStats);
+
+                                dispatch(success(currentUser));
+                            },
+                            error => {
+                                dispatch(failure(error));
+                                dispatch(alertActions.error(error));
+                            }
+                        )
                 },
                 error => {
                     dispatch(failure(error));
@@ -36,7 +49,6 @@ function login(username, password) {
 function register(user) {
 
     return dispatch => {
-        console.log(user);
         dispatch(request(user));
 
         userService.register(user)
@@ -58,7 +70,6 @@ function register(user) {
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 function putPlayer(player){
-    console.log(player)
     return dispatch => {
         dispatch(request(player));
 
@@ -80,14 +91,29 @@ function putPlayer(player){
     function success(player) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, player } }
     function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
 }
-function getUser(id){
+
+function getInspected(id){
+    let inspectedUser = {stats:{}}
     return dispatch => {
         dispatch(request({ id }));
 
         userService.getUser(id)
             .then(
                 user => {
-                    dispatch(success(user));
+                    userService.getUserType(user.id)
+                        .then(
+                            userStats => {
+                                Object.assign(inspectedUser, user);
+                                inspectedUser.stats = userStats;
+
+                                dispatch(success(inspectedUser));
+                            },
+                            error => {
+                                dispatch(failure(error));
+                                dispatch(alertActions.error(error));
+                            }
+                        )
+                    ;
                     //history.push('/');
                 },
                 error => {
@@ -100,6 +126,9 @@ function getUser(id){
     function request(user) { return { type: userConstants.INSPECT_USER_REQUEST, user } }
     function success(user) { return { type: userConstants.INSPECT_USER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.INSPECT_USER_FAILURE, error } }
+}
+function removePlayer() {
+    return {type: userConstants.REMOVE_INSPECTED};
 }
 function addInfos(user) {
     return dispatch => {

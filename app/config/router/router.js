@@ -44,7 +44,7 @@ const PROFILETAB = {
                                                       indicatorHeight={2}
                                                       navigation={navigation}/>,
 
-    tabBarPosition: 'top'
+    tabBarPosition: 'top',
 };
 /** TimeLine **/
 import TimeLine from '../../screens/TimeLine';
@@ -325,7 +325,9 @@ class AppNavigation extends Component {
 }
 const mapStateToProps = state => {
     return {
-        navigationState: state.NavigationReducer
+        navigationState: state.NavigationReducer,
+        inspectedUser: state.inspectedUser,
+        currentUser: state.currentUser,
     };
 };
 export default connect(mapStateToProps)(AppNavigation);

@@ -7,7 +7,9 @@ import Content from './Content';
 import CommentModal from './CommentModal';
 import {connect} from "react-redux";
 import {bindActionCreators} from 'redux';
+import axios from 'axios';
 import {postActions} from "../../../_actions";
+import {userActions} from "../../../_actions/user";
 
 const PostStyle = StyleSheet.create({
     container: {
@@ -106,10 +108,12 @@ class Post extends Component {
         }
     }
     buttonPress() {
-        const users = {
-            currentUser: this.props.currentUser,
-            inspectedUser: this.state.post.owner,
-        };this.props.navigation.navigate('Profile', users);
+        this.props.dispatch(userActions.getInspected(this.state.post.owner.id));
+            const users = {
+                currentUser: this.props.currentUser,
+                inspectedUser: this.state.post.owner.id,
+            };
+            this.props.navigation.navigate('Profile', users);
     }
     render() {
 
@@ -151,6 +155,8 @@ class Post extends Component {
 mapStateToProps = (state) => {
     return {
         currentUser: state.currentUser.user,
+        inspectedUser: state.inspectedUser.user,
+        isFetching: state.inspectedUser.fetching,
     };
 };
 export default connect(mapStateToProps)(Post);

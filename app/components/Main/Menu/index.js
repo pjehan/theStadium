@@ -42,6 +42,7 @@ class Menu extends Component {
             currentUser: this.props.currentUser,
             inspectedUser: this.props.currentUser,
         }
+        console.log(users);
         if(action !== 'Profil'){
             navigate(action, users);
         } else {
@@ -72,6 +73,7 @@ class Menu extends Component {
     return {
         currentUser: state.currentUser.user,
         inspectedUser: state.inspectedUser,
+
     };
 };
 export default connect(mapStateToProps)(Menu);

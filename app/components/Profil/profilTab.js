@@ -26,7 +26,6 @@ export default class ProfileTabBar extends Component {
     render() {
         const {routes} = this.props.navigation.state;
         const index = this.props.navigation.state.index;
-        console.log(this.props)
         return (
             <View style={[styles.tab,  {paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight}]}>
                 <View style={{borderWidth:0, flexDirection:'row'}}>

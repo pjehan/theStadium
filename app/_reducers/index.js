@@ -1,16 +1,19 @@
 import {registeringUser} from './register';
-import {postList,commentList} from './post'
+import {postList,commentList,ownerList} from './post'
 import NavigationReducer from './navigation'
 import { combineReducers } from 'redux';
-import {currentUser} from "./user";
+import {currentUser,inspectedUser} from "./user";
 
 
 const appReducer = combineReducers({
     registeringUser,
+    inspectedUser,
     postList,
+    ownerList,
     NavigationReducer,
     commentList,
     currentUser,
+
 });
 
 

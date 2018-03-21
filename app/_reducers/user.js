@@ -80,9 +80,15 @@ export function inspectedUser(state = {
             return {...state, fetching: true, fetched: false};
             break;
         case userConstants.INSPECT_USER_SUCCESS:
-            return {...state, fetching: false, fetched: true};
+            let newUser = Object.assign(state.user, action.user);
+            return {...state, fetching: false, fetched: true, user: newUser};
             break;
         case userConstants.INSPECT_USER_FAILURE:
             return {fetching: false, fetched: true, error: action.payload};
+            break
+        case userConstants.REMOVE_INSPECTED:
+            return {...state, user: {}};
+        default:
+            return state;
     }
 }

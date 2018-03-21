@@ -11,6 +11,8 @@ import {
 import {ImagePicker} from 'expo';
 import {Icon} from 'react-native-elements';
 import {GLOBAL_STYLE, timeLineStyle} from '../assets/css/global';
+import {connect} from "react-redux";
+import {postActions} from "../_actions/post";
 
 const STYLE = StyleSheet.create({
     tab: {
@@ -34,7 +36,7 @@ const STYLE = StyleSheet.create({
 let ImageCover = null;
 let {width} = Dimensions.get('window');
 
-export default class Actus extends Component {
+class Actus extends Component {
     constructor(props) {
         super(props);
 
@@ -42,7 +44,11 @@ export default class Actus extends Component {
             profilePic: '../assets/img/thestadium/profil.jpeg',
         }
     }
-
+    componentWillMount() {
+        const {navigation} = this.props;
+        const state = navigation.state.params;
+        //if(state.inspectedUser){this.props.dispatch(postActions.getOwnerList(state.id));}
+    }
     _addMedia = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
@@ -220,4 +226,10 @@ export default class Actus extends Component {
             </View>
         )
     }
+}
+const mapStateToProps = (state) => {
+    return {
+        posts: state.ownerList.posts,
+    };
 };
+export default connect(mapStateToProps)(Actus);

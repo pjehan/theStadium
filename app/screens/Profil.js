@@ -7,7 +7,7 @@ import {
     ScrollView,
     Dimensions,
     StyleSheet,
-    Picker
+    Picker, ActivityIndicator, Modal
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 
@@ -15,6 +15,7 @@ import Spinner from 'react-native-number-spinner';
 import CustomInput from "../components/CustomInput";
 import {userActions} from "../_actions/user";
 import Moment from "moment";
+import {connect} from "react-redux";
 
 const STYLE = StyleSheet.create({
     tab: {
@@ -34,59 +35,101 @@ const STYLE = StyleSheet.create({
     even: {
         backgroundColor: '#E7E7E7',
     },
+    modalBackground: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#00000040'
+    },
+    activityIndicatorWrapper: {
+        backgroundColor: '#FFFFFF',
+        height: 100,
+        padding: 10,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    }
 });
 let strongFoot = ['Gauche', 'Droit', 'Ambidextre'];
 
 
 let stats = {};
 let statsComponent = null;
-export default class Profil extends Component {
+const initialState = {
+    goalsNbr: null,
+    passNbr: null,
+    strongFoot: strongFoot[1],
+    weight: null,
+    height: null,
+}
+class Profil extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            goalsNbr: null,
-            passNbr: null,
-            strongFoot: strongFoot[1],
-            weight: null,
-            height: null,
-        };
+        this.state = initialState;
         this._renderStats = this._renderStats.bind(this);
         this._renderChange = this._renderChange.bind(this);
         this._confirmChange = this._renderStats.bind(this);
         this.stateSetting = this.stateSetting.bind(this);
     }
 
-    componentWillMount() {
+    componentWillReceiveProps(nextProps) {
+        if (nextProps !== this.props) {
+            this.stateSetting();
+        }
+    }
 
+    componentWillMount() {
         this.stateSetting();
-        this._renderStats();
         this.forceUpdate();
     }
 
-    stateSetting(){
+    componentWillUnmount() {
+        this.props.dispatch(userActions.removePlayer());
+        statsComponent = null;
+        stats = {};
+        this.setState(initialState)
+    }
+
+    _isUser(user, inspected) {
+        return user.id === inspected.id;
+    }
+
+    stateSetting() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        stats = state.inspectedUser.stats;
 
+        if (this._isUser(state.currentUser, state.inspectedUser)) {
+            console.log(state.currentUser);
+            stats = state.inspectedUser.stats;
+            console.log(stats, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzz', state.currentUser.stats)
+        } else if (this.props.inspectedUser && this.props.inspectedUser.id) {
+            stats = this.props.inspectedUser.stats;
+        }
         this.setState({goalsNbr: stats.goalsNbr});
         this.setState({passNbr: stats.passNbr});
         this.setState({weight: stats.weight});
         this.setState({height: stats.height});
         this.setState({id: stats.id});
-
+        this.forceUpdate();
+        this._renderStats();
     }
 
     _renderStats() {
         const {navigation} = this.props;
         const state = navigation.state.params;
+        console.log(stats, state)
         statsComponent = (
             <View>
                 <TouchableOpacity onPress={() => {
                     state.currentUser === state.inspectedUser ? this._renderChange() : null
                 }} style={[STYLE.tab, {justifyContent: 'center'}]}>
                     <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
-                    {state.currentUser === state.inspectedUser ? <Icon style={{right: 20, position: 'absolute'}} name="create" size={20} color="#003366"/> : null}
+                    {state.currentUser === state.inspectedUser ?
+                        <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
+                              color="#003366"/> : null}
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>But</Text>
@@ -111,21 +154,45 @@ export default class Profil extends Component {
             </View>
         );
         this.forceUpdate();
+
     }
 
     _confirmChange() {
         this.props.dispatch(userActions.putPlayer(stats));
+        statsComponent = null;
         this._renderStats();
     }
+
     onChange(state, newvalue) {
         this.setState({[state]: newvalue});
 
-       stats[state] = newvalue;
+        stats[state] = newvalue;
+    }
+
+    _loadingModal() {
+        return (
+            <Modal
+                transparent={true}
+                animationType={'none'}
+                visible={this.props.isFetching}
+                onRequestClose={() => {
+                    console.log('close modal')
+                }}>
+                <View style={STYLE.modalBackground}>
+                    <View style={STYLE.activityIndicatorWrapper}>
+                        <ActivityIndicator
+                            size={'large'}/>
+                        <Text>Récupération des données utilisateurs en cours</Text>
+                    </View>
+                </View>
+            </Modal>
+        )
     }
 
     _renderChange() {
         const {navigation} = this.props;
         const state = navigation.state.params;
+        stats = this.props.inspectedUser.stats || state.inspectedUser.stats;
         statsComponent = (
             <View>
                 <TouchableOpacity onPress={() => {
@@ -206,7 +273,14 @@ export default class Profil extends Component {
 
                     </Picker>
                 </View>
-                <TouchableOpacity style={{flex:2/4, alignItems:'center', justifyContent:'center', marginTop:50,padding:10, backgroundColor:'#003366'}} onPress={() => {
+                <TouchableOpacity style={{
+                    flex: 2 / 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 50,
+                    padding: 10,
+                    backgroundColor: '#003366'
+                }} onPress={() => {
                     this.props.navigation.dispatch(userActions.putPlayer(stats));
                     this._renderStats();
                 }}>
@@ -219,12 +293,23 @@ export default class Profil extends Component {
 
     render() {
         let {width} = Dimensions.get('window');
+        const {navigation} = this.props;
+        const state = navigation.state.params;
         return (
             <View style={{backgroundColor: '#ffffff'}}>
                 <Image style={{height: 200, width: width}} resizeMode={'cover'}
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
-                {statsComponent}
+                {this.props.isFetching || !state.inspectedUser.stats ? this._loadingModal() : this.stateSetting.bind(this)}
+                {stats ? statsComponent : null}
             </View>
         )
     }
 };
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser.user,
+        inspectedUser: state.inspectedUser.user,
+        isFetching: state.inspectedUser.fetching,
+    };
+};
+export default connect(mapStateToProps)(Profil);

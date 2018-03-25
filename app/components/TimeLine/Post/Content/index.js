@@ -155,6 +155,7 @@ export default class Content extends Component {
         const TYPE = this.props.postType.label;
         console.log(TYPE)
         if (TYPE === TypeEnum.simple) {
+            console.log('oui')
             this.returnSimplePost()
         }
         else if (TYPE === TypeEnum.article) {
@@ -173,7 +174,7 @@ export default class Content extends Component {
     }
 
     render() {
-        const TYPE = this.props.postType;
+        const TYPE = this.props.postType.label;
         return (
             <View>
                 {TYPE === TypeEnum.simple ? this.returnSimplePost() :

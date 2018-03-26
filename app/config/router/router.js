@@ -48,6 +48,7 @@ const PROFILETAB = {
 };
 /** TimeLine **/
 import TimeLine from '../../screens/TimeLine';
+import Search from "../../screens/Search";
 
 const ArticleTab = TabNavigator({
     Setup: {
@@ -122,8 +123,9 @@ const MainStack = TabNavigator({
         }),
     },
     Rechercher: {
-        screen: TimeLine,
+        screen: Search,
         navigationOptions: ({navigation}) => ({
+            header: props => <Header headerType="logo" backIcon={false} {...props} />,
             tabBarIcon: ({focused}) => {
                 return <Image
                     resizeMode='contain'
@@ -137,6 +139,7 @@ const MainStack = TabNavigator({
     Notifications: {
         screen: TimeLine,
         navigationOptions: ({navigation}) => ({
+            header: props => <Header headerType="logo" backIcon={false} {...props} />,
         tabBarIcon: ({focused}) => {
             return <Image
                 resizeMode='contain'
@@ -149,6 +152,7 @@ const MainStack = TabNavigator({
     Menu: {
         screen: MenuStack,
         navigationOptions: ({navigation}) => ({
+            header: props => <Header headerType="logo" backIcon={false} {...props} />,
             tabBarIcon: ({focused}) => {
                 return <Image
                     resizeMode='contain'

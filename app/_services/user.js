@@ -33,7 +33,7 @@ function login(username, password) {
         }).then(responseJSON => {
             return this.getUser(jwt_decode(responseJSON).id)
         }).catch((error) => {
-            console.log(error);
+            return Promise.reject(error);
         })
 }
 

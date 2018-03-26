@@ -49,9 +49,11 @@ class Login extends Component {
 
     componentWillReceiveProps(nextProps) {
         const {navigate} = this.props.navigation;
-        if (nextProps.userFetched) {
+        if (nextProps.userFetched && nextProps.currentUser) {
             this.setModalVisible(false);
             navigate("TimeLine", {});
+        } else {
+            this.setModalVisible(false);
         }
     }
 

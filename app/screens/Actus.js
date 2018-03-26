@@ -52,7 +52,6 @@ class Actus extends Component {
     _addMedia = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [4, 3],
         });
 
         if (!result.cancelled) {
@@ -75,8 +74,8 @@ class Actus extends Component {
     _renderHeader() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        let type = 0;
-        if (type === 1) {
+        let type = state.inspectedUser ? state.inspectedUser.userType : this.props.inspectedUser.userType;
+        if (type === '/api/types/3') {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
@@ -199,8 +198,6 @@ class Actus extends Component {
                 )
             }
         }else {
-            console.log(state.currentUser);
-            let isLiked = true;
             return (
                 <View style={{width: width / 2}}>
                     <TouchableOpacity style={{alignItems:'center',backgroundColor:'#003366', paddingVertical:10,paddingHorizontal:10,justifyContent:'center'}} onPress={() => {this.toggleFollow()}}>
@@ -213,6 +210,9 @@ class Actus extends Component {
     render() {
         const {navigation} = this.props;
         const state = navigation.state.params;
+
+        let team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
+        let teamDisplay = team.category.label + ' ' + team.division.label;
         return (
             <View>
                 {this._renderHeader()}
@@ -220,7 +220,7 @@ class Actus extends Component {
                     <Text style={{fontWeight: 'bold', marginBottom: 5, fontSize: 16}}>
                         {state.inspectedUser.firstname} {state.inspectedUser.lastname}
                     </Text>
-                    <Text style={{fontSize: 14, marginBottom: 10}}>OCC Cesson - Sénior DH</Text>
+                    {team ? <Text style={{fontSize: 14, marginBottom: 10}}>{team.club.name} - {teamDisplay}</Text> : null}
                     {this._renderActions()}
                 </View>
             </View>
@@ -230,6 +230,7 @@ class Actus extends Component {
 const mapStateToProps = (state) => {
     return {
         posts: state.ownerList.posts,
+        inspectedUser: state.inspectedUser.user,
     };
 };
 export default connect(mapStateToProps)(Actus);

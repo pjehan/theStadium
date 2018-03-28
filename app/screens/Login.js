@@ -49,6 +49,7 @@ class Login extends Component {
 
     componentWillReceiveProps(nextProps) {
         const {navigate} = this.props.navigation;
+
         if (nextProps.userFetched && nextProps.currentUser) {
             this.setModalVisible(false);
             navigate("TimeLine", {});
@@ -56,7 +57,9 @@ class Login extends Component {
             this.setModalVisible(false);
         }
     }
-
+componentWillMount() {
+    this.props.dispatch(userActions.login("tehpanaa@gmail.com", "zizi"));
+    this.setModalVisible(true);}
     loginIn() {
         //fetch to databse
         this.props.dispatch(userActions.login(this.state.email, this.state.password));

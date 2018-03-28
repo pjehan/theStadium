@@ -74,12 +74,13 @@ class Actus extends Component {
     _renderHeader() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        let type = state.inspectedUser ? state.inspectedUser.userType : this.props.inspectedUser.userType;
-        if (type === '/api/types/3') {
+        let type = state.inspectedUser ? state.inspectedUser.userType.label : this.props.inspectedUser.userType.label;
+        if (type === 'Joueur') {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
                            source={{uri: this.state.profilePic}}>
+                        {this._isUser(state.currentUser, state.inspectedUser) ?
                         <TouchableOpacity onPress={() => this._addMedia()} style={{
                             height: 30,
                             width: 30,
@@ -91,7 +92,7 @@ class Actus extends Component {
                             alignItems:'center',
                         }}>
                             <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
-                        </TouchableOpacity>
+                        </TouchableOpacity>: null}
                     </Image>
                 </View>);
         } else {
@@ -207,21 +208,27 @@ class Actus extends Component {
             )
         }
     }
-    render() {
-        const {navigation} = this.props;
+    test() { const {navigation} = this.props;
         const state = navigation.state.params;
 
         let team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         let teamDisplay = team.category.label + ' ' + team.division.label;
         return (
+            <View><Text style={{fontSize: 14, marginBottom: 10}}>{team.club.name} - {teamDisplay}</Text>{this._renderActions()}</View>)
+    }
+    render() {
+        const {navigation} = this.props;
+        const state = navigation.state.params;
+
+        return (
             <View>
-                {this._renderHeader()}
+                {!this.props.isFetching || state.inspectedUser.userType ? this._renderHeader() : null}
                 <View style={[{padding: 15}, GLOBAL_STYLE.whiteColorBG]}>
                     <Text style={{fontWeight: 'bold', marginBottom: 5, fontSize: 16}}>
                         {state.inspectedUser.firstname} {state.inspectedUser.lastname}
                     </Text>
-                    {team ? <Text style={{fontSize: 14, marginBottom: 10}}>{team.club.name} - {teamDisplay}</Text> : null}
-                    {this._renderActions()}
+
+                    {!this.props.isFetching || state.inspectedUser.userType ? this.test() : state.inspectedUser.teams ? this.test() :null}
                 </View>
             </View>
         )
@@ -231,6 +238,7 @@ const mapStateToProps = (state) => {
     return {
         posts: state.ownerList.posts,
         inspectedUser: state.inspectedUser.user,
+        isFetching: state.inspectedUser.fetching
     };
 };
 export default connect(mapStateToProps)(Actus);

@@ -98,7 +98,7 @@ class TimeLine extends Component {
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 {this._renderModal()}
-                {this.props.currentUser.userType === "/api/types/3" ? this._renderPlayerHeader() : null}
+                {this.props.currentUser.userType.label === "Joueur" ? this._renderPlayerHeader() : null}
                 <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35, height:'95%'}}>
                     {this._renderList()}
                 </ScrollView>

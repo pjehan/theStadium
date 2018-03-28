@@ -31,6 +31,7 @@ function login(username, password) {
             setAuthorizationToken(token);
             return token;
         }).then(responseJSON => {
+            console.log(jwt_decode(responseJSON))
             return this.getUser(jwt_decode(responseJSON).id)
         }).catch((error) => {
             return Promise.reject(error);

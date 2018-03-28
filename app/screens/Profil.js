@@ -104,7 +104,6 @@ class Profil extends Component {
         if (this._isUser(state.currentUser, state.inspectedUser)) {
             console.log(state.currentUser);
             stats = state.inspectedUser.stats;
-            console.log(stats, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzz', state.currentUser.stats)
         } else if (this.props.inspectedUser && this.props.inspectedUser.id) {
             stats = this.props.inspectedUser.stats;
         }
@@ -120,7 +119,6 @@ class Profil extends Component {
     _renderStats() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        console.log(stats, state)
         statsComponent = (
             <View>
                 <TouchableOpacity onPress={() => {

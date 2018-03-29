@@ -6,7 +6,8 @@ export const postService = {
     addComment,
     getComments,
     deleteComment,
-    getOwnerList
+    getOwnerList,
+    toggleLikePost
 };
 import axios from 'axios';
 let postList = [
@@ -164,18 +165,19 @@ let postList = [
 ];
 function getAll() {
 
-    let post = [];
-    return axios.get("http://192.168.1.95:8001/api/posts/1")
+    let post = null;
+    return axios.get("http://192.168.43.103:8001/api/posts")
         .then(response => {
-            post.push(response.data);
-            return post;
+            console.log(response)
+            post = response.data["hydra:member"];
+            return response.data["hydra:member"];
         }).catch((error) => {
             console.error(error);
         });
 }
 function getOwnerList(id){
     let post = [];
-    return axios.get("http://192.168.1.95:8001/api/posts?owner=" + id)
+    return axios.get("http://192.168.43.103:8001/api/posts?owner=" + id)
         .then(response => {
             post.push(response.data);
             return post;
@@ -184,7 +186,6 @@ function getOwnerList(id){
         });
 }
 function add(user, post){
-    console.log(post)
     let postToAdd = {
         title: null,
         creationDate: new Date(),
@@ -199,22 +200,16 @@ function add(user, post){
     Object.assign(postToAdd, post);
     //postList.push(postToAdd);
     console.log(postToAdd)
-    return axios.post("http://192.168.1.95:8001/api/posts",postToAdd).then(response => {
+    return axios.post("http://192.168.43.103:8001/api/posts",postToAdd).then(response => {
         console.log(response)
     }).catch(err => {
         console.log(err)
     })
-    /*return Promise.resolve({
-        then: function(onFulfill, onReject) { onFulfill(postList);onReject('erreur') }
-    })*/
+
 }
 
 function addComment(comment) {
-    /*postList[id].post_comments.push(comment);
-    return Promise.resolve({
-        then: function(onFulfill, onReject) {onFulfill(postList[id].post_comments);onReject('erreur')}
-    })*/
-    return axios.post("http://192.168.1.95:8001/api/comments", comment)
+    return axios.post("http://192.168.43.103:8001/api/comments", comment)
         .then(response => {
             return response.data["hydra:member"];
         }).catch((error) => {
@@ -228,32 +223,9 @@ function deleteComment(id, commentID) {
     })
 }
 function getComments(id) {
-   /* if(id === undefined) {
-        return Promise.resolve({
-            then: function(onFullfill, onReject) {
-                onFullfill([{
-                    user: {
-                        lastName: null,
-                        firstName: null,
-                        profilePic: null,
-                        sex: null,
-                        team: null
-                    }, comment: null
-                }]);
-                onReject('erreur');
-            }
-        })
-    }else {
-        return Promise.resolve({
-            then: function (onFulfill, onReject) {
-                onFulfill(postList[id].post_comments);
-                onReject('erreur')
-            }
-        });
 
-    }*/
    let comments = [];
-    return axios.get("http://192.168.1.95:8001/api/comments?post=" + id)
+    return axios.get("http://192.168.43.103:8001/api/comments?post=" + id)
         .then(response => {
             console.log(response)
             comments.push(response.data["hydra:member"]);
@@ -269,10 +241,25 @@ function getComments(id) {
             console.error(error);
         });
 }
-function handleResponse(test, response) {
-    if (!test) {
-        return Promise.reject(response.statusText);
-    }
+function toggleLikePost(postID, userID, liked){
+    if(!liked) {
+        return axios.post("http://192.168.43.103:8001/api/user_likes_post",{ creationDate: new Date(),
+            userLikes: userID,
+            postsLiked: postID})
+            .then(response => {
+                console.log(response)
+                return response.data;
+            }).catch((error) => {
+                console.error(error);
+            });
 
-    return response;
+    } else {
+        return axios.get("http://192.168.43.103:8001/api/user_likes_post")
+            .then(response => {
+                console.log(response)
+                return response.data;
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
 }

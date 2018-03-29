@@ -122,3 +122,18 @@ function getComments(id) {
     function success(comments) { return { type: postConstants.GETALL_COMMENTS_SUCCESS, payload: comments} }
     function failure(error) { return { type: postConstants.GETALL_COMMENTS_FAILURE, payload: error} }
 }
+
+function toogleLikePost(postID, userID, liked) {
+    return (dispatch) => {
+        dispatch(request());
+        postService.toggleLikePost(postID, userID, liked)
+            .then(
+                response => {
+                    dispatch(success({}));
+                }
+            )
+    };
+    function request() {return { type: postConstants.ADD_POST_REQUEST } }
+    function success(posts) { return { type: postConstants.ADD_POST_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.ADD_POST_FAILURE, payload: error} }
+}

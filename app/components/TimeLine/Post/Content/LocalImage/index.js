@@ -19,6 +19,7 @@ export default class LocalImage extends Component {
         this.renderImage();
     }
     renderImage() {
+
         Image.getSize(this.props.source.uri ? this.props.source.uri : this.props.source, (width, height) => {
             originalWidth = null || width;
             originalHeight = null || height;

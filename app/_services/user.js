@@ -23,7 +23,7 @@ function login(username, password) {
     let form = new FormData();
     form.append('_username', username);
     form.append('_password', password);
-    return axios.post("http://192.168.1.95:8001/api/login_check", form,{
+    return axios.post("http://192.168.43.103:8001/api/login_check", form,{
         headers: {'content-type': 'multipart/form-data; charset=UTF-8',}
     })
         .then((response) => {
@@ -40,7 +40,7 @@ function login(username, password) {
 
 function getUser(id) {
 
-    return axios.get("http://192.168.1.95:8001/api/users/"+id)
+    return axios.get("http://192.168.43.103:8001/api/users/"+id)
         .then(response => {
                return response.data;
         }).catch((error) => {
@@ -48,7 +48,7 @@ function getUser(id) {
         })
 }
 function getUserType(id) {
-    return axios.get("http://192.168.1.95:8001/api/players?user=" + id)
+    return axios.get("http://192.168.43.103:8001/api/players?user=" + id)
         .then(response => {
             console.log(response)
             return response.data["hydra:member"][0];
@@ -108,7 +108,7 @@ function register(user) {
 }
 function putPlayer(player) {
     console.log(player.id);
-    return axios.put("http://192.168.1.95:8001/api/players/" + player.id,player)
+    return axios.put("http://192.168.43.103:8001/api/players/" + player.id,player)
         .then(response => {
             console.log(response)
             Object.assign(currentUser.stats, response.data);

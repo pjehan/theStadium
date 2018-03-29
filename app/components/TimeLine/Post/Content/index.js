@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {TypeEnum} from "../contentType";
 import LocalImage from './LocalImage';
-import {View, Image, Dimensions, StyleSheet, Button, DatePickerAndroid, Text} from 'react-native';
+import {View, Image, Dimensions, StyleSheet, Button, DatePickerAndroid, Text, TouchableOpacity} from 'react-native';
+import OpenContent from "../OpenContent";
 
 let postContent;
 let {height} = Dimensions.get('window');
@@ -33,11 +34,24 @@ export default class Content extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            url: null,
+            openContent: false,
+            actualImg: null,
+        }
         this.returnSimplePost = this.returnSimplePost.bind(this);
         this.returnArticle = this.returnArticle.bind(this);
         this.returnGoalPost = this.returnGoalPost.bind(this);
         this.returnAssistPost = this.returnAssistPost.bind(this);
         this.checkType = this.checkType.bind(this);
+        this.onToggleModal = this.onToggleModal.bind(this);
+    }
+
+    onToggleModal(visible, img) {
+        this.setState({openContent: visible});
+        img ? this.setState({actualImg: img}) : '';
+        this.forceUpdate();
     }
 
     returnSimplePost() {
@@ -53,14 +67,26 @@ export default class Content extends Component {
             }*/
         }
         if (this.props.medias.length > 0) {
-            url = this.props.medias[0].url;
+            url = this.props.medias[0].path;
         }
         return (
             <View>
                 <Text style={{padding: 10, paddingLeft: 5, paddingRight: 5}}>
                     {this.props.content}
                 </Text>
+                <OpenContent owner={{
+                    lastName: this.props.owner.lastname,
+                    firstName: this.props.owner.firstname
+                }} visible={this.state.openContent}
+                             media={this.state.actualImg}
+                             toggleModal={(visible) => {
+                                 this.onToggleModal(visible)
+                             }}/>
+                <TouchableOpacity onPress={() => {
+                    this.onToggleModal(true, url);
+                }}>
                 {url ? <LocalImage source={url}/> : null}
+                </TouchableOpacity>
             </View>);
     }
 

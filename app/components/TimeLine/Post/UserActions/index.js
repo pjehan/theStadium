@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 
 import { StyleSheet, Image } from 'react-native';
+import {postActions} from "../../../../_actions/post";
+import {connect} from "react-redux";
 const PostStyle = StyleSheet.create({
     container: {
         backgroundColor: '#ffffff',
@@ -61,15 +63,24 @@ const PostStyle = StyleSheet.create({
       marginLeft:2
     }
 });
-export default class UserActions extends Component {
+class UserActions extends Component {
     constructor(props) {
-      super(props);
+        super(props);
+        this.toggleLike = this.toggleLike.bind(this)
+    }
+    toggleLike() {
+        this.props.dispatch(postActions.toggleLikePost(this.props.postID, this.props.userID, this.props.isLiked));
+        //!this.props.isLiked ? this.props.likes + 1 : this.propslikes - 1;
+    }
+
+    toggleShare(){
+
     }
     render() {
         return (
 <View style={PostStyle.userAction}>
             <View style={{height:0.5, backgroundColor:'#cccccc', width: '100%'}} />
-              <TouchableOpacity style={{marginLeft:10}}>
+              <TouchableOpacity onPress={() => this.toggleLike()} style={{marginLeft:10}}>
               <View style={{alignItems:'center'}}>
                 <Image resizeMode="contain" style={{height:20, width:20}} source={require('../../../../assets/img/picto/actualite/like.png')}/>
                 <Text style={PostStyle.actionText}>{this.props.likes}</Text>
@@ -83,7 +94,7 @@ export default class UserActions extends Component {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity style={{marginRight:10}}>
+              <TouchableOpacity onPress={() => this.toggleShare()} style={{marginRight:10}}>
                   <View style={{alignItems:'center'}}>
                   <Image resizeMode="contain" style={{height:15, width:15}} source={require('../../../../assets/img/picto/actualite/partage.png')}/>
                   <Text style={PostStyle.actionText}>{this.props.shares}</Text>
@@ -94,3 +105,9 @@ export default class UserActions extends Component {
             )
           }
         }
+mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser.user,
+    };
+};
+export default connect(mapStateToProps)(UserActions);

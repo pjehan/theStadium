@@ -8,6 +8,7 @@ export const postActions = {
     addComment,
     getComments,
     deleteComment,
+    toggleLikePost,
 };
 function getAll() {
 
@@ -123,7 +124,7 @@ function getComments(id) {
     function failure(error) { return { type: postConstants.GETALL_COMMENTS_FAILURE, payload: error} }
 }
 
-function toogleLikePost(postID, userID, liked) {
+function toggleLikePost(postID, userID, liked) {
     return (dispatch) => {
         dispatch(request());
         postService.toggleLikePost(postID, userID, liked)
@@ -133,7 +134,7 @@ function toogleLikePost(postID, userID, liked) {
                 }
             )
     };
-    function request() {return { type: postConstants.ADD_POST_REQUEST } }
-    function success(posts) { return { type: postConstants.ADD_POST_SUCCESS, payload: posts} }
-    function failure(error) { return { type: postConstants.ADD_POST_FAILURE, payload: error} }
+    function request() {return { type: postConstants.LIKES_REQUEST } }
+    function success(posts) { return { type: postConstants.LIKES_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.LIKES_FAILURE, payload: error} }
 }

@@ -1,5 +1,5 @@
 import {userService} from "./user";
-
+import instance from "../config/axiosConfig";
 export const postService = {
     getAll,
     add,
@@ -165,7 +165,7 @@ let postList = [
 ];
 function getAll() {
     let post = null;
-    return axios.get("http://192.168.43.103:8001/api/posts")
+    return instance.get("/api/posts")
         .then(response => {
             console.log(response)
             post = response.data["hydra:member"];
@@ -176,7 +176,7 @@ function getAll() {
 }
 function getOwnerList(id){
     let post = [];
-    return axios.get("http://192.168.43.103:8001/api/posts?owner=" + id)
+    return instance.get("/api/posts?owner=" + id)
         .then(response => {
             post.push(response.data);
             return post;
@@ -199,7 +199,7 @@ function add(user, post){
     Object.assign(postToAdd, post);
     //postList.push(postToAdd);
     console.log(postToAdd)
-    return axios.post("http://192.168.43.103:8001/api/posts",postToAdd).then(response => {
+    return instance.post("/api/posts",postToAdd).then(response => {
         console.log(response)
     }).catch(err => {
         console.log(err)
@@ -208,7 +208,7 @@ function add(user, post){
 }
 
 function addComment(comment) {
-    return axios.post("http://192.168.43.103:8001/api/comments", comment)
+    return instance.post("/api/comments", comment)
         .then(response => {
             return response.data["hydra:member"];
         }).catch((error) => {
@@ -224,7 +224,7 @@ function deleteComment(id, commentID) {
 function getComments(id) {
 
    let comments = [];
-    return axios.get("http://192.168.43.103:8001/api/comments?post=" + id)
+    return instance.get("/api/comments?post=" + id)
         .then(response => {
             console.log(response)
             comments.push(response.data["hydra:member"]);
@@ -241,8 +241,9 @@ function getComments(id) {
         });
 }
 function toggleLikePost(postID, userID, liked){
+    console.log(liked)
     if(!liked) {
-        return axios.post("http://192.168.43.103:8001/api/user_likes_post",{ creationDate: new Date(),
+        return instance.post("/api/user_likes_posts",{ creationDate: '2018-03-01 00:00:00',
             userLikes: userID,
             postsLiked: postID})
             .then(response => {
@@ -253,7 +254,7 @@ function toggleLikePost(postID, userID, liked){
             });
 
     } else {
-        return axios.get("http://192.168.43.103:8001/api/user_likes_post")
+        return instance.get("/api/user_likes_posts")
             .then(response => {
                 console.log(response)
                 return response.data;

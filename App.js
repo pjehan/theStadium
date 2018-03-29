@@ -16,7 +16,7 @@ import setAuthorizationToken from "./app/config/setAuthorizationToken";
 const logger = createLogger({
     // ...options
 });
-const MIDDLEWARE = applyMiddleware(promise(), thunk);
+const MIDDLEWARE = applyMiddleware(promise(), thunk,logger);
 
 export default class App extends Component {
 

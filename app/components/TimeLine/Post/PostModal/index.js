@@ -225,7 +225,7 @@ class PostModal extends Component {
 
     displaySimpleArticle(type) {
         ModalContent = (
-            <ScrollView style={{flex: 1, justifyContent: 'space-between'}}>
+            <ScrollView contentContainerStyle={{flex: 1}}>
                 <View style={{
                     flexDirection: 'row',
                     borderBottomWidth: 0.5,

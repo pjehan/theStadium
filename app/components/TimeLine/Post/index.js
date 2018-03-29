@@ -84,8 +84,11 @@ class Post extends Component {
         this.onToggleComment = this.onToggleComment.bind(this);
         this._renderCommentModal = this._renderCommentModal.bind(this);
         this.buttonPress = this.buttonPress.bind(this);
+        this.isLiked = this.isLiked.bind(this);
     }
-
+    isLiked() {
+       return this.props.post.postsLiked.some(user => user.userLikes.id === this.props.currentUser.id);
+    }
     onToggleComment(visible) {
         if (visible) {
             this.props.dispatch(postActions.getComments(this.props.id+1));
@@ -130,7 +133,7 @@ class Post extends Component {
 
                 <Content {...this.state.post} />
 
-               <UserActions likes={this.state.post.post_likes} shares={this.state.post.post_shares}
+               <UserActions postID={this.props.post.id} userID={this.props.currentUser.id} isLiked={this.isLiked()} likes={this.state.post.postsLiked.length} shares={this.state.post.postsShared.length}
                              comments={this.state.post.comments.length}/>
                 <View style={PostStyle.userActionText}>
                     <View style={{flexDirection: 'row'}}>

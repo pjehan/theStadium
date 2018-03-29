@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Modal,
     Image,
+    ScrollView, Dimensions
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {TypeEnum} from "../contentType";
@@ -78,11 +79,10 @@ class PostModal extends Component {
                 goalsNbr: 0,
                 passNbr: 0,
                 content:'',
-                medias: [
-                     'https://vignette.wikia.nocookie.net/cardfight/images/a/af/Bobo_Bunny.jpeg/revision/latest?cb=20170811201219',
-                ],
                 postType: null,
             },
+
+            medias: '',
             goals_assists: false,
 
         };
@@ -104,7 +104,6 @@ class PostModal extends Component {
     publishModal(type) {
         let post = this.state.post;
         post.postType = type;
-        console.log(this.props)
         this.props.dispatch(postActions.add(this.props.owner.id, post));
         //TODO when dispatch is good toggle modal
         this.toggleModal(false, type);
@@ -160,11 +159,8 @@ class PostModal extends Component {
             Description = 'Vous avez mis en valeur votre coéquipier(e) grâce à une passe';
             Label = 'Nombre de passe(s) décisive(s)';
         }
-        ModalContent = (<Modal animationType={"slide"} transparent={false}
-                               visible={this.props.visible}
-                               onRequestClose={() => {
-                                   console.log("Modal has been closed.")
-                               }}>
+        ModalContent = (
+            <View>
                 <View style={{
                     flexDirection: 'row',
                     borderBottomWidth: 0.5,
@@ -223,19 +219,13 @@ class PostModal extends Component {
                     />
 
                 </View>
-            </Modal>
-
+        </View>
         )
     }
 
     displaySimpleArticle(type) {
-        ModalContent = (<Modal animationType={"slide"} transparent={false}
-                               visible={this.props.visible}
-
-                               onRequestClose={() => {
-                                   console.log("Modal has been closed.")
-                               }}>
-            <View style={{flex: 1, justifyContent: 'space-between'}}>
+        ModalContent = (
+            <ScrollView style={{flex: 1, justifyContent: 'space-between'}}>
                 <View style={{
                     flexDirection: 'row',
                     borderBottomWidth: 0.5,
@@ -282,9 +272,10 @@ class PostModal extends Component {
                                  this.onChangeInfos(state, newvalue)
                              }}/>
                 <View>
-                    <Image style={{height: 169, width: 298}} source={{uri: this.state.post.medias[0]}}/>
+                    {SelectedMedia}
+
                 </View>
-                <View style={{}}>
+                <View >
                     <TouchableOpacity onPress={() => {
                         this.toggleModal(true, TypeEnum.goals)
                     }} style={{
@@ -333,17 +324,11 @@ class PostModal extends Component {
                         <Text style={{marginRight: 20}}> > </Text>
                     </TouchableOpacity>
                 </View>
-            </View>
-        </Modal>)
+            </ScrollView>);
     }
 
     displayArticle(type) {
-        ModalContent = (<Modal animationType={"slide"} transparent={false}
-                               visible={this.props.visible}
-
-                               onRequestClose={() => {
-                                   console.log("Modal has been closed.")
-                               }}>
+        ModalContent = (
             <View style={{flex: 1, justifyContent: 'space-between'}}>
                 <View style={{
                     flexDirection: 'row',
@@ -366,28 +351,39 @@ class PostModal extends Component {
                     </TouchableOpacity>
                 </View>
             </View>
-        </Modal>);
+        );
     };
     render() {
         return (
-        <View>
+        <Modal animationType={"slide"} transparent={false}
+                visible={this.props.visible}
+
+                onRequestClose={() => {
+                    console.log("Modal has been closed.")
+                }}>
         {ModalContent}
-        </View>
+        </Modal>
         )
     }
+    renderImage(result, callback) {
+            let originalWidth = result.width;
+            let originalHeight = result.height;
+            let windowWidth = null || Dimensions.get('window').width;
+            let widthChange = null || (windowWidth - 10) / originalWidth;
+            SelectedMedia = (<Image source={{uri: result.uri}} style={{marginLeft:5,width: originalWidth * widthChange, height: originalHeight * widthChange}}/>);
+            this.displaySimpleArticle(TypeEnum.simple);
+            this.forceUpdate();
+        }
     _addMedia = async () =>{
         let result =  await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-        aspect: [4, 3],
     });
-        console.log(result)
 
         if (!result.cancelled) {
-        this.setState({media:result});
-        SelectedMedia = <Image style={{
-            height: this.state.post.medias.height,
-            width: this.state.post.medias.width
-        }} source={{uri: this.state.post.medias[0]}}/>;
+        this.setState({medias:result.uri});
+        console.log(result, this.state.medias);
+            this.renderImage(result, this.displaySimpleArticle(TypeEnum.simple));
+
     } else {
         console.log('uri', result.uri, this.state.post.medias[0])
     }

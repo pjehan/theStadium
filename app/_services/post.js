@@ -164,7 +164,6 @@ let postList = [
     },
 ];
 function getAll() {
-
     let post = null;
     return axios.get("http://192.168.43.103:8001/api/posts")
         .then(response => {

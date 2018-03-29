@@ -6,7 +6,7 @@ export function registeringUser(state = {
     birthdate: '',
     password: '',
     email:'',
-    type:null,
+    userType:null,
     sexe:0,
     club:'',
     team: '',

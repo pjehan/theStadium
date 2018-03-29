@@ -3,6 +3,7 @@ import { Text, View, Image, Button } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import { GLOBAL_STYLE } from '../assets/css/global';
+import {clubAction} from "../_actions/club";
 
 const navigateAction = NavigationActions.navigate({
   routeName: 'Login',
@@ -29,7 +30,7 @@ componentDidMount() {
 }
   render() {
     var {navigate} = this.props.navigation;
-    if(this.state.isLoggedIn == true) {
+    if(this.state.isLoggedIn === true) {
       navigate("Login", {})
     }
     return (

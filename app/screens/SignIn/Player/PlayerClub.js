@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
-import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity, Picker, Item} from 'react-native';
+import Autocomplete from 'react-native-autocomplete-input';
+import {View,StyleSheet,AsyncStorage, Text,KeyboardAvoidingView,TouchableOpacity, Picker, Item} from 'react-native';
 import {GLOBAL_STYLE} from '../../../assets/css/global';
 import CustomInput from '../../../components/CustomInput';
 const style = StyleSheet.create({
@@ -18,6 +19,7 @@ const style = StyleSheet.create({
         borderRadius: 4,
     },
 });
+
 const programmingLanguages = [
   {
     label: 'Java',
@@ -55,13 +57,41 @@ const programmingLanguages = [
 export default class PlayerInfos extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      team: '',
-      poste: '',
+      this.state = {
+          dataSource : ['oui','jesuis','cheunnnourry','marabou'],
+          inputValue : '',
+          query:'',
+          clubQuery: '',
+          teamQuery: '',
+
+          clubList: ['FC GUICHEN', 'ZIZI', 'OUI'],
+          teamList: ['Sénior D3', 'U17', 'Sénior féminine F1'],
+
+          hideTeam: false,
+          hideClub: false,
+
+            poste: '',
+          team: '',
     }
+      this._filterData = this._filterData.bind(this)
   }
+componentDidMount() {
+    AsyncStorage.getItem('@appStore:clubList').then(value => {console.log(value);this.setState({team: value[0].label});this.forceUpdate()});
+}
+    _filterData(query, dataSource) {
+        if (query === '') {
+            return [];
+        }
+        let data = dataSource;
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        return data.filter(data => data.search(regex) >= 0);
+    }
     render() {
+        const { teamQuery, clubQuery, clubList, teamList } = this.state;
+        const teamData = this._filterData(teamQuery, teamList);
+        const clubData = this._filterData(clubQuery, clubList);
         return (
+
           <View style={{flex: 7,backgroundColor:'white', justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
 
               <View style={{flex: 2, justifyContent: 'center'}}>
@@ -74,26 +104,41 @@ export default class PlayerInfos extends Component {
               <KeyboardAvoidingView
                   style={{flex:3, justifyContent: 'space-around', alignItems:'center'}}
                   behavior="padding">
-                  <CustomInput
-                      container={''}
-                      placeholder={'Nom de votre club'}
-                      input={GLOBAL_STYLE.input}
-                      state={'club'}
-                      textColor={'#333333'}
-                      borderColor={'transparent'}
-                      backgroundColor={'#eeeeee'}
-                      onChangeParent={() => {}}
-                  />
-                    <View style={{backgroundColor:'#eeeeee'}}>
-                  <Picker style={GLOBAL_STYLE.input}
-                    selectedValue={this.state.team}
-                    prompt="Votre équipe"
-                    onValueChange={itemValue => this.setState({ team: itemValue })}>
-                    {programmingLanguages.map((i, index) => (
-                      <Picker.Item key={index} label={i.label} value={i.value} />
-                    ))}
-              </Picker>
-            </View>
+                  <View style={[{height:40,width:'85%'}]}>
+                      <Autocomplete
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          containerStyle={styles.autocompleteContainer}
+                          data={clubData}
+                          defaultValue={clubQuery}
+                          placeholder={'Nom de votre Club'}
+                          onChangeText={text => this.setState({ clubQuery: text })}
+                          hideResults={this.state.hideClub}
+                          renderItem={item => (
+                              <TouchableOpacity onPress={() => this.setState({ clubQuery: item, hideClub: true })}>
+                                  <Text>{item}</Text>
+                              </TouchableOpacity>
+                          )}
+                      />
+                  </View>
+                  <Text>{this.state.team}</Text>
+                  <View style={[{height:40,width:'85%'}]}>
+                      <Autocomplete
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          containerStyle={styles.autocompleteContainer}
+                          data={teamData}
+                          defaultValue={teamQuery}
+                          placeholder={'Votre équipe'}
+                          onChangeText={text => this.setState({ teamQuery: text })}
+                          hideResults={this.state.hideTeam}
+                          renderItem={item => (
+                              <TouchableOpacity onPress={() => this.setState({ teamQuery: item, hideTeam: true })}>
+                                  <Text>{item}</Text>
+                              </TouchableOpacity>
+                          )}
+                      />
+                  </View>
             <View style={{backgroundColor:'#eeeeee'}}>
           <Picker style={GLOBAL_STYLE.input}
           prompt="Poste joué"
@@ -114,3 +159,43 @@ export default class PlayerInfos extends Component {
     }
 
 }
+const styles = StyleSheet.create({
+    autocompleteContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1,
+        backgroundColor:'#eeeeee'
+    },
+    itemText: {
+        fontSize: 15,
+        margin: 2
+    },
+    descriptionContainer: {
+        // `backgroundColor` needs to be set otherwise the
+        // autocomplete input will disappear on text input.
+        backgroundColor: '#F5FCFF',
+        marginTop: 8
+    },
+    infoText: {
+        textAlign: 'center'
+    },
+    titleText: {
+        fontSize: 18,
+        fontWeight: '500',
+        marginBottom: 10,
+        marginTop: 10,
+        textAlign: 'center'
+    },
+    directorText: {
+        color: 'grey',
+        fontSize: 12,
+        marginBottom: 10,
+        textAlign: 'center'
+    },
+    openingText: {
+        textAlign: 'center'
+    }
+});

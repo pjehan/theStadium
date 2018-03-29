@@ -18,6 +18,7 @@ import CustomInput from '../components/CustomInput';
 import {connect} from 'react-redux';
 import {userActions} from "../_actions/user";
 import axios from "axios";
+import {clubAction} from "../_actions/club";
 
 class Login extends Component {
     constructor(props) {
@@ -58,12 +59,14 @@ class Login extends Component {
         }
     }
 componentWillMount() {
-    this.props.dispatch(userActions.login("tehpanaa@gmail.com", "zizi"));
-    this.setModalVisible(true);}
+    this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
+    this.setModalVisible(true);
+    this.props.dispatch(clubAction.getAll());
+}
     loginIn() {
         //fetch to databse
-        this.props.dispatch(userActions.login(this.state.email, this.state.password));
-        this.setModalVisible(true);
+        //this.props.dispatch(userActions.login(this.state.email, this.state.password));
+        //this.setModalVisible(true);
 
     }
 

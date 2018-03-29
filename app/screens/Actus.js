@@ -238,7 +238,8 @@ const mapStateToProps = (state) => {
     return {
         posts: state.ownerList.posts,
         inspectedUser: state.inspectedUser.user,
-        isFetching: state.inspectedUser.fetching
+        isFetching: state.inspectedUser.fetching,
+        currentUser: state.currentUser.user
     };
 };
 export default connect(mapStateToProps)(Actus);

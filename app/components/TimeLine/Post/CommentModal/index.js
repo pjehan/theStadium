@@ -7,7 +7,7 @@ import {
     Modal,
     Image,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator, ScrollView
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import CustomInput from "../../../CustomInput";
@@ -94,6 +94,8 @@ class CommentModal extends Component {
             refreshComments: null,
             comments: null,
             tools: false,
+            item: null,
+            comments: this.props.comments
         };
         this.toggleModal = this.toggleModal.bind(this);
         this.renderItem = this.renderItem.bind(this);
@@ -101,12 +103,17 @@ class CommentModal extends Component {
         this._displayTools = this._displayTools.bind(this);
         this.renderPost = this.renderPost.bind(this);
     };
-
+    componentWillReceiveProps(nextProps){
+        if(this.props !== nextProps){}
+    }
+    _isUser(user, inspected) {
+        return user.id === inspected.id;
+    }
     _displayTools() {
         return (
             <Modal animationType={"slide"} transparent={true}
                 visible={this.state.tools}
-                presentationStyle={'formSheet'}
+
                 onRequestClose={() => {
                     console.log("Modal has been closed.")
                 }}>
@@ -114,17 +121,24 @@ class CommentModal extends Component {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center'}}>
-                    <View style={{height: 200, width: 200, backgroundColor: '#ffffff'}}>
-                        <TouchableOpacity style={{height: 20, borderTopColor: '#cccccc', borderTopWidth: 2}}
+                    <View style={{height: 200, width: 200,borderRadius:10, backgroundColor: '#ffffff', justifyContent:'center'}}>
+                        {this._isUser(this.props.post.owner.id, this.props.currentUser.id) ?
+                            <TouchableOpacity style={{justifyContent:'center',height: 40, borderTopColor: '#cccccc', borderTopWidth: 1,borderBottomColor: '#cccccc', borderBottomWidth: 0.5}}
                                           onPress={() => {
-                                              this.props.dispatch(postActions.deleteComment(this.props.id, this.props.comments.comments.indexOf(item)));
+                                              this.props.dispatch(postActions.deleteComment(this.state.item.id,this.props.id,this.props.comments.comments[0].indexOf(this.state.item)));
+                                              this.props.comments.comments[0].splice(this.props.comments.comments[0].indexOf(this.state.item), 1);
                                           }}>
-                            <Text style={{color: '#003366'}}>Supprimer</Text>
+                            <Text style={{textAlign:'center', color: '#003366'}}>Supprimer</Text>
+                        </TouchableOpacity> : null}
+                        <TouchableOpacity style={{justifyContent:'center',height: 40, borderTopColor: '#cccccc', borderTopWidth: 0.5,borderBottomColor: '#cccccc', borderBottomWidth: 0.5}}
+                                          onPress={() => {
+                                          }}>
+                            <Text style={{textAlign:'center', color: '#003366'}}>Signalez un abus</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{height: 20, borderTopColor: '#cccccc', borderTopWidth: 2}}
-                                          onPress={() => {
-                                          }}>
-                            <Text style={{color: '#003366'}}>Signalez un abus</Text>
+                        <TouchableOpacity style={{justifyContent:'center',height: 40, borderTopColor: '#cccccc', borderTopWidth: 0.5,borderBottomColor: '#cccccc', borderBottomWidth: 1}}
+                                               onPress={() => { this.setState({tools: false})
+                                               }}>
+                            <Text style={{textAlign:'center', color: '#003366'}}>Annuler</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -136,7 +150,7 @@ class CommentModal extends Component {
         return (
             <View>
                 <OwnerHeader
-                    Owner={this.props.post.club ? this.props.post.club : this.props.post.owner.firstName + ' ' + this.props.post.owner.lastName}
+                    Owner={this.props.post.club ? this.props.post.club : this.props.post.owner.firstname + ' ' + this.props.post.owner.lastname}
                     postDate={this.props.post.postDate} team={this.props.post.owner.team}/>
 
                 <Content {...this.props.post} />
@@ -151,21 +165,32 @@ class CommentModal extends Component {
                                  comments={this.props.post.post_comments.length}/>
      */
     renderItem(item) {
-        console.log(item)
         if (item) {
             return (
-                <TouchableOpacity onPress={() => {
-                    this.setState({tools: true})
-                }} style={PostStyle.container}>
+                <TouchableOpacity  style={PostStyle.container}>
 
-                    <View style={PostStyle.ownerStyle}>
-                        {item.user.profilepicture ?
-                            <Image style={PostStyle.profilePic} source={{uri: item.user.profilepicture}}/> :
+                    <View style={[PostStyle.ownerStyle, {width:'100%'}]}>
+                        {item.user.profilepicture && item.user.userType === 'Joueur' ?
+                            <Image style={PostStyle.profilePic} source={{uri: item.user.profilepicture}}/> : item.user.teams[0].team.club.profilePicture ?
+                                <Image style={PostStyle.profilePic} source={{uri: item.user.teams[0].team.club.profilePicture}}/> :
                             <View style={[PostStyle.profilePic, PostStyle.profilBack]}/>}
                         <View>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <Text style={PostStyle.title}>{item.user.firstname} {item.user.lastname}</Text>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', width:'75%'}}>
+                                {item.user.userType === 'Joueur' ?
+                                    <Text style={PostStyle.title}>{item.user.firstname} {item.user.lastname}</Text>
+                                    :
+                                    <View>
+                                    <Text style={PostStyle.title}>{item.user.teams[0].team.club.name}</Text>
+                                    <Text style={{
+                                        paddingVertical: 2,
+                                        paddingHorizontal: 15,
+                                        backgroundColor: '#003366',
+                                        color: '#ffffff',
+                                        marginRight: 10
+                                    }}>{item.user.teams[0].team.category.label + ' ' + item.user.teams[0].team.division.label}</Text></View>}
+                                <TouchableOpacity onPress={() => {
+                                    this.setState({tools: true, item: item})
+                                }} style={{flexDirection: 'row', alignItems: 'center', justifyContent:'flex-end'}}>
                                     <View style={{height: 5, width: 5, backgroundColor: '#cccccc', borderRadius: 8}}/>
                                     <View style={{
                                         height: 5,
@@ -177,7 +202,7 @@ class CommentModal extends Component {
                                     }}/>
                                     <View style={{height: 5, width: 5, backgroundColor: '#cccccc', borderRadius: 8}}/>
 
-                                </View>
+                                </TouchableOpacity>
                             </View>
                             <Text style={PostStyle.content}>{item.contenu}</Text>
                         </View>
@@ -191,9 +216,8 @@ class CommentModal extends Component {
 
     renderList() {
         if (!this.props.comments.comments) {
-            return null;
+            return <ActivityIndicator color="#ffffff" size="large"/>
         } else {
-            console.log(this.props.comments)
             return (
                 <FlatList
                     data={this.props.comments.comments[0]}
@@ -217,10 +241,15 @@ class CommentModal extends Component {
             user: this.props.currentUser.id,
             contenu: this.state.userMessage,
             createdAt: new Date(),
-            post: 1,
+            post: this.props.post.id,
         };
-        this.props.dispatch(postActions.addComment(COMMENTTOADD));
-
+        const commentState = {
+            user: this.props.currentUser,
+            contenu: this.state.userMessage,
+            createdAt: new Date(),
+            post: this.props.post.id,
+        };
+        this.props.dispatch(postActions.addComment(COMMENTTOADD,this.props.id));
     }
 
     render() {
@@ -250,10 +279,11 @@ class CommentModal extends Component {
                             <Text style={{color: '#003366'}}>Retour</Text>
                         </TouchableOpacity>
                     </View>
-                    {this.props.visible ? null : /*this.renderPost() : */null}
+                    <ScrollView>
+                    {this.props.preview ? this.renderPost() : null}
                     {this._displayTools()}
-                    {this.props.visible && this.props.comments && !this.props.isFetching ? this.renderList() :
-                        <ActivityIndicator color="#ffffff" size="large"/>}
+                    {this.props.visible && this.props.comments && !this.props.isFetching ? this.renderList() : <ActivityIndicator color="#ffffff" size="large"/>}
+                    </ScrollView>
                     <View style={{justifyContent: 'center', backgroundColor: '#cccccc', padding: 5}}>
                         <CustomInput
                             ref={input => {
@@ -286,7 +316,8 @@ const mapStateToProps = (state) => {
     return {
         currentUser: state.currentUser.user,
         comments: state.commentList.comments,
-        isFetching: state.commentList.fetching
+        isFetching: state.commentList.fetching,
+        postList: state.postList.posts,
     };
 };
 export default connect(mapStateToProps)(CommentModal);

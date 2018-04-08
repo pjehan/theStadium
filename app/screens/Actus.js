@@ -12,27 +12,8 @@ import {ImagePicker} from 'expo';
 import {Icon} from 'react-native-elements';
 import {GLOBAL_STYLE, timeLineStyle} from '../assets/css/global';
 import {connect} from "react-redux";
-import {postActions} from "../_actions/post";
+import {userActions} from "../_actions/user";
 
-const STYLE = StyleSheet.create({
-    tab: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 30,
-        paddingRight: 30,
-        justifyContent: 'space-between',
-        height: 50,
-        borderBottomColor: '#cccccc',
-        borderBottomWidth: 1,
-    },
-    tabText: {
-        color: '#003366',
-        fontWeight: '700'
-    },
-    even: {
-        backgroundColor: '#dddddd',
-    },
-});
 let ImageCover = null;
 let {width} = Dimensions.get('window');
 
@@ -42,64 +23,106 @@ class Actus extends Component {
 
         this.state = {
             profilePic: '../assets/img/thestadium/profil.jpeg',
+
         }
     }
+
     componentWillMount() {
         const {navigation} = this.props;
         const state = navigation.state.params;
         //if(state.inspectedUser){this.props.dispatch(postActions.getOwnerList(state.id));}
     }
-    _addMedia = async () => {
+
+    componentWillReceiveProps(nextProps) {
+
+        nextProps ? this.setState({profilePic: nextProps.inspectedUser.profilepicture}) : null;
+    }
+
+    _addMedia = async (coach) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
         });
 
         if (!result.cancelled) {
-            this.setState({profilePic: result.uri})
-            this.forceUpdate();
+            const user = this.props.currentUser;
+            user.profilepicture = result.uri;
+            this.props.dispatch(userActions.putPlayer(user)).then(
+                response => {
+                    this.forceUpdate();
+                }
+            );
         } else {
 
         }
     };
-    _isUser(user, inspected){
+
+    _isUser(user, inspected) {
         return user.id === inspected.id;
     }
 
-    _isLiked(user, inspected){
-        return user.players.includes('/api/players/' + inspected.id);
+    _isLiked(user, inspected) {
+        if(inspected.userType !== 'Coach') {
+            return user.players.includes('/api/players/' + inspected.id)
+        }else {
+            return user.teamsLiked.includes('/api/teamsLiked' + inspected.teams[inspected.teams.length - 1].id);
+        }
     }
-    toggleFollow(){
+
+    toggleFollow(user,inspected) {
+        if(inspected.userType === 'Coach') {
+            if(this._isLiked(user, inspected)) {
+                user.teamsLiked.splice(user.teamsLiked.indexOf('/api/teams/' + inspected.teams[inspected.teams.length - 1].id), 1);
+                this.props.dispatch(userActions.putUser(user));
+            }else {
+                user.teamsLiked.push('/api/teams/' + inspected);
+                this.props.dispatch(userActions.putUser(user));
+            }
+        }else {
+
+            if(this._isLiked(user, inspected)) {
+                user.teamsLiked.splice(user.teamsLiked.indexOf('/api/players/' + inspected), 1);
+                this.props.dispatch(userActions.putUser(user));
+            }else {
+
+                user.teamsLiked.push('/api/players/' + inspected);
+                this.props.dispatch(userActions.putUser(user));
+            }
+        }
 
     }
+
     _renderHeader() {
         const {navigation} = this.props;
         const state = navigation.state.params;
+        console.log(state)
         let type = state.inspectedUser ? state.inspectedUser.userType.label : this.props.inspectedUser.userType.label;
+        let team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
+        let user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
         if (type === 'Joueur') {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={{uri: this.state.profilePic}}>
+                           source={{uri: this.props.inspectedUser.profilepicture}}>
                         {this._isUser(state.currentUser, state.inspectedUser) ?
-                        <TouchableOpacity onPress={() => this._addMedia()} style={{
-                            height: 30,
-                            width: 30,
-                            backgroundColor: 'rgba(0,0,0,0.5)',
-                            position: 'absolute',
-                            right: 0,
-                            bottom: 0,
-                            justifyContent:'center',
-                            alignItems:'center',
-                        }}>
-                            <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
-                        </TouchableOpacity>: null}
+                            <TouchableOpacity onPress={() => this._addMedia()} style={{
+                                height: 30,
+                                width: 30,
+                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                position: 'absolute',
+                                right: 0,
+                                bottom: 0,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
+                            </TouchableOpacity> : null}
                     </Image>
                 </View>);
         } else {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={{uri: this.state.profilePic}}>
+                           source={{uri: team.club.profilePicture}}>
                         <View style={{
                             height: 250,
                             width: width / 2.5,
@@ -107,14 +130,19 @@ class Actus extends Component {
                             position: 'absolute',
                             left: 0,
                             bottom: 0,
-                            justifyContent:'center',
-                            alignItems:'center'
+                            justifyContent: 'center',
+                            alignItems: 'center'
                         }}>
                             <Image style={{height: 100, width: 100}} resizeMode={'cover'}
-                                   source={{uri: this.state.profilePic}}/>
-                            <Text style={{color:'#ffffff', fontWeight:'700',marginVertical:5}}>Fc Guichen</Text>
-                            <View style={{paddingHorizontal:10 ,backgroundColor: '#ffffff', paddingVertical:5}}>
-                                <Text style={{color: '#000000'}}>Sénior F3</Text>
+                                   source={{uri: team.club.coverPhoto}}/>
+                            <Text style={{
+                                color: '#ffffff',
+                                fontWeight: '700',
+                                marginVertical: 5
+                            }}>{team.club.name}</Text>
+                            <View style={{paddingHorizontal: 10, backgroundColor: '#ffffff', paddingVertical: 5}}>
+                                <Text
+                                    style={{color: '#000000'}}>{team.category.label + ' ' + team.division.label}</Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => this._addMedia()} style={{
@@ -123,7 +151,9 @@ class Actus extends Component {
                             backgroundColor: 'rgba(0,0,0,0.5)',
                             position: 'absolute',
                             right: 0,
-                            bottom: 0
+                            bottom: 0,
+                            alignItems:'center',
+                            justifyContent:'center'
                         }}>
                             <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
                         </TouchableOpacity>
@@ -132,11 +162,12 @@ class Actus extends Component {
             )
         }
     }
+
     _renderActions() {
         const {navigation} = this.props;
         const state = navigation.state.params;
         let type = 0;
-        if(this._isUser(state.currentUser, state.inspectedUser)) {
+        if (this._isUser(state.currentUser, state.inspectedUser)) {
             if (type === 1) {
                 return (
                     <View style={{width: width / 1.25}}>
@@ -175,7 +206,7 @@ class Actus extends Component {
                                 this.onToggleModal(true, 'interview')
                             }}>
                                 <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/assist.png')}/>
+                                       source={require('../assets/img/picto/menu/actions/interview.png')}/>
                                 <Text style={timeLineStyle.tabButtonText}>Interview</Text>
                             </TouchableOpacity>
                             <View style={timeLineStyle.buttonBorder}/>
@@ -183,7 +214,7 @@ class Actus extends Component {
                                 this.onToggleModal(true, 'article')
                             }}>
                                 <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/goal.png')}/>
+                                       source={require('../assets/img/picto/menu/actions/article.png')}/>
                                 <Text style={timeLineStyle.tabButtonText}>Article</Text>
                             </TouchableOpacity>
                             <View style={timeLineStyle.buttonBorder}/>
@@ -198,42 +229,62 @@ class Actus extends Component {
                     </View>
                 )
             }
-        }else {
+        } else {
             return (
                 <View style={{width: width / 2}}>
-                    <TouchableOpacity style={{alignItems:'center',backgroundColor:'#003366', paddingVertical:10,paddingHorizontal:10,justifyContent:'center'}} onPress={() => {this.toggleFollow()}}>
-                        <Text style={{fontSize:18, fontWeight:'500',color:'#ffffff'}}>{this._isLiked(state.currentUser, state.inspectedUser) ? 'Je suis abonné' : 'S\'abonner'}</Text>
+                    <TouchableOpacity style={{
+                        alignItems: 'center',
+                        backgroundColor: '#003366',
+                        paddingVertical: 10,
+                        paddingHorizontal: 10,
+                        justifyContent: 'center'
+                    }} onPress={() => {
+                        this.toggleFollow(state.currentUser, state.inspectedUser)
+                    }}>
+                        <Text style={{
+                            fontSize: 18,
+                            fontWeight: '500',
+                            color: '#ffffff'
+                        }}>{this._isLiked(state.currentUser, state.inspectedUser) ? 'Je suis abonné' : 'S\'abonner'}</Text>
                     </TouchableOpacity>
                 </View>
             )
         }
     }
-    test() { const {navigation} = this.props;
+
+    renderName() {
+        const {navigation} = this.props;
         const state = navigation.state.params;
 
         let team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         let teamDisplay = team.category.label + ' ' + team.division.label;
         return (
-            <View><Text style={{fontSize: 14, marginBottom: 10}}>{team.club.name} - {teamDisplay}</Text>{this._renderActions()}</View>)
+            <Text style={{textAlign:'center',fontSize: 14, marginBottom: 10}}>{team.club.name} - {teamDisplay}</Text>)
     }
+
     render() {
         const {navigation} = this.props;
         const state = navigation.state.params;
 
         return (
             <View>
-                {!this.props.isFetching || state.inspectedUser.userType ? this._renderHeader() : null}
+                {!this.props.isFetching && state.inspectedUser.userType ? this._renderHeader() : null}
                 <View style={[{padding: 15}, GLOBAL_STYLE.whiteColorBG]}>
-                    <Text style={{fontWeight: 'bold', marginBottom: 5, fontSize: 16}}>
-                        {state.inspectedUser.firstname} {state.inspectedUser.lastname}
-                    </Text>
-
-                    {!this.props.isFetching || state.inspectedUser.userType ? this.test() : state.inspectedUser.teams ? this.test() :null}
+                    {!this.props.isFetching && state.inspectedUser.userType !== 'Coach'  ?
+                        <Text style={{fontWeight: '600',color:'#003366', marginBottom: 5, fontSize: 16}}>
+                            {state.inspectedUser.firstname} {state.inspectedUser.lastname}
+                        </Text> : null
+                    }
+                    <View>
+                        {!this.props.isFetching && state.inspectedUser.userType !== 'Coach'  ? this.renderName() : null}
+                        {this._renderActions()}
+                    </View>
                 </View>
             </View>
         )
     }
 }
+
 const mapStateToProps = (state) => {
     return {
         posts: state.ownerList.posts,

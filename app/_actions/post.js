@@ -69,12 +69,14 @@ function add(user, post) {
     function failure(error) { return { type: postConstants.ADD_POST_FAILURE, payload: error} }
 }
 
-function addComment(comment) {
+function addComment(comment,postID) {
     return (dispatch) => {
         dispatch(request());
         postService.addComment(comment)
             .then(
-                comments => {dispatch(success({comments}))},
+                comments => {
+                    dispatch(success({postID:postID, comments: comments, commentID: comments["@id"]}))
+                },
                 error => {
                     console.log(error);
                     dispatch(failure(error));
@@ -88,12 +90,13 @@ function addComment(comment) {
     function failure(error) { return { type: postConstants.ADD_COMMENT_FAILURE, payload: error} }
 }
 
-function deleteComment(id, commentID) {
+function deleteComment(comment, postID, commentID) {
+    console.log(comment,postID,commentID)
     return (dispatch) => {
         dispatch(request());
-        postService.deleteComment(id, commentID)
+        postService.deleteComment(comment)
             .then(
-                comments => {dispatch(success({comments}))},
+                comments => {dispatch(success({comment: comment, commentID: commentID, postID: postID}))},
                 error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
@@ -101,9 +104,9 @@ function deleteComment(id, commentID) {
             );
     };
 
-    function request() {return { type: postConstants.ADD_COMMENT_REQUEST } }
-    function success(posts) { return { type: postConstants.ADD_COMMENT_SUCCESS, payload: posts} }
-    function failure(error) { return { type: postConstants.ADD_COMMENT_FAILURE, payload: error} }
+    function request() {return { type: postConstants.DELETE_COMMENT_REQUEST } }
+    function success(posts) { return { type: postConstants.DELETE_COMMENT_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.DELETE_COMMENT_FAILURE, payload: error} }
 }
 
 function getComments(id) {

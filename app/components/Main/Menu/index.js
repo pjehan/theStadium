@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 import connect from "react-redux/es/connect/connect";
 
 const MENU = [
     {
-        label : 'Profil',
-        action: 'Profil',
+        label: 'Profil',
+        action: 'Profile',
         params: {},
     },
     {
-        label : 'Partager à mes amis',
+        label: 'Partager à mes amis',
         action: 'oui',
         params: {},
     },
     {
-        label : 'Réglages',
+        label: 'Réglages',
         action: 'za',
         params: {},
     },
     {
-        label : 'Aide',
+        label: 'Aide',
         action: 'rearae',
         params: {},
     },
@@ -41,35 +41,44 @@ class Menu extends Component {
         const users = {
             currentUser: this.props.currentUser,
             inspectedUser: this.props.currentUser,
-        }
-        console.log(users);
-        if(action !== 'Profil'){
-            navigate(action, users);
+        };
+
+        if (this.props.currentUser.userType.label === 'Coach') {
+            navigate("CoachProfile", users);
         } else {
-            navigate("Profile", users);
+            navigate(action, users);
         }
     }
 
     componentDidUpdate() {
     }
+
     render() {
         return (
-            <View style={{flex:1,backgroundColor:'#ffffff'}}>
+            <View style={{flex: 1, backgroundColor: '#ffffff'}}>
                 {MENU.map((menu, key) => (
-                <TouchableOpacity style={{paddingLeft:15,justifyContent:'center',height:50, borderBottomColor: '#cccccc',borderBottomWidth: 1,}}
-                                  onPress={() => this.onPressHandler(menu.action, menu.params)}>
+                    <TouchableOpacity style={{
+                        paddingLeft: 15,
+                        justifyContent: 'center',
+                        height: 50,
+                        borderBottomColor: '#cccccc',
+                        borderBottomWidth: 1,
+                    }}
+                                      onPress={() => this.onPressHandler(menu.action, menu.params)}>
 
-                    <Text>{menu.label.toUpperCase()}</Text>
-                    <Icon style={{position: 'absolute', right: 0}}
-                          color='#003366'
-                          size={35}
-                          name={'chevron-right'}/>
-                </TouchableOpacity>
+                        <Text>{menu.label.toUpperCase()}</Text>
+                        <Icon style={{position: 'absolute', right: 0}}
+                              color='#003366'
+                              size={35}
+                              name={'chevron-right'}/>
+                    </TouchableOpacity>
                 ))}
             </View>
         )
     }
-}const mapStateToProps = (state) => {
+}
+
+const mapStateToProps = (state) => {
     return {
         currentUser: state.currentUser.user,
         inspectedUser: state.inspectedUser,

@@ -1,6 +1,7 @@
 import { userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from './';
+import {teamService} from "../_services";
 //import { history } from '../_helpers';
 
 export const userActions = {
@@ -9,7 +10,8 @@ export const userActions = {
     addInfos,
     putPlayer,
     getInspected,
-    removePlayer
+    removePlayer,
+    putUser,
 };
 
 function login(username, password) {
@@ -20,7 +22,6 @@ function login(username, password) {
         userService.login(username, password)
             .then(
                 user => {
-                    console.log(user)
                     userService.getUserType(user.id)
                         .then(
                             userStats => {
@@ -51,15 +52,25 @@ function register(user) {
 
     return dispatch => {
         dispatch(request(user));
-
         userService.register(user)
             .then(
-                user => {
-                    dispatch(success(user));
-                    //history.push('/login');
-                    dispatch(alertActions.success('Registration successful'));
+                responseUser => {
+
+                    userService.login(user.email, user.password)
+                        .then(
+                            login => {
+                                teamService.addUser(login.id, user.team, user.userType)
+                                    .then(
+                                        response =>{
+                                            dispatch(success(user));
+                                            dispatch(alertActions.success('Registration successful'));
+                                        }
+                                    )
+                            }
+                        );
                 },
                 error => {
+                    console.log(error);
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }
@@ -75,6 +86,29 @@ function putPlayer(player){
         dispatch(request(player));
 
         userService.putPlayer(player)
+            .then(
+                user => {
+                    dispatch(success({player}));
+
+                    dispatch(alertActions.success('Registration successful'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(player) { return { type: userConstants.PLAYER_ADD_STATS_REQUEST, player } }
+    function success(player) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, player } }
+    function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
+}
+
+function putUser(player){
+    return dispatch => {
+        dispatch(request(player));
+
+        userService.putUser(player)
             .then(
                 user => {
                     dispatch(success({player}));

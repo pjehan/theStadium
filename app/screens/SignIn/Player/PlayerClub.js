@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
-
 import Autocomplete from 'react-native-autocomplete-input';
-import {View,StyleSheet,AsyncStorage, Text,KeyboardAvoidingView,TouchableOpacity, Picker, Item} from 'react-native';
+import {
+    View, StyleSheet, AsyncStorage, Text, KeyboardAvoidingView, TouchableOpacity, Picker, Item,
+    Modal, ActivityIndicator
+} from 'react-native';
 import {GLOBAL_STYLE} from '../../../assets/css/global';
 import CustomInput from '../../../components/CustomInput';
+import {connect} from "react-redux";
+
 const style = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
@@ -20,145 +24,188 @@ const style = StyleSheet.create({
     },
 });
 
-const programmingLanguages = [
-  {
-    label: 'Java',
-    value: 'java',
-  },
-  {
-    label: 'JavaScript',
-    value: 'js',
-  },
-  {
-    label: 'Python',
-    value: 'python',
-  },
-  {
-    label: 'Ruby',
-    value: 'ruby',
-  },
-  {
-    label: 'C#',
-    value: 'csharp',
-  },
-  {
-    label: 'C++',
-    value: 'cpp',
-  },
-  {
-    label: 'C',
-    value: 'c',
-  },
-  {
-    label: 'Go',
-    value: 'go',
-  }
-];
-export default class PlayerInfos extends Component {
-  constructor(props) {
-    super(props);
-      this.state = {
-          dataSource : ['oui','jesuis','cheunnnourry','marabou'],
-          inputValue : '',
-          query:'',
-          clubQuery: '',
-          teamQuery: '',
+class PlayerInfos extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            dataSource: ['oui', 'jesuis', 'cheunnnourry', 'marabou'],
+            inputValue: '',
+            query: '',
+            clubQuery: '',
+            teamQuery: '',
 
-          clubList: ['FC GUICHEN', 'ZIZI', 'OUI'],
-          teamList: ['Sénior D3', 'U17', 'Sénior féminine F1'],
+            clubList: '',
+            teamList: '',
 
-          hideTeam: false,
-          hideClub: false,
+            hideTeam: false,
+            hideClub: false,
 
             poste: '',
-          team: '',
+            club: '',
+            team: '',
+        };
+        this._filterClub = this._filterClub.bind(this);
+        this._filterTeam = this._filterTeam.bind(this);
     }
-      this._filterData = this._filterData.bind(this)
-  }
-componentDidMount() {
-    AsyncStorage.getItem('@appStore:clubList').then(value => {console.log(value);this.setState({team: value[0].label});this.forceUpdate()});
-}
-    _filterData(query, dataSource) {
+
+    componentDidMount() {
+        AsyncStorage.getItem('clubList').then(
+            value => {
+                this.setState({clubList: JSON.parse(value)});
+                this.forceUpdate()
+            });
+    }
+
+    _filterClub(query, dataSource) {
         if (query === '') {
             return [];
         }
         let data = dataSource;
         const regex = new RegExp(`${query.trim()}`, 'i');
-        return data.filter(data => data.search(regex) >= 0);
+        if(data) {
+            return data.filter(data => data.name.search(regex) >= 0);
+        }
     }
+    _filterTeam(query, dataSource) {
+        if (query === '') {
+            return [];
+        }
+        let data = dataSource;
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        if(data) {
+            return data.filter(data => data.category.label.search(regex) >= 0);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {navigate} = this.props.navigation;
+
+        if (!nextProps.user.fetching && nextProps.user && nextProps.user.done) {
+            navigate('Congratz');
+        } else {
+            console.log('efafaefeafae')
+        }
+    }
+    _setClub(item) {
+        this.setState({
+            clubQuery: item.name,
+            club: item.id,
+            hideClub: true,
+            teamList: item.teams
+        });
+        this.props.user.club = item.id;
+    }
+
+    _setTeam(item){
+        this.setState({
+                teamQuery: item.category.label + ' ' +item.division.label,
+                hideTeam: true,team:item.id
+            });
+        this.props.user.team = item.id;
+    }
+
     render() {
-        const { teamQuery, clubQuery, clubList, teamList } = this.state;
-        const teamData = this._filterData(teamQuery, teamList);
-        const clubData = this._filterData(clubQuery, clubList);
+        const {teamQuery, clubQuery, clubList, teamList} = this.state;
+        const teamData = this._filterTeam(teamQuery, teamList);
+        const clubData = this._filterClub(clubQuery, clubList);
         return (
 
-          <View style={{flex: 7,backgroundColor:'white', justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
+            <View style={{
+                flex: 7,
+                backgroundColor: 'white',
+                justifyContent: 'flex-start',
+                paddingLeft: 30,
+                paddingRight: 30
+            }}>
+                <Modal
+                    transparent={true}
+                    animationType={'none'}
+                    visible={!this.props.user.done && this.props.user.fetching}
+                    onRequestClose={() => {
+                        console.log('close modal')
+                    }}>
+                    <View style={STYLE.modalBackground}>
+                        <View style={STYLE.activityIndicatorWrapper}>
+                            <ActivityIndicator
+                                size={'large'}/>
+                            <Text>Enregistrement en cours</Text>
+                        </View>
+                    </View>
+                </Modal>
+                <View style={{flex: 2, justifyContent: 'center'}}>
+                    <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Le football et vous</Text>
+                    <Text style={[GLOBAL_STYLE.miniDescription]}>
+                        Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
+                    </Text>
+                </View>
 
-              <View style={{flex: 2, justifyContent: 'center'}}>
-                  <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Le football et vous</Text>
-                  <Text style={[GLOBAL_STYLE.miniDescription]}>
-                      Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
-                  </Text>
-              </View>
+                <KeyboardAvoidingView
+                    style={{flex: 3, justifyContent: 'space-around', alignItems: 'center'}}
+                    behavior="padding">
+                    <View style={[{height: 40, width: '85%'}]}>
+                        <Autocomplete
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            containerStyle={styles.autocompleteContainer}
+                            data={clubData}
+                            defaultValue={clubQuery}
+                            placeholder={'Nom de votre Club'}
+                            onChangeText={text => this.setState({clubQuery: text})}
+                            hideResults={this.state.hideClub}
+                            renderItem={item => (
 
-              <KeyboardAvoidingView
-                  style={{flex:3, justifyContent: 'space-around', alignItems:'center'}}
-                  behavior="padding">
-                  <View style={[{height:40,width:'85%'}]}>
-                      <Autocomplete
-                          autoCapitalize="none"
-                          autoCorrect={false}
-                          containerStyle={styles.autocompleteContainer}
-                          data={clubData}
-                          defaultValue={clubQuery}
-                          placeholder={'Nom de votre Club'}
-                          onChangeText={text => this.setState({ clubQuery: text })}
-                          hideResults={this.state.hideClub}
-                          renderItem={item => (
-                              <TouchableOpacity onPress={() => this.setState({ clubQuery: item, hideClub: true })}>
-                                  <Text>{item}</Text>
-                              </TouchableOpacity>
-                          )}
-                      />
-                  </View>
-                  <Text>{this.state.team}</Text>
-                  <View style={[{height:40,width:'85%'}]}>
-                      <Autocomplete
-                          autoCapitalize="none"
-                          autoCorrect={false}
-                          containerStyle={styles.autocompleteContainer}
-                          data={teamData}
-                          defaultValue={teamQuery}
-                          placeholder={'Votre équipe'}
-                          onChangeText={text => this.setState({ teamQuery: text })}
-                          hideResults={this.state.hideTeam}
-                          renderItem={item => (
-                              <TouchableOpacity onPress={() => this.setState({ teamQuery: item, hideTeam: true })}>
-                                  <Text>{item}</Text>
-                              </TouchableOpacity>
-                          )}
-                      />
-                  </View>
-            <View style={{backgroundColor:'#eeeeee'}}>
-          <Picker style={GLOBAL_STYLE.input}
-          prompt="Poste joué"
-    selectedValue={this.state.poste}
-    onValueChange={itemValue => this.setState({ poste: itemValue })}>
-    {programmingLanguages.map((i, index) => (
-      <Picker.Item key={index} label={i.label} value={i.value} />
-    ))}
-      </Picker>
-    </View>
-    <View style={{justifyContent:'flex-start', alignItems: 'flex-start'}}>
-      <Text style={{fontSize:12}}>Le nom de votre club napparait pas dans la liste </Text>
-      <Text style={{fontSize:12}}>Signalez un problème </Text>
-    </View>
-              </KeyboardAvoidingView>
-          </View>
+                                <TouchableOpacity onPress={() => this._setClub(item)}>
+                                    <Text>{item.name}</Text>
+                                </TouchableOpacity>
+                            )}
+                        />
+                    </View>
+                    <View style={[{height: 40, width: '85%'}]}>
+                        <Autocomplete
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            containerStyle={styles.autocompleteContainer}
+                            data={teamData}
+                            defaultValue={teamQuery}
+                            placeholder={'Votre équipe'}
+                            onChangeText={text => this.setState({teamQuery: text})}
+                            hideResults={this.state.hideTeam}
+                            renderItem={item => (
+                                <TouchableOpacity onPress={() =>  this._setTeam(item)}>
+                                    <Text>{item.category.label + ' ' +item.division.label}</Text>
+                                </TouchableOpacity>
+                            )}
+                        />
+                    </View>
+
+                    <View style={{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                        <Text style={{fontSize: 12}}>Le nom de votre club napparait pas dans la liste </Text>
+                        <Text style={{fontSize: 12}}>Signalez un problème </Text>
+                    </View>
+                </KeyboardAvoidingView>
+            </View>
         )
     }
 
 }
+const mapStateToProps = (state) => {
+    return {
+        user: state.registeringUser
+    };
+};
+export default connect(mapStateToProps)(PlayerInfos);
+/*
+ <View style={{backgroundColor: '#eeeeee'}}>
+                        <Picker style={GLOBAL_STYLE.input}
+                                prompt="Poste joué"
+                                selectedValue={this.state.poste}
+                                onValueChange={itemValue => this.setState({poste: itemValue})}>
+                            {programmingLanguages.map((i, index) => (
+                                <Picker.Item key={index} label={i.label} value={i.value}/>
+                            ))}
+                        </Picker>
+                    </View>
+ */
 const styles = StyleSheet.create({
     autocompleteContainer: {
         flex: 1,
@@ -167,7 +214,7 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1,
-        backgroundColor:'#eeeeee'
+        backgroundColor: '#eeeeee'
     },
     itemText: {
         fontSize: 15,
@@ -197,5 +244,40 @@ const styles = StyleSheet.create({
     },
     openingText: {
         textAlign: 'center'
+    }
+});
+const STYLE = StyleSheet.create({
+    tab: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        justifyContent: 'space-between',
+        height: 50,
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    },
+    tabText: {
+        color: '#003366',
+        fontWeight: '700'
+    },
+    even: {
+        backgroundColor: '#E7E7E7',
+    },
+    modalBackground: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#00000040'
+    },
+    activityIndicatorWrapper: {
+        backgroundColor: '#FFFFFF',
+        height: 100,
+        padding: 10,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around'
     }
 });

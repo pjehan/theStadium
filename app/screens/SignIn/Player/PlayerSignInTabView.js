@@ -46,18 +46,18 @@ class PlayerSignInTabView extends Component {
                   if(index > 0) {
                   this.props.navigation.navigate(routes[index - 1].key, {});
                 }
-              }}><Icon style={{display: index == 0 ? 'none' : 'flex'}} name={'chevron-left'} color='#cccccc'/>
-                  <Text style={{color:'#cccccc'}}>{index == 0 ? '' : 'Precedent'}</Text>
+              }}><Icon style={{display: index === 0 ? 'none' : 'flex'}} name={'chevron-left'} color='#cccccc'/>
+                  <Text style={{color:'#cccccc'}}>{index === 0 ? '' : 'Precedent'}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
-                  if(index + 1 != routes.length){
+                  if(index + 1 !== routes.length){
                     this.props.navigation.navigate(routes[index + 1].key, {});
-                  } else if(index + 1 == routes.length){
+                  } else if(index + 1 === routes.length){
                       this.props.navigation.dispatch(userActions.register(this.props.user));
                   }
                 }
                 }>
-                <Text>{index + 1 == routes.length ? 'Fin' : 'Suivant'}</Text>
+                <Text>{index + 1 === routes.length ? 'Fin' : 'Suivant'}</Text>
                 <Icon name={'chevron-right'} color='#003366'/>
                 </TouchableOpacity>
                 </View>

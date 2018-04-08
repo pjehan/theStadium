@@ -8,7 +8,8 @@ export const userService = {
     register,
     getUser,
     getUserType,
-    putPlayer
+    putPlayer,
+    putUser
 };
 import jwt_decode from 'jwt-decode'
 let currentUser = {stats:{}};
@@ -63,51 +64,25 @@ function addInfos(user) {
 
 }
 function register(user) {
-    /**
-     *
-     *  "firstname": "string",
-     "lastname": "string",
-     "email": "string",
-     "plainPassword": "string",
-     "profilepicture": "string",
-     "sexe": {},
-     "userType": {}
-
-
-
-
-     firstname:'',
-     lastname:'',
-     birthdate: '',
-     password: '',
-     email:'',
-     userType:null,
-     sexe:0,
-     club:'',
-     team: '',
-     error: '',
-     poste: '',
-     */
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user })
+    const sendUser = {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        plainPassword: user.password,
+        profilepicture: "",
+        sexe: user.sexe,
+        userType: user.userType,
     };
+    console.log(sendUser)
 
-    return instance.post('/api//users', requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                console.log(response)
-            }
-
-            return null;
-        })
+    return instance.post('/api/users', sendUser)
         .then(user => {
-            // login successful if there's a jwt token in the response
+            /* login successful if there's a jwt token in the response
             if (user && user.token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
-            }
+            }*/
+            console.log(user)
 
             return user;
         });
@@ -123,6 +98,45 @@ function putPlayer(player) {
             console.log(response)
             Object.assign(currentUser.stats, response.data);
             return currentUser;
+
+        }).catch((error) => {
+            console.error(error);
+        })
+}
+
+function putUser(player) {
+    /*
+    "firstname": "string",
+  "lastname": "string",
+  "email": "string",
+  "plainPassword": "string",
+  "profilepicture": "string",
+  "sexe": {},
+  "userType": {},
+  "players": [
+    "string"
+  ],
+  "teamsLiked": [
+    {
+      "division": "string",
+      "category": "string",
+      "club": "string",
+      "sexe": "string"
+    }
+     */
+    const user = {
+        firstname: player.firstname,
+        lastname: player.lastname,
+        email: player.email,
+        profilepicture: player.profilepicture,
+        sexe: player.sexe,
+        userType: player.userType,
+        players: player.players,
+        teamsLiked: player.teamsLiked
+    }
+    return instance.put("/api/users/" + player.id,user)
+        .then(response => {
+            return response.data;
 
         }).catch((error) => {
             console.error(error);

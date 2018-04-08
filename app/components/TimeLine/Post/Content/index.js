@@ -39,7 +39,7 @@ export default class Content extends Component {
             url: null,
             openContent: false,
             actualImg: null,
-        }
+        };
         this.returnSimplePost = this.returnSimplePost.bind(this);
         this.returnArticle = this.returnArticle.bind(this);
         this.returnGoalPost = this.returnGoalPost.bind(this);
@@ -78,6 +78,9 @@ export default class Content extends Component {
                     lastName: this.props.owner.lastname,
                     firstName: this.props.owner.firstname
                 }} visible={this.state.openContent}
+                             like={this.props.postsLiked.length}
+                             share={this.props.postsShared.length}
+                             comments={this.props.comments.length}
                              media={this.state.actualImg}
                              toggleModal={(visible) => {
                                  this.onToggleModal(visible)
@@ -114,13 +117,14 @@ export default class Content extends Component {
                     <Text style={PostStyle.assist_and_goals_text}>Passe Décisive</Text>
                 </View>
                 <Text>
-                    {owner.firstName} a {scored} {assists_nbr} contre {club}
+                    {owner.firstName} a {scored} <Text  style={{fontWeight:'600'}}> {assists_nbr}</Text> contre <Text  style={{fontWeight:'600'}}>{club}</Text>
                 </Text>
             </View>
         )
     }
 
     returnGoalPost(owner, goals, club) {
+        console.log(this.props)
         let goals_nbr;
         let scored;
         if (!club) {
@@ -142,41 +146,39 @@ export default class Content extends Component {
                 <View style={PostStyle.assist_and_goals}>
                     <Image style={PostStyle.assist_and_goals_icon} resizeMode='contain'
                            source={require('../../../../assets/img/picto/menu/actions/white_goal.png')}/>
-                    <Text style={PostStyle.assist_and_goals_text}>Passe Décisive</Text>
+                    <Text style={PostStyle.assist_and_goals_text}>But</Text>
                 </View>
                 <Text>
-                    {owner.firstName} a {scored} {goals_nbr} contre {club}
+                    {owner.firstName} a {scored}  <Text style={{fontWeight:'600'}}>{goals_nbr}</Text> contre <Text  style={{fontWeight:'600'}}> {club} </Text>
                 </Text>
             </View>
         )
     }
 
     returnArticle() {
-        let url = null;
-        if (this.props.media.length > 0) {
-            url = this.props.media[0].url;
-        }
+        let content = JSON.parse(JSON.stringify(eval("(" + this.props.content.toString() + ")")));
+        const  originalWidth = this.props.medias[0].width;
+        const originalHeight = this.props.medias[0].height;
+        const windowWidth = Dimensions.get('window').width;
+        const widthChange = (windowWidth - 10) / originalWidth;
         return (
                 <View>
-                    {url ?
-                        <View>
+                        <TouchableOpacity onPress={() => {console.log(this.props)}}>
                         <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10,height:150, backgroundColor:'rgba(0,0,0,0.5)'}}>
                             <View style={{borderRadius:5,width:100,backgroundColor:'#00A65B',paddingHorizontal:2,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
                                 <Text style={{color:'#ffffff'}}>Article</Text>
                             </View>
                             <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
-                            <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{this.props.club} {this.props.score} - {this.props.oponentScore} {this.props.oponentClub}</Text>
+                            <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub} {content.homeScore} - {content.guessClub} {content.guessScore}</Text>
                             <Text  style={{color:'#ffffff',fontSize:12}}>Merveilleuse Victoire des joueurs !!! Ce fût un match intense du début à la fin, et c'est finalement avec un peu de ...</Text>
                             </View>
                             </View>
-                        <LocalImage source={url} />
-                        </View>
-                        : null}
+                            <Image source={{uri: this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                        </TouchableOpacity>
                 </View>
         )
     }
-
     checkType() {
         const TYPE = this.props.postType.label;
         console.log(TYPE)
@@ -188,10 +190,10 @@ export default class Content extends Component {
             this.returnArticle()
         }
         else if (TYPE === TypeEnum.goals) {
-            this.returnGoalPost(this.props.owner, this.props.goals, this.props.club)
+            this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content)
         }
         else if (TYPE === TypeEnum.assists) {
-            this.returnAssistPost(this.props.owner, this.props.assist, this.props.club)
+            this.returnAssistPost(this.props.owner, this.props.assistsNbr, this.props.content)
         }
     }
 
@@ -201,12 +203,13 @@ export default class Content extends Component {
 
     render() {
         const TYPE = this.props.postType.label;
+        console.log(TYPE)
         return (
             <View>
                 {TYPE === TypeEnum.simple ? this.returnSimplePost() :
                     TYPE === TypeEnum.article ? this.returnArticle() :
-                        TYPE === TypeEnum.goals ? this.returnGoalPost(this.props.owner, this.props.goals, this.props.club) :
-                            this.returnAssistPost(this.props.owner, this.props.assist, this.props.club)}
+                        TYPE === TypeEnum.goals ?  this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content) :
+                            this.returnAssistPost(this.props.owner, this.props.passNbr, this.props.content)}
             </View>
         )
     }

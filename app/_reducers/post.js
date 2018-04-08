@@ -4,13 +4,16 @@ export function postList(state = {
     posts: [{
         id: null,
         owner: null,
-        type: null,
-        media: [{url: null}],
+        postType: null,
+        medias: null,
         content: null,
-        postDate: null,
-        post_likes: null,
-        post_comments: null,
-        post_shares: null,
+        creationDate: null,
+        postsLiked: null,
+        comments: null,
+        postsShared: null,
+        goalsNbr: null,
+        passNbr: null,
+        title: null,
     }],
     fetching: false,
     fetched: false,
@@ -40,7 +43,15 @@ export function postList(state = {
             return {...state, fetching: false, fetched: true};
             break;
 
-
+        case postConstants.ADD_COMMENT_SUCCESS:
+            state.posts.posts[action.payload.postID].comments.push(action.payload.commentID);
+            return {...state, fetching:false, fetched:true};
+            break;
+        case postConstants.DELETE_COMMENT_SUCCESS:
+            const POST = state.posts.posts[action.payload.postID]
+            POST.comments.splice(POST.comments.indexOf('/api/comments/' + action.payload.comment+1),1);
+            return {...state, fetching:false, fetched:true};
+            break;
         default:
             return state;
     }
@@ -85,7 +96,7 @@ export function commentList(state = {
             lastname: null,
             firstname: null,
             profilepicture: null,
-            team: null
+            teams: null
         },
         contenu: null,
         createdAt:null,
@@ -115,7 +126,8 @@ export function commentList(state = {
             return {...state, fetching:false, fetched: false, error: action.payload};
             break;
         case postConstants.ADD_COMMENT_SUCCESS:
-            return {...state, fetching:false, fetched:true, comments: action.payload};
+            state.comments.comments[0].push(action.payload.comments);
+            return {...state, fetching:false, fetched:true};
             break;
         // REMOVE
         case postConstants.DELETE_COMMENT_REQUEST:
@@ -125,7 +137,8 @@ export function commentList(state = {
             return {...state, fetching:false, fetched: false, error: action.payload};
             break;
         case postConstants.DELETE_COMMENT_SUCCESS:
-            return {...state, fetching:false, fetched:true, comments: action.payload};
+            state.comments.comments.splice(action.payload.commentID,1);
+            return {...state, fetching:false, fetched:true};
             break;
         default:
             return state;

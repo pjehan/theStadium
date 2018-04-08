@@ -164,8 +164,12 @@ class OwnerHeader extends Component {
     }
 
     render() {
+        console.log(this.props)
         return (<View style={PostStyle.ownerStyle}>
-            <Image style={PostStyle.profilePic} source={require('../../../../assets/img/TA-Rennes.jpg')}/>
+            {(this.props.team && !this.props.team.club.profilePicture) || (!this.props.team && !this.props.Owner.profilepicture) ? <View style={[PostStyle.profilePic, {backgroundColor: '#cccccc'}]}/> :
+                <Image style={PostStyle.profilePic}
+                       source={{uri: !this.props.team ? this.props.Owner.profilepicture : this.props.team.club.profilePicture}}/>
+            }
             <View>
                 <Text style={PostStyle.title}>{this.props.Owner}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -176,7 +180,7 @@ class OwnerHeader extends Component {
                         backgroundColor: '#003366',
                         color: '#ffffff',
                         marginRight: 10
-                    }}>{this.props.team}</Text>: null}
+                    }}>{this.props.team.category.label} {this.props.team.division.label}</Text>: null}
                     <View style={{flexDirection: 'row'}}>
                         <Image resizeMode="contain" style={{height: 15, width: 15}}
                                source={require('../../../../assets/img/picto/actualite/picto-time-gris.png')}/>
@@ -206,7 +210,7 @@ class OwnerHeader extends Component {
 OwnerHeader.propTypes = {
     postDate: PropTypes.any.isRequired, /* getaccesstoken of Facebook API */
     Owner: PropTypes.string.isRequired, /* SecretToken of Facebook API */
-    team: PropTypes.string, /* Indicade refresh time of Facebook Widget in second */
+   // team: PropTypes.string, /* Indicade refresh time of Facebook Widget in second */
 };
 OwnerHeader.defaultProps = {
     postDate: new Date(), /* getaccesstoken of Facebook API */

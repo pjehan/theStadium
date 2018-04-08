@@ -97,10 +97,10 @@ class OpenContent extends Component {
                    }}>
                 <View style={{backgroundColor: '#000000', flex: 1, justifyContent: 'space-between'}}>
                     <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-                        <TouchableOpacity onPress={() => this.toggleModal(false)}>
+                        <TouchableOpacity style={{marginLeft:10,marginTop:10}} onPress={() => this.toggleModal(false)}>
                             <Icon name='clear' color='#ffffff'/>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity  style={{marginRight:10,marginTop:10}} onPress={() => {
                         }}>
                             <Icon type="font-awesome" name='ellipsis-h' color='#ffffff'/>
                         </TouchableOpacity>
@@ -119,15 +119,18 @@ class OpenContent extends Component {
                             <TouchableOpacity>
                                 <Image source={require('../../../../assets/img/picto/actualite/notlike.png')}
                                        resizeMode={'contain'} style={{height: 25, width: 25}}/>
+                                <Text style={{color:'#ffffff', textAlign:'center'}}>{this.props.like}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity>
                                 <Image source={require('../../../../assets/img/picto/actualite/comment-white.png')}
                                        resizeMode={'cover'}
                                        style={{height: 25, width: 25, marginLeft: 20, marginRight: 20}}/>
+                                <Text style={{textAlign:'center',color:'#ffffff'}}>{this.props.comments}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity>
                                 <Image source={require('../../../../assets/img/picto/actualite/share-white.png')}
                                        resizeMode={'cover'} style={{height: 25, width: 25}}/>
+                                <Text style={{color:'#ffffff', textAlign:'center'}}>{this.props.share}</Text>
                             </TouchableOpacity>
                         </View>
                         <View>

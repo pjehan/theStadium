@@ -6,7 +6,7 @@ import {
     StyleSheet,
     Modal,
     Image,
-    ScrollView, Dimensions
+    ScrollView, Dimensions, AsyncStorage
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {TypeEnum} from "../contentType";
@@ -16,57 +16,8 @@ import {GLOBAL_STYLE} from '../../../../assets/css/global';
 import {ImagePicker} from 'expo';
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
-
+import Autocomplete from "react-native-autocomplete-input";
 let ModalContent;
-const timeLineStyle = StyleSheet.create({
-    tabContainer: {
-        justifyContent: 'space-between',
-        backgroundColor: '#ffffff',
-        flexDirection: 'row',
-        width: '100%',
-        height: 40
-    },
-    tabButton: {
-        backgroundColor: 'white',
-        flex: 1,
-        height: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    tabButtonText: {
-        color: '#003366',
-        fontWeight: '400',
-    },
-    tabButtonPicto: {
-        height: 15,
-        width: 15,
-        marginRight: 5
-    },
-    buttonBorder: {
-        alignSelf: 'center',
-        height: '70%',
-        width: 1,
-        backgroundColor: '#cccccc'
-    },
-    singlePost: {
-        marginBottom: 200
-    }, profilePic: {
-        width: 45,
-        height: 45,
-        borderRadius: 45,
-        marginRight: 5
-    },
-    text: {
-        color: 'black',
-        fontSize: 12
-    },
-    title: {
-        color: 'black',
-        fontSize: 16,
-        fontWeight: '500'
-    },
-});
 let SelectedMedia = <View/>;
 
 class PostModal extends Component {
@@ -81,7 +32,9 @@ class PostModal extends Component {
                 content:'',
                 postType: null,
             },
-
+            clubList: null,
+            clubQuery: '',
+            hideClub: false,
             medias: '',
             goals_assists: false,
 
@@ -95,6 +48,7 @@ class PostModal extends Component {
 
     onChangeInfos(state, newvalue) {
         this.setState({post:{...this.state.post,[state]: newvalue}});
+        console.log(this.state.post)
     }
 
     toggleModal(visible, type) {
@@ -103,14 +57,37 @@ class PostModal extends Component {
 
     publishModal(type) {
         let post = this.state.post;
-        post.postType = type;
+        switch (type) {
+            case TypeEnum.goals:
+                post.postType = 1;
+                break;
+            case TypeEnum.simple:
+                post.postType = 2;
+                break;
+            case TypeEnum.article:
+                post.postType = 3;
+                break;
+            case TypeEnum.assists:
+                post.postType = 4;
+                break;
+            case TypeEnum.interview:
+                post.postType = 5;
+                break;
+        }
+        post.goalsNbr = this.state.goals;
+        post.passNbr = this.state.assists;
         this.props.dispatch(postActions.add(this.props.owner.id, post));
         //TODO when dispatch is good toggle modal
         this.toggleModal(false, type);
     }
 
     componentWillMount() {
-        console.log(this.props)
+        AsyncStorage.getItem('clubList').then(
+            value => {
+                this.setState({clubList: JSON.parse(value)});
+                console.log(this.state)
+                this.forceUpdate()
+            });
         switch (this.props.type) {
             case TypeEnum.goals:
                 this.displayGoalsAssists(TypeEnum.goals);
@@ -126,7 +103,26 @@ class PostModal extends Component {
                 break;
         }
     }
-
+    _filterClub(query, dataSource) {
+        if (query === '') {
+            return [];
+        }
+        let data = dataSource;
+        console.log(data)
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        if(data) {
+            console.log(data.filter(data => data.name.search(regex) >= 0))
+            return data.filter(data => data.name.search(regex) >= 0);
+        }
+    }
+    _setClub(item) {
+        this.setState({
+            clubQuery: item.name,
+            club: item.name,
+            post :{content:item.name},
+            hideClub: true,
+        });
+    }
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
         switch (this.props.type) {
@@ -147,6 +143,7 @@ class PostModal extends Component {
     }
 
     displayGoalsAssists(type) {
+
         let Title;
         let Description;
         let Label;
@@ -197,26 +194,15 @@ class PostModal extends Component {
                         <Spinner max={99}
                                  min={1}
                                  default={1}
-                                 color="#f60"
-                                 numColor="#f60"
+                                 color="#003366"
+                                 numColor="#003366"
                                  onNumChange={(num) => {
-                                     this.setState({post:{...this.state.post,[type]: num}})
+                                     this.setState({[type]: num});
+                                     console.log(this.state)
                                  }}/>
                     </View>
-                    <CustomInput
-                        container={''}
-                        placeholder={'L\' équipe que vous avez affronté'}
-                        input={[GLOBAL_STYLE.input, {marginBottom: 10}]}
-                        description={'Ecrivez le nom complet de l\' équipe \nEx: CPB Bréquigny'}
-                        state={'club'}
-                        textColor={'#000000'}
-                        borderColor={'transparent'}
-                        backgroundColor={'#eeeeee'}
-                        security={false}
-                        onChangeParent={(state, newvalue) => {
-                            this.onChangeInfos(state, newvalue)
-                        }}
-                    />
+
+
 
                 </View>
         </View>
@@ -225,7 +211,7 @@ class PostModal extends Component {
 
     displaySimpleArticle(type) {
         ModalContent = (
-            <ScrollView contentContainerStyle={{flex: 1}}>
+            <ScrollView>
                 <View style={{
                     flexDirection: 'row',
                     borderBottomWidth: 0.5,
@@ -354,14 +340,36 @@ class PostModal extends Component {
         );
     };
     render() {
+
+console.log(this.props)
+        const {clubQuery, clubList} = this.state;
+        const clubData = this._filterClub(clubQuery, clubList);
         return (
-        <Modal animationType={"slide"} transparent={false}
+        <Modal style={{flex:1}} animationType={"slide"} transparent={false}
                 visible={this.props.visible}
 
                 onRequestClose={() => {
                     console.log("Modal has been closed.")
                 }}>
         {ModalContent}
+            {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ? <View style={[{marginLeft:'7.5%',height: 50, width: '85%'}]}>
+                <Autocomplete
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    containerStyle={styles.autocompleteContainer}
+                    data={clubData}
+                    defaultValue={clubQuery}
+                    placeholder={'Nom du club affronté'}
+                    onChangeText={text => this.setState({clubQuery: text})}
+                    hideResults={this.state.hideClub}
+                    renderItem={item => (
+
+                        <TouchableOpacity onPress={() => this._setClub(item)}>
+                            <Text>{item.name}</Text>
+                        </TouchableOpacity>
+                    )}
+                />
+            </View> : null}
         </Modal>
         )
     }
@@ -370,7 +378,16 @@ class PostModal extends Component {
             let originalHeight = result.height;
             let windowWidth = null || Dimensions.get('window').width;
             let widthChange = null || (windowWidth - 10) / originalWidth;
-            SelectedMedia = (<Image source={{uri: result.uri}} style={{marginLeft:5,width: originalWidth * widthChange, height: originalHeight * widthChange}}/>);
+            SelectedMedia = (
+                <View style={{position:'relative'}}>
+                    <TouchableOpacity onPress={() => {SelectedMedia = null;this.setState({medias:null});this.displaySimpleArticle(TypeEnum.simple);
+                        this.forceUpdate();}}
+                                      style={{position:'absolute',zIndex:5,right:10,top:-15,justifyContent:'center',alignItems:'center',height:30,width:30,backgroundColor:'rgba(0,0,0,0.4)',borderRadius:15}}>
+                    <Image source={require('../../../../assets/img/picto/white-cross.png')} style={{width:15,height:15}} />
+                    </TouchableOpacity>
+                <Image source={{uri: result.uri}} style={{marginLeft:5,width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                </View>
+            );
             this.displaySimpleArticle(TypeEnum.simple);
             this.forceUpdate();
         }
@@ -381,7 +398,6 @@ class PostModal extends Component {
 
         if (!result.cancelled) {
         this.setState({medias:result.uri});
-        console.log(result, this.state.medias);
             this.renderImage(result, this.displaySimpleArticle(TypeEnum.simple));
 
     } else {
@@ -398,3 +414,145 @@ class PostModal extends Component {
         type: PropTypes.string, /* Content Type */
     };
     export default connect()(PostModal);
+
+const styles = StyleSheet.create({
+    autocompleteContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1,
+        backgroundColor: '#eeeeee'
+    },
+    itemText: {
+        fontSize: 15,
+        margin: 2
+    },
+    descriptionContainer: {
+        // `backgroundColor` needs to be set otherwise the
+        // autocomplete input will disappear on text input.
+        backgroundColor: '#F5FCFF',
+        marginTop: 8
+    },
+    infoText: {
+        textAlign: 'center'
+    },
+    titleText: {
+        fontSize: 18,
+        fontWeight: '500',
+        marginBottom: 10,
+        marginTop: 10,
+        textAlign: 'center'
+    },
+    directorText: {
+        color: 'grey',
+        fontSize: 12,
+        marginBottom: 10,
+        textAlign: 'center'
+    },
+    openingText: {
+        textAlign: 'center'
+    }
+});
+const STYLE = StyleSheet.create({
+    tab: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        justifyContent: 'space-between',
+        height: 50,
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    },
+    tabText: {
+        color: '#003366',
+        fontWeight: '700'
+    },
+    even: {
+        backgroundColor: '#E7E7E7',
+    },
+    modalBackground: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#00000040'
+    },
+    activityIndicatorWrapper: {
+        backgroundColor: '#FFFFFF',
+        height: 100,
+        padding: 10,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    }
+});
+
+const timeLineStyle = StyleSheet.create({
+    tabContainer: {
+        justifyContent: 'space-between',
+        backgroundColor: '#ffffff',
+        flexDirection: 'row',
+        width: '100%',
+        height: 40
+    },
+    tabButton: {
+        backgroundColor: 'white',
+        flex: 1,
+        height: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    tabButtonText: {
+        color: '#003366',
+        fontWeight: '400',
+    },
+    tabButtonPicto: {
+        height: 15,
+        width: 15,
+        marginRight: 5
+    },
+    buttonBorder: {
+        alignSelf: 'center',
+        height: '70%',
+        width: 1,
+        backgroundColor: '#cccccc'
+    },
+    singlePost: {
+        marginBottom: 200
+    }, profilePic: {
+        width: 45,
+        height: 45,
+        borderRadius: 45,
+        marginRight: 5
+    },
+    text: {
+        color: 'black',
+        fontSize: 12
+    },
+    title: {
+        color: 'black',
+        fontSize: 16,
+        fontWeight: '500'
+    },
+});
+/*
+<CustomInput
+                        container={''}
+                        placeholder={'L\' équipe que vous avez affronté'}
+                        input={[GLOBAL_STYLE.input, {marginBottom: 10}]}
+                        description={'Ecrivez le nom complet de l\' équipe \nEx: CPB Bréquigny'}
+                        state={'club'}
+                        textColor={'#000000'}
+                        borderColor={'transparent'}
+                        backgroundColor={'#eeeeee'}
+                        security={false}
+                        onChangeParent={(state, newvalue) => {
+                            this.onChangeInfos(state, newvalue)
+                        }}
+                    />
+ */

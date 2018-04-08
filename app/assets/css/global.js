@@ -119,7 +119,8 @@ inputContainer: {
         alignItems: 'center',
         justifyContent: 'space-between',
     },
-    innerContainer: {
+    numericInput: {borderWidth: 1,textAlign:'center',padding:0,height:30,width:40,borderTopColor:'#000000',borderBottomColor:'#000000',borderLeftColor:'#000000',borderRightColor:'#000000'},
+innerContainer: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',

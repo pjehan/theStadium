@@ -15,6 +15,7 @@ import UserBasic from '../../screens/SignIn/UserBasic'
 import Header from '../../layout/Header.js';
 import UserInfos from '../../screens/SignIn/UserInfos';
 import PlayerClub from '../../screens/SignIn/Player/PlayerClub';
+import Congratz from '../../screens/SignIn/Congratz';
 /** Tab **/
 import PlayerSignInTabView from '../../screens/SignIn/Player/PlayerSignInTabView';
 import MainTabView from '../../components/Main/TabBar'
@@ -33,7 +34,8 @@ import SecondHalf from '../../components/TimeLine/Post/PostModal/postArticle/sec
 const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
         tabBarVisible: false,
-        tabBarPosition: 'bottom'
+        tabBarPosition: 'bottom',
+
       };
 const PROFILETAB = {
     tabBarComponent: ({navigation}) => <ProfileTabBar focused={'focused'}
@@ -49,6 +51,10 @@ const PROFILETAB = {
 /** TimeLine **/
 import TimeLine from '../../screens/TimeLine';
 import Search from "../../screens/Search";
+import Sexe from "../../screens/SignIn/Sexe";
+import Contact from "../../screens/Contact";
+import ArticleTabHeader from "../../components/TimeLine/Post/PostModal/postArticle/ArticleTabHeader";
+import conclusion from "../../components/TimeLine/Post/PostModal/postArticle/conclusion";
 
 const ArticleTab = TabNavigator({
     Setup: {
@@ -68,9 +74,41 @@ const ArticleTab = TabNavigator({
         navigationOptions: {
             header:null,
         }
+    },
+    conclusion: {
+        screen: conclusion,
+        navigationOptions: {
+            header:null,
+        }
     }
-}, {tabBarComponent: ({navigation}) => <View/>});
+}, {tabBarComponent: ({navigation}) => <ArticleTabHeader navigation={navigation}/>,
+    tabBarVisible: false,
+    tabBarPosition: 'top',});
 
+
+const TeamProfile = TabNavigator({
+
+    Actus: {
+        screen: Actus,
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            tabBarLabel: 'Actualitées'
+        })
+    },
+    Gallerie: {
+        screen: Gallery,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    Contact: {
+        screen: Contact,
+        navigationOptions: {
+            header: null,
+        }
+    },
+
+},PROFILETAB);
 const ProfileTab = TabNavigator({
     Infos: {
         screen: Profil,
@@ -85,7 +123,7 @@ const ProfileTab = TabNavigator({
             tabBarLabel: 'Actualitées'
         })
     },
-    gallery: {
+    Gallerie: {
         screen: Gallery,
         navigationOptions: {
             header: null,
@@ -137,7 +175,7 @@ const MainStack = TabNavigator({
         })
     },
     Notifications: {
-        screen: TimeLine,
+        screen: Search,
         navigationOptions: ({navigation}) => ({
             header: props => <Header headerType="logo" backIcon={false} {...props} />,
         tabBarIcon: ({focused}) => {
@@ -237,14 +275,16 @@ const FanSignInStack = TabNavigator({
         screen: UserBasic,
         navigationOptions: ({navigation}) => ({
             header: props => <Header {...props} />,
-
+            teamList: navigation.state.params.teamList,
+            clubList: navigation.state.params.clubList
         })
     },
     CoachInfos: {
         screen: UserInfos,
         navigationOptions: ({navigation}) => ({
             header: props => <Header {...props} />,
-
+            teamList: navigation.state.params.teamList,
+            clubList: navigation.state.params.clubList
         })
     },
   },
@@ -257,6 +297,7 @@ export const Navigator = StackNavigator({
                 header: null,
             }
         },
+
         Login: {
             screen: Login,
             navigationOptions: {
@@ -275,8 +316,44 @@ export const Navigator = StackNavigator({
                 header: null,
             }
         },
+        CoachProfile: {
+            screen: TeamProfile,
+            navigationOptions: {
+                header: null,
+            }
+        },
+    ArticleTab: {
+            screen:ArticleTab,
+        navigationOptions: {
+                header:null,
+        }
+    },
+    Congratz: {
+            screen: Congratz,
+        navigationOptions: {
+            header: null,
+        }
+    },
+        FirstHalf: {
+            screen: FirstHalf,
+            navigationOptions: {
+                header:null
+            }
+        },
+        SecondHalf: {
+            screen: SecondHalf,
+            navigationOptions: {
+                header:null
+            }
+        },
         SignIn: {
             screen: SignIn,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header headerType="logo" backIcon={true} {...props} />
+            })
+        },
+        Sexe: {
+            screen: Sexe,
             navigationOptions: ({navigation}) => ({
                 header: props => <Header headerType="logo" backIcon={true} {...props} />
             })

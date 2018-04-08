@@ -4,38 +4,32 @@ import { GLOBAL_STYLE } from '../../assets/css/global';
 import {userActions} from '../../_actions';
 import {connect} from 'react-redux';
 
-class SignIn extends Component {
+class Sexe extends Component {
 
-    typeSelected(route,type,params) {
-        const USER = this.props.user;
-        USER.userType = type;
-        this.props.dispatch(userActions.addInfos(USER));
-        this.props.navigation.navigate(route,params);
-    }
+        sexeSelected(route,sexe) {
+
+            const {navigate} = this.props.navigation;
+            const USER = this.props.user;
+            USER.sexe = sexe;
+            this.props.dispatch(userActions.addInfos(USER));
+            navigate(route);
+        }
     render() {
-        const {navigate} = this.props.navigation;
         return (
             <View style={{flex: 6, justifyContent:'flex-start', paddingLeft:60, paddingRight:60}}>
                 <View style={{flex:2, justifyContent:'center'}}>
                     <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Bienvenue</Text>
-                    <Text style={[GLOBAL_STYLE.description, GLOBAL_STYLE.mainColor]}>Quel profil êtes-vous ?</Text>
+                    <Text style={[GLOBAL_STYLE.description, GLOBAL_STYLE.mainColor]}>De quel sexe êtes-vous ?</Text>
                 </View>
                 <View  style={{flex:3, justifyContent:'space-around'}}>
                     <Button
-                        onPress={() => {this.typeSelected('FanSignIn',0,{});}}
-                        title="Supporter"
+                        onPress={() => {this.sexeSelected('SignIn',1);}}
+                        title="Homme"
                         color="#003366"
                     />
                     <Button
-                        onPress={() => {this.typeSelected('PlayerSignIn',1,{});}}
-                        title="Joueur"
-                        color="#003366"
-                    />
-                    <Button
-                        onPress={() => {this.typeSelected('CoachSignIn',2,{coach: true});
-                        }
-                      }
-                        title="Entraineur"
+                        onPress={() => {this.sexeSelected('SignIn',2);}}
+                        title="Femme"
                         color="#003366"
                     />
                 </View>
@@ -49,4 +43,4 @@ const mapStateToProps = (state) => {
         user: state.registeringUser
     };
 };
-export default connect(mapStateToProps)(SignIn);
+export default connect(mapStateToProps)(Sexe);

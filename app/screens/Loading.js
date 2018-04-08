@@ -29,9 +29,9 @@ componentDidMount() {
   }, 1000)
 }
   render() {
-    var {navigate} = this.props.navigation;
+    const {navigate} = this.props.navigation;
     if(this.state.isLoggedIn === true) {
-      navigate("Login", {})
+      navigate("Congratz", {})
     }
     return (
       <View style={[GLOBAL_STYLE.mainColorBG, GLOBAL_STYLE.justifyEnd]}>

@@ -80,6 +80,7 @@ class Post extends Component {
         this.state = {
             post: this.props.post,
             modalVisible: false,
+            isPreview: false,
         };
         this.onToggleComment = this.onToggleComment.bind(this);
         this._renderCommentModal = this._renderCommentModal.bind(this);
@@ -89,7 +90,9 @@ class Post extends Component {
     isLiked() {
        return this.props.post.postsLiked.some(user => user.userLikes.id === this.props.currentUser.id);
     }
-    onToggleComment(visible) {
+    onToggleComment(visible, preview) {
+            this.setState({isPreview: preview});
+
         if (visible) {
             this.props.dispatch(postActions.getComments(this.props.id+1));
             this.setState({modalVisible: visible});
@@ -101,8 +104,9 @@ class Post extends Component {
     _renderCommentModal() {
         if(this.state.modalVisible){
            return ( <CommentModal visible={this.state.modalVisible}
-                          id={this.props.id}
+                          id={this.props.postList.posts.indexOf(this.state.post)}
                                   post={this.state.post}
+                                  preview={this.state.isPreview}
                           toggleCommentModal={(visible) => {
                               this.onToggleComment(visible)
                           }}/>)
@@ -124,11 +128,11 @@ class Post extends Component {
             <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
                 shadowColor: 'black',
                 shadowOpacity: 1,
-                elevation: 4,}]}>
+                elevation: 2,}]}>
                 {this._renderCommentModal()}
                 <TouchableOpacity onPress={() => {this.buttonPress()}}>
-                <OwnerHeader Owner={ this.state.post.club ? this.state.post.club : this.state.post.owner.firstname + ' ' + this.state.post.owner.lastname}
-                             postDate={this.state.post.creationDate} team={this.state.post.owner.team}/>
+                <OwnerHeader Owner={ this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team.club.name : this.state.post.owner.firstname + ' ' + this.state.post.owner.lastname}
+                             postDate={this.state.post.creationDate} team={this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team : null}/>
                 </TouchableOpacity>
 
                 <Content {...this.state.post} />
@@ -141,7 +145,7 @@ class Post extends Component {
                             <Text style={PostStyle.text}>Jaime</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-                            this.onToggleComment(true)
+                            this.onToggleComment(true, true)
                         }}>
                             <Text style={[PostStyle.text, {marginHorizontal:10}]}>Commenter</Text>
                         </TouchableOpacity>
@@ -149,7 +153,11 @@ class Post extends Component {
                             <Text style={PostStyle.text}>Partager</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={PostStyle.text}>Lire les commentaires</Text>
+                    <TouchableOpacity onPress={() => {
+                        this.onToggleComment(true, false)
+                    }}>
+                        <Text style={[PostStyle.text]}>Lire les commentaires</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -160,6 +168,7 @@ mapStateToProps = (state) => {
         currentUser: state.currentUser.user,
         inspectedUser: state.inspectedUser.user,
         isFetching: state.inspectedUser.fetching,
+        postList: state.postList.posts,
     };
 };
 export default connect(mapStateToProps)(Post);

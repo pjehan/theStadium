@@ -52,8 +52,8 @@ export default class CustomInput extends Component {
         this.onDatePicked = this.onDatePicked.bind(this);
         this.getDateString = this.getDateString.bind(this);
     }
-    componentWillMount() {
-
+    onChangeSize(size){
+        this.props.onChangeSizeParent(size)
     }
     onChange(value) {
         this.props.onChangeParent(this.props.state, value)
@@ -111,9 +111,12 @@ export default class CustomInput extends Component {
             Input = <TextInput
                 {...this.props}
                 multiline={this.props.multiple}
-                placeholderTextColor={this.props.textColor}
+                placeholderTextColor={this.props.placeholderTextColor || this.props.textColor}
                 onChangeText={(value) => this.onChange(value)}
                 placeholder={this.props.placeholder}
+                onContentSizeChange={(event) => {
+                   this.props.onChangeSizeParent ? this.onChangeSize(event.nativeEvent.contentSize.height) : null
+                }}
                 style={[this.props.input, {backgroundColor: this.props.backgroundColor, borderColor: this.props.borderColor,color: this.props.textColor}]}
                 secureTextEntry={this.props.security}
                 keyboardType={this.props.keyboardType}

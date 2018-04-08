@@ -53,20 +53,20 @@ class Login extends Component {
 
         if (nextProps.userFetched && nextProps.currentUser) {
             this.setModalVisible(false);
-            navigate("TimeLine", {});
+            navigate("Main", {});
         } else {
             this.setModalVisible(false);
         }
     }
 componentWillMount() {
-    this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
+    this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
     this.setModalVisible(true);
-    //this.props.dispatch(clubAction.getAll());
+    this.props.dispatch(clubAction.getAll());
 }
     loginIn() {
         //fetch to databse
-        //this.props.dispatch(userActions.login(this.state.email, this.state.password));
-        //this.setModalVisible(true);
+        this.props.dispatch(userActions.login(this.state.email, this.state.password));
+        this.setModalVisible(true);
 
     }
 
@@ -115,7 +115,7 @@ componentWillMount() {
                             state={'password'}
                             onChangeParent={(state, newvalue) => this.onChange(state, newvalue)}
                         />
-                        <TouchableOpacity disabled={(this.state.email && this.state.password ? false : true)}
+                        <TouchableOpacity disabled={(!(this.state.email && this.state.password))}
                                           style={[GLOBAL_STYLE.loginButton, {backgroundColor: this.state.email && this.state.password ? '#ffffff' : '#cccccc'}]}
                                           onPress={() => {
                                               this.loginIn()
@@ -126,9 +126,9 @@ componentWillMount() {
 
                 </KeyboardAvoidingView>
                 <View>
-                    <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("SignIn", {})}>Pas encore
+                    <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("Sexe", {})}>Pas encore
                         inscrit ?</Text>
-                    <TouchableOpacity onPress={() => navigate("SignIn", {})} style={GLOBAL_STYLE.loginButton}>
+                    <TouchableOpacity onPress={() => navigate("Sexe", {})} style={GLOBAL_STYLE.loginButton}>
                         <Text style={GLOBAL_STYLE.loginText}>Démarrer linscription</Text>
                     </TouchableOpacity>
                 </View>

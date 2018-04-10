@@ -27,7 +27,7 @@ class ArticleTabHeader extends Component {
                             if(index > 0) {
                                 this.props.navigation.navigate(routes[index - 1].key, {});
                             } else {
-
+                                this.props.navigation.goBack();
                             }
                         }}>
                             <Text style={{color:'#cccccc'}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
@@ -37,7 +37,6 @@ class ArticleTabHeader extends Component {
                         if(index + 1 !== routes.length){
                             this.props.navigation.navigate(routes[index + 1].key, {});
                         } else if(index + 1 === routes.length){
-                            console.log(this.props);
                             const params = this.props.navigation.state.routes[3].params;
                             const content = `{
                             "homeScore": ${params.homeScore},
@@ -71,10 +70,11 @@ class ArticleTabHeader extends Component {
                                 <Text style={timeLineStyle.title}>{this.props.currentUser.teams[0].team.club.name}</Text>
                                 <Text style={{
                                     paddingVertical: 2,
-                                    paddingHorizontal: 8,
+                                    paddingHorizontal: 5,
+                                    fontSize:10,
                                     backgroundColor: '#003366',
                                     color: '#ffffff',
-                                    justifyContent: 'center'
+                                    marginRight: 10
                                 }}>{this.props.currentUser.teams[0].team.category.label} {this.props.currentUser.teams[0].team.division.label}</Text>
 
 

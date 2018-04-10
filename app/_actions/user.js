@@ -12,6 +12,7 @@ export const userActions = {
     getInspected,
     removePlayer,
     putUser,
+    searchUser,
 };
 
 function login(username, password) {
@@ -186,4 +187,26 @@ function addInfos(user) {
     function request(user) { return { type: userConstants.REGISTER_ADD_INFOS_REQUEST, user } }
     function success(user) { return { type: userConstants.REGISTER_ADD_INFOS_SUCCESS, user } }
     function failure(error) { return { type: userConstants.REGISTER_ADD_INFOS_FAILURE, error } }
+}
+function searchUser(query){
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.addInfos(user)
+            .then(
+                user => {
+                    dispatch(success({user}));
+
+                    dispatch(alertActions.success('Registration successful'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.SEARCH_REQUEST, user } }
+    function success(user) { return { type: userConstants.SEARCH_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.SEARCH_FAILURE, error } }
 }

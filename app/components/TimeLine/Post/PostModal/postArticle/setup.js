@@ -6,12 +6,13 @@ import {
     StyleSheet,
     Modal,
     Image,
-    AsyncStorage, ScrollView
+    AsyncStorage, ScrollView, KeyboardAvoidingView
 } from 'react-native';
 import {NavigationActions}from "react-navigation";
 import Autocomplete from "react-native-autocomplete-input";
 import CustomInput from "../../../../CustomInput";
 import {GLOBAL_STYLE} from '../../../../../assets/css/global';
+import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
 export default class Setup extends Component {
     constructor(props){
         super(props);
@@ -96,7 +97,11 @@ export default class Setup extends Component {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
         return (
-            <ScrollView style={{backgroundColor:'#ffffff'}}>
+            <KeyboardAwareScrollView
+                style={{ backgroundColor: '#ffffff' }}
+                resetScrollToCoords={{ x: 0, y: 0 }}
+                extraHeight={500}
+                >
                 <Modal
                     transparent={true}
                     animationType={'none'}
@@ -153,9 +158,9 @@ export default class Setup extends Component {
                             borderColor={'transparent'}
                             backgroundColor={'#eeeeee'}
                             placeholder={'0'}
+                            keyboardType={'numeric'}
                             input={GLOBAL_STYLE.numericInput}
                             state={'homeScore'}
-                            type={'numeric'}
                             onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                         />
                         <Text> - </Text>
@@ -165,9 +170,9 @@ export default class Setup extends Component {
                             borderColor={'transparent'}
                             backgroundColor={'#eeeeee'}
                             placeholder={'0'}
+                            keyboardType={'numeric'}
                             input={GLOBAL_STYLE.numericInput}
                             state={'guessScore'}
-                            type={'numeric'}
                             onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                         />
                     </View>
@@ -179,9 +184,9 @@ export default class Setup extends Component {
 
                 <View style={{paddingVertical:10,paddingHorizontal:15}}>
                     <CustomInput multiple={true}
-                                 container={{flex: 3, justifyContent: 'flex-start'}}
+                                 container={{justifyContent: 'flex-start'}}
                                  placeholder={'Écrivez le titre de l\'article'}
-                                 input={[{flex: 1, padding: 5, marginTop: 10,borderWidth:1,height: Math.max(50, this.state.height)}]}
+                                 input={[{padding: 5, marginTop: 10,borderWidth:1,height: Math.max(50, this.state.height)}]}
                                  state={'title'}
                                  textColor={'#000000'}
                                  placeholderTextColor={'#cccccc'}
@@ -195,7 +200,7 @@ export default class Setup extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         )
     };
 }

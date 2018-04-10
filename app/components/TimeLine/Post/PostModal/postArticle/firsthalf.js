@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Modal, Dimensions,
-    Image, ScrollView,
+    Image, ScrollView, KeyboardAvoidingView,
 } from 'react-native';
 
 import {NavigationActions}from "react-navigation";
@@ -109,7 +109,7 @@ export default class SecondHalf extends Component {
 
     render() {
         return (
-            <ScrollView style={{backgroundColor: '#ffffff'}}>
+            <KeyboardAvoidingView behavior="padding" style={{backgroundColor: '#ffffff'}}>
 
                 <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
                     <Text style={{color: '#000000', fontWeight: '600'}}>Photo de couverture</Text>
@@ -139,7 +139,7 @@ export default class SecondHalf extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </ScrollView>
+            </KeyboardAvoidingView>
         )
     };
 }

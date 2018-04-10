@@ -48,6 +48,9 @@ export default class Gallery extends Component {
             console.log('uri', result.uri, this.state.media.uri)
         }
     };
+    _isUser(user, inspected) {
+        return user.id === inspected.id;
+    }
     render() {
         const {navigation} = this.props;
         const state = navigation.state.params;
@@ -59,17 +62,19 @@ export default class Gallery extends Component {
         return (
             <View style={{backgroundColor:'#ffffff',flex:1, flexDirection:'row'}}>
                 <OpenContent owner={{
-                    lastName: type === 'Joueur' ? this.props.inspectedUser.lastname || state.inspectedUser.lastname : team.category.label + ' ' + team.division.label,
-                    firstName: type === 'Joueur' ? this.props.inspectedUser.firstname || state.inspectedUser.firstname : team.category.label + ' ' + team.division.label
+                    lastName: type === 'Joueur' ? state.inspectedUser.lastname || this.props.inspectedUser.lastname: team.category.label + ' ' + team.division.label,
+                    firstName: type === 'Joueur' ? state.inspectedUser.firstname || this.props.inspectedUser.firstname: team.category.label + ' ' + team.division.label
                 }} visible={this.state.openContent}
                              media={this.state.actualImg}
                              toggleModal={(visible) => {
                                  this.onToggleModal(visible)
                              }}/>
+                {this._isUser(state.currentUser, state.inspectedUser) ?
+
                 <TouchableOpacity onPress={() => this._addMedia()} style={{backgroundColor:'#333333', width:width/4, height: width/4, justifyContent:'center', alignItems:'center'}}>
                     <Icon size={40} name={'camera'} type={'entypo'} color={'#ffffff'} />
                     <Text style={{color: '#ffffff', textAlign:'center'}}>Ajoutez une photo</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> : null}
                 {gallery.map((i, index) => (
                 <TouchableOpacity onPress={() => {
                     this.onToggleModal(true, i.media);

@@ -67,10 +67,18 @@ class UserActions extends Component {
     constructor(props) {
         super(props);
         this.toggleLike = this.toggleLike.bind(this)
+        this.state = {
+            likes: this.props.likes,
+            shares: this.props.shares,
+        }
     }
     toggleLike() {
         this.props.dispatch(postActions.toggleLikePost(this.props.postID, this.props.userID, this.props.isLiked));
-        //!this.props.isLiked ? this.props.likes + 1 : this.propslikes - 1;
+        !this.props.isLiked ? this.setState({likes: this.state.likes + 1}, () => {
+            this.forceUpdate();
+        }) : this.setState({likes: this.state.likes - 1}, () => {
+            this.forceUpdate();
+        });
     }
 
     toggleShare(){
@@ -78,7 +86,7 @@ class UserActions extends Component {
     }
     render() {
         return (
-<View style={PostStyle.userAction}>
+        <View style={PostStyle.userAction}>
             <View style={{height:0.5, backgroundColor:'#cccccc', width: '100%'}} />
               <TouchableOpacity onPress={() => this.toggleLike()} style={{marginLeft:10}}>
               <View style={{alignItems:'center'}}>

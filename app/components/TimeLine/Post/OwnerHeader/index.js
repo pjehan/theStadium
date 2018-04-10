@@ -77,19 +77,6 @@ class OwnerHeader extends Component {
 
     componentWillMount() {
         this.calculatePostTime();
-        if (this.props.team) {
-            /*<View style={PostStyle.teamBackground}>
-                    <Text style={PostStyle.teamText}>U13 DRH</Text>
-                </View>
-                <View style={{
-                height: 8,
-                    width: 8,
-                    backgroundColor: '#cccccc',
-                    borderRadius: 8,
-                    marginLeft: 6,
-                    marginRight: 6
-            }}></View>*/
-        }
     }
 
     calculatePostTime() {
@@ -164,8 +151,8 @@ class OwnerHeader extends Component {
     }
 
     render() {
-        console.log(this.props)
-        return (<View style={PostStyle.ownerStyle}>
+        return (
+            <View style={PostStyle.ownerStyle}>
             {(this.props.team && !this.props.team.club.profilePicture) || (!this.props.team && !this.props.Owner.profilepicture) ? <View style={[PostStyle.profilePic, {backgroundColor: '#cccccc'}]}/> :
                 <Image style={PostStyle.profilePic}
                        source={{uri: !this.props.team ? this.props.Owner.profilepicture : this.props.team.club.profilePicture}}/>
@@ -176,7 +163,8 @@ class OwnerHeader extends Component {
                     {this.props.team ?
                         <Text style={{
                         paddingVertical: 2,
-                        paddingHorizontal: 15,
+                        paddingHorizontal: 5,
+                            fontSize:10,
                         backgroundColor: '#003366',
                         color: '#ffffff',
                         marginRight: 10

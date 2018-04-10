@@ -6,6 +6,7 @@ import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
 import Autocomplete from 'react-native-autocomplete-input';
 import {NavigationActions}from "react-navigation";
+import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
 class userBasic extends Component {
 
     constructor(props){
@@ -88,7 +89,7 @@ class userBasic extends Component {
         </View>
       }
         return (
-            <View style={{flex: 7, backgroundColor:'white',justifyContent: 'flex-start', paddingLeft: 30, paddingRight: 30}}>
+            <KeyboardAwareScrollView contentContainerStyle={{flexGrow: 1,backgroundColor:'white', paddingLeft: 30, paddingRight: 30}}>
 
                 <View style={{flex: 2, justifyContent: 'center'}}>
                     <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Création de votre profil</Text>
@@ -135,7 +136,7 @@ class userBasic extends Component {
 
                     {Coach}
                 </KeyboardAvoidingView>
-            </View>
+            </KeyboardAwareScrollView>
         )
     }
 }

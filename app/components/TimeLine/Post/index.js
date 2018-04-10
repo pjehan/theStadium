@@ -11,6 +11,105 @@ import axios from 'axios';
 import {postActions} from "../../../_actions";
 import {userActions} from "../../../_actions/user";
 
+
+class Post extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            post: this.props.post,
+            modalVisible: false,
+            isPreview: false,
+        };
+        this.onToggleComment = this.onToggleComment.bind(this);
+        this._renderCommentModal = this._renderCommentModal.bind(this);
+        this.goToProfile = this.goToProfile.bind(this);
+        this.isLiked = this.isLiked.bind(this);
+    }
+    isLiked() {
+       return this.props.post.postsLiked.some(user => user.userLikes.id === this.props.currentUser.id);
+    }
+    onToggleComment(visible, preview) {
+            this.setState({isPreview: preview});
+
+        if (visible) {
+            this.props.dispatch(postActions.getComments(this.props.id+1));
+            this.setState({modalVisible: visible});
+        } else {
+            this.setState({modalVisible: visible});
+        }
+
+    }
+    _renderCommentModal() {
+        if(this.state.modalVisible){
+           return ( <CommentModal visible={this.state.modalVisible}
+                          id={this.props.postList.posts.indexOf(this.state.post)}
+                                  post={this.state.post}
+                                  preview={this.state.isPreview}
+                          toggleCommentModal={(visible) => {
+                              this.onToggleComment(visible)
+                          }}/>)
+        } else {
+            return null;
+        }
+    }
+    goToProfile() {
+        this.props.dispatch(userActions.getInspected(this.state.post.owner.id));
+            const users = {
+                currentUser: this.props.currentUser,
+                inspectedUser: this.state.post.owner,
+            };
+            this.props.navigation.navigate('Profile', users);
+    }
+    render() {
+
+        return (
+            <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
+                shadowColor: 'black',
+                shadowOpacity: 1,
+                elevation: 2,}]}>
+                {this._renderCommentModal()}
+                <TouchableOpacity onPress={() => {this.goToProfile()}}>
+                <OwnerHeader Owner={ this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team.club.name : this.state.post.owner.firstname + ' ' + this.state.post.owner.lastname}
+                             postDate={this.state.post.creationDate} team={this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team : null}/>
+                </TouchableOpacity>
+
+                <Content {...this.state.post} {...this.props.navigation} />
+
+               <UserActions postID={this.props.post.id} userID={this.props.currentUser.id} isLiked={this.isLiked()} likes={this.state.post.postsLiked.length} shares={this.state.post.postsShared.length}
+                             comments={this.state.post.comments.length}/>
+                <View style={PostStyle.userActionText}>
+                    <View style={{flexDirection: 'row'}}>
+                        <TouchableOpacity>
+                            <Text style={PostStyle.text}>Jaime</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            this.onToggleComment(true, true)
+                        }}>
+                            <Text style={[PostStyle.text, {marginHorizontal:10}]}>Commenter</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Text style={PostStyle.text}>Partager</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity onPress={() => {
+                        this.onToggleComment(true, false)
+                    }}>
+                        <Text style={[PostStyle.text]}>Lire les commentaires</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+}
+mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser.user,
+        inspectedUser: state.inspectedUser.user,
+        isFetching: state.inspectedUser.fetching,
+        postList: state.postList.posts,
+    };
+};
+export default connect(mapStateToProps)(Post);
 const PostStyle = StyleSheet.create({
     container: {
         backgroundColor: '#ffffff',
@@ -74,101 +173,3 @@ const PostStyle = StyleSheet.create({
         backgroundColor: '#00A65B',
     }
 });
-class Post extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            post: this.props.post,
-            modalVisible: false,
-            isPreview: false,
-        };
-        this.onToggleComment = this.onToggleComment.bind(this);
-        this._renderCommentModal = this._renderCommentModal.bind(this);
-        this.buttonPress = this.buttonPress.bind(this);
-        this.isLiked = this.isLiked.bind(this);
-    }
-    isLiked() {
-       return this.props.post.postsLiked.some(user => user.userLikes.id === this.props.currentUser.id);
-    }
-    onToggleComment(visible, preview) {
-            this.setState({isPreview: preview});
-
-        if (visible) {
-            this.props.dispatch(postActions.getComments(this.props.id+1));
-            this.setState({modalVisible: visible});
-        } else {
-            this.setState({modalVisible: visible});
-        }
-
-    }
-    _renderCommentModal() {
-        if(this.state.modalVisible){
-           return ( <CommentModal visible={this.state.modalVisible}
-                          id={this.props.postList.posts.indexOf(this.state.post)}
-                                  post={this.state.post}
-                                  preview={this.state.isPreview}
-                          toggleCommentModal={(visible) => {
-                              this.onToggleComment(visible)
-                          }}/>)
-        } else {
-            return null;
-        }
-    }
-    buttonPress() {
-        this.props.dispatch(userActions.getInspected(this.state.post.owner.id));
-            const users = {
-                currentUser: this.props.currentUser,
-                inspectedUser: this.state.post.owner.id,
-            };
-            this.props.navigation.navigate('Profile', users);
-    }
-    render() {
-
-        return (
-            <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
-                shadowColor: 'black',
-                shadowOpacity: 1,
-                elevation: 2,}]}>
-                {this._renderCommentModal()}
-                <TouchableOpacity onPress={() => {this.buttonPress()}}>
-                <OwnerHeader Owner={ this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team.club.name : this.state.post.owner.firstname + ' ' + this.state.post.owner.lastname}
-                             postDate={this.state.post.creationDate} team={this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team : null}/>
-                </TouchableOpacity>
-
-                <Content {...this.state.post} />
-
-               <UserActions postID={this.props.post.id} userID={this.props.currentUser.id} isLiked={this.isLiked()} likes={this.state.post.postsLiked.length} shares={this.state.post.postsShared.length}
-                             comments={this.state.post.comments.length}/>
-                <View style={PostStyle.userActionText}>
-                    <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity>
-                            <Text style={PostStyle.text}>Jaime</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            this.onToggleComment(true, true)
-                        }}>
-                            <Text style={[PostStyle.text, {marginHorizontal:10}]}>Commenter</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text style={PostStyle.text}>Partager</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity onPress={() => {
-                        this.onToggleComment(true, false)
-                    }}>
-                        <Text style={[PostStyle.text]}>Lire les commentaires</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
-}
-mapStateToProps = (state) => {
-    return {
-        currentUser: state.currentUser.user,
-        inspectedUser: state.inspectedUser.user,
-        isFetching: state.inspectedUser.fetching,
-        postList: state.postList.posts,
-    };
-};
-export default connect(mapStateToProps)(Post);

@@ -96,7 +96,7 @@ function getComments(id) {
 function toggleLikePost(postID, userID, liked){
     console.log(liked)
     if(!liked) {
-        return instance.post("/api/user_likes_posts",{ creationDate: '2018-03-01 00:00:00',
+        return instance.post("/api/user_likes_posts",{ creationDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
             userLikes: userID,
             postsLiked: postID})
             .then(response => {

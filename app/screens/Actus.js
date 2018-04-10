@@ -9,6 +9,8 @@ import {
     StyleSheet
 } from 'react-native';
 import {ImagePicker} from 'expo';
+
+import Placeholder from 'rn-placeholder';
 import {Icon} from 'react-native-elements';
 import {GLOBAL_STYLE, timeLineStyle} from '../assets/css/global';
 import {connect} from "react-redux";
@@ -61,28 +63,28 @@ class Actus extends Component {
     }
 
     _isLiked(user, inspected) {
-        if(inspected.userType !== 'Coach') {
+        if (inspected.userType !== 'Coach') {
             return user.players.includes('/api/players/' + inspected.id)
-        }else {
+        } else {
             return user.teamsLiked.includes('/api/teamsLiked' + inspected.teams[inspected.teams.length - 1].id);
         }
     }
 
-    toggleFollow(user,inspected) {
-        if(inspected.userType === 'Coach') {
-            if(this._isLiked(user, inspected)) {
+    toggleFollow(user, inspected) {
+        if (inspected.userType === 'Coach') {
+            if (this._isLiked(user, inspected)) {
                 user.teamsLiked.splice(user.teamsLiked.indexOf('/api/teams/' + inspected.teams[inspected.teams.length - 1].id), 1);
                 this.props.dispatch(userActions.putUser(user));
-            }else {
+            } else {
                 user.teamsLiked.push('/api/teams/' + inspected);
                 this.props.dispatch(userActions.putUser(user));
             }
-        }else {
+        } else {
 
-            if(this._isLiked(user, inspected)) {
+            if (this._isLiked(user, inspected)) {
                 user.teamsLiked.splice(user.teamsLiked.indexOf('/api/players/' + inspected), 1);
                 this.props.dispatch(userActions.putUser(user));
-            }else {
+            } else {
 
                 user.teamsLiked.push('/api/players/' + inspected);
                 this.props.dispatch(userActions.putUser(user));
@@ -95,14 +97,13 @@ class Actus extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
         console.log(state)
-        let type = state.inspectedUser ? state.inspectedUser.userType.label : this.props.inspectedUser.userType.label;
-        let team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
-        let user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
+        let type = !state.inspectedUser.userType ? this.props.inspectedUser.userType.label : state.inspectedUser.userType.label;
+        let team = !state.inspectedUser.teams ? this.props.inspectedUser.teams[0].team : state.inspectedUser.teams[0].team;
         if (type === 'Joueur') {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={{uri: this.props.inspectedUser.profilepicture}}>
+                           source={!this.props.inspectedUser.profilepicture ? require('../assets/img/thestadium/placeholder.jpg') : {uri: this.props.inspectedUser.profilepicture}}>
                         {this._isUser(state.currentUser, state.inspectedUser) ?
                             <TouchableOpacity onPress={() => this._addMedia()} style={{
                                 height: 30,
@@ -122,7 +123,7 @@ class Actus extends Component {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={{uri: team.club.profilePicture}}>
+                           source={this.props.inspectedUser.profilepicture ? {uri: this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
                         <View style={{
                             height: 250,
                             width: width / 2.5,
@@ -134,7 +135,7 @@ class Actus extends Component {
                             alignItems: 'center'
                         }}>
                             <Image style={{height: 100, width: 100}} resizeMode={'cover'}
-                                   source={{uri: team.club.coverPhoto}}/>
+                                   source={team.club.profilePicture ? {uri: team.club.profilePicture} : require('../assets/img/thestadium/placeholder.jpg')}/>
                             <Text style={{
                                 color: '#ffffff',
                                 fontWeight: '700',
@@ -152,8 +153,8 @@ class Actus extends Component {
                             position: 'absolute',
                             right: 0,
                             bottom: 0,
-                            alignItems:'center',
-                            justifyContent:'center'
+                            alignItems: 'center',
+                            justifyContent: 'center'
                         }}>
                             <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
                         </TouchableOpacity>
@@ -166,11 +167,11 @@ class Actus extends Component {
     _renderActions() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        let type = 0;
+        let type = state.currentUser.userType.label;
         if (this._isUser(state.currentUser, state.inspectedUser)) {
-            if (type === 1) {
+            if (type === 'Joueur') {
                 return (
-                    <View style={{width: width / 1.25}}>
+                    <View style={{width: width / 1.25, alignSelf: 'center'}}>
                         <View style={timeLineStyle.tabContainer}>
                             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                                 this.onToggleModal(true, 'assists')
@@ -200,7 +201,7 @@ class Actus extends Component {
                 )
             } else {
                 return (
-                    <View style={{width: width / 1.25}}>
+                    <View style={{width: width / 1.25, alignSelf: 'center'}}>
                         <View style={timeLineStyle.tabContainer}>
                             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
                                 this.onToggleModal(true, 'interview')
@@ -231,7 +232,7 @@ class Actus extends Component {
             }
         } else {
             return (
-                <View style={{width: width / 2}}>
+                <View style={{width: width / 2, alignSelf: 'center'}}>
                     <TouchableOpacity style={{
                         alignItems: 'center',
                         backgroundColor: '#003366',
@@ -252,14 +253,21 @@ class Actus extends Component {
         }
     }
 
-    renderName() {
+    renderName(user) {
         const {navigation} = this.props;
         const state = navigation.state.params;
 
-        let team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
+        let team = state.inspectedUser.teams[0].team;
         let teamDisplay = team.category.label + ' ' + team.division.label;
         return (
-            <Text style={{textAlign:'center',fontSize: 14, marginBottom: 10}}>{team.club.name} - {teamDisplay}</Text>)
+            <View>
+                <Text style={{textAlign: 'center', fontWeight: '600', color: '#003366', marginBottom: 5, fontSize: 16}}>
+                    {this.props.inspectedUser.firstname} {this.props.inspectedUser.lastname}
+                </Text>
+                <Text style={{textAlign: 'center', fontSize: 14, marginBottom: 10}}>
+                    {team.club.name} - {teamDisplay}
+                </Text>
+            </View>)
     }
 
     render() {
@@ -268,17 +276,26 @@ class Actus extends Component {
 
         return (
             <View>
-                {!this.props.isFetching && state.inspectedUser.userType ? this._renderHeader() : null}
-                <View style={[{padding: 15}, GLOBAL_STYLE.whiteColorBG]}>
-                    {!this.props.isFetching && state.inspectedUser.userType !== 'Coach'  ?
-                        <Text style={{fontWeight: '600',color:'#003366', marginBottom: 5, fontSize: 16}}>
-                            {state.inspectedUser.firstname} {state.inspectedUser.lastname}
-                        </Text> : null
-                    }
-                    <View>
-                        {!this.props.isFetching && state.inspectedUser.userType !== 'Coach'  ? this.renderName() : null}
-                        {this._renderActions()}
-                    </View>
+                {this._renderHeader()}
+                <View style={[{padding: 15, backgroundColor: '#ffffff'}]}>
+                    {!this._isUser(state.currentUser, state.inspectedUser) && state.currentUser.userType.label === 'Coach' ?
+                    <Placeholder.Paragraph
+                        color="#003366"
+                        textSize={14}
+                        lineNumber={2}
+                        lineSpacing={5}
+                        lastLineWidth="50%"
+                        firstLineWidth="50%"
+                        marginBottom={10}
+                        style={{alignSelf: 'center'}}
+                        onReady={!this.props.isFetching && this.props.done || this._isUser(state.currentUser, state.inspectedUser)}>
+                        {
+                            this.props.done && state.inspectedUser.userType.label !== 'Coach' ?
+                            this.renderName() : null
+                        }
+                    </Placeholder.Paragraph> : null}
+
+                    {this._renderActions()}
                 </View>
             </View>
         )
@@ -290,6 +307,7 @@ const mapStateToProps = (state) => {
         posts: state.ownerList.posts,
         inspectedUser: state.inspectedUser.user,
         isFetching: state.inspectedUser.fetching,
+        done: state.inspectedUser.fetched,
         currentUser: state.currentUser.user
     };
 };

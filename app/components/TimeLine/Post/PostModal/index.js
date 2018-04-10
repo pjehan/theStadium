@@ -26,16 +26,17 @@ class PostModal extends Component {
 
         this.state = {
             post: {
-                title:'',
+                title: '',
                 goalsNbr: 0,
                 passNbr: 0,
-                content:'',
+                content: '',
                 postType: null,
             },
             clubList: null,
             clubQuery: '',
             hideClub: false,
             medias: '',
+            height:50,
             goals_assists: false,
 
         };
@@ -44,11 +45,12 @@ class PostModal extends Component {
         this.onChangeInfos = this.onChangeInfos.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.publishModal = this.publishModal.bind(this);
+        this._renderHeader = this._renderHeader.bind(this);
+        this._renderOwner = this._renderOwner.bind(this);
     }
 
     onChangeInfos(state, newvalue) {
-        this.setState({post:{...this.state.post,[state]: newvalue}});
-        console.log(this.state.post)
+        this.setState({post: {...this.state.post, [state]: newvalue}});
     }
 
     toggleModal(visible, type) {
@@ -85,7 +87,6 @@ class PostModal extends Component {
         AsyncStorage.getItem('clubList').then(
             value => {
                 this.setState({clubList: JSON.parse(value)});
-                console.log(this.state)
                 this.forceUpdate()
             });
         switch (this.props.type) {
@@ -103,26 +104,27 @@ class PostModal extends Component {
                 break;
         }
     }
+
     _filterClub(query, dataSource) {
         if (query === '') {
             return [];
         }
         let data = dataSource;
-        console.log(data)
         const regex = new RegExp(`${query.trim()}`, 'i');
-        if(data) {
-            console.log(data.filter(data => data.name.search(regex) >= 0))
+        if (data) {
             return data.filter(data => data.name.search(regex) >= 0);
         }
     }
+
     _setClub(item) {
         this.setState({
             clubQuery: item.name,
             club: item.name,
-            post :{content:item.name},
+            post: {content: item.name},
             hideClub: true,
         });
     }
+
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
         switch (this.props.type) {
@@ -142,6 +144,54 @@ class PostModal extends Component {
         this.forceUpdate();
     }
 
+    _renderHeader(type, Title) {
+        return (
+            <View style={{
+                flexDirection: 'row',
+                borderBottomWidth: 0.5,
+                borderColor: '#cccccc',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                height: 40
+            }}>
+                <TouchableOpacity onPress={() => {
+                    this.toggleModal(false, type)
+                }}>
+                    <Text>Annuler</Text>
+                </TouchableOpacity>
+                <Text style={{fontWeight: '600'}}>{Title}</Text>
+                <TouchableOpacity onPress={() => {
+                    this.publishModal(type)
+                }}>
+                    <Text style={{fontWeight: '600', color: '#003366'}}>Publiez</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    _renderOwner() {
+        return (
+            <View
+                style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
+                <Image style={timeLineStyle.profilePic}
+                       source={{uri: this.props.owner.userType.label !== 'Coach' ? this.props.owner.profilepicture : this.props.owner.teams[0].team.profilePicture}}/>
+                {this.props.owner.userType.label === 'Joueur' ? <Text
+                        style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text> :
+                    <View>
+                        <Text style={timeLineStyle.title}>{this.props.owner.teams[0].team.club.name}</Text>
+                        <Text style={{
+                            paddingVertical: 2,
+                            paddingHorizontal: 5,
+                            fontSize: 10,
+                            backgroundColor: '#003366',
+                            color: '#ffffff',
+                            marginRight: 10
+                        }}>{this.props.owner.teams[0].team.category.label} {this.props.owner.teams[0].team.division.label}</Text>
+                    </View>}
+            </View>
+        )
+    }
+
     displayGoalsAssists(type) {
 
         let Title;
@@ -158,35 +208,10 @@ class PostModal extends Component {
         }
         ModalContent = (
             <View>
-                <View style={{
-                    flexDirection: 'row',
-                    borderBottomWidth: 0.5,
-                    borderColor: '#cccccc',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    height: 40
-                }}>
-                    <TouchableOpacity onPress={() => {
-                        this.toggleModal(false, type)
-                    }}>
-                        <Text>Annuler</Text>
-                    </TouchableOpacity>
-                    <Text style={{fontWeight: '600'}}>{Title}</Text>
-                    <TouchableOpacity onPress={() => {
-                        this.publishModal(type)
-                    }}>
-                        <Text style={{fontWeight: '600', color: '#003366'}}>Publiez</Text>
-                    </TouchableOpacity>
-                </View>
+                {this._renderHeader(type, Title)}
                 <View style={{paddingLeft: 20, paddingRight: 20}}>
                     <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
-                        <View
-                            style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
-                            <Image style={timeLineStyle.profilePic}
-                                   source={require('../../../../assets/img/TA-Rennes.jpg')}/>
-                            <Text
-                                style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text>
-                        </View>
+                        {this._renderOwner()}
                         <Text style={GLOBAL_STYLE.text}>{Description}</Text>
                     </View>
                     <View style={{flexDirection: 'row', marginTop: 40, marginBottom: 40}}>
@@ -203,57 +228,34 @@ class PostModal extends Component {
                     </View>
 
 
-
                 </View>
-        </View>
+            </View>
         )
     }
 
     displaySimpleArticle(type) {
         ModalContent = (
             <ScrollView>
-                <View style={{
-                    flexDirection: 'row',
-                    borderBottomWidth: 0.5,
-                    borderColor: '#cccccc',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    height: 40
-                }}>
-                    <TouchableOpacity onPress={() => {
-                        this.toggleModal(false, type)
-                    }}>
-                        <Text>Annuler</Text>
-                    </TouchableOpacity>
-                    <Text style={{fontWeight: '600'}}>Post</Text>
-                    <TouchableOpacity onPress={() => {
-                        this.publishModal(type)
-                    }}>
-                        <Text style={{fontWeight: '600', color: '#003366'}}>Publiez</Text>
-                    </TouchableOpacity>
-                </View>
+                {this._renderHeader(type, 'Publiez')}
                 <View style={{flex: 1, paddingLeft: 20, paddingRight: 20}}>
                     <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
-                        <View
-                            style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
-                            <Image style={timeLineStyle.profilePic}
-                                   source={require('../../../../assets/img/TA-Rennes.jpg')}/>
-                            <Text
-                                style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text>
-                        </View>
+                        {this._renderOwner()}
                         <Text style={GLOBAL_STYLE.text}>Partager en toute simplicié</Text>
                     </View>
 
                 </View>
                 <CustomInput multiple={true}
-                             container={{flex: 3, justifyContent: 'flex-start'}}
+                             container={{flex:1,justifyContent: 'flex-start'}}
                              placeholder={'Écrivez votre message'}
-                             input={[{flex: 1, padding: 20, marginTop: 10}]}
+                             input={[{flex: 1, padding: 20, marginTop: 10,height: Math.max(50, this.state.height)}]}
                              state={'content'}
                              textColor={'#000000'}
                              borderColor={'transparent'}
                              backgroundColor={'#ffffff'}
                              security={false}
+                             onChangeSizeParent={(size)=>{
+                                 this.setState({height:size})
+                             }}
                              onChangeParent={(state, newvalue) => {
                                  this.onChangeInfos(state, newvalue)
                              }}/>
@@ -261,40 +263,45 @@ class PostModal extends Component {
                     {SelectedMedia}
 
                 </View>
-                <View >
-                    <TouchableOpacity onPress={() => {
-                        this.toggleModal(true, TypeEnum.goals)
-                    }} style={{
-                        borderColor: '#cccccc',
-                        borderTopWidth: 0.5,
-                        height: 50,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
+                <View>
+                    {this.props.owner.userType.label === 'Joueur' ?
+                        <View>
+                            <TouchableOpacity onPress={() => {
+                                this.toggleModal(true, TypeEnum.goals)
+                            }} style={{
+                                borderColor: '#cccccc',
+                                borderTopWidth: 0.5,
+                                height: 50,
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
+                            }}>
 
-                        <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}} resizeMode={'contain'}
-                               source={require('../../../../assets/img/picto/menu/actions/goal.png')}/>
-                        <Text style={{color: 'green'}}>Partagez un But</Text>
-                        <Text style={{marginRight: 20}}> > </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-                        this.toggleModal(true, TypeEnum.assists)
-                    }} style={{
-                        borderColor: '#cccccc',
-                        borderTopWidth: 0.5,
-                        borderBottomWidth: 0.5,
-                        height: 50,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
+                                <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}}
+                                       resizeMode={'contain'}
+                                       source={require('../../../../assets/img/picto/menu/actions/goal.png')}/>
+                                <Text style={{color: 'green'}}>Partagez un But</Text>
+                                <Text style={{marginRight: 20}}> > </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                this.toggleModal(true, TypeEnum.assists)
+                            }} style={{
+                                borderColor: '#cccccc',
+                                borderTopWidth: 0.5,
+                                borderBottomWidth: 0.5,
+                                height: 50,
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
+                            }}>
 
-                        <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}} resizeMode={'contain'}
-                               source={require('../../../../assets/img/picto/menu/actions/assist.png')}/>
-                        <Text style={{color: 'green'}}>Partagez une Passe Décisive</Text>
-                        <Text style={{marginRight: 20}}> > </Text>
-                    </TouchableOpacity>
+                                <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}}
+                                       resizeMode={'contain'}
+                                       source={require('../../../../assets/img/picto/menu/actions/assist.png')}/>
+                                <Text style={{color: 'green'}}>Partagez une Passe Décisive</Text>
+                                <Text style={{marginRight: 20}}> > </Text>
+                            </TouchableOpacity>
+                        </View> : null}
                     <TouchableOpacity onPress={() => {
                         this._addMedia();
                     }} style={{
@@ -339,81 +346,104 @@ class PostModal extends Component {
             </View>
         );
     };
-    render() {
 
-console.log(this.props)
+    render() {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
         return (
-        <Modal style={{flex:1}} animationType={"slide"} transparent={false}
-                visible={this.props.visible}
+            <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
+                   visible={this.props.visible}
 
-                onRequestClose={() => {
-                    console.log("Modal has been closed.")
-                }}>
-        {ModalContent}
-            {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ? <View style={[{marginLeft:'7.5%',height: 50, width: '85%'}]}>
-                <Autocomplete
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    containerStyle={styles.autocompleteContainer}
-                    data={clubData}
-                    defaultValue={clubQuery}
-                    placeholder={'Nom du club affronté'}
-                    onChangeText={text => this.setState({clubQuery: text})}
-                    hideResults={this.state.hideClub}
-                    renderItem={item => (
+                   onRequestClose={() => {
+                       console.log("Modal has been closed.")
+                   }}>
+                {ModalContent}
+                {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
+                    <View style={[{marginLeft: '7.5%', height: 50, width: '85%'}]}>
+                        <Autocomplete
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            containerStyle={styles.autocompleteContainer}
+                            data={clubData}
+                            defaultValue={clubQuery}
+                            placeholder={'Nom du club affronté'}
+                            onChangeText={text => this.setState({clubQuery: text})}
+                            hideResults={this.state.hideClub}
+                            renderItem={item => (
 
-                        <TouchableOpacity onPress={() => this._setClub(item)}>
-                            <Text>{item.name}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
-            </View> : null}
-        </Modal>
+                                <TouchableOpacity onPress={() => this._setClub(item)}>
+                                    <Text>{item.name}</Text>
+                                </TouchableOpacity>
+                            )}
+                        />
+                    </View> : null}
+            </Modal>
         )
     }
+
     renderImage(result, callback) {
-            let originalWidth = result.width;
-            let originalHeight = result.height;
-            let windowWidth = null || Dimensions.get('window').width;
-            let widthChange = null || (windowWidth - 10) / originalWidth;
-            SelectedMedia = (
-                <View style={{position:'relative'}}>
-                    <TouchableOpacity onPress={() => {SelectedMedia = null;this.setState({medias:null});this.displaySimpleArticle(TypeEnum.simple);
-                        this.forceUpdate();}}
-                                      style={{position:'absolute',zIndex:5,right:10,top:-15,justifyContent:'center',alignItems:'center',height:30,width:30,backgroundColor:'rgba(0,0,0,0.4)',borderRadius:15}}>
-                    <Image source={require('../../../../assets/img/picto/white-cross.png')} style={{width:15,height:15}} />
-                    </TouchableOpacity>
-                <Image source={{uri: result.uri}} style={{marginLeft:5,width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
-                </View>
-            );
-            this.displaySimpleArticle(TypeEnum.simple);
-            this.forceUpdate();
-        }
-    _addMedia = async () =>{
-        let result =  await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-    });
+        let originalWidth = result.width;
+        let originalHeight = result.height;
+        let windowWidth = null || Dimensions.get('window').width;
+        let widthChange = null || (windowWidth - 10) / originalWidth;
+        SelectedMedia = (
+            <View style={{position: 'relative'}}>
+                <TouchableOpacity onPress={() => {
+                    SelectedMedia = null;
+                    this.setState({medias: null});
+                    this.displaySimpleArticle(TypeEnum.simple);
+                    this.forceUpdate();
+                }}
+                                  style={{
+                                      position: 'absolute',
+                                      zIndex: 5,
+                                      right: 10,
+                                      top: -15,
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      height: 30,
+                                      width: 30,
+                                      backgroundColor: 'rgba(0,0,0,0.4)',
+                                      borderRadius: 15
+                                  }}>
+                    <Image source={require('../../../../assets/img/picto/white-cross.png')}
+                           style={{width: 15, height: 15}}/>
+                </TouchableOpacity>
+                <Image source={{uri: result.uri}} style={{
+                    marginLeft: 5,
+                    width: originalWidth * widthChange,
+                    height: originalHeight * widthChange
+                }}/>
+            </View>
+        );
+        this.displaySimpleArticle(TypeEnum.simple);
+        this.forceUpdate();
+    }
+
+    _addMedia = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+        });
 
         if (!result.cancelled) {
-        this.setState({medias:result.uri});
+            this.setState({medias: result.uri});
             this.renderImage(result, this.displaySimpleArticle(TypeEnum.simple));
 
-    } else {
-        console.log('uri', result.uri, this.state.post.medias[0])
-    }
+        } else {
+            console.log('uri', result.uri, this.state.post.medias[0])
+        }
     };
-    }
-        /**
-         * Props
-         */
-    PostModal.propTypes = {
-        owner: PropTypes.object,
-        /* visible or not */
-        type: PropTypes.string, /* Content Type */
-    };
-    export default connect()(PostModal);
+}
+
+/**
+ * Props
+ */
+PostModal.propTypes = {
+    owner: PropTypes.object,
+    /* visible or not */
+    type: PropTypes.string, /* Content Type */
+};
+export default connect()(PostModal);
 
 const styles = StyleSheet.create({
     autocompleteContainer: {

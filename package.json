@@ -31,6 +31,7 @@
     "react-native-awesome-alerts": "^1.0.3",
     "react-native-datepicker": "^1.6.0",
     "react-native-elements": "^0.17.0",
+    "react-native-keyboard-aware-scroll-view": "^0.5.0",
     "react-native-number-spinner": "^1.1.1",
     "react-native-textinput-effects": "^0.4.1",
     "react-native-vector-icons": "^4.4.2",
@@ -38,6 +39,7 @@
     "react-redux": "^5.0.6",
     "redux-promise-middleware": "^5.0.0",
     "redux-thunk": "^2.2.0",
+    "rn-placeholder": "^1.2.0",
     "tcomb-form-native": "^0.6.11"
   }
 }

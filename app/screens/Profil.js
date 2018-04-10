@@ -10,7 +10,7 @@ import {
     Picker, ActivityIndicator, Modal
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-
+import Placeholder from 'rn-placeholder';
 import Spinner from 'react-native-number-spinner';
 import CustomInput from "../components/CustomInput";
 import {userActions} from "../_actions/user";
@@ -25,6 +25,15 @@ const STYLE = StyleSheet.create({
         paddingRight: 30,
         justifyContent: 'space-between',
         height: 50,
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    },
+    role: {flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        height: 50,
+        justifyContent: 'center',
         borderBottomColor: '#cccccc',
         borderBottomWidth: 1,
     },
@@ -64,6 +73,7 @@ const initialState = {
     weight: null,
     height: null,
 }
+
 class Profil extends Component {
     constructor(props) {
         super(props);
@@ -102,7 +112,6 @@ class Profil extends Component {
         const state = navigation.state.params;
 
         if (this._isUser(state.currentUser, state.inspectedUser)) {
-            console.log(state.currentUser);
             stats = state.inspectedUser.stats;
         } else if (this.props.inspectedUser && this.props.inspectedUser.id) {
             stats = this.props.inspectedUser.stats;
@@ -113,45 +122,92 @@ class Profil extends Component {
         this.setState({height: stats.height});
         this.setState({id: stats.id});
         this.forceUpdate();
-        this._renderStats();
     }
 
     _renderStats() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        statsComponent = (
+        return (
             <View>
-                <TouchableOpacity onPress={() => {
-                    state.currentUser === state.inspectedUser ? this._renderChange() : null
-                }} style={[STYLE.tab, {justifyContent: 'center'}]}>
-                    <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
-                    {state.currentUser === state.inspectedUser ?
-                        <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
-                              color="#003366"/> : null}
-                </TouchableOpacity>
+                <View style={STYLE.role}>
+                <Placeholder.Line
+                    color="#003366"
+                    width="75%"
+                    textSize={14}
+                    style={{alignSelf:'center'}}
+                    onReady={this.state.goalsNbr || this.state.goalsNbr === 0}>
+                    <TouchableOpacity  onPress={() => {
+                        this._isUser(state.currentUser, state.inspectedUser) ? this._renderChange() : null
+                    }} style={STYLE.tab}>
+                        <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
+                        {this._isUser(state.currentUser, state.inspectedUser) ?
+                            <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
+                                  color="#003366"/> : null}
+                    </TouchableOpacity>
+                </Placeholder.Line>
+                </View>
                 <TouchableOpacity style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>But</Text>
-                    <Text>{stats.goalsNbr}</Text>
+                    <Placeholder.Line
+                        style={{alignSelf:'center'}}
+                        color="#003366"
+                        width="33%"
+
+                        textSize={14}
+                        onReady={this.state.goalsNbr || this.state.goalsNbr === 0}>
+                        <Text>{stats.goalsNbr}</Text>
+                    </Placeholder.Line>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab]}>
                     <Text style={STYLE.tabText}>Passe Décisive</Text>
-                    <Text>{stats.passNbr}</Text>
+                    <Placeholder.Line
+                        style={{alignSelf:'center'}}
+                        color="#003366"
+                        width="33%"
+
+                        textSize={14}
+                        onReady={this.state.passNbr || this.state.passNbr === 0}>
+                        <Text>{stats.passNbr}</Text>
+                    </Placeholder.Line>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>Poids</Text>
-                    <Text>{stats.weight} kg</Text>
+                    <Placeholder.Line
+                        style={{alignSelf:'center'}}
+                        color="#003366"
+                        width="33%"
+
+                        textSize={14}
+                        onReady={this.state.weight}>
+                        <Text>{stats.weight} kg</Text>
+                    </Placeholder.Line>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab]}>
                     <Text style={STYLE.tabText}>Taille</Text>
-                    <Text>{stats.height} cm</Text>
+                    <Placeholder.Line
+                        style={{alignSelf:'center'}}
+                        color="#003366"
+                        width="33%"
+
+                        textSize={14}
+                        onReady={this.state.height}>
+                        <Text>{stats.height} cm</Text>
+                    </Placeholder.Line>
                 </TouchableOpacity>
                 <TouchableOpacity style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>Pied fort</Text>
-                    <Text>{stats.strongFoot}</Text>
+                    <Placeholder.Line
+                        style={{alignSelf:'center'}}
+                        color="#003366"
+                        width="33%"
+
+                        textSize={14}
+                        onReady={this.state.strongFoot !== null}>
+                        <Text>{stats.strongFoot}</Text>
+                    </Placeholder.Line>
                 </TouchableOpacity>
             </View>
         );
-        this.forceUpdate();
 
     }
 
@@ -297,8 +353,9 @@ class Profil extends Component {
             <View style={{backgroundColor: '#ffffff'}}>
                 <Image style={{height: 200, width: width}} resizeMode={'cover'}
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
-                {this.props.isFetching || !state.inspectedUser.stats ? this._loadingModal() : this.stateSetting.bind(this)}
-                {stats ? statsComponent : null}
+                {this.props.isFetching || !state.inspectedUser.stats ? null : this.stateSetting.bind(this)}
+
+                {this._renderStats()}
             </View>
         )
     }

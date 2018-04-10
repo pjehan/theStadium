@@ -110,18 +110,18 @@ const TeamProfile = TabNavigator({
 
 },PROFILETAB);
 const ProfileTab = TabNavigator({
-    Infos: {
-        screen: Profil,
-        navigationOptions: {
-            header: null,
-        }
-    },
+
     Actus: {
         screen: Actus,
         navigationOptions: ({navigation}) => ({
             header: null,
             tabBarLabel: 'Actualitées'
         })
+    },Infos: {
+        screen: Profil,
+        navigationOptions: {
+            header: null,
+        }
     },
     Gallerie: {
         screen: Gallery,
@@ -231,17 +231,9 @@ const MainStack = TabNavigator({
 const PlayerSignInStack = TabNavigator({
         Player: {
             screen: UserBasic,
-            navigationOptions: ({navigation}) => ({
-                header: props => <Header {...props} />,
-
-            })
         },
         PlayerInfosfrom: {
             screen: UserInfos,
-            navigationOptions: ({navigation}) => ({
-                header: props => <Header {...props} />,
-
-            })
         },
         PlayerClub: {
           screen: PlayerClub,

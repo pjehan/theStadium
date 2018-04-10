@@ -91,7 +91,6 @@ function addComment(comment,postID) {
 }
 
 function deleteComment(comment, postID, commentID) {
-    console.log(comment,postID,commentID)
     return (dispatch) => {
         dispatch(request());
         postService.deleteComment(comment)
@@ -128,6 +127,7 @@ function getComments(id) {
 }
 
 function toggleLikePost(postID, userID, liked) {
+    console.log(postID,userID,liked)
     return (dispatch) => {
         dispatch(request());
         postService.toggleLikePost(postID, userID, liked)

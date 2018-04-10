@@ -8,6 +8,7 @@ import {GLOBAL_STYLE} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
 import Autocomplete from "react-native-autocomplete-input";
+import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
 
 const style = StyleSheet.create({
     tabContainer: {
@@ -103,10 +104,13 @@ class PlayerInfos extends Component {
                 </View>;
         }
         return (
-            <View style={{
-                flex: 7,
+            <KeyboardAwareScrollView
+                style={{ backgroundColor: '#ffffff' }}
+                resetScrollToCoords={{ x: 500, y: 500 }}
+                extraHeight={500}
+                contentContainerStyle={{
+                    flexGrow:1,
                 backgroundColor: 'white',
-                justifyContent: 'flex-start',
                 paddingLeft: 30,
                 paddingRight: 30
             }}>
@@ -162,7 +166,7 @@ class PlayerInfos extends Component {
                     />
                     {Coach}
                 </KeyboardAvoidingView>
-            </View>
+            </KeyboardAwareScrollView>
         )
     }
 

@@ -2,9 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {TypeEnum} from "../contentType";
 import LocalImage from './LocalImage';
-import {View, Image, Dimensions, StyleSheet, Button, DatePickerAndroid, Text, TouchableOpacity} from 'react-native';
+import {
+    View, Image, Dimensions, StyleSheet, Button, DatePickerAndroid, Text, TouchableOpacity,
+    Modal
+} from 'react-native';
 import OpenContent from "../OpenContent";
-
+import ArticleDisplay from "../ArticleDisplay";
 let postContent;
 let {height} = Dimensions.get('window');
 const PostStyle = StyleSheet.create({
@@ -39,6 +42,7 @@ export default class Content extends Component {
             url: null,
             openContent: false,
             actualImg: null,
+            visible:false,
         };
         this.returnSimplePost = this.returnSimplePost.bind(this);
         this.returnArticle = this.returnArticle.bind(this);
@@ -157,24 +161,24 @@ export default class Content extends Component {
 
     returnArticle() {
         let content = JSON.parse(JSON.stringify(eval("(" + this.props.content.toString() + ")")));
-        const  originalWidth = this.props.medias[0].width;
-        const originalHeight = this.props.medias[0].height;
+        const  originalWidth = 890;
+        const originalHeight = 593;
         const windowWidth = Dimensions.get('window').width;
         const widthChange = (windowWidth - 10) / originalWidth;
         return (
                 <View>
-                        <TouchableOpacity onPress={() => {console.log(this.props)}}>
+                        <TouchableOpacity onPress={() => {this.setState({visible:true})}}>
                         <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10,height:150, backgroundColor:'rgba(0,0,0,0.5)'}}>
-                            <View style={{borderRadius:5,width:100,backgroundColor:'#00A65B',paddingHorizontal:2,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
+                            <View style={{position:'absolute',top:-20,zIndex:15,borderRadius:5,width:100,backgroundColor:'#00A65B',paddingHorizontal:2,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
                                 <Text style={{color:'#ffffff'}}>Article</Text>
                             </View>
                             <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
-                            <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub} {content.homeScore} - {content.guessClub} {content.guessScore}</Text>
+                            <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub} {content.homeScore} - {content.guessScore} {content.guessClub}</Text>
                             <Text  style={{color:'#ffffff',fontSize:12}}>Merveilleuse Victoire des joueurs !!! Ce fût un match intense du début à la fin, et c'est finalement avec un peu de ...</Text>
                             </View>
                             </View>
-                            <Image source={{uri: this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                            <Image source={{uri: 'https://www.thesportsman.com/media/images/admin/football/Zidane.jpg'}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
                         </TouchableOpacity>
                 </View>
         )
@@ -200,12 +204,24 @@ export default class Content extends Component {
     componentWillMount() {
         this.checkType();
     }
+    _renderArticleModal() {
+        return (
+            <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
+                   visible={this.state.visible}
 
+                   onRequestClose={() => {
+                       console.log("Modal has been closed.")
+                   }}>
+                <ArticleDisplay disband={(value) => {this.setState({visible:value})}} {...this.props} owner={this.props.owner} />
+            </Modal>
+        )
+    }
     render() {
         const TYPE = this.props.postType.label;
-        console.log(TYPE)
         return (
             <View>
+
+                {this._renderArticleModal()}
                 {TYPE === TypeEnum.simple ? this.returnSimplePost() :
                     TYPE === TypeEnum.article ? this.returnArticle() :
                         TYPE === TypeEnum.goals ?  this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content) :

@@ -164,7 +164,7 @@ export const timeLineStyle = StyleSheet.create({
         backgroundColor: '#cccccc'
     },
     singlePost: {
-        marginBottom: 200
+        marginBottom: 200,
     }, profilePic: {
         width: 45,
         height: 45,

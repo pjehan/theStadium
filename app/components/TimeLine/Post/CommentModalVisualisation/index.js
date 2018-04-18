@@ -15,70 +15,6 @@ import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from 'redux';
 
-const PostStyle = StyleSheet.create({
-    container: {
-        backgroundColor: '#ffffff',
-        width: '100%',
-        paddingTop: 5,
-        paddingBottom: 5,
-        borderBottomWidth: 0.5, borderColor: '#cccccc',
-    },
-    profilePic: {
-        width: 45,
-        height: 45,
-        borderRadius: 45,
-        marginRight: 10,
-        marginLeft: 10,
-    },
-    text: {
-        color: 'black',
-        fontSize: 12
-    },
-    title: {
-        color: 'black',
-        fontSize: 14,
-        fontWeight: '500'
-    },
-    content: {
-        fontSize: 14,
-        paddingRight: 80
-    },
-    userAction: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 10
-    },
-    ownerStyle: {
-        flexDirection: 'row',
-        padding: 5,
-    },
-    userActionText: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 10
-    },
-    actionText: {
-        fontSize: 12
-    },
-    teamText: {
-        color: "white",
-        fontSize: 12
-    },
-    teamBackground: {
-        backgroundColor: '#003366',
-        padding: 10,
-        paddingTop: 2,
-        paddingBottom: 2
-    },
-    timeText: {
-        fontSize: 12,
-        color: '#cccccc',
-        fontWeight: '400',
-        marginLeft: 2
-    }
-});
 
 class CommentModal extends Component {
     constructor(props) {
@@ -175,27 +111,30 @@ class CommentModal extends Component {
                         </TouchableOpacity>
                     </View>
                     {this.props.visible && this.props.comments ? this.renderList() : <ActivityIndicator color="#ffffff" size="large" />}
-                    <View style={{justifyContent: 'center', backgroundColor: '#cccccc', padding: 5}}>
+                    <View style={[PostStyle.containerTest, {height: Math.max(44, this.state.height)}]}>
+
                         <CustomInput
-                            ref={input => {
-                                this.textInput = input
-                            }}
-                            container={{
-                                alignItems: 'center',
-                                backgroundColor: '#ffffff',
-                                borderRadius: 35,
-                                height: 35,
-                                flexDirection: 'row'
-                            }}
-                            input={{flex: 4, borderRadius: 35, height: '100%', paddingHorizontal: 10}}
+                            container={{justifyContent:'flex-start',flex:1,height: Math.max(44, this.state.height)}}
+                            input={{flex:1,borderRadius: 35, paddingHorizontal: 10,height: Math.max(44, this.state.height)}}
                             textColor={'#333333'}
                             placeholder={'Commentez...'}
-                            security={false}
-                            action={'send'}
                             state={'userMessage'}
+                            multiple={true}
+                            security={false}
+                            onChangeSizeParent={(size)=>{
+                                this.setState({height:size})
+                            }}
                             onChangeParent={(state, newvalue) => this.onChange(state, newvalue)}
-                            onTriggeredAction={(value) => this.onSendComment(value)}
                         />
+                        <TouchableOpacity
+                            style={[PostStyle.commentInputContainer, {height: Math.max(44, this.state.height)}]}
+                            onPress={() => {
+                                this.onSendComment(this.state.userMessage);
+                            }}
+                            accessibilityTraits="button"
+                        >
+                            <View><Text style={[PostStyle.commentInputText]}>Envoyer</Text></View>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
             </View>
@@ -209,3 +148,99 @@ const mapStateToProps = (state) => {
     };
 };
 export default connect(mapStateToProps)(CommentModal);
+const PostStyle = StyleSheet.create({
+    containerTest: {
+        position:'absolute',
+        bottom:0,
+        left:0,
+        right:0,
+        borderTopWidth: 1,
+        borderTopColor: '#cccccc',
+        backgroundColor: 'white',
+        flex:1,
+        height:44,
+        flexDirection: 'row',
+        paddingVertical:10,
+    },
+    primary: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+    },
+    commentInputContainer: {
+        height:44,
+        justifyContent: 'center',
+    },
+    commentInputText: {
+        color: '#003366',
+        fontWeight: '600',
+        fontSize: 17,
+        backgroundColor: 'transparent',
+        marginVertical: 6,
+        marginHorizontal: 10,
+    },
+    container: {
+        backgroundColor: '#ffffff',
+        width: '100%',
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderBottomWidth: 0.5, borderColor: '#cccccc',
+    },
+    profilePic: {
+        width: 45,
+        height: 45,
+        borderRadius: 45,
+        marginRight: 10,
+        marginLeft: 10,
+    },
+    profilBack: {
+        backgroundColor: 'red',
+    },
+    text: {
+        color: 'black',
+        fontSize: 12
+    },
+    title: {
+        color: 'black',
+        fontSize: 14,
+        fontWeight: '500'
+    },
+    content: {
+        fontSize: 14,
+        paddingRight: 80
+    },
+    userAction: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10
+    },
+    ownerStyle: {
+        flexDirection: 'row',
+        padding: 5,
+    },
+    userActionText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10
+    },
+    actionText: {
+        fontSize: 12
+    },
+    teamText: {
+        color: "white",
+        fontSize: 12
+    },
+    teamBackground: {
+        backgroundColor: '#003366',
+        padding: 10,
+        paddingTop: 2,
+        paddingBottom: 2
+    },
+    timeText: {
+        fontSize: 12,
+        color: '#cccccc',
+        fontWeight: '400',
+        marginLeft: 2
+    }
+});

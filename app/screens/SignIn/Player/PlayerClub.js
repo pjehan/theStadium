@@ -144,10 +144,13 @@ class PlayerInfos extends Component {
                     behavior="padding">
                     <View style={[{height: 40, width: '85%'}]}>
                         <Autocomplete
+                            underlineColorAndroid="transparent"
+                            placeholderTextColor="#000000"
                             autoCapitalize="none"
                             autoCorrect={false}
                             containerStyle={styles.autocompleteContainer}
-                            data={clubData}
+                            inputContainerStyle={styles.inputContainer}
+                            style={[GLOBAL_STYLE.input, {borderWidth:0,backgroundColor:'#eeeeee',color:'#000000'}]}
                             defaultValue={clubQuery}
                             placeholder={'Nom de votre Club'}
                             onChangeText={text => this.setState({clubQuery: text})}
@@ -162,9 +165,13 @@ class PlayerInfos extends Component {
                     </View>
                     <View style={[{height: 40, width: '85%'}]}>
                         <Autocomplete
+                            underlineColorAndroid="transparent"
+                            placeholderTextColor="#000000"
                             autoCapitalize="none"
                             autoCorrect={false}
                             containerStyle={styles.autocompleteContainer}
+                            inputContainerStyle={styles.inputContainer}
+                            style={[GLOBAL_STYLE.input, {borderWidth:0,backgroundColor:'#eeeeee',color:'#000000'}]}
                             data={teamData}
                             defaultValue={teamQuery}
                             placeholder={'Votre équipe'}
@@ -214,7 +221,11 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1,
-        backgroundColor: '#eeeeee'
+        borderWidth:0,
+    },
+    inputContainer: {
+        backgroundColor: '#cccccc',
+        borderWidth:0,
     },
     itemText: {
         fontSize: 15,

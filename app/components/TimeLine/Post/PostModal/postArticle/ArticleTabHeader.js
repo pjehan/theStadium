@@ -7,7 +7,12 @@ import {GLOBAL_STYLE} from '../../../../../assets/css/global';
 import {postActions} from "../../../../../_actions/post";
 
 
-
+const labels= [
+    'Introduction',
+    'Première mi-temps',
+    'Deuxième mi-temps',
+    'En bref'
+]
 class ArticleTabHeader extends Component {
     render() {
         const {routes} = this.props.navigation.state;
@@ -44,7 +49,8 @@ class ArticleTabHeader extends Component {
                             "firstHalf_content":  \' ${params.firstHalf_content} \',
                             "secondHalf_content": \' ${params.secondHalf_content} \',
                             "guessClub": \'${params.guessClub.name}\',
-                            "homeClub": \'${this.props.currentUser.teams[0].team.club.name}\'
+                            "homeClub": \'${this.props.currentUser.teams[0].team.club.name}\',
+                            "conclusion": \'${params.conclusion}\'
                             }`;
                             const post = {
                                 title: params.title,
@@ -107,7 +113,8 @@ class ArticleTabHeader extends Component {
 
                         </View>
                         <View style={{marginBottom:20}}>
-                            <Text style={{color:'#003366',fontWeight:'500'}}>Etape {index+1} : </Text>
+                                    <Text style={{color:'#003366',fontWeight:'500'}}>Etape {index+1} : {labels[index]} </Text>
+
                         </View>
                         </View>
                     </View>

@@ -17,73 +17,6 @@ import UserActions from '../UserActions';
 import OwnerHeader from '../OwnerHeader';
 import Content from '../Content';
 
-const PostStyle = StyleSheet.create({
-    container: {
-        backgroundColor: '#ffffff',
-        width: '100%',
-        paddingTop: 5,
-        paddingBottom: 5,
-        borderBottomWidth: 0.5, borderColor: '#cccccc',
-    },
-    profilePic: {
-        width: 45,
-        height: 45,
-        borderRadius: 45,
-        marginRight: 10,
-        marginLeft: 10,
-    },
-    profilBack: {
-        backgroundColor: 'red',
-    },
-    text: {
-        color: 'black',
-        fontSize: 12
-    },
-    title: {
-        color: 'black',
-        fontSize: 14,
-        fontWeight: '500'
-    },
-    content: {
-        fontSize: 14,
-        paddingRight: 80
-    },
-    userAction: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 10
-    },
-    ownerStyle: {
-        flexDirection: 'row',
-        padding: 5,
-    },
-    userActionText: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 10
-    },
-    actionText: {
-        fontSize: 12
-    },
-    teamText: {
-        color: "white",
-        fontSize: 12
-    },
-    teamBackground: {
-        backgroundColor: '#003366',
-        padding: 10,
-        paddingTop: 2,
-        paddingBottom: 2
-    },
-    timeText: {
-        fontSize: 12,
-        color: '#cccccc',
-        fontWeight: '400',
-        marginLeft: 2
-    }
-});
 let toolsModal = null;
 
 class CommentModal extends Component {
@@ -92,7 +25,6 @@ class CommentModal extends Component {
         this.state = {
             userMessage: '',
             refreshComments: null,
-            comments: null,
             tools: false,
             item: null,
             comments: this.props.comments
@@ -107,7 +39,7 @@ class CommentModal extends Component {
         if(this.props !== nextProps){}
     }
     _isUser(user, inspected) {
-        return user.id === inspected.id;
+        return user === inspected;
     }
     _displayTools() {
         return (
@@ -122,7 +54,7 @@ class CommentModal extends Component {
                     justifyContent: 'center',
                     alignItems: 'center'}}>
                     <View style={{height: 200, width: 200,borderRadius:10, backgroundColor: '#ffffff', justifyContent:'center'}}>
-                        {this._isUser(this.props.post.owner.id, this.props.currentUser.id) ?
+                        {this._isUser(this.props.ownerID, this.props.currentUser.id) ?
                             <TouchableOpacity style={{justifyContent:'center',height: 40, borderTopColor: '#cccccc', borderTopWidth: 1,borderBottomColor: '#cccccc', borderBottomWidth: 0.5}}
                                           onPress={() => {
                                               this.props.dispatch(postActions.deleteComment(this.state.item.id,this.props.id,this.props.comments.comments[0].indexOf(this.state.item)));
@@ -152,6 +84,10 @@ class CommentModal extends Component {
                 <OwnerHeader
                     Owner={this.props.post.club ? this.props.post.club : this.props.post.owner.firstname + ' ' + this.props.post.owner.lastname}
                     postDate={this.props.post.postDate} team={this.props.post.owner.team}/>
+                <OwnerHeader
+                    owner={this.state.post.owner}
+                    Owner={ this.props.post.owner.userType.label === 'Coach' ? this.props.post.owner.teams[0].team.club.name : this.props.post.owner.firstname + ' ' + this.props.post.owner.lastname}
+                    ownerID={this.props.post.owner.id} postDate={this.props.post.creationDate} team={this.props.post.owner.userType.label === 'Coach' ? this.props.post.owner.teams[0].team : null}/>
 
                 <Content {...this.props.post} />
 
@@ -284,27 +220,30 @@ class CommentModal extends Component {
                     {this._displayTools()}
                     {this.props.visible && this.props.comments && !this.props.isFetching ? this.renderList() : <ActivityIndicator color="#ffffff" size="large"/>}
                     </ScrollView>
-                    <View style={{justifyContent: 'center', backgroundColor: '#cccccc', padding: 5}}>
+                    <View style={[PostStyle.containerTest, {height: Math.max(44, this.state.height)}]}>
+
                         <CustomInput
-                            ref={input => {
-                                this.textInput = input
-                            }}
-                            container={{
-                                alignItems: 'center',
-                                backgroundColor: '#ffffff',
-                                borderRadius: 35,
-                                height: 35,
-                                flexDirection: 'row'
-                            }}
-                            input={{flex: 4, borderRadius: 35, height: '100%', paddingHorizontal: 10}}
+                            container={{justifyContent:'flex-start',flex:1,height: Math.max(44, this.state.height)}}
+                            input={{flex:1,borderRadius: 35, paddingHorizontal: 10,height: Math.max(44, this.state.height)}}
                             textColor={'#333333'}
                             placeholder={'Commentez...'}
-                            security={false}
-                            action={'send'}
                             state={'userMessage'}
+                            multiple={true}
+                            security={false}
+                            onChangeSizeParent={(size)=>{
+                                this.setState({height:size})
+                            }}
                             onChangeParent={(state, newvalue) => this.onChange(state, newvalue)}
-                            onTriggeredAction={(value) => this.onSendComment(value)}
                         />
+                        <TouchableOpacity
+                            style={[PostStyle.commentInputContainer, {height: Math.max(44, this.state.height)}]}
+                            onPress={() => {
+                                this.onSendComment(this.state.userMessage);
+                            }}
+                            accessibilityTraits="button"
+                        >
+                            <View><Text style={[PostStyle.commentInputText]}>Envoyer</Text></View>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
             </View>
@@ -321,3 +260,102 @@ const mapStateToProps = (state) => {
     };
 };
 export default connect(mapStateToProps)(CommentModal);
+
+
+const PostStyle = StyleSheet.create({
+    containerTest: {
+        position:'absolute',
+        bottom:0,
+        left:0,
+        right:0,
+        borderTopWidth: 1,
+        borderTopColor: '#cccccc',
+        backgroundColor: 'white',
+        flex:1,
+        height:44,
+        flexDirection: 'row',
+        paddingVertical:10,
+        alignItems:'center',
+    },
+    primary: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+    },
+        commentInputContainer: {
+        height:44,
+        justifyContent: 'center',
+    },
+    commentInputText: {
+        color: '#003366',
+        fontWeight: '600',
+        fontSize: 17,
+        backgroundColor: 'transparent',
+        marginVertical: 6,
+        marginHorizontal: 10,
+    },
+    container: {
+        backgroundColor: '#ffffff',
+        width: '100%',
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderBottomWidth: 0.5, borderColor: '#cccccc',
+    },
+    profilePic: {
+        width: 45,
+        height: 45,
+        borderRadius: 45,
+        marginRight: 10,
+        marginLeft: 10,
+    },
+    profilBack: {
+        backgroundColor: 'red',
+    },
+    text: {
+        color: 'black',
+        fontSize: 12
+    },
+    title: {
+        color: 'black',
+        fontSize: 14,
+        fontWeight: '500'
+    },
+    content: {
+        fontSize: 14,
+        paddingRight: 80
+    },
+    userAction: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10
+    },
+    ownerStyle: {
+        flexDirection: 'row',
+        padding: 5,
+    },
+    userActionText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10
+    },
+    actionText: {
+        fontSize: 12
+    },
+    teamText: {
+        color: "white",
+        fontSize: 12
+    },
+    teamBackground: {
+        backgroundColor: '#003366',
+        padding: 10,
+        paddingTop: 2,
+        paddingBottom: 2
+    },
+    timeText: {
+        fontSize: 12,
+        color: '#cccccc',
+        fontWeight: '400',
+        marginLeft: 2
+    }
+});

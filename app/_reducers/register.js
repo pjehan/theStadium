@@ -1,15 +1,15 @@
 import { userConstants } from '../_constants';
 
 export function registeringUser(state = {
-    firstname:'',
-    lastname:'',
-    birthdate: '',
-    password: '',
-    email:'',
+    firstname:null,
+    lastname:null,
+    birthdate: null,
+    password: null,
+    email:null,
     userType:null,
-    sexe:1,
+    sexe:null,
     club:'',
-    team: '',
+    team: null,
     error: '',
     poste: '',
     fetching: false,

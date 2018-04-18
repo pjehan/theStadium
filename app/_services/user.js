@@ -57,7 +57,6 @@ function getUserType(id) {
         }).catch(err => console.log(err))
 }
 function addInfos(user) {
-    console.log(user);
     return Promise.resolve({
         then: function(onFulfill, onReject) { onFulfill(user);onReject('erreur') }
     });
@@ -73,7 +72,6 @@ function register(user) {
         sexe: user.sexe,
         userType: user.userType,
     };
-    console.log(sendUser)
 
     return instance.post('/api/users', sendUser)
         .then(user => {
@@ -82,7 +80,6 @@ function register(user) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
             }*/
-            console.log(user)
 
             return user;
         });
@@ -95,7 +92,6 @@ function putPlayer(player) {
     console.log(player.id);
     return instance.put("/api/players/" + player.id,player)
         .then(response => {
-            console.log(response)
             Object.assign(currentUser.stats, response.data);
             return currentUser;
 

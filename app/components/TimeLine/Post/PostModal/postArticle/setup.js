@@ -13,7 +13,8 @@ import Autocomplete from "react-native-autocomplete-input";
 import CustomInput from "../../../../CustomInput";
 import {GLOBAL_STYLE} from '../../../../../assets/css/global';
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
-export default class Setup extends Component {
+import {connect} from "react-redux";
+class Setup extends Component {
     constructor(props){
         super(props);
 
@@ -112,6 +113,8 @@ export default class Setup extends Component {
                     <View style={STYLE.modalBackground}>
                         <View style={[STYLE.activityIndicatorWrapper,{width:'60%',alignItems:'center',justifyContent:'flex-end'}]}>
                             <Autocomplete
+
+                                underlineColorAndroid="transparent"
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 containerStyle={[styles.autocompleteContainer,{width:'90%',marginLeft:'10%'}]}
@@ -146,8 +149,9 @@ export default class Setup extends Component {
                 </View>
                 <View style={{justifyContent:'space-between', paddingVertical:40,paddingHorizontal:10,flexDirection:'row'}}>
                     <View style={{alignItems:'center',width:'25%'}}>
-                        <Image style={timeLineStyle.profilePic}
-                               source={require('../../../../../assets/img/TA-Rennes.jpg')}/>
+                        {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
+                                                                                          source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
+                        <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
                         <Text
                             style={timeLineStyle.title}>Fc Guichen</Text>
                     </View>
@@ -205,6 +209,12 @@ export default class Setup extends Component {
     };
 }
 
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser.user
+    };
+};
+export default connect(mapStateToProps)( Setup);
 const timeLineStyle = StyleSheet.create({
     tabContainer: {
         justifyContent: 'space-between',

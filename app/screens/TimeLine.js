@@ -40,7 +40,7 @@ class TimeLine extends Component {
         this.forceUpdate();
     }
     _renderItem(item) {
-        return <Post style={timeLineStyle.singlePost} navigation={this.props.navigation} key={this.props.posts.posts.indexOf(item)} id={this.props.posts.posts.indexOf(item)} post={item} />
+        return <Post style={[timeLineStyle.singlePost]} navigation={this.props.navigation} key={this.props.posts.posts.indexOf(item)} id={this.props.posts.posts.indexOf(item)} post={item} />
     }
 
     _renderList(){
@@ -48,7 +48,8 @@ class TimeLine extends Component {
 
         return(
             <FlatList
-                style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35}}
+                onRefresh={() => {this.props.dispatch(postActions.getAll())}}
+                refreshing={this.props.isFetching}
                 data={posts.posts}
                 renderItem={({item}) => this._renderItem(item)}
             />
@@ -140,8 +141,11 @@ class TimeLine extends Component {
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 {this._renderModal()}
                 {this.props.currentUser.userType.label === "Joueur" ? this._renderPlayerHeader() : this.props.currentUser.userType.label === 'Coach' ? this._renderCoachHeader() : null}
-                <ScrollView style={{padding: 10, paddingLeft: 5, paddingRight: 5, paddingBottom: 35, height:'95%'}}>
-                    {this.props.posts ? this._renderList() : !this.postsFetched && !this.props.posts ? this._renderLoading() : <Text>Aucun résultat trouvé </Text>}
+                <ScrollView contentContainerStyle={{flex:1}} style={{paddingTop:10,paddingBottom: 35,paddingHorizontal:10,height:'100%'}}>
+                    {
+                        this.props.posts ? this._renderList() :
+                        !this.postsFetched && !this.props.posts ? this._renderLoading() : <Text>Aucun résultat trouvé </Text>
+                    }
                 </ScrollView>
             </View>
         )
@@ -151,6 +155,7 @@ const mapStateToProps = (state) => {
     return {
         posts: state.postList.posts,
         postsFetched: state.postList.fetched,
+        isFetching: state.postList.fetching,
         currentUser: state.currentUser.user,
 
     };

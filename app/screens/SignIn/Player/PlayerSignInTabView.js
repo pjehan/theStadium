@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Icon } from 'react-native-elements';
 import {connect} from 'react-redux';
-import {View,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
+import {View,Alert,StyleSheet, Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
 
 import {userActions} from '../../../_actions';
 const styles = StyleSheet.create({
@@ -13,7 +13,84 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
     },
 });
+const USERBASIC = [
+    'firstname',
+    'lastname',
+    'birthdate'
+];
+
+const USERINFOS = [
+    'email',
+    'password'
+];
+const USERCLUB = [
+    'club',
+    'team',
+    'poste'
+];
+const COACHBASIC = [
+    'firstname',
+    'lastname',
+    'birthdate',
+    'club',
+];
 class PlayerSignInTabView extends Component {
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            modalVisible: false
+        };
+
+        this.checkIfComplete = this.checkIfComplete.bind(this);
+        this.checkPlayerTabs = this.checkPlayerTabs.bind(this);
+        this.objectContains = this.objectContains.bind(this);
+    }
+
+    displayAlert() {
+        Alert.alert(
+            'Une erreur est survenue',
+            'Vous n\'avez pas remplis tous les champs sur cette page !',
+            [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+        )
+    }
+
+    objectContains(ELEMENTS){
+        return ELEMENTS.every((element) => {
+            return !!this.props.user[element];
+        });
+    }
+
+    checkPlayerTabs(routeName) {
+        switch(routeName) {
+            case 'PlayerInfosfrom':
+                return this.objectContains(USERBASIC);
+            case 'PlayerClub':
+                return this.objectContains(USERINFOS);
+            case 'done':
+                return this.objectContains(USERCLUB);
+        }
+    }
+
+    checkIfComplete(routeName) {
+        const ROUTE = this.props.navigation.state.routeName;
+        switch(ROUTE){
+            case 'PlayerSignIn':
+                return this.checkPlayerTabs(routeName);
+            case 'FanSignInStack':
+
+                break;
+            case 'CoachSignInStack':
+
+                break;
+            default:
+                return null;
+        }
+    }
     render() {
         const { routes } = this.props.navigation.state;
         const index = this.props.navigation.state.index;
@@ -51,9 +128,9 @@ class PlayerSignInTabView extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                   if(index + 1 !== routes.length){
-                    this.props.navigation.navigate(routes[index + 1].key, {});
+                      this.checkIfComplete(routes[index + 1].key) ? this.props.navigation.navigate(routes[index + 1].key, {}) : this.displayAlert();
                   } else if(index + 1 === routes.length){
-                      this.props.navigation.dispatch(userActions.register(this.props.user));
+                      this.checkIfComplete('done') ? this.props.navigation.dispatch(userActions.register(this.props.user)) : this.displayAlert();
                   }
                 }
                 }>

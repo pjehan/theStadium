@@ -60,28 +60,32 @@ const ArticleTab = TabNavigator({
     Setup: {
         screen: Setup,
         navigationOptions: {
-            header:null,
-        }
+            title: 'Profile',
+            headerTitle: 'Profile',
+            tabBarLabel: 'Profile',}
     },
     firstHalf: {
         screen: FirstHalf,
         navigationOptions: {
             header:null,
-        }
+        },
+        tabBarLabel :'Première mi-temps'
     },
     secondHalf: {
         screen: SecondHalf,
         navigationOptions: {
             header:null,
-        }
+
+        },
     },
     conclusion: {
         screen: conclusion,
         navigationOptions: {
             header:null,
-        }
+        },
     }
-}, {tabBarComponent: ({navigation}) => <ArticleTabHeader navigation={navigation}/>,
+}, {
+    tabBarComponent: ArticleTabHeader,
     tabBarVisible: false,
     tabBarPosition: 'top',});
 
@@ -228,7 +232,7 @@ const MainStack = TabNavigator({
             borderTopWidth: 2,borderTopColor:'#cccccc'
         }, }
 });
-const PlayerSignInStack = TabNavigator({
+export const PlayerSignInStack = TabNavigator({
         Player: {
             screen: UserBasic,
         },

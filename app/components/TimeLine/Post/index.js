@@ -24,9 +24,13 @@ class Post extends Component {
         this._renderCommentModal = this._renderCommentModal.bind(this);
         this.goToProfile = this.goToProfile.bind(this);
         this.isLiked = this.isLiked.bind(this);
+        this._isUser = this._isUser.bind(this);
     }
     isLiked() {
        return this.props.post.postsLiked.some(user => user.userLikes.id === this.props.currentUser.id);
+    }
+    _isUser(user, inspected) {
+        return user.id === inspected.id;
     }
     onToggleComment(visible, preview) {
             this.setState({isPreview: preview});
@@ -53,12 +57,20 @@ class Post extends Component {
         }
     }
     goToProfile() {
-        this.props.dispatch(userActions.getInspected(this.state.post.owner.id));
+        if(this._isUser(this.props.currentUser, this.state.post.owner)){
+            const users = {
+                currentUser: this.props.currentUser,
+                inspectedUser: this.props.currentUser,
+            };
+            this.props.navigation.navigate('Profile', users);
+        }else {
+            this.props.dispatch(userActions.getInspected(this.state.post.owner.id));
             const users = {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.state.post.owner,
             };
             this.props.navigation.navigate('Profile', users);
+        }
     }
     render() {
 
@@ -68,10 +80,11 @@ class Post extends Component {
                 shadowOpacity: 1,
                 elevation: 2,}]}>
                 {this._renderCommentModal()}
-                <TouchableOpacity onPress={() => {this.goToProfile()}}>
-                <OwnerHeader Owner={ this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team.club.name : this.state.post.owner.firstname + ' ' + this.state.post.owner.lastname}
-                             postDate={this.state.post.creationDate} team={this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team : null}/>
-                </TouchableOpacity>
+                <View>
+                    <OwnerHeader goToProfileParent={() => {this.goToProfile()}}
+                        owner={this.state.post.owner} currentUser={this.props.currentUser} Owner={ this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team.club.name : this.state.post.owner.firstname + ' ' + this.state.post.owner.lastname}
+                                 ownerID={this.state.post.owner.id} postDate={this.state.post.creationDate} team={this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team : null}/>
+                </View>
 
                 <Content {...this.state.post} {...this.props.navigation} />
 

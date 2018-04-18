@@ -11,6 +11,7 @@ import {
 import Autocomplete from "react-native-autocomplete-input";
 import CustomInput from "../../../../CustomInput";
 import {GLOBAL_STYLE} from '../../../../../assets/css/global';
+import {NavigationActions} from "react-navigation";
 export default class Conclusion extends Component {
 
     constructor(props){
@@ -23,6 +24,12 @@ export default class Conclusion extends Component {
 
     onChangeInfos(state, newvalue) {
         this.setState({[state]: newvalue});
+        this.props.navigation.dispatch(NavigationActions.setParams({
+            params:{
+                [state]: newvalue
+            },
+            key: "conclusion"
+        }))
     }
     render() {
         return (

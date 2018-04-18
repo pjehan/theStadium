@@ -6,7 +6,10 @@ import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
 import Autocomplete from 'react-native-autocomplete-input';
 import {NavigationActions}from "react-navigation";
+import {PlayerSignInStack} from "../../config/router/router";
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
+
+
 class userBasic extends Component {
 
     constructor(props){
@@ -25,13 +28,13 @@ class userBasic extends Component {
     }
     onChangeInfos(state, newvalue) {
         this.props.user[state] = newvalue;
-      this.setState({[state]: newvalue});
+        this.setState({[state]: newvalue});
     }
+
     componentDidMount() {
         AsyncStorage.getItem('clubList').then(
             value => {
                 this.setState({clubList: JSON.parse(value)});
-                console.log(this.state, '*********************************')
                 this.forceUpdate();
             });
     }
@@ -54,7 +57,6 @@ class userBasic extends Component {
         }))
     }
     _filterClub(query, dataSource) {
-        console.log(dataSource)
         if (query === '') {
             return [];
         }
@@ -69,12 +71,16 @@ class userBasic extends Component {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
       if(this.props.navigation.state.params.coach) {
-        Coach = <View style={[{height: 40, width: '65%'}]}>
+        Coach = <View style={[{height: 40, width: 300}]}>
             <Autocomplete
+                placeholdertextColor='#000000'
                 autoCapitalize="none"
                 autoCorrect={false}
                 containerStyle={styles.autocompleteContainer}
+                inputContainerStyle={styles.inputContainer}
+                style={[GLOBAL_STYLE.input, {borderWidth:0,backgroundColor:'#eeeeee',color:'#000000'}]}
                 data={clubData}
+                underlineColorAndroid="transparent"
                 defaultValue={clubQuery}
                 placeholder={'Nom de votre Club'}
                 onChangeText={text => this.setState({clubQuery: text})}
@@ -154,7 +160,11 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1,
-        backgroundColor: '#eeeeee'
+        borderWidth:0
+    },
+    inputContainer: {
+        backgroundColor: '#cccccc',
+        borderWidth:0,
     },
     itemText: {
         fontSize: 15,

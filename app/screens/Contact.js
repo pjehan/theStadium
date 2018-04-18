@@ -22,7 +22,6 @@ class Contact extends Component {
         let type = state.inspectedUser ? state.inspectedUser.userType.label : this.props.inspectedUser.userType.label;
         let team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         let user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
-        console.log(team)
         return (
             <View style={{backgroundColor:'#ffffff',flex:1,paddingTop:20, flexDirection:'column', paddingHorizontal:20}}>
                 <View style={{paddingVertical: 10}}>

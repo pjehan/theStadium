@@ -54,7 +54,7 @@ class ArticleDisplay extends Component {
 
                     <View style={style.half}>
                         <Text style={style.title}>En Bref</Text>
-                        <Text style={{textAlign: 'left'}}>{content.secondHalf_content}</Text>
+                        <Text style={{textAlign: 'left'}}>{content.conclusion}</Text>
                     </View>
                 </View>
             </ScrollView>

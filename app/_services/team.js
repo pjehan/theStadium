@@ -5,7 +5,6 @@ export const teamService = {
 };
 
 function addUser(userID, teamID, userStatus) {
-    console.log(userID,teamID,userStatus)
     return instance.post("/api/team_has_users", {
         startDate: "2018-04-05T11:52:21.006Z",
         endDate: "2018-04-05T11:52:21.006Z",
@@ -17,7 +16,6 @@ function addUser(userID, teamID, userStatus) {
             console.log(response);
             return response
         }).catch((error) => {
-        console.log(error,'*******************')
             return error;
         });
 }

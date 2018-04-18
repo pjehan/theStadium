@@ -13,7 +13,6 @@ function getAll() {
     let post = null;
     return instance.get("/api/posts")
         .then(response => {
-            console.log(response)
             post = response.data["hydra:member"];
             return response.data["hydra:member"];
         }).catch((error) => {
@@ -45,7 +44,6 @@ function add(user, post){
     Object.assign(postToAdd, post);
     console.log(postToAdd)
     return instance.post("/api/posts",postToAdd).then(response => {
-        console.log(response)
     }).catch(err => {
         console.log(err)
     })
@@ -55,7 +53,6 @@ function add(user, post){
 function addComment(comment) {
     return instance.post("/api/comments", comment)
         .then(response => {
-            console.log(response)
             return response.data;
         }).catch((error) => {
             console.error(error);
@@ -79,7 +76,6 @@ function getComments(id) {
    let comments = [];
     return instance.get("/api/comments?post=" + id)
         .then(response => {
-            console.log(response)
             comments.push(response.data["hydra:member"]);
             /*return userService.getUser(response.data.user).then(
                 user => {
@@ -94,7 +90,6 @@ function getComments(id) {
         });
 }
 function toggleLikePost(postID, userID, liked){
-    console.log(liked)
     if(!liked) {
         return instance.post("/api/user_likes_posts",{ creationDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
             userLikes: userID,

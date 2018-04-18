@@ -28,8 +28,6 @@ function login(username, password) {
                             userStats => {
                                 Object.assign(currentUser, user);
                                 currentUser.stats = userStats;
-                                console.log(userStats);
-
                                 dispatch(success(currentUser));
                             },
                             error => {

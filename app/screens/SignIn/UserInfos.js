@@ -33,6 +33,8 @@ class PlayerInfos extends Component {
             email: '',
             teamQuery: '',
             team: '',
+            password: null,
+            passwordConfirm: null,
         };
         this.onChangeInfos = this.onChangeInfos.bind(this)
     }
@@ -154,12 +156,14 @@ class PlayerInfos extends Component {
                     <CustomInput
                         container={''}
                         placeholder={'Confirmer le mot de passe'}
-                        input={GLOBAL_STYLE.input}
-                        state={'password'}
+                        input={[GLOBAL_STYLE.input]}
+                        state={'passwordConfirm'}
+                        descriptionColor="#ff0000"
                         textColor={'#333333'}
-                        borderColor={'transparent'}
+                        borderColor={(this.state.password !== this.state.passwordConfirm) ? "#ff0000": 'transparent'}
                         backgroundColor={'#eeeeee'}
                         security={true}
+                        description={this.state.password === this.state.passwordConfirm ? '' : 'Les deux mots de passe ne correspondent pas'}
                         onChangeParent={(state, newvalue) => {
                             this.onChangeInfos(state, newvalue)
                         }}

@@ -13,8 +13,6 @@ function getAll() {
         clubService.getAll()
             .then(
                 clubs => {
-
-                    console.log(clubs)
                     AsyncStorage.setItem('clubList', JSON.stringify(clubs));
                     dispatch(success({clubs}))
                 },error => {

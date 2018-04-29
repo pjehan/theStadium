@@ -8,6 +8,7 @@ import {
     DatePickerAndroid,
     TouchableOpacity,
     Platform,
+    TimePickerAndroid
 } from 'react-native';
 
 import { Icon } from 'react-native-elements';
@@ -36,6 +37,7 @@ const FORMATS = {
  * format : if the input is of type date, it is the format of the date (c.f. FORMATS const)
  *
  */
+let time;
 export default class CustomInput extends Component {
 
     constructor(props) {
@@ -51,6 +53,8 @@ export default class CustomInput extends Component {
         this.openDatePicker = this.openDatePicker.bind(this);
         this.onDatePicked = this.onDatePicked.bind(this);
         this.getDateString = this.getDateString.bind(this);
+        this.openTimePicker = this.openTimePicker.bind(this);
+        this.onTimePicked = this.onTimePicked.bind(this);
     }
     onChangeSize(size){
         this.props.onChangeSizeParent(size)
@@ -68,7 +72,8 @@ export default class CustomInput extends Component {
         } else {
             DatePickerAndroid.open({
                 date: this.state.date,
-                mode: 'spinner'
+                mode: 'spinner',
+                maxDate: new Date('2006')
             }).then(this.onDatePicked);
         }
     }
@@ -80,6 +85,25 @@ export default class CustomInput extends Component {
                 date: new Date(year, month, day)
             });
             this.onChange(this.getDateString(this.state.date, FORMATS[this.props.format]));
+        }
+    }
+
+    openTimePicker() {
+        if (Platform.OS === 'ios') {
+            // do ios job
+        } else {
+            TimePickerAndroid.open({
+                is24Hour:true,
+                mode: 'spinner'
+            }).then(this.onTimePicked);
+        }
+    }
+
+    onTimePicked({action, hour, minute}) {
+        Keyboard.dismiss();
+        if (action !== TimePickerAndroid.dismissedAction) {
+            time = hour + "h" + minute;
+            this.onChange(time);
         }
     }
 
@@ -107,7 +131,14 @@ export default class CustomInput extends Component {
                 style={[this.props.input, {backgroundColor: this.props.backgroundColor}]}
             ><Text>{datePlaceholder}</Text><Icon name={'expand-more'} size={30} color='#333333' />
             </TouchableOpacity>
-        } else {
+        } else if(this.props.type === 'time'){
+            Input = <TouchableOpacity
+                onPress={() => this.openTimePicker()}
+                style={[this.props.input, {backgroundColor: this.props.backgroundColor}]}
+            ><Text>{time}</Text><Icon name={'expand-more'} size={30} color='#333333' />
+            </TouchableOpacity>
+        }
+        else {
             Input = <TextInput
                 {...this.props}
                 multiline={this.props.multiple}

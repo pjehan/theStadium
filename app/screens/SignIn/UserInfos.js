@@ -42,6 +42,7 @@ class PlayerInfos extends Component {
     onChangeInfos(state, newvalue) {
         this.props.user[state] = newvalue;
         this.setState({[state]: newvalue});
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -145,13 +146,13 @@ class PlayerInfos extends Component {
                         input={GLOBAL_STYLE.input}
                         state={'password'}
                         textColor={'#333333'}
-                        borderColor={'transparent'}
+                        borderColor={(this.state.password && this.state.password.length < 6 ) ? "#ff0000": 'transparent'}
                         backgroundColor={'#eeeeee'}
                         security={true}
                         onChangeParent={(state, newvalue) => {
                             this.onChangeInfos(state, newvalue)
                         }}
-                        description={'Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.'}
+                        description={this.state.password && this.state.password.length < 6? 'Vous n\'avez pas 6 caractères \n Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.' : 'Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.' }
                     />
                     <CustomInput
                         container={''}

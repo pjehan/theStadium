@@ -66,7 +66,7 @@ componentWillMount() {
     loginIn() {
         //fetch to databse
         //this.props.dispatch(userActions.login(this.state.email, this.state.password));
-        this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
+        //this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
         this.setModalVisible(true);
     }
 
@@ -129,7 +129,7 @@ componentWillMount() {
                     <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("Sexe", {})}>Pas encore
                         inscrit ?</Text>
                     <TouchableOpacity onPress={() => navigate("Sexe", {})} style={GLOBAL_STYLE.loginButton}>
-                        <Text style={GLOBAL_STYLE.loginText}>Démarrer linscription</Text>
+                        <Text style={GLOBAL_STYLE.loginText}>Démarrer l'inscription</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

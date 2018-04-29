@@ -161,10 +161,11 @@ export default class Content extends Component {
 
     returnArticle() {
         let content = JSON.parse(JSON.stringify(eval("(" + this.props.content.toString() + ")")));
-        const  originalWidth = 890;
-        const originalHeight = 593;
+        const  originalWidth = this.props.medias[0].width;
+        const originalHeight = this.props.medias[0].height;
         const windowWidth = Dimensions.get('window').width;
         const widthChange = (windowWidth - 10) / originalWidth;
+        let previewStr = content.firstHalf_content + '\n' + content.secondHalf_content;
         return (
                 <View>
                         <TouchableOpacity onPress={() => {this.setState({visible:true})}}>
@@ -175,10 +176,10 @@ export default class Content extends Component {
                             <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
                             <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub} {content.homeScore} - {content.guessScore} {content.guessClub}</Text>
-                            <Text  style={{color:'#ffffff',fontSize:12}}>Merveilleuse Victoire des joueurs !!! Ce fût un match intense du début à la fin, et c'est finalement avec un peu de ...</Text>
+                            <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))}</Text>
                             </View>
                             </View>
-                            <Image source={{uri: 'https://www.thesportsman.com/media/images/admin/football/Zidane.jpg'}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                            <Image source={{uri: this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
                         </TouchableOpacity>
                 </View>
         )

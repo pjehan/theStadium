@@ -131,8 +131,8 @@ export default class SecondHalf extends Component {
                                  borderColor={'#cccccc'}
                                  backgroundColor={'#ffffff'}
                                  security={false} onChangeSizeParent={(size)=>{
-                        this.setState({height:size})
-                    }}
+                                    this.setState({height:size})
+                                 }}
                                  onChangeParent={(state, newvalue) => {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>

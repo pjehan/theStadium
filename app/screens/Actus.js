@@ -63,7 +63,7 @@ class Actus extends Component {
     }
 
     _isLiked(user, inspected) {
-        if (inspected.userType !== 'Coach') {
+        if (inspected.userType.label !== 'Coach') {
             return user.players.includes('/api/players/' + inspected.id)
         } else {
             return user.teamsLiked.includes('/api/teamsLiked' + inspected.teams[inspected.teams.length - 1].id);
@@ -76,17 +76,17 @@ class Actus extends Component {
                 user.teamsLiked.splice(user.teamsLiked.indexOf('/api/teams/' + inspected.teams[inspected.teams.length - 1].id), 1);
                 this.props.dispatch(userActions.putUser(user));
             } else {
-                user.teamsLiked.push('/api/teams/' + inspected);
+                user.teamsLiked.push('/api/teams/' + inspected.teams[0].id);
                 this.props.dispatch(userActions.putUser(user));
             }
         } else {
 
             if (this._isLiked(user, inspected)) {
-                user.teamsLiked.splice(user.teamsLiked.indexOf('/api/players/' + inspected), 1);
+                user.players.splice(user.teamsLiked.indexOf('/api/players/' + inspected.id), 1);
                 this.props.dispatch(userActions.putUser(user));
             } else {
 
-                user.teamsLiked.push('/api/players/' + inspected);
+                user.players.push('/api/players/' + inspected.id);
                 this.props.dispatch(userActions.putUser(user));
             }
         }

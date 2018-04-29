@@ -35,7 +35,7 @@ const SignInTabBar = {
         tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
         tabBarVisible: false,
         tabBarPosition: 'bottom',
-
+    swipeEnabled:false,
       };
 const PROFILETAB = {
     tabBarComponent: ({navigation}) => <ProfileTabBar focused={'focused'}
@@ -121,7 +121,8 @@ const ProfileTab = TabNavigator({
             header: null,
             tabBarLabel: 'Actualitées'
         })
-    },Infos: {
+    },
+    Caracteristique: {
         screen: Profil,
         navigationOptions: {
             header: null,

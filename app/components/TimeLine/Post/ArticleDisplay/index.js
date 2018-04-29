@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
     Text,
-    View, ScrollView, Image, StyleSheet, TouchableOpacity
+    View, ScrollView, Image, StyleSheet, TouchableOpacity,Dimensions
 } from 'react-native';
 
 import LocalImage from "../Content/LocalImage/index";
@@ -14,7 +14,13 @@ class ArticleDisplay extends Component {
     render() {
 
         let content = JSON.parse(JSON.stringify(eval("(" + this.props.content.toString() + ")")));
-        console.log(content)
+        const  originalWidth1 = this.props.medias[0].width;
+        const originalHeight1 = this.props.medias[0].height;
+        const windowWidth = Dimensions.get('window').width;
+        const widthChange1 = (windowWidth - 10) / originalWidth1;
+        const  originalWidth2 = this.props.medias[1].width;
+        const originalHeight2 = this.props.medias[1].height;
+        const widthChange2 = (windowWidth - 10) / originalWidth2;
         return (
             <View>
                 <TouchableOpacity style={{position: 'absolute', left: 10, top: 10,justifyContent:'center',alignItems:'center', zIndex:100, backgroundColor:'rgba(0,0,0,0.5)', height:40,width:40, borderRadius:20}}
@@ -24,7 +30,7 @@ class ArticleDisplay extends Component {
                 </TouchableOpacity>
             <ScrollView>
 
-                <LocalImage source={this.props.medias[0].path}/>
+                <Image source={{uri: this.props.medias[0].path}} style={{width: originalWidth1 * widthChange1, height: originalHeight1 * widthChange1}}/>
                 <View
                     style={{flexDirection: 'row', paddingVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
                     <Image style={{width: 20, height: 30}} resizeMode='contain'
@@ -46,7 +52,7 @@ class ArticleDisplay extends Component {
                         <Text style={{textAlign: 'left'}}>{content.firstHalf_content}</Text>
                     </View>
 
-                    <LocalImage source={this.props.medias[1].path}/>
+                    <Image source={{uri: this.props.medias[1].path}} style={{width: originalWidth2 * widthChange2, height: originalHeight2 * widthChange2}}/>
                     <View style={style.half}>
                         <Text style={style.title}>2 ème Mi-Temps</Text>
                         <Text style={{textAlign: 'left'}}>{content.secondHalf_content}</Text>

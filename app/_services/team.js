@@ -1,7 +1,8 @@
 import instance from "../config/axiosConfig";
 
 export const teamService = {
-    addUser
+    addUser,
+    putTeam
 };
 
 function addUser(userID, teamID, userStatus) {
@@ -18,4 +19,22 @@ function addUser(userID, teamID, userStatus) {
         }).catch((error) => {
             return error;
         });
+}
+function putTeam(teamID, team) {
+    /*return instance.put("/api/teams/"+teamID, {
+        "division": "string",
+        "category": "string",
+        "season": "string",
+        "club": "string",
+        "sexe": "string",
+        "trainingHours": "string",
+        "trainingAddress": "string",
+        "matchAddress": "string"
+    })
+        .then(response => {
+            console.log(response);
+            return response
+        }).catch((error) => {
+            return error;
+        });*/
 }

@@ -139,7 +139,7 @@ class Profil extends Component {
                     <TouchableOpacity  onPress={() => {
                         this._isUser(state.currentUser, state.inspectedUser) ? this._renderChange() : null
                     }} style={STYLE.tab}>
-                        <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
+                        <Text style={STYLE.tabText}>Attaquant, 25ans</Text>
                         {this._isUser(state.currentUser, state.inspectedUser) ?
                             <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
                                   color="#003366"/> : null}

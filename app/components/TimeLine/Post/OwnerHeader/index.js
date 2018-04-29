@@ -97,7 +97,7 @@ class OwnerHeader extends Component {
     }
 
     _isUser(user, inspected) {
-        return user.id === inspected.id;
+        return user === inspected.id;
     }
 
     _displayTools() {

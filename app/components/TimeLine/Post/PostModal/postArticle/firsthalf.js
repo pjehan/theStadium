@@ -109,7 +109,7 @@ export default class SecondHalf extends Component {
 
     render() {
         return (
-            <KeyboardAvoidingView behavior="padding" style={{backgroundColor: '#ffffff'}}>
+            <KeyboardAvoidingView behavior="padding" style={{flex:1,backgroundColor: '#ffffff'}}>
 
                 <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
                     <Text style={{color: '#000000', fontWeight: '600'}}>Photo de couverture</Text>
@@ -123,9 +123,9 @@ export default class SecondHalf extends Component {
 
                 <View style={{paddingVertical: 10, paddingHorizontal: 15}}>
                     <CustomInput multiple={true}
-                                 container={{flex:1,justifyContent: 'flex-start'}}
+                                 container={{justifyContent: 'flex-start'}}
                                  placeholder={'Décrivez les temps forts et temps faibles de la première mi-temps'}
-                                 input={[{flex: 1,borderWidth:1, padding: 5, marginTop: 10,height: Math.max(50, this.state.height)}]}
+                                 input={[{borderWidth:1, padding: 5, marginTop: 10,height: Math.max(50, this.state.height)}]}
                                  state={'firstHalf_content'}
                                  textColor={'#000000'}
                                  placeholderTextColor={'#cccccc'}

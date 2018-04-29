@@ -170,11 +170,14 @@ class PostModal extends Component {
     }
 
     _renderOwner() {
+        console.log(this.props.owner)
         return (
             <View
                 style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
+                {this.props.owner.userType.label !== 'Coach' && !this.props.owner.profilepicture || !this.props.owner.teams[0].team.profilePicture ?
                 <Image style={timeLineStyle.profilePic}
-                       source={{uri: this.props.owner.userType.label !== 'Coach' ? this.props.owner.profilepicture : this.props.owner.teams[0].team.profilePicture}}/>
+                       source={{uri: this.props.owner.userType.label !== 'Coach' ? this.props.owner.profilepicture : this.props.owner.teams[0].team.profilePicture}}/> :
+                   <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/> }
                 {this.props.owner.userType.label === 'Joueur' ? <Text
                         style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text> :
                     <View>
@@ -245,9 +248,9 @@ class PostModal extends Component {
 
                 </View>
                 <CustomInput multiple={true}
-                             container={{flex:1,justifyContent: 'flex-start'}}
+                             container={{justifyContent: 'flex-start'}}
                              placeholder={'Écrivez votre message'}
-                             input={[{flex: 1, padding: 20, marginTop: 10,height: Math.max(50, this.state.height)}]}
+                             input={[{flex: 1, padding: 20, marginTop: 10,height: Math.max(80, this.state.height)}]}
                              state={'content'}
                              textColor={'#000000'}
                              borderColor={'transparent'}

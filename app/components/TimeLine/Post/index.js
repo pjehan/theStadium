@@ -62,14 +62,22 @@ class Post extends Component {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.props.currentUser,
             };
-            this.props.navigation.navigate('Profile', users);
+            if (this.props.currentUser.userType.label === 'Coach') {
+                this.props.navigation.navigate("CoachProfile", users);
+            } else {
+                this.props.navigation.navigate('Profile', users);
+            }
         }else {
             this.props.dispatch(userActions.getInspected(this.state.post.owner.id));
             const users = {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.state.post.owner,
             };
-            this.props.navigation.navigate('Profile', users);
+            if ( this.state.post.owner.userType.label === 'Coach') {
+                this.props.navigation.navigate("CoachProfile", users);
+            } else {
+                this.props.navigation.navigate('Profile', users);
+            }
         }
     }
     render() {
@@ -100,9 +108,7 @@ class Post extends Component {
                         }}>
                             <Text style={[PostStyle.text, {marginHorizontal:10}]}>Commenter</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text style={PostStyle.text}>Partager</Text>
-                        </TouchableOpacity>
+
                     </View>
                     <TouchableOpacity onPress={() => {
                         this.onToggleComment(true, false)

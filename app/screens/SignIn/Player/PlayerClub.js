@@ -24,6 +24,17 @@ const style = StyleSheet.create({
     },
 });
 
+const ROLES = [
+    {label:"Gardien", value:1},
+    {label:"Latéral gauche",value:2},
+    {label:"Latéral droit", value:3},
+    {label:"Arrière axe", value:4},
+    {label:"Milieu axe", value:5},
+    {label:"Milieu gauche", value:6},
+    {label:"Milieu droit", value:7},
+    {label:"Attaquant", value:8},
+];
+
 class PlayerInfos extends Component {
     constructor(props) {
         super(props);
@@ -52,11 +63,15 @@ class PlayerInfos extends Component {
         AsyncStorage.getItem('clubList').then(
             value => {
                 this.setState({clubList: JSON.parse(value)});
-                this.forceUpdate()
+                this.forceUpdate();
             });
+        if(this.props.clubList){
+            this.setState({clubList: this.props.clubList});
+        }
     }
 
     _filterClub(query, dataSource) {
+        console.log(query,dataSource);
         if (query === '') {
             return [];
         }
@@ -148,6 +163,7 @@ class PlayerInfos extends Component {
                             placeholderTextColor="#000000"
                             autoCapitalize="none"
                             autoCorrect={false}
+                            data={clubData}
                             containerStyle={styles.autocompleteContainer}
                             inputContainerStyle={styles.inputContainer}
                             style={[GLOBAL_STYLE.input, {borderWidth:0,backgroundColor:'#eeeeee',color:'#000000'}]}
@@ -164,6 +180,7 @@ class PlayerInfos extends Component {
                         />
                     </View>
                     <View style={[{height: 40, width: '85%'}]}>
+
                         <Autocomplete
                             underlineColorAndroid="transparent"
                             placeholderTextColor="#000000"
@@ -184,10 +201,15 @@ class PlayerInfos extends Component {
                             )}
                         />
                     </View>
-
-                    <View style={{justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                        <Text style={{fontSize: 12}}>Le nom de votre club napparait pas dans la liste </Text>
-                        <Text style={{fontSize: 12}}>Signalez un problème </Text>
+                    <View style={{backgroundColor: '#eeeeee', width: '85%'}}>
+                        <Picker style={GLOBAL_STYLE.input}
+                                prompt="Poste joué"
+                                selectedValue={this.state.poste}
+                                onValueChange={itemValue => this.setState({poste: itemValue})}>
+                            {ROLES.map((i, index) => (
+                                <Picker.Item key={index} label={i.label} value={i.value}/>
+                            ))}
+                        </Picker>
                     </View>
                 </KeyboardAvoidingView>
             </View>
@@ -197,7 +219,8 @@ class PlayerInfos extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        user: state.registeringUser
+        user: state.registeringUser,
+        clubList: state.clubList
     };
 };
 export default connect(mapStateToProps)(PlayerInfos);

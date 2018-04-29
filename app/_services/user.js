@@ -9,7 +9,8 @@ export const userService = {
     getUser,
     getUserType,
     putPlayer,
-    putUser
+    putUser,
+    searchUser
 };
 import jwt_decode from 'jwt-decode'
 let currentUser = {stats:{}};
@@ -33,7 +34,6 @@ function login(username, password) {
             setAuthorizationToken(token);
             return token;
         }).then(responseJSON => {
-            console.log(jwt_decode(responseJSON))
             return this.getUser(jwt_decode(responseJSON).id)
         }).catch((error) => {
             return Promise.reject(error);
@@ -41,12 +41,11 @@ function login(username, password) {
 }
 
 function getUser(id) {
-
+    console.log(instance)
     return instance.get("/api/users/"+id)
         .then(response => {
                return response.data;
         }).catch((error) => {
-            console.error(error);
         })
 }
 function getUserType(id) {
@@ -101,25 +100,6 @@ function putPlayer(player) {
 }
 
 function putUser(player) {
-    /*
-    "firstname": "string",
-  "lastname": "string",
-  "email": "string",
-  "plainPassword": "string",
-  "profilepicture": "string",
-  "sexe": {},
-  "userType": {},
-  "players": [
-    "string"
-  ],
-  "teamsLiked": [
-    {
-      "division": "string",
-      "category": "string",
-      "club": "string",
-      "sexe": "string"
-    }
-     */
     const user = {
         firstname: player.firstname,
         lastname: player.lastname,
@@ -129,7 +109,8 @@ function putUser(player) {
         userType: player.userType,
         players: player.players,
         teamsLiked: player.teamsLiked
-    }
+    };
+    console.log(user)
     return instance.put("/api/users/" + player.id,user)
         .then(response => {
             return response.data;
@@ -138,7 +119,15 @@ function putUser(player) {
             console.error(error);
         })
 }
-
+function searchUser(query){
+    return instance.get("/api/users?firstname=" +query)
+        .then(response => {
+            console.log(response.data["hydra:member"])
+            return response.data["hydra:member"];
+        }).catch((error) => {
+            console.error(error);
+        })
+}
 function handleResponse(test, response) {
     if (!test) {
         return Promise.reject(response.statusText);

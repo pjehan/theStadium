@@ -32,6 +32,12 @@ class Sexe extends Component {
                         title="Femme"
                         color="#003366"
                     />
+
+                    <Button
+                        onPress={() => {this.sexeSelected('SignIn',3);}}
+                        title="Autre"
+                        color="#003366"
+                    />
                 </View>
                 <View style={{flex:1}} />
             </View>

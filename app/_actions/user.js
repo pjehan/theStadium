@@ -48,7 +48,7 @@ function login(username, password) {
     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
 }
 function register(user) {
-
+console.log(user)
     return dispatch => {
         dispatch(request(user));
         userService.register(user)
@@ -69,7 +69,6 @@ function register(user) {
                         );
                 },
                 error => {
-                    console.log(error);
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }

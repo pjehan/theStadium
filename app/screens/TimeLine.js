@@ -93,7 +93,7 @@ class TimeLine extends Component {
                             }}>
                 <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
                        source={require('../assets/img/picto/menu/actions/article.png')}/>
-                <Text style={timeLineStyle.tabButtonText}>Article</Text>
+                <Text style={timeLineStyle.tabButtonText}>Résumé</Text>
             </TouchableOpacity>
             <View style={timeLineStyle.buttonBorder}/>
             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {

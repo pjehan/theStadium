@@ -22,7 +22,7 @@ class SignIn extends Component {
                 </View>
                 <View  style={{flex:3, justifyContent:'space-around'}}>
                     <Button
-                        onPress={() => {this.typeSelected('FanSignIn',0,{});}}
+                        onPress={() => {this.typeSelected('FanSignIn',3,{});}}
                         title="Supporter"
                         color="#003366"
                     />

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Image,View} from 'react-native';
-import {StackNavigator, TabNavigator,addNavigationHelpers} from 'react-navigation';
+import {Image, KeyboardAvoidingView, View} from 'react-native';
+import {StackNavigator, TabNavigator, addNavigationHelpers} from 'react-navigation';
 import {connect} from 'react-redux';
 import {Button, Text} from 'react-native';
 //import { Icon } from 'react-native-elements';
@@ -8,7 +8,7 @@ import {Button, Text} from 'react-native';
 import Login from '../../screens/Login';
 import Loading from '../../screens/Loading';
 
-import  Menu from '../../components/Main/Menu'
+import Menu from '../../components/Main/Menu'
 /** SIGN IN**/
 import SignIn from '../../screens/SignIn/SignIn';
 import UserBasic from '../../screens/SignIn/UserBasic'
@@ -32,11 +32,11 @@ import FirstHalf from '../../components/TimeLine/Post/PostModal/postArticle/firs
 import SecondHalf from '../../components/TimeLine/Post/PostModal/postArticle/secondhalf';
 
 const SignInTabBar = {
-        tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
-        tabBarVisible: false,
-        tabBarPosition: 'bottom',
-    swipeEnabled:false,
-      };
+    tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
+    tabBarVisible: false,
+    tabBarPosition: 'bottom',
+    swipeEnabled: false,
+};
 const PROFILETAB = {
     tabBarComponent: ({navigation}) => <ProfileTabBar focused={'focused'}
                                                       activeLabelColor="#333333"
@@ -55,39 +55,68 @@ import Sexe from "../../screens/SignIn/Sexe";
 import Contact from "../../screens/Contact";
 import ArticleTabHeader from "../../components/TimeLine/Post/PostModal/postArticle/ArticleTabHeader";
 import conclusion from "../../components/TimeLine/Post/PostModal/postArticle/conclusion";
-
-const ArticleTab = TabNavigator({
+import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
+const ArticleTabTest = TabNavigator({
     Setup: {
         screen: Setup,
         navigationOptions: {
             title: 'Profile',
             headerTitle: 'Profile',
-            tabBarLabel: 'Profile',}
+            tabBarLabel: 'Profile',
+        }
     },
     firstHalf: {
         screen: FirstHalf,
         navigationOptions: {
-            header:null,
+            header: null,
         },
-        tabBarLabel :'Première mi-temps'
+        tabBarLabel: 'Première mi-temps'
     },
     secondHalf: {
         screen: SecondHalf,
         navigationOptions: {
-            header:null,
+            header: null,
 
         },
     },
     conclusion: {
         screen: conclusion,
         navigationOptions: {
-            header:null,
+            header: null,
         },
     }
 }, {
     tabBarComponent: ArticleTabHeader,
     tabBarVisible: false,
-    tabBarPosition: 'top',});
+    tabBarPosition: 'top',
+});
+
+export class AvoidArticle extends Component {
+    render() {
+        return (
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={-50}
+                style={{flex: 1,
+                    justifyContent: 'flex-end',backgroundColor:'white',}}
+                contentContainerStyle={{
+                    flex: 1,
+                    width:"100%",
+                    justifyContent: 'flex-end',backgroundColor:'white',
+                }}
+                behavior="position" enabled>
+                <ArticleTabTest />
+            </KeyboardAvoidingView>
+        )
+    }
+}
+const ArticleTab = StackNavigator({
+    ArticleTabK: {
+        screen: AvoidArticle,
+        navigationOptions: {
+            header: null,
+        }
+    }
+}, {initialRouteName:'ArticleTabK'});
 
 
 const TeamProfile = TabNavigator({
@@ -112,7 +141,7 @@ const TeamProfile = TabNavigator({
         }
     },
 
-},PROFILETAB);
+}, PROFILETAB);
 const ProfileTab = TabNavigator({
 
     Actus: {
@@ -135,7 +164,7 @@ const ProfileTab = TabNavigator({
         }
     }
 
-},PROFILETAB);
+}, PROFILETAB);
 
 const MenuStack = StackNavigator({
     Menu: {
@@ -145,8 +174,8 @@ const MenuStack = StackNavigator({
         }
     },
 
-},{
-    lazy:true,
+}, {
+    lazy: true,
     initialRouteName: "Menu",
 
 });
@@ -159,7 +188,8 @@ const MainStack = TabNavigator({
             tabBarIcon: ({focused}) => {
                 return <Image
                     resizeMode='contain'
-                    source={!focused ? require('../../assets/img/picto/menu/tabbar/timeline.png') : require('../../assets/img/picto/menu/tabbar/timeline-on.png')} style={{ height: 20 }}/>
+                    source={!focused ? require('../../assets/img/picto/menu/tabbar/timeline.png') : require('../../assets/img/picto/menu/tabbar/timeline-on.png')}
+                    style={{height: 20}}/>
             },
             showLabel: true,
             tabBarLabel: 'Actualitée'
@@ -183,13 +213,14 @@ const MainStack = TabNavigator({
         screen: Search,
         navigationOptions: ({navigation}) => ({
             header: props => <Header headerType="logo" backIcon={false} {...props} />,
-        tabBarIcon: ({focused}) => {
-            return <Image
-                resizeMode='contain'
-                source={!focused ? require('../../assets/img/picto/menu/tabbar/notification.png') : require('../../assets/img/picto/menu/tabbar/notification-on.png')} style={{ height: 20 }}/>
-        },
-        showLabel: true,
-        tabBarLabel: 'Notifications'
+            tabBarIcon: ({focused}) => {
+                return <Image
+                    resizeMode='contain'
+                    source={!focused ? require('../../assets/img/picto/menu/tabbar/notification.png') : require('../../assets/img/picto/menu/tabbar/notification-on.png')}
+                    style={{height: 20}}/>
+            },
+            showLabel: true,
+            tabBarLabel: 'Notifications'
         })
     },
     Menu: {
@@ -211,27 +242,29 @@ const MainStack = TabNavigator({
     tabBarPosition: 'bottom',
     animationEnabled: true,
 
-    tabBarOptions: { showIcon: true,
-        activeTintColor:'#003366',
+    tabBarOptions: {
+        showIcon: true,
+        activeTintColor: '#003366',
         inactiveTintColor: '#cccccc',
         upperCaseLabel: false,
         labelStyle: {
             fontSize: 12,
-            marginTop:5,
-            marginBottom:0,
+            marginTop: 5,
+            marginBottom: 0,
         },
         tabStyle: {
-        paddingTop:10,
-            height:60,
+            paddingTop: 10,
+            height: 60,
             shadowColor: 'black',
             shadowOpacity: 1, elevation: 4,
 
         },
-        indicatorStyle: { backgroundColor: 'transparent', },
+        indicatorStyle: {backgroundColor: 'transparent',},
         style: {
             backgroundColor: '#ffffff',
-            borderTopWidth: 2,borderTopColor:'#cccccc'
-        }, }
+            borderTopWidth: 2, borderTopColor: '#cccccc'
+        },
+    }
 });
 export const PlayerSignInStack = TabNavigator({
         Player: {
@@ -241,50 +274,50 @@ export const PlayerSignInStack = TabNavigator({
             screen: UserInfos,
         },
         PlayerClub: {
-          screen: PlayerClub,
-          navigationOption: ({navigation}) => ({
-            header: props => <Header {...props} />
-          })
+            screen: PlayerClub,
+            navigationOption: ({navigation}) => ({
+                header: props => <Header {...props} />
+            })
         }
     },
     SignInTabBar);
 
 const FanSignInStack = TabNavigator({
-  Fan: {
-      screen: UserBasic,
-      navigationOptions: ({navigation}) => ({
-          header: props => <Header {...props} />,
+        Fan: {
+            screen: UserBasic,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header {...props} />,
 
-      })
-  },
-  FanInfos: {
-      screen: UserInfos,
-      navigationOptions: ({navigation}) => ({
-          header: props => <Header {...props} />,
+            })
+        },
+        FanInfos: {
+            screen: UserInfos,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header {...props} />,
 
-      })
-  },
-},
-  SignInTabBar);
-
-  const CoachSignInStack = TabNavigator({
-    Coach: {
-        screen: UserBasic,
-        navigationOptions: ({navigation}) => ({
-            header: props => <Header {...props} />,
-            teamList: navigation.state.params.teamList,
-            clubList: navigation.state.params.clubList
-        })
+            })
+        },
     },
-    CoachInfos: {
-        screen: UserInfos,
-        navigationOptions: ({navigation}) => ({
-            header: props => <Header {...props} />,
-            teamList: navigation.state.params.teamList,
-            clubList: navigation.state.params.clubList
-        })
+    SignInTabBar);
+
+const CoachSignInStack = TabNavigator({
+        Coach: {
+            screen: UserBasic,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header {...props} />,
+                teamList: navigation.state.params.teamList,
+                clubList: navigation.state.params.clubList
+            })
+        },
+        CoachInfos: {
+            screen: UserInfos,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header {...props} />,
+                teamList: navigation.state.params.teamList,
+                clubList: navigation.state.params.clubList
+            })
+        },
     },
-  },
     SignInTabBar);
 
 export const Navigator = StackNavigator({
@@ -304,7 +337,7 @@ export const Navigator = StackNavigator({
         Article: {
             screen: ArticleTab,
             navigationOptions: {
-                header:null,
+                header: null,
             }
         },
         Profile: {
@@ -319,28 +352,28 @@ export const Navigator = StackNavigator({
                 header: null,
             }
         },
-    ArticleTab: {
-            screen:ArticleTab,
-        navigationOptions: {
-                header:null,
-        }
-    },
-    Congratz: {
+        ArticleTab: {
+            screen: ArticleTab,
+            navigationOptions: {
+                header: null,
+            }
+        },
+        Congratz: {
             screen: Congratz,
-        navigationOptions: {
-            header: null,
-        }
-    },
+            navigationOptions: {
+                header: null,
+            }
+        },
         FirstHalf: {
             screen: FirstHalf,
             navigationOptions: {
-                header:null
+                header: null
             }
         },
         SecondHalf: {
             screen: SecondHalf,
             navigationOptions: {
-                header:null
+                header: null
             }
         },
         SignIn: {
@@ -366,22 +399,22 @@ export const Navigator = StackNavigator({
             }),
         },
         FanSignIn: {
-          screen: FanSignInStack,
-          navigationOptions: ({navigation}) => ({
-              header: props => <Header headerType="logo" backIcon={true} {...props} />,
-              tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
-              tabBarVisible: false,
+            screen: FanSignInStack,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header headerType="logo" backIcon={true} {...props} />,
+                tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
+                tabBarVisible: false,
 
-          }),
+            }),
         },
         CoachSignIn: {
-          screen: CoachSignInStack,
-          navigationOptions: ({navigation}) => ({
-              header: props => <Header headerType="logo" backIcon={true} {...props} />,
-              tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
-              tabBarVisible: false,
+            screen: CoachSignInStack,
+            navigationOptions: ({navigation}) => ({
+                header: props => <Header headerType="logo" backIcon={true} {...props} />,
+                tabBarComponent: ({navigation}) => <TXTabBar navigation={navigation}/>,
+                tabBarVisible: false,
 
-          }),
+            }),
         },
         Main: {
             screen: MainStack,
@@ -391,16 +424,18 @@ export const Navigator = StackNavigator({
         initialRouteName: "Main",
         headerMode: "screen"
     });
+
 class AppNavigation extends Component {
     render() {
-        const { navigationState, dispatch } = this.props;
+        const {navigationState, dispatch} = this.props;
         return (
             <Navigator
-                navigation={addNavigationHelpers({ dispatch, state: navigationState })}
+                navigation={addNavigationHelpers({dispatch, state: navigationState})}
             />
         );
     }
 }
+
 const mapStateToProps = state => {
     return {
         navigationState: state.NavigationReducer,

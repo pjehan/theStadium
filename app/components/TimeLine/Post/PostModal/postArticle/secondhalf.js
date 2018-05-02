@@ -74,15 +74,12 @@ export default class SecondHalf extends Component {
                 <TouchableOpacity onPress={() => {
                     this._addMedia()
                 }} style={{
-                    paddingVertical: 40,
-                    paddingHorizontal: 10,
                     flex: 1,
-                    borderWidth: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderStyle: 'dashed'
                 }}>
-                    <Image style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}
+                    <Image style={{borderWidth: 3,
+                        borderColor:'#000000',width: originalWidth * widthChange, height: originalHeight * widthChange}}
                            source={{uri: this.state.secondHalf_coverPhoto}}/>
                 </TouchableOpacity>
             )

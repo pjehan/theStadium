@@ -171,7 +171,7 @@ export default class Content extends Component {
                         <TouchableOpacity onPress={() => {this.setState({visible:true})}}>
                         <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10,height:150, backgroundColor:'rgba(0,0,0,0.5)'}}>
                             <View style={{position:'absolute',top:-20,zIndex:15,borderRadius:5,width:100,backgroundColor:'#00A65B',paddingHorizontal:2,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
-                                <Text style={{color:'#ffffff'}}>Article</Text>
+                                <Text style={{color:'#ffffff'}}>Résumé</Text>
                             </View>
                             <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
@@ -186,7 +186,6 @@ export default class Content extends Component {
     }
     checkType() {
         const TYPE = this.props.postType.label;
-        console.log(TYPE)
         if (TYPE === TypeEnum.simple) {
             console.log('oui')
             this.returnSimplePost()

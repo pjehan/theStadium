@@ -12,7 +12,7 @@ const labels= [
     'Première mi-temps',
     'Deuxième mi-temps',
     'En bref'
-]
+];
 class ArticleTabHeader extends Component {
     render() {
         const {routes} = this.props.navigation.state;
@@ -37,7 +37,7 @@ class ArticleTabHeader extends Component {
                         }}>
                             <Text style={{color:'#cccccc'}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
                         </TouchableOpacity>
-                    <Text style={{fontWeight: '600'}}>Article</Text>
+                    <Text style={{fontWeight: '600'}}>Résumé</Text>
                     <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                         if(index + 1 !== routes.length){
                             this.props.navigation.navigate(routes[index + 1].key, {});

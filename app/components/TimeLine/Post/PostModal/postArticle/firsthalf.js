@@ -75,15 +75,13 @@ export default class SecondHalf extends Component {
                 <TouchableOpacity onPress={() => {
                     this._addMedia()
                 }} style={{
-                    paddingVertical: 40,
-                    paddingHorizontal: 10,
+
                     flex: 1,
-                    borderWidth: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderStyle: 'dashed'
                 }}>
-                    <Image style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}
+                    <Image style={{borderWidth: 3,
+                        borderColor:'#000000',width: originalWidth * widthChange, height: originalHeight * widthChange}}
                            source={{uri: this.state.firstHalf_coverPhoto}}/>
                 </TouchableOpacity>
             )
@@ -109,7 +107,8 @@ export default class SecondHalf extends Component {
 
     render() {
         return (
-            <KeyboardAvoidingView behavior="padding" style={{flex:1,backgroundColor: '#ffffff'}}>
+
+            <View>
 
                 <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
                     <Text style={{color: '#000000', fontWeight: '600'}}>Photo de couverture</Text>
@@ -139,7 +138,7 @@ export default class SecondHalf extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </KeyboardAvoidingView>
+            </View>
         )
     };
 }

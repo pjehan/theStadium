@@ -16,6 +16,7 @@ import {GLOBAL_STYLE, timeLineStyle} from '../assets/css/global';
 import {connect} from "react-redux";
 import {userActions} from "../_actions/user";
 
+import PostModal from '../components/TimeLine/Post/PostModal';
 let ImageCover = null;
 let {width} = Dimensions.get('window');
 
@@ -24,6 +25,8 @@ class Actus extends Component {
         super(props);
 
         this.state = {
+            modalVisible: false,
+            modalType: '',
             profilePic: '../assets/img/thestadium/profil.jpeg',
 
         }
@@ -39,7 +42,12 @@ class Actus extends Component {
 
         nextProps ? this.setState({profilePic: nextProps.inspectedUser.profilepicture}) : null;
     }
+    onToggleModal(visible, type) {
+        this.setState({modalVisible: visible});
+        this.setState({modalType: type});
 
+        this.forceUpdate();
+    }
     _addMedia = async (coach) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
@@ -92,11 +100,19 @@ class Actus extends Component {
         }
 
     }
-
+    _renderModal() {
+        if(this.state.modalVisible && this.state.modalType){
+            return (<PostModal owner={this.props.currentUser} type={this.state.modalType} visible={this.state.modalVisible}
+                               toggleModal={(visible, type) => {
+                                   this.onToggleModal(visible, type)
+                               }}/>)
+        } else {
+            return null;
+        }
+    }
     _renderHeader() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        console.log(state)
         let type = !state.inspectedUser.userType ? this.props.inspectedUser.userType.label : state.inspectedUser.userType.label;
         let team = !state.inspectedUser.teams ? this.props.inspectedUser.teams[0].team : state.inspectedUser.teams[0].team;
         if (type === 'Joueur') {
@@ -212,11 +228,11 @@ class Actus extends Component {
                             </TouchableOpacity>
                             <View style={timeLineStyle.buttonBorder}/>
                             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.onToggleModal(true, 'article')
+                                this.props.navigation.navigate('ArticleTab')
                             }}>
                                 <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
                                        source={require('../assets/img/picto/menu/actions/article.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>Article</Text>
+                                <Text style={timeLineStyle.tabButtonText}>Résumé</Text>
                             </TouchableOpacity>
                             <View style={timeLineStyle.buttonBorder}/>
                             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
@@ -277,6 +293,7 @@ class Actus extends Component {
         return (
             <View>
                 {this._renderHeader()}
+                {this._renderModal()}
                 <View style={[{padding: 15, backgroundColor: '#ffffff'}]}>
                     {!this._isUser(state.currentUser, state.inspectedUser) && state.currentUser.userType.label === 'Coach' ?
                     <Placeholder.Paragraph

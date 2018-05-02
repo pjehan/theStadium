@@ -12,7 +12,8 @@ import {NavigationActions}from "react-navigation";
 import Autocomplete from "react-native-autocomplete-input";
 import CustomInput from "../../../../CustomInput";
 import {GLOBAL_STYLE} from '../../../../../assets/css/global';
-import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
+import { Header } from 'react-navigation';
+
 import {connect} from "react-redux";
 class Setup extends Component {
     constructor(props){
@@ -97,12 +98,9 @@ class Setup extends Component {
     render() {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
+        console.log(this.props)
         return (
-            <KeyboardAwareScrollView
-                style={{ backgroundColor: '#ffffff' }}
-                resetScrollToCoords={{ x: 0, y: 0 }}
-                extraHeight={500}
-                >
+            <View>
                 <Modal
                     transparent={true}
                     animationType={'none'}
@@ -204,7 +202,7 @@ class Setup extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </KeyboardAwareScrollView>
+            </View>
         )
     };
 }

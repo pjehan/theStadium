@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Autocomplete from 'react-native-autocomplete-input';
 import {
     View, StyleSheet, AsyncStorage, Text, KeyboardAvoidingView, TouchableOpacity, Picker, Item,
-    Modal, ActivityIndicator
+    Modal, ActivityIndicator,Linking
 } from 'react-native';
 import {GLOBAL_STYLE} from '../../../assets/css/global';
 import CustomInput from '../../../components/CustomInput';
@@ -57,6 +57,7 @@ class PlayerInfos extends Component {
         };
         this._filterClub = this._filterClub.bind(this);
         this._filterTeam = this._filterTeam.bind(this);
+        this._setRole = this._setRole.bind(this);
     }
 
     componentDidMount() {
@@ -71,7 +72,6 @@ class PlayerInfos extends Component {
     }
 
     _filterClub(query, dataSource) {
-        console.log(query,dataSource);
         if (query === '') {
             return [];
         }
@@ -95,7 +95,7 @@ class PlayerInfos extends Component {
     componentWillReceiveProps(nextProps) {
         const {navigate} = this.props.navigation;
 
-        if (!nextProps.user.fetching && nextProps.user && nextProps.user.done) {
+        if (!nextProps.user.fetching && nextProps.user && nextProps.user.done && !nextProps.user.error) {
             navigate('Congratz');
         } else {
             console.log('efafaefeafae')
@@ -117,6 +117,11 @@ class PlayerInfos extends Component {
                 hideTeam: true,team:item.id
             });
         this.props.user.team = item.id;
+    }
+
+    _setRole(itemValue) {
+        this.setState({poste: itemValue});
+        this.props.user.poste = itemValue;
     }
 
     render() {
@@ -150,7 +155,7 @@ class PlayerInfos extends Component {
                 <View style={{flex: 2, justifyContent: 'center'}}>
                     <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Le football et vous</Text>
                     <Text style={[GLOBAL_STYLE.miniDescription]}>
-                        Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
+                        Ajoutez de vraies informations pour vous permettre d'échanger avec les joueurs et les clubs
                     </Text>
                 </View>
 
@@ -200,12 +205,13 @@ class PlayerInfos extends Component {
                                 </TouchableOpacity>
                             )}
                         />
+
                     </View>
                     <View style={{backgroundColor: '#eeeeee', width: '85%'}}>
                         <Picker style={GLOBAL_STYLE.input}
                                 prompt="Poste joué"
                                 selectedValue={this.state.poste}
-                                onValueChange={itemValue => this.setState({poste: itemValue})}>
+                                onValueChange={(itemValue) => this._setRole(itemValue) }>
                             {ROLES.map((i, index) => (
                                 <Picker.Item key={index} label={i.label} value={i.value}/>
                             ))}

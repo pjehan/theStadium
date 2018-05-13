@@ -81,7 +81,7 @@ class Post extends Component {
         }
     }
     render() {
-
+        console.log(this.props.post)
         return (
             <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
                 shadowColor: 'black',

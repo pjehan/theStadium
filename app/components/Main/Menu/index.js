@@ -45,8 +45,10 @@ class Menu extends Component {
 
         if (this.props.currentUser.userType.label === 'Coach') {
             navigate("CoachProfile", users);
+        } else if(this.props.currentUser.userType.label === 'Supporter') {
+            navigate("FanProfile", users);
         } else {
-            navigate(action, users);
+            navigate(action, users)
         }
     }
 

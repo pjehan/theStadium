@@ -15,7 +15,7 @@ import {ImagePicker} from 'expo';
 let importedMedai = null;
 let gallery = [
     {media: 'http://cdn.planetefoot.net/wp-content/uploads/2016/10/zidane-1.jpg'}
-]
+];
 
 export default class Gallery extends Component {
     constructor(props) {

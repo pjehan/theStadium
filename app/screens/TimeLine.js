@@ -89,7 +89,7 @@ class TimeLine extends Component {
         </TouchableOpacity>
             <View style={timeLineStyle.buttonBorder} />
             <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                this.props.navigation.navigate('ArticleTab')
+                        this.props.navigation.navigate('ArticleTab')
                             }}>
                 <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
                        source={require('../assets/img/picto/menu/actions/article.png')}/>

@@ -6,7 +6,7 @@ import {
     Image,
     ScrollView,
     Dimensions,
-    StyleSheet
+    StyleSheet, FlatList, ActivityIndicator
 } from 'react-native';
 import {ImagePicker} from 'expo';
 
@@ -15,8 +15,9 @@ import {Icon} from 'react-native-elements';
 import {GLOBAL_STYLE, timeLineStyle} from '../assets/css/global';
 import {connect} from "react-redux";
 import {userActions} from "../_actions/user";
-
+import Post from "../components/TimeLine/Post";
 import PostModal from '../components/TimeLine/Post/PostModal';
+import {postActions} from "../_actions/post";
 let ImageCover = null;
 let {width} = Dimensions.get('window');
 
@@ -35,11 +36,12 @@ class Actus extends Component {
     componentWillMount() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        //if(state.inspectedUser){this.props.dispatch(postActions.getOwnerList(state.id));}
+        if(state.inspectedUser){
+            this.props.dispatch(postActions.getOwnerList(state.inspectedUser.id));
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-
         nextProps ? this.setState({profilePic: nextProps.inspectedUser.profilepicture}) : null;
     }
     onToggleModal(visible, type) {
@@ -215,7 +217,8 @@ class Actus extends Component {
                         </View>
                     </View>
                 )
-            } else {
+            } else if (type === 'Coach')
+            {
                 return (
                     <View style={{width: width / 1.25, alignSelf: 'center'}}>
                         <View style={timeLineStyle.tabContainer}>
@@ -246,7 +249,22 @@ class Actus extends Component {
                     </View>
                 )
             }
-        } else {
+            else {
+                return (
+                    <View style={{width: width / 1.25, alignSelf: 'center'}}>
+                        <View style={timeLineStyle.tabContainer}>
+                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
+                                this.onToggleModal(true, 'simple')
+                            }}>
+                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
+                                       source={require('../assets/img/picto/menu/actions/post.png')}/>
+                                <Text style={timeLineStyle.tabButtonText}>Publier</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )
+            }
+        } else if(state.inspectedUser.userType.label !== 'Supporter'){
             return (
                 <View style={{width: width / 2, alignSelf: 'center'}}>
                     <TouchableOpacity style={{
@@ -285,7 +303,31 @@ class Actus extends Component {
                 </Text>
             </View>)
     }
+    _renderLoading() {
+        return (
+            <View>
+                <ActivityIndicator
+                    size={'large'}/>
+                <Text>Chargement de votre TimeLine</Text>
+            </View>
+        )
+    }
+    _renderItem(item) {
+        console.log(this.props.post);
+        return <Post style={[timeLineStyle.singlePost]} navigation={this.props.navigation} key={item.id} id={item.id} post={item} />
+    }
 
+    _renderList(){
+        const state = this.props.navigation.state.params;
+        return(
+            <FlatList
+                onRefresh={() => {}}
+                refreshing={this.props.postsFetching}
+                data={this.props.posts}
+                renderItem={({item}) => this._renderItem(item)}
+            />
+        );
+    }
     render() {
         const {navigation} = this.props;
         const state = navigation.state.params;
@@ -313,6 +355,12 @@ class Actus extends Component {
                     </Placeholder.Paragraph> : null}
 
                     {this._renderActions()}
+                    <ScrollView contentContainerStyle={{flex:1}} style={{paddingTop:10,paddingBottom: 35,paddingHorizontal:10,height:'100%'}}>
+                        {
+                            (this.props.posts && this.props.isFetched) ? this._renderList() :
+                            (!this.props.postsFetching && this.props.isFetched)  ? this._renderLoading() : <Text>Aucun résultat trouvé </Text>
+                        }
+                    </ScrollView>
                 </View>
             </View>
         )
@@ -321,7 +369,9 @@ class Actus extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        posts: state.ownerList.posts,
+        posts: state.ownerList.posts.posts,
+        isFetched: state.ownerList.fetched,
+        postsFetching: state.ownerList.fetching,
         inspectedUser: state.inspectedUser.user,
         isFetching: state.inspectedUser.fetching,
         done: state.inspectedUser.fetched,

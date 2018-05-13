@@ -23,8 +23,7 @@ function getOwnerList(id){
     let post = [];
     return instance.get("/api/posts?owner=" + id)
         .then(response => {
-            post.push(response.data);
-            return post;
+            return response.data["hydra:member"]
         }).catch((error) => {
             console.error(error);
         });
@@ -41,6 +40,7 @@ function add(user, post){
         comments: [],
         owner: user,
     };
+
     Object.assign(postToAdd, post);
     console.log(postToAdd)
     return instance.post("/api/posts",postToAdd).then(response => {

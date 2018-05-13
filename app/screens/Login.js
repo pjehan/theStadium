@@ -59,12 +59,15 @@ class Login extends Component {
         }
     }
 componentWillMount() {
-
+    this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
+    this.setModalVisible(true);
     this.props.dispatch(clubAction.getAll());
 
 }
     loginIn() {
-        this.props.dispatch(userActions.login(this.state.email, this.state.password));
+        //fetch to databse
+        //this.props.dispatch(userActions.login(this.state.email, this.state.password));
+        this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
         this.setModalVisible(true);
     }
 

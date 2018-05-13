@@ -134,12 +134,30 @@ const TeamProfile = TabNavigator({
             header: null,
         }
     },
-    Contact: {
+    Contacts: {
         screen: Contact,
         navigationOptions: {
             header: null,
         }
     },
+
+}, PROFILETAB);
+
+const SupporterProfile = TabNavigator({
+
+    Actus: {
+        screen: Actus,
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            tabBarLabel: 'Actualitées'
+        })
+    },
+    Gallerie: {
+        screen: Gallery,
+        navigationOptions: {
+            header: null,
+        }
+    }
 
 }, PROFILETAB);
 const ProfileTab = TabNavigator({
@@ -342,6 +360,12 @@ export const Navigator = StackNavigator({
         },
         Profile: {
             screen: ProfileTab,
+            navigationOptions: {
+                header: null,
+            }
+        },
+        FanProfile: {
+            screen: SupporterProfile,
             navigationOptions: {
                 header: null,
             }

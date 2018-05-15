@@ -57,8 +57,7 @@ class Actus extends Component {
 
         if (!result.cancelled) {
             const user = this.props.currentUser;
-            user.profilepicture = result.uri;
-            this.props.dispatch(userActions.putPlayer(user)).then(
+            this.props.dispatch(userActions.putUser(user, result.uri)).then(
                 response => {
                     this.forceUpdate();
                 }

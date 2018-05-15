@@ -51,12 +51,13 @@ function getOwnerList(id) {
     function failure(error) { return { type: postConstants.GETALL_OWNER_FAILURE, payload: error} }
 }
 
-function add(user, post) {
+function add(user, post, media) {
     return (dispatch) => {
         dispatch(request());
-        postService.add(user, post)
+        postService.add(user, post, media)
             .then(
-                posts => dispatch(success({posts})),
+                posts => {
+                    dispatch(success({posts}))},
                 error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error))

@@ -101,12 +101,11 @@ function putPlayer(player){
     function success(player) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, player } }
     function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
 }
-
-function putUser(player){
+function putUser(player, media){
     return dispatch => {
         dispatch(request(player));
 
-        userService.putUser(player)
+        userService.putUser(player, media)
             .then(
                 user => {
                     dispatch(success({player}));

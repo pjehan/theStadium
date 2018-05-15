@@ -1,5 +1,7 @@
 import {userService} from "./user";
 import instance from "../config/axiosConfig";
+import axios from 'axios';
+
 export const postService = {
     getAll,
     add,
@@ -9,6 +11,7 @@ export const postService = {
     getOwnerList,
     toggleLikePost
 };
+
 function getAll() {
     let post = null;
     return instance.get("/api/posts")
@@ -19,7 +22,8 @@ function getAll() {
             console.error(error);
         });
 }
-function getOwnerList(id){
+
+function getOwnerList(id) {
     let post = [];
     return instance.get("/api/posts?owner=" + id)
         .then(response => {
@@ -28,7 +32,8 @@ function getOwnerList(id){
             console.error(error);
         });
 }
-function add(user, post){
+
+function add(user, post, media) {
     let postToAdd = {
         title: "",
         creationDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
@@ -42,11 +47,39 @@ function add(user, post){
     };
 
     Object.assign(postToAdd, post);
-    console.log(postToAdd)
-    return instance.post("/api/posts",postToAdd).then(response => {
+
+
+
+    let data = new FormData();
+    console.log(postToAdd);
+    if (media) {
+        for(const medias of media) {
+            console.log(medias)
+            let uriParts = medias.uri.split('.');
+            let fileType = uriParts[uriParts.length - 1];
+            data.append('media', {
+                uri: medias.uri,
+                name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + `.${fileType}`,
+                type: `image/${fileType}`
+            });
+            data.append('width', medias.width);
+            data.append('height', medias.height);
+        };
+        console.log(data)
+    }
+
+    return instance.post("/api/posts", postToAdd).then(response => {
+        if (media) {
+            data.append('post_id', response.data.id);
+            return axios.post("http://192.168.1.95:3000/media/upload/", data).then(
+                response => {
+                })
+        }
+
     }).catch(err => {
         console.log(err)
     })
+
 
 }
 
@@ -58,6 +91,7 @@ function addComment(comment) {
             console.error(error);
         });
 }
+
 function deleteComment(commentID, postID) {
     /*postList[id].post_comments.splice(commentID,1);
     return Promise.resolve({
@@ -71,9 +105,10 @@ function deleteComment(commentID, postID) {
             console.error(error);
         });
 }
+
 function getComments(id) {
 
-   let comments = [];
+    let comments = [];
     return instance.get("/api/comments?post=" + id)
         .then(response => {
             comments.push(response.data["hydra:member"]);
@@ -89,11 +124,14 @@ function getComments(id) {
             console.error(error);
         });
 }
-function toggleLikePost(postID, userID, liked){
-    if(!liked) {
-        return instance.post("/api/user_likes_posts",{ creationDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
+
+function toggleLikePost(postID, userID, liked) {
+    if (!liked) {
+        return instance.post("/api/user_likes_posts", {
+            creationDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
             userLikes: userID,
-            postsLiked: postID})
+            postsLiked: postID
+        })
             .then(response => {
                 console.log(response)
                 return response.data;

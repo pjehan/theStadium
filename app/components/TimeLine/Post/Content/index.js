@@ -70,8 +70,15 @@ export default class Content extends Component {
                     break;
             }*/
         }
+        let originalWidth;
+        let originalHeight;
+        let windowWidth = Dimensions.get('window').width;
+        let widthChange;
         if (this.props.medias.length > 0) {
             url = this.props.medias[0].path;
+            originalWidth = this.props.medias[0].width;
+            originalHeight = this.props.medias[0].height;
+            widthChange = (windowWidth - 10) / originalWidth;
         }
         return (
             <View>
@@ -92,7 +99,7 @@ export default class Content extends Component {
                 <TouchableOpacity onPress={() => {
                     this.onToggleModal(true, url);
                 }}>
-                {url ? <LocalImage source={url}/> : null}
+                    {url ? <Image source={{uri: 'http://192.168.1.95:3000/' + this.props.medias[0].path.replace('public/', '')}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}} /> : null}
                 </TouchableOpacity>
             </View>);
     }

@@ -99,7 +99,7 @@ function putPlayer(player) {
         })
 }
 
-function putUser(player) {
+function putUser(player, media) {
     const user = {
         firstname: player.firstname,
         lastname: player.lastname,
@@ -107,17 +107,39 @@ function putUser(player) {
         profilepicture: player.profilepicture,
         sexe: player.sexe,
         userType: player.userType,
-        players: player.players,
-        teamsLiked: player.teamsLiked
+        //players: player.players,
+        //teamsLiked: player.teamsLiked
     };
+    console.log(media);
     console.log(user)
-    return instance.put("/api/users/" + player.id,user)
-        .then(response => {
-            return response.data;
+    if(media){
+        let uriParts = media.split('.');
+        let fileType = uriParts[uriParts.length - 1];
 
-        }).catch((error) => {
-            console.error(error);
-        })
+        let data = new FormData ();
+        data.append('media',{
+            uri:media,
+            name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + `.${fileType}`,
+            type: `image/${fileType}`
+        });
+        return axios.post("http://192.168.1.95:3000/media/upload/", data).then(response => {
+            user.profilepicture = response.data;
+            userRequest(player, user);
+        });
+
+        function userRequest(p,u){
+console.log(player.id);
+            return instance.put("/api/users/" + player.id,user)
+                .then(response => {
+                    console.log(response)
+                    return response.data;
+
+                }).catch((error) => {
+                console.log(error);
+                    console.error(error);
+                })
+        }
+    }
 }
 function searchUser(query){
     return instance.get("/api/users?firstname=" +query)

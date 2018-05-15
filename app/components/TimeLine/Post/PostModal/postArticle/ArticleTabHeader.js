@@ -43,7 +43,7 @@ class ArticleTabHeader extends Component {
                             this.props.navigation.navigate(routes[index + 1].key, {});
                         } else if(index + 1 === routes.length){
                             const params = this.props.navigation.state.routes[3].params;
-                            const content = `{
+                           /* const content = `{
                             "homeScore": ${params.homeScore},
                             "guessScore":${params.guessScore},
                             "firstHalf_content":  \' ${params.firstHalf_content} \',
@@ -51,14 +51,23 @@ class ArticleTabHeader extends Component {
                             "guessClub": \'${params.guessClub.name}\',
                             "homeClub": \'${this.props.currentUser.teams[0].team.club.name}\',
                             "conclusion": \'${params.conclusion}\'
-                            }`;
+                            }`;*/
+                            const content = JSON.stringify({
+                                homeScore: params.homeScore,
+                                guessScore: params.guessClub,
+                                firstHalf_content: params.firstHalf_content,
+                                secondHalf_content: params.secondHalf_content,
+                                guessclub: params.guessClub,
+                                homeClub:params.homeClub,
+                                conclusion: params.conclusion
+                            });
                             const post = {
                                 title: params.title,
                                 content: content,
                                 postType: 3,
                                 medias: []
                             };
-                            this.props.dispatch(postActions.add(this.props.currentUser.id,post))
+                            this.props.dispatch(postActions.add(this.props.currentUser.id,post, [params.firstHalf_coverPhoto, params.secondHalf_coverPhoto]))
                         }
                     }}
                     >

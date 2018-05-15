@@ -52,8 +52,10 @@ export default class SecondHalf extends Component {
                     this.props.navigation.dispatch(NavigationActions.setParams({
                         params:{
                             firstHalf_coverPhoto: {
-                                path:result.uri,
-                                mainMedia: true,
+                                uri:result.uri,
+                                mainMedia: 1,
+                                width: result.width,
+                                height: result.height
                             }
                         },
                         key: "conclusion"

@@ -61,7 +61,10 @@ class Setup extends Component {
         }, () => {
             this.props.navigation.dispatch(NavigationActions.setParams({
                 params:{
-                    guessClub: this.state.guessClub
+                    guessClub: {
+                        name: this.state.guessClub.name,
+                        id: this.state.guessClub.id
+                    }
                 },
                 key: "conclusion"
             }))});

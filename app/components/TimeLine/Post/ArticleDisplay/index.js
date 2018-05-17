@@ -30,7 +30,7 @@ class ArticleDisplay extends Component {
                 </TouchableOpacity>
             <ScrollView>
 
-                <Image source={{uri: this.props.medias[0].path}} style={{width: originalWidth1 * widthChange1, height: originalHeight1 * widthChange1}}/>
+                <Image source={{uri:'http://192.168.43.103:3000/' + this.props.medias[0].path.replace('public', '')}} style={{width: originalWidth1 * widthChange1, height: originalHeight1 * widthChange1}}/>
                 <View
                     style={{flexDirection: 'row', paddingVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
                     <Image style={{width: 20, height: 30}} resizeMode='contain'
@@ -43,8 +43,8 @@ class ArticleDisplay extends Component {
                         {this.props.title}
                     </Text>
                     <View>
-                        <Text style={{textAlign: 'center', fontSize: 16}}>{content.homeClub} {content.homeScore}
-                            - {content.guessScore} {content.guessClub}</Text>
+                        <Text style={{textAlign: 'center', fontSize: 16}}>{content.homeClub.name} {content.homeScore}
+                            - {content.guessScore} {content.guessClub.name}</Text>
                     </View>
 
                     <View style={style.half}>
@@ -52,7 +52,7 @@ class ArticleDisplay extends Component {
                         <Text style={{textAlign: 'left'}}>{content.firstHalf_content}</Text>
                     </View>
 
-                    <Image source={{uri: this.props.medias[1].path}} style={{width: originalWidth2 * widthChange2, height: originalHeight2 * widthChange2}}/>
+                    <Image source={{uri: 'http://192.168.43.103:3000/' + this.props.medias[1].path.replace('public', '')}} style={{width: originalWidth2 * widthChange2, height: originalHeight2 * widthChange2}}/>
                     <View style={style.half}>
                         <Text style={style.title}>2 ème Mi-Temps</Text>
                         <Text style={{textAlign: 'left'}}>{content.secondHalf_content}</Text>

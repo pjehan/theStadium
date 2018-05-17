@@ -111,6 +111,7 @@ inputContainer: {
         width: 300,
         paddingLeft:20,
         paddingRight: 20,
+        marginVertical:5,
         height: 40,
         borderWidth: 1,
         borderColor: 'transparent',

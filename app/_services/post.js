@@ -48,30 +48,25 @@ function add(user, post, media) {
 
     Object.assign(postToAdd, post);
 
-
-
     let data = new FormData();
-    console.log(postToAdd);
     if (media) {
-        for(const medias of media) {
-            console.log(medias)
-            let uriParts = medias.uri.split('.');
+        for(let i = 0; i < media.length; i++) {
+            let uriParts = media[i].uri.split('.');
             let fileType = uriParts[uriParts.length - 1];
             data.append('media', {
-                uri: medias.uri,
+                uri: media[i].uri,
                 name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + `.${fileType}`,
                 type: `image/${fileType}`
             });
-            data.append('width', medias.width);
-            data.append('height', medias.height);
-        };
-        console.log(data)
+            data.append('width'+i, media[i].width);
+            data.append('height'+i, media[i].height);
+        }
     }
 
     return instance.post("/api/posts", postToAdd).then(response => {
         if (media) {
             data.append('post_id', response.data.id);
-            return axios.post("http://192.168.1.95:3000/media/upload/", data).then(
+            return axios.post("http://192.168.43.103:3000/media/upload/", data).then(
                 response => {
                 })
         }

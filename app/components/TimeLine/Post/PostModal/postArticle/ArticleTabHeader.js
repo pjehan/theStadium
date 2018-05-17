@@ -54,11 +54,11 @@ class ArticleTabHeader extends Component {
                             }`;*/
                             const content = JSON.stringify({
                                 homeScore: params.homeScore,
-                                guessScore: params.guessClub,
+                                guessScore: params.guessScore,
                                 firstHalf_content: params.firstHalf_content,
                                 secondHalf_content: params.secondHalf_content,
-                                guessclub: params.guessClub,
-                                homeClub:params.homeClub,
+                                guessClub: params.guessClub,
+                                homeClub:{name:this.props.currentUser.teams[0].team.club.name, id:this.props.currentUser.teams[0].team.club.id},
                                 conclusion: params.conclusion
                             });
                             const post = {

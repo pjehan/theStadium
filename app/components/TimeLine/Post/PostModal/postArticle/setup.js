@@ -61,7 +61,10 @@ class Setup extends Component {
         }, () => {
             this.props.navigation.dispatch(NavigationActions.setParams({
                 params:{
-                    guessClub: this.state.guessClub
+                    guessClub: {
+                        name: this.state.guessClub.name,
+                        id: this.state.guessClub.id
+                    }
                 },
                 key: "conclusion"
             }))});
@@ -148,8 +151,8 @@ class Setup extends Component {
                 <View style={{justifyContent:'space-between', paddingVertical:40,paddingHorizontal:10,flexDirection:'row'}}>
                     <View style={{alignItems:'center',width:'25%'}}>
                         {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
-                                                                                          source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
-                        <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
+                                                                                           source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
+                            <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
                         <Text
                             style={timeLineStyle.title}>Fc Guichen</Text>
                     </View>
@@ -183,7 +186,6 @@ class Setup extends Component {
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Titre de l'article</Text>
                 </View>
-
                 <View style={{paddingVertical:10,paddingHorizontal:15}}>
                     <CustomInput multiple={true}
                                  container={{justifyContent: 'flex-start'}}

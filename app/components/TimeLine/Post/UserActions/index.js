@@ -4,65 +4,6 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { StyleSheet, Image } from 'react-native';
 import {postActions} from "../../../../_actions/post";
 import {connect} from "react-redux";
-const PostStyle = StyleSheet.create({
-    container: {
-        backgroundColor: '#ffffff',
-        borderRadius: 10,
-        width:'100%',
-        paddingTop:5,
-        paddingBottom: 5
-    },
-    profilePic: {
-        width: 45,
-        height: 45,
-        borderRadius:45,
-        marginRight: 5
-    },
-    text: {
-        color:'black',
-        fontSize: 12
-    },
-    title: {
-      color: 'black',
-      fontSize: 16,
-      fontWeight: '500'
-    },
-    userAction: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop:10
-    },
-    ownerStyle: {
-        flexDirection: 'row',
-        padding:5,
-    },
-    userActionText: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding:10
-    },
-    actionText: {
-      fontSize: 12
-    },
-    teamText: {
-      color: "white",
-      fontSize:12
-    },
-    teamBackground: {
-      backgroundColor: '#003366', 
-      padding: 10,
-      paddingTop:2,
-      paddingBottom:2
-    },
-    timeText: {
-      fontSize:12,
-      color:'#cccccc',
-      fontWeight: '500',
-      marginLeft:2
-    }
-});
 class UserActions extends Component {
     constructor(props) {
         super(props);
@@ -119,3 +60,62 @@ mapStateToProps = (state) => {
     };
 };
 export default connect(mapStateToProps)(UserActions);
+const PostStyle = StyleSheet.create({
+    container: {
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        width:'100%',
+        paddingTop:5,
+        paddingBottom: 5
+    },
+    profilePic: {
+        width: 45,
+        height: 45,
+        borderRadius:45,
+        marginRight: 5
+    },
+    text: {
+        color:'black',
+        fontSize: 12
+    },
+    title: {
+        color: 'black',
+        fontSize: 16,
+        fontWeight: '500'
+    },
+    userAction: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:10
+    },
+    ownerStyle: {
+        flexDirection: 'row',
+        padding:5,
+    },
+    userActionText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding:10
+    },
+    actionText: {
+        fontSize: 12
+    },
+    teamText: {
+        color: "white",
+        fontSize:12
+    },
+    teamBackground: {
+        backgroundColor: '#003366',
+        padding: 10,
+        paddingTop:2,
+        paddingBottom:2
+    },
+    timeText: {
+        fontSize:12,
+        color:'#cccccc',
+        fontWeight: '500',
+        marginLeft:2
+    }
+});

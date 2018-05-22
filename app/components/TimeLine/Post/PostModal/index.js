@@ -17,33 +17,36 @@ import {ImagePicker} from 'expo';
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
 import Autocomplete from "react-native-autocomplete-input";
+
 let ModalContent;
 let SelectedMedia = <View/>;
+
+let originalWidth = null;
+let originalHeight = null;
+let windowWidth = null;
+let widthChange = null;
+const InitialState = {
+    post: {
+        title: '',
+        goalsNbr: 0,
+        passNbr: 0,
+        content: '',
+        postType: null,
+    },
+    clubList: null,
+    clubQuery: '',
+    hideClub: false,
+    medias: null,
+    height: 50,
+    goals_assists: false,
+
+}
 
 class PostModal extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            post: {
-                title: '',
-                goalsNbr: 0,
-                passNbr: 0,
-                content: '',
-                postType: null,
-            },
-            clubList: null,
-            clubQuery: '',
-            hideClub: false,
-            medias: {
-                uri:'',
-                width:0,
-                height:0
-            },
-            height:50,
-            goals_assists: false,
-
-        };
+        this.state = InitialState;
         this.displayGoalsAssists = this.displayGoalsAssists.bind(this);
         this.displaySimpleArticle = this.displaySimpleArticle.bind(this);
         this.onChangeInfos = this.onChangeInfos.bind(this);
@@ -51,6 +54,11 @@ class PostModal extends Component {
         this.publishModal = this.publishModal.bind(this);
         this._renderHeader = this._renderHeader.bind(this);
         this._renderOwner = this._renderOwner.bind(this);
+        this.coverPhoto = this.coverPhoto.bind(this);
+        this._addMedia = this._addMedia.bind(this);
+        this.renderImage = this.renderImage.bind(this);
+        this.conditionalRender = this.conditionalRender.bind(this);
+        this.coverVideo = this.coverVideo.bind(this);
     }
 
     onChangeInfos(state, newvalue) {
@@ -59,6 +67,8 @@ class PostModal extends Component {
 
     toggleModal(visible, type) {
         this.props.toggleModal(visible, type);
+        this.setState(InitialState);
+        this.forceUpdate();
     }
 
     publishModal(type) {
@@ -106,6 +116,24 @@ class PostModal extends Component {
             case TypeEnum.article:
                 this.displayArticle(TypeEnum.article);
                 break;
+            case TypeEnum.interview:
+                this.displayInterview(TypeEnum.interview);
+                break;
+        }
+    }
+
+    conditionalRender() {
+        switch (this.props.type) {
+            case TypeEnum.goals:
+                return this.displayGoalsAssists(TypeEnum.goals);
+            case TypeEnum.assists:
+                return this.displayGoalsAssists(TypeEnum.assists);
+            case TypeEnum.simple:
+                return this.displaySimpleArticle(TypeEnum.simple);
+            case TypeEnum.article:
+                return this.displayArticle(TypeEnum.article);
+            case TypeEnum.interview:
+                return this.displayInterview(TypeEnum.interview);
         }
     }
 
@@ -144,6 +172,9 @@ class PostModal extends Component {
             case TypeEnum.article:
                 this.displayArticle(TypeEnum.article);
                 break;
+            case TypeEnum.interview:
+                this.displayInterview(TypeEnum.interview);
+                break;
         }
         this.forceUpdate();
     }
@@ -181,7 +212,7 @@ class PostModal extends Component {
                 {this.props.owner.userType.label !== 'Coach' && !this.props.owner.profilepicture || !this.props.owner.teams[0].team.profilePicture ?
                     <Image style={timeLineStyle.profilePic}
                            source={{uri: this.props.owner.userType.label !== 'Coach' ? this.props.owner.profilepicture : this.props.owner.teams[0].team.profilePicture}}/> :
-                    <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/> }
+                    <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/>}
                 {this.props.owner.userType.label === 'Joueur' ? <Text
                         style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text> :
                     <View>
@@ -213,7 +244,7 @@ class PostModal extends Component {
             Description = 'Vous avez mis en valeur votre coéquipier(e) grâce à une passe';
             Label = 'Nombre de passe(s) décisive(s)';
         }
-        ModalContent = (
+        return (
             <View>
                 {this._renderHeader(type, Title)}
                 <View style={{paddingLeft: 20, paddingRight: 20}}>
@@ -241,7 +272,7 @@ class PostModal extends Component {
     }
 
     displaySimpleArticle(type) {
-        ModalContent = (
+        return (
             <ScrollView>
                 {this._renderHeader(type, 'Publiez')}
                 <View style={{flex: 1, paddingLeft: 20, paddingRight: 20}}>
@@ -254,20 +285,20 @@ class PostModal extends Component {
                 <CustomInput multiple={true}
                              container={{justifyContent: 'flex-start'}}
                              placeholder={'Écrivez votre message'}
-                             input={[{flex: 1, padding: 20, marginTop: 10,height: Math.max(80, this.state.height)}]}
+                             input={[{flex: 1, padding: 20, marginTop: 10, height: Math.max(80, this.state.height)}]}
                              state={'content'}
                              textColor={'#000000'}
                              borderColor={'transparent'}
                              backgroundColor={'#ffffff'}
                              security={false}
-                             onChangeSizeParent={(size)=>{
-                                 this.setState({height:size})
+                             onChangeSizeParent={(size) => {
+                                 this.setState({height: size})
                              }}
                              onChangeParent={(state, newvalue) => {
                                  this.onChangeInfos(state, newvalue)
                              }}/>
                 <View>
-                    {SelectedMedia}
+                    {this.state.medias ? this.renderImage() : null}
 
                 </View>
                 <View>
@@ -310,7 +341,7 @@ class PostModal extends Component {
                             </TouchableOpacity>
                         </View> : null}
                     <TouchableOpacity onPress={() => {
-                        this._addMedia();
+                        this._addMedia('Images', this.displaySimpleArticle);
                     }} style={{
                         height: 50,
                         alignItems: 'center',
@@ -354,6 +385,149 @@ class PostModal extends Component {
         );
     };
 
+    displayInterview(type) {
+        return (
+            <ScrollView contentContainerStyle={{flex: 1}}>
+                {this._renderHeader(type, 'Interview')}
+                <View style={{flex: 1, paddingLeft: 20, paddingRight: 20}}>
+                    <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
+                        {this._renderOwner()}
+                        <Text style={GLOBAL_STYLE.text}>Partager une interview</Text>
+                    </View>
+                </View>
+                <View style={[GLOBAL_STYLE.modal]}>
+                    <View style={{paddingVertical: 10, paddingHorizontal: 15}}>
+                        <CustomInput
+                            container={{justifyContent: 'flex-start'}}
+                            placeholder={'Donnez un titre à votre interview'}
+                            input={[{
+                                borderWidth: 1,
+                                padding: 5,
+                                marginTop: 10,
+                                height: Math.max(50, this.state.height)
+                            }]}
+                            state={'title'}
+                            textColor={'#000000'}
+                            placeholderTextColor={'#cccccc'}
+                            borderColor={'#cccccc'}
+                            backgroundColor={'#ffffff'}
+                            security={false}
+                            onChangeParent={(state, newvalue) => {
+                                this.onChangeInfos(state, newvalue)
+                            }}/>
+                    </View>
+                    <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
+                        <Text style={{color: '#000000', fontWeight: '600'}}>Selectionner une miniature</Text>
+                    </View>
+                    <View style={{justifyContent: 'space-between', flexDirection: 'row', padding: 2}}>
+                        {this.coverPhoto('Images', this.displayInterview)}
+                    </View>
+                    <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
+                        <Text style={{color: '#000000', fontWeight: '600'}}>Selectionner votre interview</Text>
+                    </View>
+                    <View style={{justifyContent: 'space-between', flexDirection: 'row', padding: 2}}>
+                        {this.coverVideo('All', this.displayInterview)}
+                    </View>
+
+                    <TouchableOpacity style={{
+                        backgroundColor: '#336699',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 35
+                    }} onPress={() => this.publishModal(type)}>
+                        <Text style={{color: 'white'}}>Publier</Text>
+                    </TouchableOpacity>
+
+                </View>
+            </ScrollView>
+        );
+    }
+
+    coverPhoto(type, callback) {
+        if (this.state.medias) {
+            let originalWidth = this.state.medias[0].width; //result.width ;
+            let originalHeight = this.state.medias[0].height; //result.height;
+            let windowWidth = Dimensions.get('window').width;
+            let widthChange = (windowWidth - 2) / originalWidth;
+            return (
+                <TouchableOpacity onPress={() => {
+                    this._addMedia(type, callback)
+                }} style={{
+
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <Image style={{
+                        borderWidth: 3,
+                        borderColor: '#000000', width: originalWidth * widthChange, height: originalHeight * widthChange
+                    }}
+                           source={{uri: this.state.medias[0].uri}}/>
+                </TouchableOpacity>
+            )
+        } else {
+            return (
+                <TouchableOpacity onPress={() => this._addMedia(type, callback)} style={{
+                    paddingVertical: 40,
+                    paddingHorizontal: 10,
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: '#cccccc',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderStyle: 'dashed'
+                }}>
+                    <Image style={timeLineStyle.profilePic}
+                           source={require('../../../../assets/img/picto/add.png')}/>
+                    <Text>Ajouter une photo</Text>
+                </TouchableOpacity>
+            )
+        }
+    }
+
+    coverVideo(type, callback) {
+        if (this.state.medias && this.state.medias[1]) {
+            let originalWidth = this.state.medias[1].width; //result.width ;
+            let originalHeight = this.state.medias[1].height; //result.height;
+            let windowWidth = Dimensions.get('window').width;
+            let widthChange = (windowWidth - 2) / originalWidth;
+            return (
+                <TouchableOpacity onPress={() => {
+                    this._addMedia(type, callback)
+                }} style={{
+
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <Image style={{
+                        borderWidth: 3,
+                        borderColor: '#000000', width: originalWidth * widthChange, height: originalHeight * widthChange
+                    }}
+                           source={{uri: this.state.medias[1].uri}}/>
+                </TouchableOpacity>
+            )
+        } else {
+            return (
+                <TouchableOpacity onPress={() => this._addMedia(type, callback)} style={{
+                    paddingVertical: 40,
+                    paddingHorizontal: 10,
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: '#cccccc',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderStyle: 'dashed'
+                }}>
+                    <Image style={timeLineStyle.profilePic}
+                           source={require('../../../../assets/img/picto/add.png')}/>
+                    <Text>Ajouter une photo</Text>
+                </TouchableOpacity>
+            )
+        }
+    }
+
     render() {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
@@ -364,7 +538,8 @@ class PostModal extends Component {
                    onRequestClose={() => {
                        console.log("Modal has been closed.")
                    }}>
-                {ModalContent}
+                <ScrollView>
+                {this.conditionalRender()}
                 {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
                     <View style={[{marginLeft: '7.5%', height: 50, width: '85%'}]}>
                         <Autocomplete
@@ -384,58 +559,93 @@ class PostModal extends Component {
                             )}
                         />
                     </View> : null}
+                </ScrollView>
             </Modal>
         )
     }
 
-    renderImage(result, callback) {
-        let originalWidth = result.width;
-        let originalHeight = result.height;
-        let windowWidth = null || Dimensions.get('window').width;
-        let widthChange = null || (windowWidth - 10) / originalWidth;
-        SelectedMedia = (
-            <View style={{position: 'relative'}}>
-                <TouchableOpacity onPress={() => {
-                    SelectedMedia = null;
-                    this.setState({medias: null});
-                    this.displaySimpleArticle(TypeEnum.simple);
-                    this.forceUpdate();
-                }}
-                                  style={{
-                                      position: 'absolute',
-                                      zIndex: 5,
-                                      right: 10,
-                                      top: -15,
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
-                                      height: 30,
-                                      width: 30,
-                                      backgroundColor: 'rgba(0,0,0,0.4)',
-                                      borderRadius: 15
-                                  }}>
-                    <Image source={require('../../../../assets/img/picto/white-cross.png')}
-                           style={{width: 15, height: 15}}/>
-                </TouchableOpacity>
-                <Image source={{uri: result.uri}} style={{
-                    marginLeft: 5,
-                    width: originalWidth * widthChange,
-                    height: originalHeight * widthChange
-                }}/>
-            </View>
-        );
-        this.displaySimpleArticle(TypeEnum.simple);
-        this.forceUpdate();
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.medias !== nextState.medias;
     }
 
-    _addMedia = async () => {
+    renderImage(result, callback) {
+        if (this.state.medias) {
+            let originalWidth = this.state.medias[0].width; //result.width ;
+            let originalHeight = this.state.medias[0].height; //result.height;
+            let windowWidth = null || Dimensions.get('window').width;
+            let widthChange = null || (windowWidth - 10) / originalWidth;
+            return (
+                <View style={{position: 'relative'}}>
+                    <TouchableOpacity onPress={() => {
+                        this.setState({medias: null}, () => {
+                            this.forceUpdate();
+                        });
+                    }}
+                                      style={{
+                                          position: 'absolute',
+                                          zIndex: 5,
+                                          right: 10,
+                                          top: -15,
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                          height: 30,
+                                          width: 30,
+                                          backgroundColor: 'rgba(0,0,0,0.4)',
+                                          borderRadius: 15
+                                      }}>
+                        <Image source={require('../../../../assets/img/picto/white-cross.png')}
+                               style={{width: 15, height: 15}}/>
+                    </TouchableOpacity>
+                    <Image source={{uri: this.state.medias[0].uri}} style={{
+                        marginLeft: 5,
+                        width: originalWidth * widthChange,
+                        height: originalHeight * widthChange
+                    }}/>
+                </View>
+            );
+        } else {
+            return null
+        }
+        //callback();
+        //this.forceUpdate();
+    }
+
+    _addMedia = async (type, callback, index) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
+            mediaTypes: 'video'
         });
 
         if (!result.cancelled) {
-            console.log(result);
-            this.setState({medias: {uri: result.uri, width: result.width, height: result.height}});
-            this.renderImage(result, this.displaySimpleArticle(TypeEnum.simple));
+            if (this.state.medias) {
+                if (index) {
+                    let mediaClone = Object.assign({},this.state.medias);
+                    mediaClone[index] = {
+                        uri: result.uri,
+                        width: result.width,
+                        height: result.height
+                    };
+                    this.setState({
+                        medias: mediaClone
+                    }, () => {
+                        callback();
+                    });
+                } else {
+                    this.setState({
+                        medias: [...this.state.medias, {
+                            uri: result.uri,
+                            width: result.width,
+                            height: result.height
+                        }]
+                    }, () => {
+                        callback();
+                    });
+                }
+            } else {
+                this.setState({medias: [{uri: result.uri, width: result.width, height: result.height}]}, () => {
+                    callback();
+                });
+            }
 
         } else {
             console.log('uri', result.uri, this.state.post.medias[0])
@@ -451,7 +661,13 @@ PostModal.propTypes = {
     /* visible or not */
     type: PropTypes.string, /* Content Type */
 };
-export default connect()(PostModal);
+
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser.user,
+    };
+};
+export default connect(mapStateToProps)(PostModal);
 
 const styles = StyleSheet.create({
     autocompleteContainer: {

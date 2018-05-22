@@ -105,12 +105,12 @@ function putUser(player, media) {
         lastname: player.lastname,
         email: player.email,
         profilepicture: player.profilepicture,
-        sexe: player.sexe,
-        userType: player.userType,
-        //players: player.players,
-        //teamsLiked: player.teamsLiked
+        sexe: player.sexe["@id"],
+        userType: player.userType["@id"],
+        players: player.players,
+        teamsLiked: player.teamsLiked.map(teams => teams["@id"])
     };
-    console.log(media);
+    console.log(player);
     console.log(user)
     if(media){
         let uriParts = media.split('.');

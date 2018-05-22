@@ -115,8 +115,11 @@ class Actus extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
         let type = !state.inspectedUser.userType ? this.props.inspectedUser.userType.label : state.inspectedUser.userType.label;
-        let team = !state.inspectedUser.teams ? this.props.inspectedUser.teams[0].team : state.inspectedUser.teams[0].team;
-        if (type === 'Joueur') {
+        let team;
+        if(type !== 'Supporter') {
+            team = !state.inspectedUser.teams ? this.props.inspectedUser.teams[0].team : state.inspectedUser.teams[0].team;
+        }
+        if (type !== 'Coach') {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
@@ -286,20 +289,26 @@ class Actus extends Component {
         }
     }
 
-    renderName(user) {
+    renderName() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-
-        let team = state.inspectedUser.teams[0].team;
-        let teamDisplay = team.category.label + ' ' + team.division.label;
+        console.log(this.props)
+        let team;
+        let teamDisplay;
+        let type = state.inspectedUser.userType.label;
+        if(type !== 'Supporter') {
+            team = state.inspectedUser.teams[0].team;
+            teamDisplay = team.category.label + ' ' + team.division.label;
+        }
         return (
             <View>
                 <Text style={{textAlign: 'center', fontWeight: '600', color: '#003366', marginBottom: 5, fontSize: 16}}>
-                    {this.props.inspectedUser.firstname} {this.props.inspectedUser.lastname}
+                    {state.inspectedUser.firstname} {state.inspectedUser.lastname}
                 </Text>
-                <Text style={{textAlign: 'center', fontSize: 14, marginBottom: 10}}>
+                { type !== 'Supporter' ?
+                    <Text style={{textAlign: 'center', fontSize: 14, marginBottom: 10}}>
                     {team.club.name} - {teamDisplay}
-                </Text>
+                </Text> : null}
             </View>)
     }
     _renderLoading() {
@@ -330,13 +339,13 @@ class Actus extends Component {
     render() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-
+        console.log(this._isUser(state.currentUser, state.inspectedUser));
         return (
             <View>
                 {this._renderHeader()}
                 {this._renderModal()}
                 <View style={[{padding: 15, backgroundColor: '#ffffff'}]}>
-                    {!this._isUser(state.currentUser, state.inspectedUser) && state.currentUser.userType.label === 'Coach' ?
+                    {!this._isUser(state.currentUser, state.inspectedUser) ?
                     <Placeholder.Paragraph
                         color="#003366"
                         textSize={14}
@@ -346,12 +355,12 @@ class Actus extends Component {
                         firstLineWidth="50%"
                         marginBottom={10}
                         style={{alignSelf: 'center'}}
-                        onReady={!this.props.isFetching && this.props.done || this._isUser(state.currentUser, state.inspectedUser)}>
+                        onReady={(!this.props.isFetching && this.props.done) || this._isUser(state.currentUser, state.inspectedUser)}>
                         {
                             this.props.done && state.inspectedUser.userType.label !== 'Coach' ?
                             this.renderName() : null
                         }
-                    </Placeholder.Paragraph> : null}
+                    </Placeholder.Paragraph> : this.renderName()}
 
                     {this._renderActions()}
                     <ScrollView contentContainerStyle={{flex:1}} style={{paddingTop:10,paddingBottom: 35,paddingHorizontal:10,height:'100%'}}>

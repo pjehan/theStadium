@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import OpenContent from "../OpenContent";
 import ArticleDisplay from "../ArticleDisplay";
+import {utils} from "../../../../_constants/utils";
 let postContent;
 let {height} = Dimensions.get('window');
 const PostStyle = StyleSheet.create({
@@ -77,6 +78,7 @@ export default class Content extends Component {
 
         console.log(this.props)
         if (this.props.medias.length > 0) {
+            console.log(this.props.medias)
             url = this.props.medias[0].path;
             originalWidth = this.props.medias[0].width;
             originalHeight = this.props.medias[0].height;
@@ -104,7 +106,7 @@ export default class Content extends Component {
                 <TouchableOpacity onPress={() => {
                     this.onToggleModal(true, url);
                 }}>
-                    {this.props.medias.length > 0 ? <Image source={{uri: 'http://192.168.1.95:3000/' + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}} /> : null}
+                    {this.props.medias.length > 0 ? <Image source={{uri: utils.NODEJS + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}} /> : null}
                 </TouchableOpacity>
             </View>);
     }
@@ -178,8 +180,6 @@ export default class Content extends Component {
         const windowWidth = Dimensions.get('window').width;
         const widthChange = (windowWidth - 10) / originalWidth;
         let previewStr = content.firstHalf_content + '\n' + content.secondHalf_content;
-        this.props.medias[0].path = this.props.medias[0].path.replace(new RegExp(/\\/g),"/");
-        this.props.medias[0].path = this.props.medias[0].path.replace('public/', '');
         return (
             <View>
                 <TouchableOpacity onPress={() => {this.setState({visible:true})}}>
@@ -191,11 +191,12 @@ export default class Content extends Component {
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
                             <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub.name} {content.homeScore} - {content.guessScore} {content.guessClub.name}</Text>
                             <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))}</Text>
-                        </View>
-                    </View>
-                    <Image source={{uri: 'http://192.168.1.95:3000/' + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
-                </TouchableOpacity>
-            </View>
+
+                            </View>
+                            </View>
+                            <Image source={{uri: utils.NODEJS + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                        </TouchableOpacity>
+                </View>
         )
     }
     checkType() {

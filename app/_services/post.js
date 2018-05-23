@@ -9,7 +9,8 @@ export const postService = {
     getComments,
     deleteComment,
     getOwnerList,
-    toggleLikePost
+    toggleLikePost,
+    sharePost
 };
 
 function getAll() {
@@ -69,7 +70,7 @@ function add(user, post, media) {
     return instance.post("/api/posts", postToAdd).then(response => {
         if (media) {
             data.append('post_id', response.data.id);
-            return axios.post("http://192.168.1.95:3000/media/upload/", data).then(
+            return axios.post("http://192.168.1.95:3000/media/uploads/", data).then(
                 response => {
                     return response;
                 })
@@ -92,13 +93,9 @@ function addComment(comment) {
 }
 
 function deleteComment(commentID, postID) {
-    /*postList[id].post_comments.splice(commentID,1);
-    return Promise.resolve({
-        then: function(onFulfill, onReject) {onFulfill(postList[id].post_comments);onReject('erreur')}
-    })*/
+
     return instance.delete("/api/comments/" + commentID)
         .then(response => {
-            console.log(response)
             return response.data["hydra:member"];
         }).catch((error) => {
             console.error(error);
@@ -106,19 +103,10 @@ function deleteComment(commentID, postID) {
 }
 
 function getComments(id) {
-
-    let comments = [];
     return instance.get("/api/comments?post=" + id)
         .then(response => {
-            comments.push(response.data["hydra:member"]);
-            /*return userService.getUser(response.data.user).then(
-                user => {
-                    comments[0].user = user;
-                    return comments;
-                }
-            );*/
-            return comments;
-
+            console.log(response)
+            return response.data["hydra:member"];
         }).catch((error) => {
             console.error(error);
         });
@@ -132,7 +120,6 @@ function toggleLikePost(postID, userID, liked) {
             postsLiked: postID
         })
             .then(response => {
-                console.log(response)
                 return response.data;
             }).catch((error) => {
                 console.error(error);
@@ -147,4 +134,15 @@ function toggleLikePost(postID, userID, liked) {
                 console.error(error);
             });
     }
+}
+function sharePost(postID, userID){
+    return instance.post("/api/user_shares_posts", {
+        creationDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        userShares: userID,
+        postsShared: postID,
+    }).then(response => {
+        return response.data
+    }).catch((error) => {
+        console.error(error);
+    })
 }

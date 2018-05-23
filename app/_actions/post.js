@@ -9,6 +9,7 @@ export const postActions = {
     getComments,
     deleteComment,
     toggleLikePost,
+    sharePost
 };
 function getAll() {
 
@@ -115,7 +116,7 @@ function getComments(id) {
         postService.getComments(id)
             .then(
                 comments => {
-                   dispatch(success({comments}))},
+                   dispatch(success(comments))},
                 error=>{
                     dispatch(failure(error));
                 }
@@ -128,7 +129,6 @@ function getComments(id) {
 }
 
 function toggleLikePost(postID, userID, liked) {
-    console.log(postID,userID,liked)
     return (dispatch) => {
         dispatch(request());
         postService.toggleLikePost(postID, userID, liked)
@@ -141,4 +141,23 @@ function toggleLikePost(postID, userID, liked) {
     function request() {return { type: postConstants.LIKES_REQUEST } }
     function success(posts) { return { type: postConstants.LIKES_SUCCESS, payload: posts} }
     function failure(error) { return { type: postConstants.LIKES_FAILURE, payload: error} }
+}
+
+function sharePost(postID, userID){
+    return (dispatch) => {
+        dispatch(request());
+        postService.sharePost(postID, userID)
+            .then(
+                response => {
+                    dispatch(success({}));
+                }
+            ).catch(
+                error => {
+                    dispatch(failure(error))
+                }
+        )
+    };
+    function request() {return { type: postConstants.SHARES_REQUEST } }
+    function success(posts) { return { type: postConstants.SHARES_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.SHARES_FAILURE, payload: error} }
 }

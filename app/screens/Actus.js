@@ -43,6 +43,7 @@ class Actus extends Component {
 
     componentWillReceiveProps(nextProps) {
         nextProps ? this.setState({profilePic: nextProps.inspectedUser.profilepicture}) : null;
+        this.forceUpdate();
     }
     onToggleModal(visible, type) {
         this.setState({modalVisible: visible});
@@ -57,11 +58,7 @@ class Actus extends Component {
 
         if (!result.cancelled) {
             const user = this.props.currentUser;
-            this.props.dispatch(userActions.putUser(user, result.uri)).then(
-                response => {
-                    this.forceUpdate();
-                }
-            );
+            this.props.dispatch(userActions.putUser(user, result));
         } else {
 
         }
@@ -69,6 +66,13 @@ class Actus extends Component {
 
     _isUser(user, inspected) {
         return user.id === inspected.id;
+    }
+    _displayPath(istrue){
+        if(!istrue){
+            return this.props.navigation.state.params.inspectedUser;
+        }else {
+            return this.props.currentUser;
+        }
     }
 
     _isLiked(user, inspected) {
@@ -119,11 +123,15 @@ class Actus extends Component {
         if(type !== 'Supporter') {
             team = !state.inspectedUser.teams ? this.props.inspectedUser.teams[0].team : state.inspectedUser.teams[0].team;
         }
+        console.log(this._displayPath(this._isUser(state.currentUser, state.inspectedUser)));
         if (type !== 'Coach') {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={!this.props.inspectedUser.profilepicture ? require('../assets/img/thestadium/placeholder.jpg') : {uri: this.props.inspectedUser.profilepicture}}>
+                           source={
+                               this._displayPath(this._isUser(state.currentUser, state.inspectedUser)).profilepicture ?
+                                   {uri: 'http://192.168.1.95:3000/' + this._displayPath(this._isUser(state.currentUser, state.inspectedUser)).profilepicture} :
+                                   require('../assets/img/thestadium/placeholder.jpg') } >
                         {this._isUser(state.currentUser, state.inspectedUser) ?
                             <TouchableOpacity onPress={() => this._addMedia()} style={{
                                 height: 30,
@@ -143,7 +151,7 @@ class Actus extends Component {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={this.props.inspectedUser.profilepicture ? {uri: this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
+                           source={this.props.inspectedUser.profilepicture ? {uri: 'http://192.168.1.95:3000/' +this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
                         <View style={{
                             height: 250,
                             width: width / 2.5,

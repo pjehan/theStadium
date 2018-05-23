@@ -48,7 +48,6 @@ function login(username, password) {
     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
 }
 function register(user) {
-console.log(user)
     return dispatch => {
         dispatch(request(user));
         userService.register(user)
@@ -108,7 +107,8 @@ function putUser(player, media){
         userService.putUser(player, media)
             .then(
                 user => {
-                    dispatch(success({player}));
+                    console.log(user)
+                    dispatch(success({user}));
 
                     dispatch(alertActions.success('Registration successful'));
                 },
@@ -120,7 +120,7 @@ function putUser(player, media){
     };
 
     function request(player) { return { type: userConstants.PLAYER_ADD_STATS_REQUEST, player } }
-    function success(player) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, player } }
+    function success(user) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, user } }
     function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
 }
 

@@ -36,7 +36,7 @@ class Post extends Component {
             this.setState({isPreview: preview});
 
         if (visible) {
-            this.props.dispatch(postActions.getComments(this.props.id+1));
+            this.props.dispatch(postActions.getComments(this.props.post.id));
             this.setState({modalVisible: visible});
         } else {
             this.setState({modalVisible: visible});
@@ -81,7 +81,6 @@ class Post extends Component {
         }
     }
     render() {
-        console.log(this.props.post)
         return (
             <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
                 shadowColor: 'black',

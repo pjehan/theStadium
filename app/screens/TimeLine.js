@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+    import React, {Component} from 'react';
 import {StyleSheet, FlatList, Image, Text, View, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 import {GLOBAL_STYLE, timeLineStyle} from '../assets/css/global';

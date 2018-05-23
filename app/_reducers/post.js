@@ -90,7 +90,7 @@ export function ownerList(state = {
 }
 
 export function commentList(state = {
-    post_comments: [{
+    comments: [{
         user: {
             id:null,
             lastname: null,
@@ -126,7 +126,7 @@ export function commentList(state = {
             return {...state, fetching:false, fetched: false, error: action.payload};
             break;
         case postConstants.ADD_COMMENT_SUCCESS:
-            state.comments.comments[0].push(action.payload.comments);
+            state.comments.comments.push(action.payload.comments);
             return {...state, fetching:false, fetched:true};
             break;
         // REMOVE

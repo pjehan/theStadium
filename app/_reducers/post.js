@@ -115,7 +115,6 @@ export function commentList(state = {
             return {...state, fetching:false, fetched:false, error:action.payload};
             break;
         case postConstants.GETALL_COMMENTS_SUCCESS:
-
             return {...state, fetching:false, fetched:true, comments: action.payload};
             break;
         // ADD

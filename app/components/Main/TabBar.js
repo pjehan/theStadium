@@ -13,7 +13,6 @@ export default class MainTabView extends Component {
     render() {
         const {routes} = this.props.navigation.state;
         const index = this.props.navigation.state.index;
-        console.log(this.props)
         return (
             <View style={styles.tab}>
                 <View style={styles.tabContainer}>

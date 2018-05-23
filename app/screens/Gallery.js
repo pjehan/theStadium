@@ -45,8 +45,6 @@ export default class Gallery extends Component {
         if (!result.cancelled) {
             gallery.push({media: result.uri});
             this.forceUpdate();
-        } else {
-            console.log('uri', result.uri, this.state.media.uri)
         }
     };
 

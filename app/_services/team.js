@@ -14,7 +14,6 @@ function addUser(userID, teamID, userStatus) {
         status: userStatus
     })
         .then(response => {
-            console.log(response);
             return response
         }).catch((error) => {
             return error;

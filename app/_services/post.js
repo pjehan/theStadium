@@ -1,4 +1,3 @@
-import {userService} from "./user";
 import instance from "../config/axiosConfig";
 import axios from 'axios';
 
@@ -25,7 +24,6 @@ function getAll() {
 }
 
 function getOwnerList(id) {
-    let post = [];
     return instance.get("/api/posts?owner=" + id)
         .then(response => {
             return response.data["hydra:member"]
@@ -105,7 +103,6 @@ function deleteComment(commentID, postID) {
 function getComments(id) {
     return instance.get("/api/comments?post=" + id)
         .then(response => {
-            console.log(response)
             return response.data["hydra:member"];
         }).catch((error) => {
             console.error(error);
@@ -128,7 +125,6 @@ function toggleLikePost(postID, userID, liked) {
     } else {
         return instance.get("/api/user_likes_posts")
             .then(response => {
-                console.log(response)
                 return response.data;
             }).catch((error) => {
                 console.error(error);

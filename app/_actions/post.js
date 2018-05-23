@@ -80,7 +80,6 @@ function addComment(comment,postID) {
                     dispatch(success({postID:postID, comments: comments, commentID: comments["@id"]}))
                 },
                 error => {
-                    console.log(error);
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }

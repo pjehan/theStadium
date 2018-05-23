@@ -192,7 +192,9 @@ class OwnerHeader extends Component {
                                         backgroundColor: '#003366',
                                         color: '#ffffff',
                                         marginRight: 10
-                                    }}>{this.props.team.category.label} {this.props.team.division.label}</Text> : null}
+                                    }}>{this.props.team.category.label} {this.props.team.division.label}</Text> :
+                                    null
+                                }
                                 <View style={{flexDirection: 'row'}}>
                                     <Image resizeMode="contain" style={{height: 15, width: 15}}
                                            source={require('../../../../assets/img/picto/actualite/picto-time-gris.png')}/>

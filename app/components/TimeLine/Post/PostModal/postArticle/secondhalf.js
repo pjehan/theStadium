@@ -62,7 +62,6 @@ export default class SecondHalf extends Component {
             });
 
         } else {
-            console.log('uri', result.uri, this.state.post.medias[0])
         }
     };
 

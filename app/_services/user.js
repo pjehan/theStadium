@@ -41,7 +41,6 @@ function login(username, password) {
 }
 
 function getUser(id) {
-    console.log(instance)
     return instance.get("/api/users/"+id)
         .then(response => {
                return response.data;
@@ -51,7 +50,6 @@ function getUser(id) {
 function getUserType(id) {
     return instance.get("/api/players?user=" + id)
         .then(response => {
-            console.log(response)
             return response.data["hydra:member"][0];
         }).catch(err => console.log(err))
 }
@@ -82,13 +80,9 @@ function register(user) {
 
             return user;
         });
-    /*return Promise.resolve({
-        then: function(onFulfill, onReject) { onFulfill(user);onReject('erreur') }
-    });*/
 
 }
 function putPlayer(player) {
-    console.log(player.id);
     return instance.put("/api/players/" + player.id,player)
         .then(response => {
             Object.assign(currentUser.stats, response.data);
@@ -107,35 +101,32 @@ function putUser(player, media) {
         profilepicture: player.profilepicture,
         sexe: player.sexe["@id"],
         userType: player.userType["@id"],
-        players: player.players,
-        teamsLiked: player.teamsLiked.map(teams => teams["@id"])
+        //players: player.players,
+        //teamsLiked: player.teamsLiked.map(teams => teams["@id"])
     };
-    console.log(player);
-    console.log(user)
     if(media){
-        let uriParts = media.split('.');
+        let uriParts = media.uri.split('.');
         let fileType = uriParts[uriParts.length - 1];
 
         let data = new FormData ();
         data.append('media',{
-            uri:media,
+            uri:media.uri,
             name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + `.${fileType}`,
             type: `image/${fileType}`
         });
+        data.append('width', media.width);
+        data.append('height', media.height);
         return axios.post("http://192.168.1.95:3000/media/upload/", data).then(response => {
             user.profilepicture = response.data;
-            userRequest(player, user);
+            return userRequest(player, user);
         });
 
         function userRequest(p,u){
-console.log(player.id);
             return instance.put("/api/users/" + player.id,user)
                 .then(response => {
-                    console.log(response)
-                    return response.data;
+                    return response.data.user;
 
                 }).catch((error) => {
-                console.log(error);
                     console.error(error);
                 })
         }
@@ -144,7 +135,6 @@ console.log(player.id);
 function searchUser(query){
     return instance.get("/api/users?firstname=" +query)
         .then(response => {
-            console.log(response.data["hydra:member"])
             return response.data["hydra:member"];
         }).catch((error) => {
             console.error(error);

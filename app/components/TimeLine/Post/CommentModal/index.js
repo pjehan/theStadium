@@ -249,7 +249,7 @@ class CommentModal extends Component {
                     <ScrollView>
                     {this.props.preview ? this.renderPost() : null}
                     {this._displayTools()}
-                    {this.props.visible && this.props.comments && !this.props.isFetching ? this.renderList() : <ActivityIndicator animating={true} color="#003366" size="large"/>}
+                        {this.props.visible && this.props.comments && !this.props.isFetching ? this.renderList() : <View style={{flex:1,justifyContent:'center',alignContent:'center'}}><ActivityIndicator animating={true} color="#003366" size="large"/></View>}
                     </ScrollView>
                     {this._renderInput()}
 
@@ -262,7 +262,7 @@ class CommentModal extends Component {
 const mapStateToProps = (state) => {
     return {
         currentUser: state.currentUser.user,
-        comments: state.commentList.comments,
+        comments: state.commentList,
         isFetching: state.commentList.fetching,
         postList: state.postList.posts,
     };

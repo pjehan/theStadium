@@ -6,8 +6,6 @@ import OwnerHeader from './OwnerHeader';
 import Content from './Content';
 import CommentModal from './CommentModal';
 import {connect} from "react-redux";
-import {bindActionCreators} from 'redux';
-import axios from 'axios';
 import {postActions} from "../../../_actions";
 import {userActions} from "../../../_actions/user";
 

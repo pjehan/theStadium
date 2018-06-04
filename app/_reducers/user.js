@@ -123,7 +123,7 @@ export function searchList(state = {
             return {...state, fetching: true, fetched: false};
             break;
         case userConstants.SEARCH_SUCCESS:
-            return {...state, fetching: false, fetched: true, user: action.payload};
+            return {...state, fetching: false, fetched: true, user: action.user};
             break;
         case userConstants.SEARCH_FAILURE:
             return {fetching: false, fetched: true, error: action.payload};

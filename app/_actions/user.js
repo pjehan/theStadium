@@ -192,7 +192,7 @@ function searchUser(query){
             .then(
                 user => {
                     console.log(user);
-                    dispatch(success({user}));
+                    dispatch(success(user));
 
                     dispatch(alertActions.success('Registration successful'));
                 },

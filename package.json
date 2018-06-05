@@ -19,13 +19,16 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "apollo-client": "^2.3.2",
     "axios": "^0.18.0",
     "expo": "^21.0.0",
+    "graphql-tag": "^2.9.2",
     "jwt-decode": "^2.2.0",
     "material-ui": "^0.20.0",
     "moment": "^2.19.2",
     "prop-types": "^15.6.0",
     "react": "16.0.0-alpha.12",
+    "react-apollo": "^2.1.4",
     "react-native": "^0.48.4",
     "react-native-autocomplete-input": "^3.5.0",
     "react-native-awesome-alerts": "^1.0.3",
@@ -41,6 +44,7 @@
     "redux-promise-middleware": "^5.0.0",
     "redux-thunk": "^2.2.0",
     "rn-placeholder": "^1.2.0",
+    "subscriptions-transport-ws": "^0.9.9",
     "tcomb-form-native": "^0.6.11"
   }
 }

@@ -67,7 +67,7 @@ componentWillMount() {
 }
     loginIn() {
         //fetch to databse
-        //this.props.dispatch(userActions.login(this.state.email, this.state.password));
+        this.props.dispatch(userActions.login(this.state.email, this.state.password));
        // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
        // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
         this.setModalVisible(true);

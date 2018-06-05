@@ -4,7 +4,7 @@ import {
     TouchableOpacity,
     Text,
     View,
-    ScrollView, FlatList, StyleSheet
+    ScrollView, FlatList, StyleSheet, Image
 } from 'react-native';
 import CustomInput from "../components/CustomInput";
 import {connect} from "react-redux";
@@ -29,7 +29,7 @@ class Search extends Component {
     }
 
     goToProfile(item) {
-        if(this._isUser(this.props.currentUser, item)){
+        if(GLOBAL._isUser(this.props.currentUser, item)){
             const users = {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.props.currentUser,
@@ -45,7 +45,7 @@ class Search extends Component {
                 currentUser: this.props.currentUser,
                 inspectedUser: item,
             };
-            if ( this.state.post.owner.userType.label === 'Coach') {
+            if ( item.userType.label === 'Coach') {
                 this.props.navigation.navigate("CoachProfile", users);
             } else {
                 this.props.navigation.navigate('Profile', users);
@@ -53,22 +53,33 @@ class Search extends Component {
         }
     }
 
+    toogleFollow(bool, item){
+
+    }
+
     _renderIsFollowed(item){
-        console.log(item)
         if(GLOBAL._isUser(this.props.currentUser, item) || item.userType === 'Supporter'){
             return null
         }else {
             if(GLOBAL._isFollowing(this.props.currentUser, item)){
-                return <Text>Test</Text>
+                return (
+                    <TouchableOpacity onPress={() => this.toggleFollow(false, item)} style={{height:20,width:20,borderRadius:20}}>
+                        <Image style={{height:20,width:20,borderRadius:20}} source={require('../assets/img/picto/Certification-bleue.png')} resizeMode={'cover'} />
+                    </TouchableOpacity>
+                )
             }else {
-                return <Text>Non</Text>
+                return (
+                    <TouchableOpacity onPress={() => this.toggleFollow(false, item)} style={{height:20,width:20,borderRadius:20}}>
+                        <Image style={{height:20,width:20,borderRadius:20}} source={require('../assets/img/picto/add.png')} resizeMode={'cover'} />
+                    </TouchableOpacity>
+                )
             }
         }
     }
 
     _renderItem(item) {
         return (
-            <View key={this.props.userList.indexOf(item)}>
+            <View style={{justifyContent:'space-between',flexDirection:'row',alignItems:'center'}} key={this.props.userList.indexOf(item)}>
                 <TouchableOpacity style={searchStyle.tabs} onPress={() => this.goToProfile(item)}>
                     <ProfilePic user={item}/>
                     <Text style={searchStyle.tabText}>{item.firstname} {item.lastname}</Text>

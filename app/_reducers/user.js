@@ -45,6 +45,15 @@ export function currentUser(state = {
         case userConstants.PLAYER_ADD_STATS_FAILURE:
             return {...state, fetching: false, fetched: true, error: action.payload};
             break;
+        case userConstants.PUT_REQUEST:
+            return {...state, fetching: true, fetched: false};
+            break;
+        case userConstants.PUT_SUCCESS:
+            return {...state, fetching: false, fetched: true};
+            break;
+        case userConstants.PUT_FAILURE:
+            return {...state, fetching: false, fetched: false, error:action.payload};
+            break;
         default:
             return state
     }

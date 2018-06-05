@@ -13,6 +13,7 @@ export const userActions = {
     removePlayer,
     putUser,
     searchUser,
+    toggleFollow
 };
 
 function login(username, password) {
@@ -99,6 +100,26 @@ function putPlayer(player){
     function request(player) { return { type: userConstants.PLAYER_ADD_STATS_REQUEST, player } }
     function success(player) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, player } }
     function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
+}
+function toggleFollow(bool, user, followed){
+    return dispatch => {
+        dispatch(request(player));
+
+        userService.toggleFollow(bool, user, followed)
+            .then(
+                response => {
+                    dispatch(success());
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(player) { return { type: userConstants.PUT_REQUEST, player } }
+    function success(user) { return { type: userConstants.PUT_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.PUT_FAILURE, error } }
 }
 function putUser(player, media){
     return dispatch => {

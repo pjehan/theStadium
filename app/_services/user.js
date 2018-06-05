@@ -10,7 +10,8 @@ export const userService = {
     getUserType,
     putPlayer,
     putUser,
-    searchUser
+    searchUser,
+    toggleFollow
 };
 import jwt_decode from 'jwt-decode'
 let currentUser = {stats:{}};
@@ -92,7 +93,25 @@ function putPlayer(player) {
             console.error(error);
         })
 }
+function toggleFollow(bool, user, followed){
+    if(!bool){
+        return instance.delete("/api/user_follows_post/" + user.id +"/"+ followed.id + "/")
+            .then(response => {
+                return null;
 
+            }).catch((error) => {
+                console.error(error);
+            });
+    } else {
+        return instance.post("/api/user_follows_post/", {users:user.id,players:followed.id})
+            .then(response => {
+                return response;
+
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+}
 function putUser(player, media) {
     const user = {
         firstname: player.firstname,
@@ -121,16 +140,21 @@ function putUser(player, media) {
             return userRequest(player, user);
         });
 
-        function userRequest(p,u){
-            return instance.put("/api/users/" + player.id,user)
-                .then(response => {
-                    return response.data.user;
 
-                }).catch((error) => {
-                    console.error(error);
-                })
+        }else {
+            return userRequest(player, user);
         }
-    }
+
+
+}
+function userRequest(p,u) {
+    return instance.put("/api/users/" + p.id, u)
+        .then(response => {
+            return response.data.user;
+
+        }).catch((error) => {
+            console.error(error);
+        });
 }
 function searchUser(query){
     return instance.get("/api/users?firstname=" +query)

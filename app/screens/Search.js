@@ -89,16 +89,40 @@ class Search extends Component {
     }
 
     _renderItem(item) {
-        return (
-            <View style={{justifyContent:'space-between',flexDirection:'row',alignItems:'center'}} key={this.props.userList.indexOf(item)}>
-                <TouchableOpacity style={searchStyle.tabs} onPress={() => this.goToProfile(item)}>
-                    <ProfilePic user={item}/>
-                    <Text style={searchStyle.tabText}>{item.firstname} {item.lastname}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    {this._renderIsFollowed(item)}
-                </TouchableOpacity>
-            </View>)
+
+            if(item.userType.label === 'Joueur') {
+                return (<View style={{justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}
+                      key={this.props.userList.indexOf(item)}>
+                    <TouchableOpacity style={searchStyle.tabs} onPress={() => this.goToProfile(item)}>
+                        <ProfilePic user={item}/>
+                        <Text style={searchStyle.tabText}>{item.firstname} {item.lastname}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        {this._renderIsFollowed(item)}
+                    </TouchableOpacity>
+                </View>)
+            }else {
+                return (
+                    <View style={{justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}
+                              key={this.props.userList.indexOf(item)}>
+                    <TouchableOpacity style={searchStyle.tabs} onPress={() => this.goToProfile(item)}>
+                        <ProfilePic user={item}/>
+                        <Text>{item.teams[0].team.club.name}</Text>
+                        <Text style={{
+                        paddingVertical: 2,
+                        paddingHorizontal: 5,
+                        fontSize: 10,
+                        backgroundColor: '#003366',
+                        color: '#ffffff',
+                        marginRight: 10
+                    }}>{item.teams[0].category.label} {item.teams[0].division.label}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        {this._renderIsFollowed(item)}
+                    </TouchableOpacity>
+                    </View>
+                )
+            }
     }
 
     _renderList(){

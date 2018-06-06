@@ -123,7 +123,7 @@ function toggleLikePost(postID, userID, liked) {
             });
 
     } else {
-        return instance.get("/api/user_likes_posts")
+        return instance.get("/api/user_likes_post/"+ userID + "/" + postID)
             .then(response => {
                 return response.data;
             }).catch((error) => {

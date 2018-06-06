@@ -154,7 +154,8 @@ function putUser(player, media) {
 function userRequest(p,u) {
     return instance.put("/api/users/" + p.id, u)
         .then(response => {
-            return response.data.user;
+            console.log(response.data)
+            return response.data;
 
         }).catch((error) => {
             console.error(error);

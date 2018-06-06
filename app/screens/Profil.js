@@ -72,6 +72,7 @@ const initialState = {
     strongFoot: strongFoot[1],
     weight: null,
     height: null,
+    change: false
 }
 
 class Profil extends Component {
@@ -81,7 +82,7 @@ class Profil extends Component {
         this.state = initialState;
         this._renderStats = this._renderStats.bind(this);
         this._renderChange = this._renderChange.bind(this);
-        this._confirmChange = this._renderStats.bind(this);
+        this._confirmChange = this._confirmChange.bind(this);
         this.stateSetting = this.stateSetting.bind(this);
     }
 
@@ -137,7 +138,7 @@ class Profil extends Component {
                     style={{alignSelf:'center'}}
                     onReady={this.state.goalsNbr || this.state.goalsNbr === 0}>
                     <TouchableOpacity  onPress={() => {
-                        this._isUser(state.currentUser, state.inspectedUser) ? this._renderChange() : null
+                        this._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
                         <Text style={STYLE.tabText}>Attaquant, 25ans</Text>
                         {this._isUser(state.currentUser, state.inspectedUser) ?
@@ -213,13 +214,12 @@ class Profil extends Component {
 
     _confirmChange() {
         this.props.dispatch(userActions.putPlayer(stats));
-        statsComponent = null;
-        this._renderStats();
+        this.setState({change:false});
+        this.forceUpdate();
     }
 
     onChange(state, newvalue) {
         this.setState({[state]: newvalue});
-
         stats[state] = newvalue;
     }
 
@@ -247,11 +247,9 @@ class Profil extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
         stats = this.props.inspectedUser.stats || state.inspectedUser.stats;
-        statsComponent = (
+        return (
             <View>
-                <TouchableOpacity onPress={() => {
-                    this._confirmChange()
-                }} style={[STYLE.tab, {justifyContent: 'center'}]}>
+                <TouchableOpacity onPress={() => this._confirmChange()} style={[STYLE.tab, {justifyContent: 'center'}]}>
                     <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
                     <Icon style={{right: 20, position: 'absolute'}} name="create" size={20} color="#003366"/>
                 </TouchableOpacity>
@@ -342,7 +340,6 @@ class Profil extends Component {
                 </TouchableOpacity>
             </View>
         );
-        this.forceUpdate();
     }
 
     render() {
@@ -355,7 +352,7 @@ class Profil extends Component {
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
                 {this.props.isFetching || !state.inspectedUser.stats ? null : this.stateSetting.bind(this)}
 
-                {this._renderStats()}
+                {this.state.change ? this._renderChange() : this._renderStats()}
             </View>
         )
     }

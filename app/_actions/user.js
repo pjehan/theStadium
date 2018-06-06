@@ -86,7 +86,7 @@ function putPlayer(player){
         userService.putPlayer(player)
             .then(
                 user => {
-                    dispatch(success({player}));
+                    dispatch(success(user));
 
                     dispatch(alertActions.success('Registration successful'));
                 },
@@ -129,7 +129,7 @@ function putUser(player, media){
             .then(
                 user => {
                     console.log(user)
-                    dispatch(success({user}));
+                    dispatch(success(user));
 
                     dispatch(alertActions.success('Registration successful'));
                 },
@@ -140,9 +140,9 @@ function putUser(player, media){
             );
     };
 
-    function request(player) { return { type: userConstants.PLAYER_ADD_STATS_REQUEST, player } }
-    function success(user) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, user } }
-    function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
+    function request(player) { return { type: userConstants.USER_PUT_REQUEST, player } }
+    function success(user) { return { type: userConstants.USER_PUT_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.USER_PUT_FAILURE, error } }
 }
 
 function getInspected(id){

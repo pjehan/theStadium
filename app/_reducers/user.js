@@ -40,11 +40,22 @@ export function currentUser(state = {
             return {...state, fecthing: true, fetch: false};
             break;
         case userConstants.PLAYER_ADD_STATS_SUCCESS:
-            return {...state, fetching: false, fetched: true, user:action.payload};
+            return {...state, fetching: false, fetched: true, user:action.user};
             break;
         case userConstants.PLAYER_ADD_STATS_FAILURE:
             return {...state, fetching: false, fetched: true, error: action.payload};
             break;
+
+        case userConstants.USER_PUT_REQUEST:
+            return {...state, fecthing: true, fetch: false};
+            break;
+        case userConstants.USER_PUT_SUCCESS:
+            return {...state, fetching: false, fetched: true, user:action.user};
+            break;
+        case userConstants.USER_PUT_FAILURE:
+            return {...state, fetching: false, fetched: true, error: action.payload};
+            break;
+
         case userConstants.PUT_REQUEST:
             return {...state, fetching: true, fetched: false};
             break;

@@ -68,7 +68,7 @@ function add(user, post, media) {
     return instance.post("/api/posts", postToAdd).then(response => {
         if (media) {
             data.append('post_id', response.data.id);
-            return axios.post("http://192.168.1.95:3000/media/uploads/", data).then(
+            return axios.post("http://192.168.43.103:3000/media/uploads/", data).then(
                 response => {
                     return response;
                 })

@@ -56,6 +56,7 @@ class Login extends Component {
             navigate("Main", {});
         } else {
             this.setModalVisible(false);
+
         }
     }
 componentWillMount() {

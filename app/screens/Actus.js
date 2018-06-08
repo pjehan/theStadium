@@ -130,7 +130,7 @@ class Actus extends Component {
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
                            source={
                                this._displayPath(this._isUser(state.currentUser, state.inspectedUser)).profilepicture ?
-                                   {uri: 'http://192.168.1.95:3000/' + this._displayPath(this._isUser(state.currentUser, state.inspectedUser)).profilepicture} :
+                                   {uri: 'http://192.168.43.103:3000/' + this._displayPath(this._isUser(state.currentUser, state.inspectedUser)).profilepicture} :
                                    require('../assets/img/thestadium/placeholder.jpg') } >
                         {this._isUser(state.currentUser, state.inspectedUser) ?
                             <TouchableOpacity onPress={() => this._addMedia()} style={{
@@ -151,7 +151,7 @@ class Actus extends Component {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={this.props.inspectedUser.profilepicture ? {uri: 'http://192.168.1.95:3000/' +this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
+                           source={this.props.inspectedUser.profilepicture ? {uri: 'http://192.168.43.103:3000/' +this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
                         <View style={{
                             height: 250,
                             width: width / 2.5,

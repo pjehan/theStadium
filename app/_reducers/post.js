@@ -42,7 +42,8 @@ export function postList(state = {
         case postConstants.ADD_POST_SUCCESS:
             return {...state, fetching: false, fetched: true};
             break;
-
+        case postConstants.LIKES_SUCCESS:
+            break;
         case postConstants.ADD_COMMENT_SUCCESS:
             state.posts.posts[action.payload.postID].comments.push(action.payload.commentID);
             return {...state, fetching:false, fetched:true};
@@ -125,7 +126,7 @@ export function commentList(state = {
             return {...state, fetching:false, fetched: false, error: action.payload};
             break;
         case postConstants.ADD_COMMENT_SUCCESS:
-            state.comments.comments.push(action.payload.comments);
+            state.comments.push(action.payload.comments);
             return {...state, fetching:false, fetched:true};
             break;
         // REMOVE
@@ -136,7 +137,7 @@ export function commentList(state = {
             return {...state, fetching:false, fetched: false, error: action.payload};
             break;
         case postConstants.DELETE_COMMENT_SUCCESS:
-            state.comments.comments.splice(action.payload.commentID,1);
+            state.comments.splice(action.payload.commentID,1);
             return {...state, fetching:false, fetched:true};
             break;
         default:

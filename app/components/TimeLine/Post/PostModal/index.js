@@ -17,6 +17,8 @@ import {ImagePicker} from 'expo';
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
 import Autocomplete from "react-native-autocomplete-input";
+import {NavigationActions} from "react-navigation";
+import SearchDropDown from "../../../SearchDropdown";
 
 let ModalContent;
 let SelectedMedia = <View/>;
@@ -33,6 +35,8 @@ const InitialState = {
         content: '',
         postType: null,
     },
+    assists:1,
+    goals:1,
     clubList: null,
     clubQuery: '',
     hideClub: false,
@@ -70,12 +74,21 @@ class PostModal extends Component {
         this.setState(InitialState);
         this.forceUpdate();
     }
-
+    componentDidMount() {
+        AsyncStorage.getItem('clubList').then(
+            value => {
+                this.setState({clubList: JSON.parse(value)});
+                this.forceUpdate();
+            });
+    }
     publishModal(type) {
         let post = this.state.post;
         switch (type) {
             case TypeEnum.goals:
                 post.postType = 1;
+                if(this.state.goals === null){
+                    this.setState({goals: 1})
+                }
                 break;
             case TypeEnum.simple:
                 post.postType = 2;
@@ -85,6 +98,9 @@ class PostModal extends Component {
                 break;
             case TypeEnum.assists:
                 post.postType = 4;
+                if(this.state.assists === null){
+                    this.setState({assists: 1})
+                }
                 break;
             case TypeEnum.interview:
                 post.postType = 5;
@@ -101,8 +117,9 @@ class PostModal extends Component {
         AsyncStorage.getItem('clubList').then(
             value => {
                 this.setState({clubList: JSON.parse(value)});
-                this.forceUpdate()
+                this.forceUpdate();
             });
+
         switch (this.props.type) {
             case TypeEnum.goals:
                 this.displayGoalsAssists(TypeEnum.goals);
@@ -260,7 +277,7 @@ class PostModal extends Component {
                                  color="#003366"
                                  numColor="#003366"
                                  onNumChange={(num) => {
-                                     this.setState({[type]: num});
+                                     this.setState({post:{[type + "Nbr"]: num}});
                                      console.log(this.state)
                                  }}/>
                     </View>
@@ -538,10 +555,12 @@ class PostModal extends Component {
                    onRequestClose={() => {
                        console.log("Modal has been closed.")
                    }}>
+
+                <SearchDropDown title={'oui'} visible={true} />
                 <ScrollView>
                 {this.conditionalRender()}
                 {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
-                    <View style={[{marginLeft: '7.5%', height: 50, width: '85%'}]}>
+                    <View style={[{marginLeft: '7.5%', height: 100, width: '85%'}]}>
                         <Autocomplete
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -677,7 +696,8 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1,
-        backgroundColor: '#eeeeee'
+        backgroundColor: '#eeeeee',
+        height:100
     },
     itemText: {
         fontSize: 15,

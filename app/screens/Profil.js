@@ -72,6 +72,7 @@ const initialState = {
     strongFoot: strongFoot[1],
     weight: null,
     height: null,
+    change: false
 }
 
 class Profil extends Component {
@@ -137,7 +138,7 @@ class Profil extends Component {
                     style={{alignSelf:'center'}}
                     onReady={this.state.goalsNbr || this.state.goalsNbr === 0}>
                     <TouchableOpacity  onPress={() => {
-                        this._isUser(state.currentUser, state.inspectedUser) ? this._renderChange() : null
+                        this._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
                         <Text style={STYLE.tabText}>Attaquant, 25ans</Text>
                         {this._isUser(state.currentUser, state.inspectedUser) ?
@@ -213,13 +214,12 @@ class Profil extends Component {
 
     _confirmChange() {
         this.props.dispatch(userActions.putPlayer(stats));
-        statsComponent = null;
+        this.setState({change:false});
         this._renderStats();
     }
 
     onChange(state, newvalue) {
         this.setState({[state]: newvalue});
-
         stats[state] = newvalue;
     }
 
@@ -247,7 +247,7 @@ class Profil extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
         stats = this.props.inspectedUser.stats || state.inspectedUser.stats;
-        statsComponent = (
+        return (
             <View>
                 <TouchableOpacity onPress={() => {
                     this._confirmChange()
@@ -336,13 +336,12 @@ class Profil extends Component {
                     backgroundColor: '#003366'
                 }} onPress={() => {
                     this.props.navigation.dispatch(userActions.putPlayer(stats));
-                    this._renderStats();
+                    this._confirmChange()
                 }}>
                     <Text>Valider</Text>
                 </TouchableOpacity>
             </View>
         );
-        this.forceUpdate();
     }
 
     render() {
@@ -355,7 +354,7 @@ class Profil extends Component {
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
                 {this.props.isFetching || !state.inspectedUser.stats ? null : this.stateSetting.bind(this)}
 
-                {this._renderStats()}
+                {this.state.change ? this._renderChange() : this._renderStats()}
             </View>
         )
     }

@@ -16,6 +16,7 @@ import {connect} from "react-redux";
 import UserActions from '../UserActions';
 import OwnerHeader from '../OwnerHeader';
 import Content from '../Content';
+import utils from "../../../../config/utils";
 
 let toolsModal = null;
 
@@ -44,9 +45,6 @@ class CommentModal extends Component {
         if(this.props !== nextProps){
         }
     }
-    _isUser(user, inspected) {
-        return user === inspected;
-    }
     _displayTools() {
         return (
             <Modal animationType={"slide"} transparent={true}
@@ -60,7 +58,7 @@ class CommentModal extends Component {
                     justifyContent: 'center',
                     alignItems: 'center'}}>
                     <View style={{height: 200, width: 200,borderRadius:10, backgroundColor: '#ffffff', justifyContent:'center'}}>
-                        {this._isUser(this.state.item.user.id, this.props.currentUser.id) ?
+                        {utils._isUser(this.state.item.user, this.props.currentUser) ?
                             <TouchableOpacity style={{justifyContent:'center',height: 40, borderTopColor: '#cccccc', borderTopWidth: 1,borderBottomColor: '#cccccc', borderBottomWidth: 0.5}}
                                           onPress={() => {
                                               this.props.dispatch(postActions.deleteComment(this.state.item.id,this.props.id,this.props.comments.comments.indexOf(this.state.item)));

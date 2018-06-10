@@ -17,8 +17,13 @@ class Search extends Component {
         super(props);
 
         this.state = {
-            search: null
+            search: null,
+            displayTeam: false
         }
+
+        this._renderClubList = this._renderClubList.bind(this);
+        this._renderIsFollowed = this._renderIsFollowed.bind(this);
+        this._renderItem = this._renderItem.bind(this);
     }
     onChangeInfos(state, newvalue) {
         this.setState({[state]: newvalue});
@@ -69,7 +74,7 @@ class Search extends Component {
     }
 
     _renderIsFollowed(item){
-        if(GLOBAL._isUser(this.props.currentUser, item) || item.userType === 'Supporter'){
+        if(GLOBAL._isUser(this.props.currentUser, item) || item["@type"] ==='User' && item.userType.label === 'Supporter'){
             return null
         }else {
             if(GLOBAL._isFollowing(this.props.currentUser, item)){
@@ -88,17 +93,70 @@ class Search extends Component {
         }
     }
 
-    _renderItem(item) {
+    _renderClubTeam(item){
         return (
-            <View style={{justifyContent:'space-between',flexDirection:'row',alignItems:'center'}} key={this.props.userList.indexOf(item)}>
-                <TouchableOpacity style={searchStyle.tabs} onPress={() => this.goToProfile(item)}>
-                    <ProfilePic user={item}/>
-                    <Text style={searchStyle.tabText}>{item.firstname} {item.lastname}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    {this._renderIsFollowed(item)}
-                </TouchableOpacity>
-            </View>)
+            <View style={{justifyContent: 'space-between', paddingVertical:10, borderTopWidth:1,borderColor:'#cccccc',flexDirection: 'row', alignItems: 'center'}}
+                      key={this.props.userList.indexOf(item)}>
+            <TouchableOpacity style={searchStyle.tabs} onPress={() => this.goToProfile(item)}>
+                <ProfilePic user={item}/>
+                <Text>{item.club.name}</Text>
+                <Text style={{
+                    paddingVertical: 2,
+                    paddingHorizontal: 5,
+                    fontSize: 10,
+                    backgroundColor: '#003366',
+                    color: '#ffffff',
+                    marginRight: 10
+                }}>{item.category.label} {item.division.label}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+                {this._renderIsFollowed(item)}
+            </TouchableOpacity>
+        </View>
+        )
+    }
+
+    _renderClubList(item){
+        return <FlatList
+            style={{paddingLeft:20}}
+            data={item.teams}
+            extraData={item.teams}
+            renderItem={({item}) => this._renderClubTeam(item)}
+        />
+    }
+
+    _renderItem(item) {
+            if(item["@type"] === 'User' && (item.userType.label === 'Joueur')) {
+                return (<View style={{borderBottomWidth:1,paddingVertical:10,borderColor:'#cccccc',justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}
+                      key={this.props.userList.indexOf(item)}>
+                    <TouchableOpacity style={searchStyle.tabs} onPress={() => this.goToProfile(item)}>
+                        <ProfilePic user={item}/>
+                        <Text style={searchStyle.tabText}>{item.firstname} {item.lastname}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        {this._renderIsFollowed(item)}
+                    </TouchableOpacity>
+                </View>)
+            }else if(item["@type"] === 'Club'){
+                return (
+                    <View style={{borderBottomWidth:1,borderColor:'#cccccc',
+                        flexDirection: 'column'}}
+                          key={this.props.userList.indexOf(item)}>
+                        <View style={{flexDirection: 'row',justifyContent: 'space-between', alignItems: 'center',paddingVertical:10,}}>
+                        <TouchableOpacity style={searchStyle.tabs} onPress={() => {this.setState({displayTeam: !this.state.displayTeam}); this.forceUpdate()}}>
+                            <ProfilePic user={item}/>
+                            <Text style={searchStyle.tabText}>{item.name}</Text>
+                        </TouchableOpacity>
+                        <FlatList
+                        />
+                        <TouchableOpacity onPress={() => {this.setState({displayTeam: !this.state.displayTeam});this.forceUpdate();console.log(this.state)}} style={{height:20,width:20,borderRadius:20}}>
+                            <Image style={{height:20,width:20,borderRadius:20}} source={require('../assets/img/picto/add.png')} resizeMode={'cover'} />
+                        </TouchableOpacity>
+                        </View>
+                        {this._renderClubList(item)}
+                    </View>
+                )
+            }
     }
 
     _renderList(){

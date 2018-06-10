@@ -112,7 +112,7 @@ class Profil extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
 
-        if (this._isUser(state.currentUser, state.inspectedUser)) {
+        if (utils._isUser(state.currentUser, state.inspectedUser)) {
             stats = state.inspectedUser.stats;
         } else if (this.props.inspectedUser && this.props.inspectedUser.id) {
             stats = this.props.inspectedUser.stats;
@@ -138,10 +138,10 @@ class Profil extends Component {
                     style={{alignSelf:'center'}}
                     onReady={this.state.goalsNbr || this.state.goalsNbr === 0}>
                     <TouchableOpacity  onPress={() => {
-                        this._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
+                        utils._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
                         <Text style={STYLE.tabText}>Attaquant, 25ans</Text>
-                        {this._isUser(state.currentUser, state.inspectedUser) ?
+                        {utils._isUser(state.currentUser, state.inspectedUser) ?
                             <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
                                   color="#003366"/> : null}
                     </TouchableOpacity>
@@ -334,7 +334,7 @@ class Profil extends Component {
                     backgroundColor: '#003366'
                 }} onPress={() => {
                     this.props.navigation.dispatch(userActions.putPlayer(stats));
-                    this._renderStats();
+                    this._confirmChange()
                 }}>
                     <Text>Valider</Text>
                 </TouchableOpacity>

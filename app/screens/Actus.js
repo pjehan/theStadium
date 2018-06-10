@@ -18,6 +18,8 @@ import {userActions} from "../_actions/user";
 import Post from "../components/TimeLine/Post";
 import PostModal from '../components/TimeLine/Post/PostModal';
 import {postActions} from "../_actions/post";
+import utils from "../config/utils";
+import {utils as utilsC} from "../_constants/utils";
 let ImageCover = null;
 let {width} = Dimensions.get('window');
 
@@ -64,9 +66,6 @@ class Actus extends Component {
         }
     };
 
-    _isUser(user, inspected) {
-        return user.id === inspected.id;
-    }
     _displayPath(istrue){
         if(!istrue){
             return this.props.navigation.state.params.inspectedUser;
@@ -123,16 +122,15 @@ class Actus extends Component {
         if(type !== 'Supporter') {
             team = !state.inspectedUser.teams ? this.props.inspectedUser.teams[0].team : state.inspectedUser.teams[0].team;
         }
-        console.log(this._displayPath(this._isUser(state.currentUser, state.inspectedUser)));
         if (type !== 'Coach') {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
                            source={
-                               this._displayPath(this._isUser(state.currentUser, state.inspectedUser)).profilepicture ?
-                                   {uri: 'http://192.168.1.95:3000/' + this._displayPath(this._isUser(state.currentUser, state.inspectedUser)).profilepicture} :
+                               this._displayPath(utils._isUser(state.currentUser, state.inspectedUser)).profilepicture ?
+                                   {uri: utilsC.NODEJS + this._displayPath(utils._isUser(state.currentUser, state.inspectedUser)).profilepicture} :
                                    require('../assets/img/thestadium/placeholder.jpg') } >
-                        {this._isUser(state.currentUser, state.inspectedUser) ?
+                        {utils._isUser(state.currentUser, state.inspectedUser) ?
                             <TouchableOpacity onPress={() => this._addMedia()} style={{
                                 height: 30,
                                 width: 30,
@@ -151,7 +149,7 @@ class Actus extends Component {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={this.props.inspectedUser.profilepicture ? {uri: 'http://192.168.1.95:3000/' +this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
+                           source={this.props.inspectedUser.profilepicture ? {uri: 'http://192.168.43.103:3000/' +this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
                         <View style={{
                             height: 250,
                             width: width / 2.5,
@@ -196,7 +194,7 @@ class Actus extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
         let type = state.currentUser.userType.label;
-        if (this._isUser(state.currentUser, state.inspectedUser)) {
+        if (utils._isUser(state.currentUser, state.inspectedUser)) {
             if (type === 'Joueur') {
                 return (
                     <View style={{width: width / 1.25, alignSelf: 'center'}}>
@@ -347,13 +345,13 @@ class Actus extends Component {
     render() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        console.log(this._isUser(state.currentUser, state.inspectedUser));
+        console.log(utils._isUser(state.currentUser, state.inspectedUser));
         return (
             <View>
                 {this._renderHeader()}
                 {this._renderModal()}
                 <View style={[{padding: 15, backgroundColor: '#ffffff'}]}>
-                    {!this._isUser(state.currentUser, state.inspectedUser) ?
+                    {!utils._isUser(state.currentUser, state.inspectedUser) ?
                     <Placeholder.Paragraph
                         color="#003366"
                         textSize={14}
@@ -363,7 +361,7 @@ class Actus extends Component {
                         firstLineWidth="50%"
                         marginBottom={10}
                         style={{alignSelf: 'center'}}
-                        onReady={(!this.props.isFetching && this.props.done) || this._isUser(state.currentUser, state.inspectedUser)}>
+                        onReady={(!this.props.isFetching && this.props.done) || utils._isUser(state.currentUser, state.inspectedUser)}>
                         {
                             this.props.done && state.inspectedUser.userType.label !== 'Coach' ?
                             this.renderName() : null

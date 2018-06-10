@@ -8,6 +8,7 @@ import CommentModal from './CommentModal';
 import {connect} from "react-redux";
 import {postActions} from "../../../_actions";
 import {userActions} from "../../../_actions/user";
+import utils from "../../../config/utils";
 
 
 class Post extends Component {
@@ -22,13 +23,9 @@ class Post extends Component {
         this._renderCommentModal = this._renderCommentModal.bind(this);
         this.goToProfile = this.goToProfile.bind(this);
         this.isLiked = this.isLiked.bind(this);
-        this._isUser = this._isUser.bind(this);
     }
     isLiked() {
        return this.props.post.postsLiked.some(user => user.userLikes.id === this.props.currentUser.id);
-    }
-    _isUser(user, inspected) {
-        return user.id === inspected.id;
     }
     onToggleComment(visible, preview) {
             this.setState({isPreview: preview});
@@ -55,7 +52,7 @@ class Post extends Component {
         }
     }
     goToProfile() {
-        if(this._isUser(this.props.currentUser, this.state.post.owner)){
+        if(utils._isUser(this.props.currentUser, this.state.post.owner)){
             const users = {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.props.currentUser,

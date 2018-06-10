@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {userActions} from "../../../../_actions/user";
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
+import utils from "../../../../config/utils";
 
 let team = null;
 
@@ -96,10 +97,6 @@ class OwnerHeader extends Component {
         }
     }
 
-    _isUser(user, inspected) {
-        return user === inspected.id;
-    }
-
     _displayTools() {
         return (
             <Modal animationType={"slide"} transparent={true}
@@ -121,7 +118,7 @@ class OwnerHeader extends Component {
                         backgroundColor: '#ffffff',
                         justifyContent: 'center'
                     }}>
-                        {this._isUser(this.props.ownerID, this.props.currentUser) ?
+                        {utils._isUser(this.props.owner, this.props.currentUser) ?
                             <TouchableOpacity style={{
                                 justifyContent: 'center',
                                 height: 40,

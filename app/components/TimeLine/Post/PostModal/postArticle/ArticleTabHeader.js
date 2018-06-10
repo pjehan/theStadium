@@ -29,10 +29,11 @@ class ArticleTabHeader extends Component {
                 }}>
 
                         <TouchableOpacity onPress={() => {
-                            if(index > 0) {
-                                this.props.navigation.navigate(routes[index - 1].key, {});
+                            if(index === 0) {
+                                console.log('oi')
+                                this.props.navigation.navigate("Main");
                             } else {
-                                this.props.navigation.goBack();
+                                this.props.navigation.navigate(routes[index - 1].key, {});
                             }
                         }}>
                             <Text style={{color:'#cccccc'}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
@@ -122,8 +123,7 @@ class ArticleTabHeader extends Component {
 
                         </View>
                         <View style={{marginBottom:20}}>
-                                    <Text style={{color:'#003366',fontWeight:'500'}}>Etape {index+1} : {labels[index]} </Text>
-
+                            <Text style={{color:'#003366',fontWeight:'500'}}>Etape {index+1} : {labels[index]} </Text>
                         </View>
                         </View>
                     </View>

@@ -114,26 +114,7 @@ export function inspectedUser(state = {
 }
 
 export function searchList(state = {
-    user: [{
-        firstname: null,
-        email: null,
-        id: null,
-        mediasLiked: [],
-        mediasShared: [],
-        players: [],
-        postsLiked: [],
-        postsShared: [],
-        profilepicture: null,
-        sexe: null,
-        teams: [],
-        teamsLiked: [],
-        userType: null,
-        lastname: null,
-        birthdate: null,
-        password: null,
-        type: null,
-        poste: null,
-    }],
+    user: [ ],
     error: null,
     fetching: false,
     fetched: false,

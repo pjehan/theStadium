@@ -1,5 +1,6 @@
 import instance from "../config/axiosConfig";
 import axios from 'axios';
+import {utils} from "../_constants/utils";
 
 export const postService = {
     getAll,
@@ -68,7 +69,7 @@ function add(user, post, media) {
     return instance.post("/api/posts", postToAdd).then(response => {
         if (media) {
             data.append('post_id', response.data.id);
-            return axios.post("http://192.168.1.95:3000/media/uploads/", data).then(
+            return axios.post(utils.NODEJS + "media/uploads/", data).then(
                 response => {
                     return response;
                 })
@@ -123,7 +124,7 @@ function toggleLikePost(postID, userID, liked) {
             });
 
     } else {
-        return instance.get("/api/user_likes_posts")
+        return instance.get("/api/user_likes_post/"+ userID + "/" + postID)
             .then(response => {
                 return response.data;
             }).catch((error) => {

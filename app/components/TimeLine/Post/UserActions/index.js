@@ -19,9 +19,11 @@ class UserActions extends Component {
     toggleLike() {
 
         !this.props.isLiked ? this.setState({likes: this.state.likes + 1}, () => {
+            this.props.likes = this.props.likes + 1;
             this.props.dispatch(postActions.toggleLikePost(this.props.postID, this.props.userID, this.props.isLiked));
             this.forceUpdate();
         }) : this.setState({likes: this.state.likes - 1}, () => {
+            this.props.likes = this.props.likes - 1;
             this.forceUpdate();
         });
     }
@@ -56,7 +58,7 @@ class UserActions extends Component {
                 backgroundColor: '#ffffff',
                 justifyContent: 'center'
             }}>
-                {this._isUser(this.state.item.user.id, this.props.currentUser.id) ?
+                {utils._isUser(this.state.item.user.id, this.props.currentUser.id) ?
                     <TouchableOpacity style={{
                         justifyContent: 'center',
                         height: 40,

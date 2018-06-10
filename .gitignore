@@ -2,3 +2,5 @@ node_modules/
 .expo/
 npm-debug.*
 .idea/
+app/confing/axiosConfig.js
+app/_constants/utils.js

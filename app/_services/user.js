@@ -14,6 +14,7 @@ export const userService = {
     toggleFollow
 };
 import jwt_decode from 'jwt-decode'
+import {utils} from "../_constants/utils";
 let currentUser = {stats:{}};
 _onTokenChange = async(item, selectedValue) => {
     try {
@@ -139,7 +140,7 @@ function putUser(player, media) {
         });
         data.append('width', media.width);
         data.append('height', media.height);
-        return axios.post("http://192.168.1.95:3000/media/upload/", data).then(response => {
+        return axios.post(utils.NODEJS + "media/upload/", data).then(response => {
             user.profilepicture = response.data;
             return userRequest(player, user);
         });
@@ -162,9 +163,17 @@ function userRequest(p,u) {
         });
 }
 function searchUser(query){
+    let array = [];
     return instance.get("/api/users?firstname=" +query)
         .then(response => {
-            return response.data["hydra:member"];
+            array = response.data["hydra:member"];
+
+            return instance.get("/api/clubs?name=" + query)
+                .then(club => {
+                    return array.concat(club.data["hydra:member"]);
+                }).catch((error) => {
+                   console.log(error);
+            })
         }).catch((error) => {
             console.error(error);
         })

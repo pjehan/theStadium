@@ -11,6 +11,7 @@ import {
 import OpenContent from '../components/TimeLine/Post/OpenContent';
 import {Icon} from 'react-native-elements';
 import {ImagePicker} from 'expo';
+import utils from "../config/utils";
 
 let importedMedai = null;
 let gallery = [
@@ -48,9 +49,6 @@ export default class Gallery extends Component {
         }
     };
 
-    _isUser(user, inspected) {
-        return user.id === inspected.id;
-    }
 
     render() {
         const {navigation} = this.props;
@@ -73,7 +71,7 @@ export default class Gallery extends Component {
                                  toggleModal={(visible) => {
                                      this.onToggleModal(visible)
                                  }}/>
-                    {this._isUser(state.currentUser, state.inspectedUser) ?
+                    {utils._isUser(state.currentUser, state.inspectedUser) ?
 
                         <TouchableOpacity onPress={() => this._addMedia()} style={{
                             backgroundColor: '#333333',

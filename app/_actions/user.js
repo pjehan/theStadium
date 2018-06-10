@@ -212,7 +212,7 @@ function searchUser(query){
         userService.searchUser(query)
             .then(
                 user => {
-                    console.log(user);
+                    console.log(user)
                     dispatch(success(user));
 
                     dispatch(alertActions.success('Registration successful'));

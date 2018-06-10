@@ -16,20 +16,14 @@ import {GLOBAL_STYLE} from '../../../../assets/css/global';
 import {ImagePicker} from 'expo';
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
-import Autocomplete from "react-native-autocomplete-input";
+import SearchDropDown from "../../../SearchDropdown";
 
 let ModalContent;
-let SelectedMedia = <View/>;
-
-let originalWidth = null;
-let originalHeight = null;
-let windowWidth = null;
-let widthChange = null;
 const InitialState = {
     post: {
         title: '',
-        goalsNbr: 0,
-        passNbr: 0,
+        goalsNbr: 1,
+        assistsNbr: 1,
         content: '',
         postType: null,
     },
@@ -39,8 +33,8 @@ const InitialState = {
     medias: null,
     height: 50,
     goals_assists: false,
-
-}
+    visible: false
+};
 
 class PostModal extends Component {
     constructor(props) {
@@ -71,11 +65,20 @@ class PostModal extends Component {
         this.forceUpdate();
     }
 
+    componentDidMount() {
+        AsyncStorage.getItem('clubList').then(
+            value => {
+                this.setState({clubList: JSON.parse(value)});
+                this.forceUpdate();
+            });
+    }
+
     publishModal(type) {
         let post = this.state.post;
         switch (type) {
             case TypeEnum.goals:
                 post.postType = 1;
+                this.setState({post:{...this.state.post,assistsNbr:0} });
                 break;
             case TypeEnum.simple:
                 post.postType = 2;
@@ -85,13 +88,15 @@ class PostModal extends Component {
                 break;
             case TypeEnum.assists:
                 post.postType = 4;
+                    this.setState({post:{...this.state.post,goalsNbr:0}});
+
                 break;
             case TypeEnum.interview:
                 post.postType = 5;
                 break;
         }
-        post.goalsNbr = this.state.goals;
-        post.passNbr = this.state.assists;
+        post.goalsNbr = this.state.post.goalsNbr;
+        post.passNbr = this.state.post.assistsNbr;
         this.props.dispatch(postActions.add(this.props.owner.id, post, this.state.medias));
         //TODO when dispatch is good toggle modal
         this.toggleModal(false, type);
@@ -101,8 +106,9 @@ class PostModal extends Component {
         AsyncStorage.getItem('clubList').then(
             value => {
                 this.setState({clubList: JSON.parse(value)});
-                this.forceUpdate()
+                this.forceUpdate();
             });
+
         switch (this.props.type) {
             case TypeEnum.goals:
                 this.displayGoalsAssists(TypeEnum.goals);
@@ -260,7 +266,7 @@ class PostModal extends Component {
                                  color="#003366"
                                  numColor="#003366"
                                  onNumChange={(num) => {
-                                     this.setState({[type]: num});
+                                     this.setState({post:{...this.state.post, [type + "Nbr"]: num}});
                                      console.log(this.state)
                                  }}/>
                     </View>
@@ -528,6 +534,19 @@ class PostModal extends Component {
         }
     }
 
+    searchClosed(visible, data) {
+        this.setState({visible: visible});
+        console.log(data)
+        if (data) {
+            this.setState({
+                clubQuery: data.name,
+                club: data.name,
+                post: {...this.state.post,content: data.name},
+            });
+        }
+        this.forceUpdate();
+    }
+
     render() {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
@@ -538,27 +557,19 @@ class PostModal extends Component {
                    onRequestClose={() => {
                        console.log("Modal has been closed.")
                    }}>
-                <ScrollView>
-                {this.conditionalRender()}
-                {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
-                    <View style={[{marginLeft: '7.5%', height: 50, width: '85%'}]}>
-                        <Autocomplete
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            containerStyle={styles.autocompleteContainer}
-                            data={clubData}
-                            defaultValue={clubQuery}
-                            placeholder={'Nom du club affronté'}
-                            onChangeText={text => this.setState({clubQuery: text})}
-                            hideResults={this.state.hideClub}
-                            renderItem={item => (
 
-                                <TouchableOpacity onPress={() => this._setClub(item)}>
-                                    <Text>{item.name}</Text>
-                                </TouchableOpacity>
-                            )}
-                        />
-                    </View> : null}
+                <SearchDropDown title={'Club affronté'} dataList={this.state.clubList} visible={this.state.visible}
+                                onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
+                <ScrollView>
+                    {this.conditionalRender()}
+                    {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
+                        <View style={[{marginLeft: '7.5%', height: 100, width: '85%'}]}>
+                            <TouchableOpacity style={styles.autocompleteContainer} onPress={() => {
+                                this.setState({visible:true});
+                                this.forceUpdate()}}>
+                                <Text>{this.state.club ? this.state.club : 'Nom du club adverse'}</Text>
+                            </TouchableOpacity>
+                        </View> : null}
                 </ScrollView>
             </Modal>
         )
@@ -619,7 +630,7 @@ class PostModal extends Component {
         if (!result.cancelled) {
             if (this.state.medias) {
                 if (index) {
-                    let mediaClone = Object.assign({},this.state.medias);
+                    let mediaClone = Object.assign({}, this.state.medias);
                     mediaClone[index] = {
                         uri: result.uri,
                         width: result.width,
@@ -671,13 +682,9 @@ export default connect(mapStateToProps)(PostModal);
 
 const styles = StyleSheet.create({
     autocompleteContainer: {
-        flex: 1,
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        zIndex: 1,
-        backgroundColor: '#eeeeee'
+        backgroundColor: '#eeeeee',
+        paddingLeft:5,
+        paddingVertical:10,
     },
     itemText: {
         fontSize: 15,

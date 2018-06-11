@@ -56,9 +56,10 @@ import Contact from "../../screens/Contact";
 import ArticleTabHeader from "../../components/TimeLine/Post/PostModal/postArticle/ArticleTabHeader";
 import conclusion from "../../components/TimeLine/Post/PostModal/postArticle/conclusion";
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
-const ArticleTabTest = TabNavigator({
+import ArticleTabFooter from "../../components/TimeLine/Post/PostModal/postArticle/ArticleTabFooter";
+const ArticleTabInside = TabNavigator({
     Setup: {
-        screen: Setup,
+        screen:  props => <Setup {...props} />,
         navigationOptions: {
             title: 'Profile',
             headerTitle: 'Profile',
@@ -66,7 +67,7 @@ const ArticleTabTest = TabNavigator({
         }
     },
     firstHalf: {
-        screen: FirstHalf,
+        screen: props =>  <FirstHalf {...props} />,
         navigationOptions: {
             header: null,
         },
@@ -104,7 +105,8 @@ export class AvoidArticle extends Component {
                     justifyContent: 'flex-end',backgroundColor:'white',
                 }}
                 behavior="position" enabled>
-                <ArticleTabTest />
+                <ArticleTabInside />
+
             </KeyboardAvoidingView>
         )
     }

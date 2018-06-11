@@ -95,7 +95,7 @@ class Post extends Component {
                 <View style={PostStyle.userActionText}>
                     <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity>
-                            <Text style={PostStyle.text}>Jaime</Text>
+                            <Text style={PostStyle.text}>J'aime</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             this.onToggleComment(true, true)

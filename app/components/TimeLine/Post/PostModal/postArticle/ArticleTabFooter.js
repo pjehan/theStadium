@@ -14,13 +14,13 @@ const labels= [
     'Deuxième mi-temps',
     'En bref'
 ];
-class ArticleTabHeader extends Component {
+class ArticleTabFooter extends Component {
     render() {
-        console.log(this.props)
+        console.log(NavigationActions);
         const {routes} = this.props.navigation.state;
         const index = this.props.navigation.state.index;
         return (
-            <View style={{paddingTop:24,backgroundColor:'#ffffff'}}>
+            <View style={{backgroundColor:'#ffffff'}}>
                 <View style={{
                     flexDirection: 'row',
                     borderBottomWidth: 0.5,
@@ -30,30 +30,20 @@ class ArticleTabHeader extends Component {
                     height: 40
                 }}>
 
-                        <TouchableOpacity onPress={() => {
-                            if(index === 0) {
-                                this.props.dispatch(NavigationActions.back());
-                            } else {
-                                this.props.navigation.navigate(routes[index - 1].key, {});
-                            }
-                        }}>
-                            <Text style={{color:'#cccccc'}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
-                        </TouchableOpacity>
-                    <Text style={{fontWeight: '600'}}>Résumé</Text>
+                    <TouchableOpacity onPress={() => {
+                        if(index === 0) {
+                            this.props.dispatch(NavigationActions.back());
+                        } else {
+                            this.props.navigation.navigate(routes[index - 1].key, {});
+                        }
+                    }}>
+                        <Text style={{color:'#cccccc'}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                         if(index + 1 !== routes.length){
                             this.props.navigation.navigate(routes[index + 1].key, {});
                         } else if(index + 1 === routes.length){
                             const params = this.props.navigation.state.routes[3].params;
-                           /* const content = `{
-                            "homeScore": ${params.homeScore},
-                            "guessScore":${params.guessScore},
-                            "firstHalf_content":  \' ${params.firstHalf_content} \',
-                            "secondHalf_content": \' ${params.secondHalf_content} \',
-                            "guessClub": \'${params.guessClub.name}\',
-                            "homeClub": \'${this.props.currentUser.teams[0].team.club.name}\',
-                            "conclusion": \'${params.conclusion}\'
-                            }`;*/
                             const content = JSON.stringify({
                                 homeScore: params.homeScore,
                                 guessScore: params.guessScore,
@@ -77,67 +67,16 @@ class ArticleTabHeader extends Component {
                         <Text style={{fontWeight: '600', color: '#003366'}} >{index + 1 === routes.length ? 'Publier' : 'Suivant'}</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{paddingLeft: 20, paddingRight: 20}}>
-                    <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
-                        <View
-                            style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
-                            {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
-                                   source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
-                                <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
-                            <View style={{flexDirection: 'column'}}>
-                                <Text style={timeLineStyle.title}>{this.props.currentUser.teams[0].team.club.name}</Text>
-                                <Text style={{
-                                    paddingVertical: 2,
-                                    paddingHorizontal: 5,
-                                    fontSize:10,
-                                    backgroundColor: '#003366',
-                                    color: '#ffffff',
-                                    marginRight: 10
-                                }}>{this.props.currentUser.teams[0].team.category.label} {this.props.currentUser.teams[0].team.division.label}</Text>
 
-
-                            </View>
-
-                            </View>
-                        <View style={[styles.tabContainer]}>
-
-                            {routes.map((route, Index, key) => (
-                                <View style={{flexDirection: 'row', marginVertical:20}}>
-                                    <View style={{
-                                        width: 20,
-                                        height: 20,
-                                        borderRadius: 20/2,
-                                        backgroundColor:  index >= Index ? '#003366' : '#cccccc'
-                                    }} >
-                                        <Text style={{color: index === index ? '#ffffff' : '#003366',
-                                            textAlign:'center'}}>{Index + 1}</Text>
-                                    </View>
-                                    <View style={[{
-                                        backgroundColor: index <= Index ? '#cccccc' : '#003366'
-                                    },{width: 30,
-                                        marginTop:8,
-                                        height:2,
-                                        display: Index === (routes.length - 1) ? 'none' : 'flex'
-                                    }]}/>
-
-                                </View>
-                            ))}
-
-                        </View>
-                        <View style={{marginBottom:20}}>
-                            <Text style={{color:'#003366',fontWeight:'500'}}>Etape {index+1} : {labels[index]} </Text>
-                        </View>
-                        </View>
-                    </View>
-                </View>
-                )}
+            </View>
+        )}
 }
 const mapStateToProps = (state) => {
     return {
         currentUser: state.currentUser.user
     };
 };
-export default connect(mapStateToProps)( ArticleTabHeader);
+export default connect(mapStateToProps)( ArticleTabFooter);
 const timeLineStyle = StyleSheet.create({
     tabContainer: {
         justifyContent: 'space-between',

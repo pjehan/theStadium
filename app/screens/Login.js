@@ -96,7 +96,6 @@ componentWillMount() {
                 </View>
                 <KeyboardAvoidingView
                     behavior="padding">
-                    {alert}
                     <View>
                         <Text>{this.state.databse}</Text>
                         <CustomInput

@@ -15,6 +15,7 @@ import {GLOBAL_STYLE} from '../../../../../assets/css/global';
 import { Header } from 'react-navigation';
 
 import {connect} from "react-redux";
+import SearchDropDown from "../../../../SearchDropdown/index";
 class Setup extends Component {
     constructor(props){
         super(props);
@@ -53,22 +54,24 @@ class Setup extends Component {
             key: "conclusion"
         }))
     }
-    _setClub(item) {
-        this.setState({
-            clubQuery: item.name,
-            guessClub: item,
-            hideClub: true,
-        }, () => {
-            this.props.navigation.dispatch(NavigationActions.setParams({
-                params:{
-                    guessClub: {
-                        name: this.state.guessClub.name,
-                        id: this.state.guessClub.id
-                    }
-                },
-                key: "conclusion"
-            }))});
-
+    _setClub(visible, item) {
+        this.setState({guessVisible: visible});
+        if(item) {
+            this.setState({
+                clubQuery: item.name,
+                guessClub: item,
+            }, () => {
+                this.props.navigation.dispatch(NavigationActions.setParams({
+                    params: {
+                        guessClub: {
+                            name: this.state.guessClub.name,
+                            id: this.state.guessClub.id
+                        }
+                    },
+                    key: "conclusion"
+                }))
+            });
+        }
     }
     _filterClub(query, dataSource) {
         if (query === '') {
@@ -85,7 +88,7 @@ class Setup extends Component {
             return (
                 <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{width:'25%',alignItems:'center'}}>
                     {this.state.guessClub.profilePicture ?<Image style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}
-                                                                 source={{uri:this.state.guessClub.profilePicture}}/> : <View stlye={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}/> }
+                                                                 source={{uri:this.state.guessClub.profilePicture}}/> : <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]}/> }
                     <Text style={timeLineStyle.title}>{this.state.guessClub.name}</Text>
                 </TouchableOpacity>
             )
@@ -93,7 +96,7 @@ class Setup extends Component {
             return (
                 <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{width:'25%',alignItems:'center'}}>
                     <View style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}/>
-                    <Text style={[timeLineStyle.title, {fontSize:14,textAlign:'center'}]}>Sélectionner un club</Text>
+                    <Text style={[timeLineStyle.title, {fontSize:14,textAlign:'center'}]}>Nom du club</Text>
                 </TouchableOpacity>
             )
         }
@@ -101,50 +104,10 @@ class Setup extends Component {
     render() {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
-        console.log(this.props)
         return (
             <View>
-                <Modal
-                    transparent={true}
-                    animationType={'none'}
-                    visible={this.state.guessVisible}
-                    onRequestClose={() => {
-                        console.log('close modal')
-                    }}>
-                    <View style={STYLE.modalBackground}>
-                        <View style={[STYLE.activityIndicatorWrapper,{width:'60%',alignItems:'center',justifyContent:'flex-end'}]}>
-                            <Autocomplete
-
-                                underlineColorAndroid="transparent"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                containerStyle={[styles.autocompleteContainer,{width:'90%',marginLeft:'10%'}]}
-                                data={clubData}
-                                defaultValue={clubQuery}
-                                placeholder={'Nom de votre Club'}
-                                onChangeText={text => this.setState({clubQuery: text,hideClub:false})}
-                                hideResults={this.state.hideClub}
-                                renderItem={item => (
-
-                                    <TouchableOpacity onPress={() => this._setClub(item)}>
-                                        <Text>{item.name}</Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-
-                            <View style={{flexDirection:'row',alignContent:'center',justifyContent:'center'}}>
-                                <TouchableOpacity style={{width:'50%',alignItems:'center',borderRightWidth:0.5}} onPress={() => {this.setState({guessVisible:false})}}>
-                                    <Text>Annuler</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{width:'50%',alignItems:'center',borderLeftWidth:0.5}} onPress={() => {this.setState({guessVisible:false})}}>
-                                    <Text>Ok</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                    </View>
-
-                </Modal>
+                <SearchDropDown title={'Club affronté'} dataList={this.state.clubList} visible={this.state.guessVisible}
+                                onModalClose={(visible, data) => this._setClub(visible, data)}/>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Score du match</Text>
                 </View>

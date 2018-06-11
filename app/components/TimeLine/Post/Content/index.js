@@ -76,9 +76,7 @@ export default class Content extends Component {
         let windowWidth = Dimensions.get('window').width;
         let widthChange;
 
-        console.log(this.props)
         if (this.props.medias.length > 0) {
-            console.log(this.props.medias)
             url = this.props.medias[0].path;
             originalWidth = this.props.medias[0].width;
             originalHeight = this.props.medias[0].height;
@@ -142,7 +140,6 @@ export default class Content extends Component {
     }
 
     returnGoalPost(owner, goals, club) {
-        console.log(this.props)
         let goals_nbr;
         let scored;
         if (!club) {
@@ -202,7 +199,6 @@ export default class Content extends Component {
     checkType() {
         const TYPE = this.props.postType.label;
         if (TYPE === TypeEnum.simple) {
-            console.log('oui')
             this.returnSimplePost()
         }
         else if (TYPE === TypeEnum.article) {

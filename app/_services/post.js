@@ -17,8 +17,7 @@ function getAll() {
     let post = null;
     return instance.get("/api/posts")
         .then(response => {
-            post = response.data["hydra:member"];
-            return response.data["hydra:member"];
+            return response.data["hydra:member"].reverse();
         }).catch((error) => {
             console.error(error);
         });
@@ -27,7 +26,7 @@ function getAll() {
 function getOwnerList(id) {
     return instance.get("/api/posts?owner=" + id)
         .then(response => {
-            return response.data["hydra:member"]
+            return response.data["hydra:member"].reverse();
         }).catch((error) => {
             console.error(error);
         });
@@ -47,11 +46,7 @@ function add(user, post, media) {
     };
 
     Object.assign(postToAdd, post);
-
-
-
     let data = new FormData();
-    console.log(postToAdd);
     if (media) {
         for(let i = 0; i < media.length; i++) {
             let uriParts = media[i].uri.split('.');

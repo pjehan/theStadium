@@ -7,6 +7,7 @@ import PostModal from '../components/TimeLine/Post/PostModal';
 import {connect} from 'react-redux';
 import {postActions} from '../_actions';
 import {TypeEnum} from "../components/TimeLine/Post/contentType/index";
+import {ImagePicker} from "expo";
 
 
 let postList;
@@ -42,6 +43,10 @@ class TimeLine extends Component {
         this.forceUpdate();
     }
 
+    _add = async () => {
+       const result = ImagePicker.launchImageLibraryAsync({});
+       console.log(result);
+    }
     _renderItem(item) {
         return <Post style={[timeLineStyle.singlePost]} navigation={this.props.navigation}
                      key={this.props.posts.posts.indexOf(item)} id={this.props.posts.posts.indexOf(item)} post={item}/>
@@ -49,7 +54,6 @@ class TimeLine extends Component {
 
     _renderList() {
         const {posts} = this.props;
-
         return (
             <FlatList
                 onRefresh={() => {
@@ -91,7 +95,7 @@ class TimeLine extends Component {
             shadowOpacity: 1,
             elevation: 5
         }]}><TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-            this.onToggleModal(true, TypeEnum.interview)
+            this._add();
         }}>
             <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
                    source={require('../assets/img/picto/menu/actions/interview.png')}/>
@@ -149,7 +153,7 @@ class TimeLine extends Component {
     }
 
     render() {
-        const {posts} = this.props;
+        console.log(this.props)
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 {this._renderModal()}

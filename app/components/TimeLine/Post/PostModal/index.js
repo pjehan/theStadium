@@ -83,13 +83,9 @@ class PostModal extends Component {
             case TypeEnum.simple:
                 post.postType = 2;
                 break;
-            case TypeEnum.article:
-                post.postType = 3;
-                break;
             case TypeEnum.assists:
                 post.postType = 4;
                     this.setState({post:{...this.state.post,goalsNbr:0}});
-
                 break;
             case TypeEnum.interview:
                 post.postType = 5;
@@ -119,9 +115,6 @@ class PostModal extends Component {
             case TypeEnum.simple:
                 this.displaySimpleArticle(TypeEnum.simple);
                 break;
-            case TypeEnum.article:
-                this.displayArticle(TypeEnum.article);
-                break;
             case TypeEnum.interview:
                 this.displayInterview(TypeEnum.interview);
                 break;
@@ -136,8 +129,6 @@ class PostModal extends Component {
                 return this.displayGoalsAssists(TypeEnum.assists);
             case TypeEnum.simple:
                 return this.displaySimpleArticle(TypeEnum.simple);
-            case TypeEnum.article:
-                return this.displayArticle(TypeEnum.article);
             case TypeEnum.interview:
                 return this.displayInterview(TypeEnum.interview);
         }
@@ -154,14 +145,6 @@ class PostModal extends Component {
         }
     }
 
-    _setClub(item) {
-        this.setState({
-            clubQuery: item.name,
-            club: item.name,
-            post: {content: item.name},
-            hideClub: true,
-        });
-    }
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
@@ -174,9 +157,6 @@ class PostModal extends Component {
                 break;
             case TypeEnum.simple:
                 this.displaySimpleArticle(TypeEnum.simple);
-                break;
-            case TypeEnum.article:
-                this.displayArticle(TypeEnum.article);
                 break;
             case TypeEnum.interview:
                 this.displayInterview(TypeEnum.interview);
@@ -363,33 +343,6 @@ class PostModal extends Component {
                 </View>
             </ScrollView>);
     }
-
-    displayArticle(type) {
-        ModalContent = (
-            <View style={{flex: 1, justifyContent: 'space-between'}}>
-                <View style={{
-                    flexDirection: 'row',
-                    borderBottomWidth: 0.5,
-                    borderColor: '#cccccc',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    height: 40
-                }}>
-                    <TouchableOpacity onPress={() => {
-                        this.toggleModal(false, type)
-                    }}>
-                        <Text>Annuler</Text>
-                    </TouchableOpacity>
-                    <Text style={{fontWeight: '600'}}>Post</Text>
-                    <TouchableOpacity onPress={() => {
-                        this.publishModal(type)
-                    }}>
-                        <Text style={{fontWeight: '600', color: '#003366'}}>Publiez</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    };
 
     displayInterview(type) {
         return (

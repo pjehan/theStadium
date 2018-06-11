@@ -138,7 +138,7 @@ class OpenContent extends Component {
                             <View style={PostStyle.userActionText}>
 
                                 <TouchableOpacity>
-                                    <Text style={PostStyle.text}>Jaime</Text>
+                                    <Text style={PostStyle.text}>J'aime</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity>
                                     <Text style={[PostStyle.text, {marginLeft: 5, marginRight: 5}]}>Commenter</Text>

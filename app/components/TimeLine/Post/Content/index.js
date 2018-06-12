@@ -9,6 +9,7 @@ import {
 import OpenContent from "../OpenContent";
 import ArticleDisplay from "../ArticleDisplay";
 import {utils} from "../../../../_constants/utils";
+import {Video} from "expo";
 let postContent;
 let {height} = Dimensions.get('window');
 const PostStyle = StyleSheet.create({
@@ -57,6 +58,41 @@ export default class Content extends Component {
         this.setState({openContent: visible});
         img ? this.setState({actualImg: img}) : '';
         this.forceUpdate();
+    }
+    returnInterview(title) {
+        const  originalWidth = this.props.medias[0].width;
+        const originalHeight = this.props.medias[0].height;
+        const windowWidth = Dimensions.get('window').width;
+        const widthChange = (windowWidth - 10) / originalWidth;
+        return (
+            <View>
+                <TouchableOpacity onPress={() => {}}>
+                    <Video   rate={1.0}
+                             volume={0}
+                             muted={true}
+                             resizeMode="cover"
+                             shouldPlay
+                             isLooping source={{uri: utils.NODEJS + this.props.medias[0].path}}
+                             style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                    <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10}}>
+                        <View style={{position:'absolute',top:0,zIndex:15,borderRadius:5,flexDirection:'row',backgroundColor:'#00A65B',paddingHorizontal:15,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
+                            <Image style={{
+                                height: 15,
+                                width: 15,
+                                marginRight: 10}} resizeMode='contain'
+                                   source={require('../../../../assets/img/picto/menu/actions/interview_white.png')}/>
+                            <Text style={{fontWeight:'bold',color:'#ffffff'}}>Interview</Text>
+                        </View>
+                        <View style={{marginTop:15,paddingVertical:15,backgroundColor:'rgba(0,0,0,0.5)',width:'100%'}}>
+                        <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
+                            <Text style={{color:'#ffffff',fontSize:16, fontWeight:'600'}}>{title}</Text>
+                        </View>
+                        </View>
+                    </View>
+
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     returnSimplePost() {
@@ -210,6 +246,9 @@ export default class Content extends Component {
         else if (TYPE === TypeEnum.assists) {
             this.returnAssistPost(this.props.owner, this.props.assistsNbr, this.props.content)
         }
+        else if (TYPE === TypeEnum.interview) {
+            this.returnInterview(this.props.title)
+        }
     }
 
     componentWillMount() {
@@ -236,7 +275,8 @@ export default class Content extends Component {
                 {TYPE === TypeEnum.simple ? this.returnSimplePost() :
                     TYPE === TypeEnum.article ? this.returnArticle() :
                         TYPE === TypeEnum.goals ?  this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content) :
-                            this.returnAssistPost(this.props.owner, this.props.passNbr, this.props.content)}
+                            TYPE === TypeEnum.assists ? this.returnAssistPost(this.props.owner, this.props.passNbr, this.props.content) :
+                    TYPE === TypeEnum.interview ? this.returnInterview(this.props.title): null}
             </View>
         )
     }

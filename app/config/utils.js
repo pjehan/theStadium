@@ -11,6 +11,10 @@ const _isFollowing = (user, inspected) => {
     }
 };
 
+const _isLiked = () => {
+
+}
+
 export default {
     _isUser,
     _isFollowing

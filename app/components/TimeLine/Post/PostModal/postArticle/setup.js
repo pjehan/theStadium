@@ -118,8 +118,6 @@ class Setup extends Component {
                             <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
                         <Text
                             style={timeLineStyle.title}>Fc Guichen</Text>
-                    </View>
-                    <View style={{flexDirection:'row',alignItems:'center',width:'30%', justifyContent:'space-between'}}>
                         <CustomInput
                             container={''}
                             textColor={'#333333'}
@@ -131,20 +129,19 @@ class Setup extends Component {
                             state={'homeScore'}
                             onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
                         />
-                        <Text> - </Text>
-                        <CustomInput
-                            container={''}
-                            textColor={'#333333'}
-                            borderColor={'transparent'}
-                            backgroundColor={'#eeeeee'}
-                            placeholder={'0'}
-                            keyboardType={'numeric'}
-                            input={GLOBAL_STYLE.numericInput}
-                            state={'guessScore'}
-                            onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
-                        />
                     </View>
                     {this._guessClub(clubData,clubQuery)}
+                    <CustomInput
+                        container={''}
+                        textColor={'#333333'}
+                        borderColor={'transparent'}
+                        backgroundColor={'#eeeeee'}
+                        placeholder={'0'}
+                        keyboardType={'numeric'}
+                        input={GLOBAL_STYLE.numericInput}
+                        state={'guessScore'}
+                        onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
+                    />
                 </View>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Titre de l'article</Text>

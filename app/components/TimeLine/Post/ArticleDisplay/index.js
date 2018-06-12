@@ -40,7 +40,7 @@ class ArticleDisplay extends Component {
                     style={{flexDirection: 'row', paddingVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
                     <Image style={{width: 20, height: 30}} resizeMode='contain'
                            source={require('../../../../assets/img/picto/menu/actions/article.png')}/>
-                    <Text style={{color: '#00A65B', marginLeft: 10, fontSize: 12, fontWeight: '500'}}>Article</Text>
+                    <Text style={{color: '#00A65B', marginLeft: 10, fontSize: 12, fontWeight: '500'}}>Résumé</Text>
                 </View>
                 <View style={{height: 1, backgroundColor: '#00A65B', alignSelf: 'center', width: '10%'}}/>
                     <View style={{height: 1, backgroundColor: '#00A65B', alignSelf: 'center', width: '10%'}}/>

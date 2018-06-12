@@ -42,7 +42,9 @@ export default class SecondHalf extends Component {
     _addMedia = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [16,9]
+            aspect: [16,9],
+
+            mediaTypes: 'Images'
         });
 
         if (!result.cancelled) {
@@ -52,6 +54,7 @@ export default class SecondHalf extends Component {
                     this.props.navigation.dispatch(NavigationActions.setParams({
                         params:{
                             firstHalf_coverPhoto: {
+                                type: result.type,
                                 uri:result.uri,
                                 mainMedia: 1,
                                 width: result.width,

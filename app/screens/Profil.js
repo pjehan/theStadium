@@ -17,50 +17,7 @@ import {userActions} from "../_actions/user";
 import Moment from "moment";
 import {connect} from "react-redux";
 
-const STYLE = StyleSheet.create({
-    tab: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 30,
-        paddingRight: 30,
-        justifyContent: 'space-between',
-        height: 50,
-        borderBottomColor: '#cccccc',
-        borderBottomWidth: 1,
-    },
-    role: {flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 30,
-        paddingRight: 30,
-        height: 50,
-        justifyContent: 'center',
-        borderBottomColor: '#cccccc',
-        borderBottomWidth: 1,
-    },
-    tabText: {
-        color: '#003366',
-        fontWeight: '700'
-    },
-    even: {
-        backgroundColor: '#E7E7E7',
-    },
-    modalBackground: {
-        flex: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        backgroundColor: '#00000040'
-    },
-    activityIndicatorWrapper: {
-        backgroundColor: '#FFFFFF',
-        height: 100,
-        padding: 10,
-        borderRadius: 10,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around'
-    }
-});
+
 let strongFoot = ['Gauche', 'Droit', 'Ambidextre'];
 
 
@@ -365,3 +322,48 @@ const mapStateToProps = (state) => {
     };
 };
 export default connect(mapStateToProps)(Profil);
+
+const STYLE = StyleSheet.create({
+    tab: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        justifyContent: 'space-between',
+        height: 50,
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    },
+    role: {flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        height: 50,
+        justifyContent: 'center',
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    },
+    tabText: {
+        color: '#003366',
+        fontWeight: '700'
+    },
+    even: {
+        backgroundColor: '#E7E7E7',
+    },
+    modalBackground: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#00000040'
+    },
+    activityIndicatorWrapper: {
+        backgroundColor: '#FFFFFF',
+        height: 100,
+        padding: 10,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    }
+});

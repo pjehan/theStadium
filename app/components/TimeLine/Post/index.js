@@ -103,6 +103,12 @@ class Post extends Component {
                             <Text style={[PostStyle.text, {marginHorizontal:10}]}>Commenter</Text>
                         </TouchableOpacity>
 
+                        <TouchableOpacity onPress={() => {
+                            this.onToggleComment(true, true)
+                        }}>
+                            <Text style={[PostStyle.text]}>Partager</Text>
+                        </TouchableOpacity>
+
                     </View>
                     <TouchableOpacity onPress={() => {
                         this.onToggleComment(true, false)

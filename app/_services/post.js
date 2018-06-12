@@ -47,24 +47,40 @@ function add(user, post, media) {
 
     Object.assign(postToAdd, post);
     let data = new FormData();
+    let url = utils.NODEJS;
     if (media) {
-        for(let i = 0; i < media.length; i++) {
-            let uriParts = media[i].uri.split('.');
+        if(media.length > 1) {
+            url = url + 'media/uploads/';
+            for (let i = 0; i < media.length; i++) {
+                let uriParts = media[i].uri.split('.');
+                let fileType = uriParts[uriParts.length - 1];
+                data.append('media', {
+                    uri: media[i].uri,
+                    name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + `.${fileType}`,
+                    type: `${media.type}/${fileType}`
+                });
+                data.append('width' + i, media[i].width);
+                data.append('height' + i, media[i].height);
+            }
+        }else{
+
+            url = url + 'media/upload/';
+            let uriParts = media.uri.split('.');
             let fileType = uriParts[uriParts.length - 1];
-            data.append('media', {
-                uri: media[i].uri,
+            data.append('media',{
+                uri:media.uri,
                 name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + `.${fileType}`,
                 type: `image/${fileType}`
             });
-            data.append('width'+i, media[i].width);
-            data.append('height'+i, media[i].height);
+            data.append('width', media.width);
+            data.append('height', media.height);
         }
     }
 
     return instance.post("/api/posts", postToAdd).then(response => {
         if (media) {
             data.append('post_id', response.data.id);
-            return axios.post(utils.NODEJS + "media/uploads/", data).then(
+            return axios.post(url, data).then(
                 response => {
                     return response;
                 })

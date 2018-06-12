@@ -4,6 +4,7 @@ import {Text, View,Alert, TouchableOpacity, Modal} from 'react-native';
 import {StyleSheet, Image} from 'react-native';
 import {postActions} from "../../../../_actions/post";
 import {connect} from "react-redux";
+import utils from "../../../../config/utils";
 
 class UserActions extends Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class UserActions extends Component {
     }
 
     toggleLike() {
-
+        console.log(this.props.isLiked);
         !this.props.isLiked ? this.setState({likes: this.state.likes + 1}, () => {
             this.props.likes = this.props.likes + 1;
             this.props.dispatch(postActions.toggleLikePost(this.props.postID, this.props.userID, this.props.isLiked));
@@ -27,6 +28,8 @@ class UserActions extends Component {
             this.forceUpdate();
         });
     }
+
+
 
     toggleShare() {
         Alert.alert(

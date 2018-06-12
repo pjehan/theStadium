@@ -12,20 +12,23 @@ import createLogger from 'redux-logger'
 
 import { styles } from './app/assets/css/global';
 import setAuthorizationToken from "./app/config/setAuthorizationToken";
+import {ChoiceModalContainer} from "./app/components/ChoiceModal/index";
 
 const logger = createLogger({
     // ...options
 });
 const MIDDLEWARE = applyMiddleware(promise(), thunk, logger);
 
+
 export default class App extends Component {
 
   render() {
       let store = createStore(appReducer, MIDDLEWARE);
     return (
-      <Provider store={store}>
-      <AppNavigation />
+      <Provider  ref={c => (this._root = c)}  store={store}>
+        <AppNavigation/>
       </Provider>
+
     );
   }
 }

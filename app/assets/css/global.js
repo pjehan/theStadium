@@ -152,6 +152,7 @@ export const timeLineStyle = StyleSheet.create({
     tabButtonText: {
         color: '#003366',
         fontWeight: '400',
+        fontSize:16,
     },
     tabButtonPicto: {
         height: 15,

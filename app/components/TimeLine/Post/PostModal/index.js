@@ -17,6 +17,8 @@ import {ImagePicker} from 'expo';
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
 import SearchDropDown from "../../../SearchDropdown";
+import {Icon} from "react-native-elements";
+import {Avatar} from "../../../User/Avatar/index";
 
 let ModalContent;
 const InitialState = {
@@ -148,6 +150,7 @@ class PostModal extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
+        console.log(this.state, this.props)
         switch (this.props.type) {
             case TypeEnum.goals:
                 this.displayGoalsAssists(TypeEnum.goals);
@@ -178,13 +181,13 @@ class PostModal extends Component {
                 <TouchableOpacity onPress={() => {
                     this.toggleModal(false, type)
                 }}>
-                    <Text>Annuler</Text>
+                    <Text style={{fontSize:16}}>Annuler</Text>
                 </TouchableOpacity>
-                <Text style={{fontWeight: '600'}}>{Title}</Text>
+                <Text style={{fontSize:16,fontWeight: '600'}}>{Title}</Text>
                 <TouchableOpacity onPress={() => {
                     this.publishModal(type)
                 }}>
-                    <Text style={{fontWeight: '600', color: '#003366'}}>Publiez</Text>
+                    <Text style={{fontWeight: '600', color: '#003366', fontSize:16}}>Publiez</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -195,10 +198,7 @@ class PostModal extends Component {
         return (
             <View
                 style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
-                {this.props.owner.userType.label !== 'Coach' && !this.props.owner.profilepicture || !this.props.owner.teams[0].team.profilePicture ?
-                    <Image style={timeLineStyle.profilePic}
-                           source={{uri: this.props.owner.userType.label !== 'Coach' ? this.props.owner.profilepicture : this.props.owner.teams[0].team.profilePicture}}/> :
-                    <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/>}
+                <Avatar user={this.props.currentUser} />
                 {this.props.owner.userType.label === 'Joueur' ? <Text
                         style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text> :
                     <View>
@@ -260,11 +260,11 @@ class PostModal extends Component {
     displaySimpleArticle(type) {
         return (
             <ScrollView>
-                {this._renderHeader(type, 'Publiez')}
+                {this._renderHeader(type, 'Publication')}
                 <View style={{flex: 1, paddingLeft: 20, paddingRight: 20}}>
                     <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
                         {this._renderOwner()}
-                        <Text style={GLOBAL_STYLE.text}>Partager en toute simplicié</Text>
+                        <Text style={GLOBAL_STYLE.text}>Partagez en toute simplicié</Text>
                     </View>
 
                 </View>
@@ -304,8 +304,11 @@ class PostModal extends Component {
                                 <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}}
                                        resizeMode={'contain'}
                                        source={require('../../../../assets/img/picto/menu/actions/goal.png')}/>
-                                <Text style={{color: 'green'}}>Partagez un But</Text>
-                                <Text style={{marginRight: 20}}> > </Text>
+                                <Text style={{color: '#0cae69'}}>Partagez un But</Text>
+                                <Icon style={{marginRight:20}}
+                                      color='#003366'
+                                      size={25}
+                                      name={'chevron-right'}/>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {
                                 this.toggleModal(true, TypeEnum.assists)
@@ -322,8 +325,11 @@ class PostModal extends Component {
                                 <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}}
                                        resizeMode={'contain'}
                                        source={require('../../../../assets/img/picto/menu/actions/assist.png')}/>
-                                <Text style={{color: 'green'}}>Partagez une Passe Décisive</Text>
-                                <Text style={{marginRight: 20}}> > </Text>
+                                <Text style={{color: '#0cae69'}}>Partagez une Passe Décisive</Text>
+                                <Icon style={{marginRight:20}}
+                                      color='#003366'
+                                      size={25}
+                                      name={'chevron-right'}/>
                             </TouchableOpacity>
                         </View> : null}
                     <TouchableOpacity onPress={() => {
@@ -337,8 +343,11 @@ class PostModal extends Component {
 
                         <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}} resizeMode={'contain'}
                                source={require('../../../../assets/img/picto/menu/actions/photo.png')}/>
-                        <Text style={{color: '#003366'}}>Ajoutez une photo</Text>
-                        <Text style={{marginRight: 20}}> > </Text>
+                        <Text style={{color: '#003366'}}>Ajoutez un média</Text>
+                        <Icon style={{marginRight:20}}
+                              color='#003366'
+                              size={25}
+                              name={'chevron-right'}/>
                     </TouchableOpacity>
                 </View>
             </ScrollView>);
@@ -351,7 +360,7 @@ class PostModal extends Component {
                 <View style={{flex: 1, paddingLeft: 20, paddingRight: 20}}>
                     <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
                         {this._renderOwner()}
-                        <Text style={GLOBAL_STYLE.text}>Partager une interview</Text>
+                        <Text style={GLOBAL_STYLE.text}>Partagez une interview</Text>
                     </View>
                 </View>
                 <View style={[GLOBAL_STYLE.modal]}>
@@ -577,7 +586,7 @@ class PostModal extends Component {
     _addMedia = async (type, callback, index) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            mediaTypes: 'video'
+            mediaTypes: 'Images'
         });
 
         if (!result.cancelled) {
@@ -606,7 +615,7 @@ class PostModal extends Component {
                     });
                 }
             } else {
-                this.setState({medias: [{uri: result.uri, width: result.width, height: result.height}]}, () => {
+                this.setState({medias: [{type: result.type, uri: result.uri, width: result.width, height: result.height}]}, () => {
                     callback();
                 });
             }

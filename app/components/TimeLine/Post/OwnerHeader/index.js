@@ -40,12 +40,9 @@ class OwnerHeader extends Component {
 
         if (seconds < 100) {
             switch (true) {
-                case seconds < 2:
-                    this.state.displayDate = seconds + ' seconde';
+                case seconds < 100:
+                    this.state.displayDate = 'Il y a quelques secondes';
                     break;
-                case seconds > 1:
-                    this.state.displayDate = seconds + ' secondes';
-                    break
             }
         } else if (minutes < 60) {
             switch (true) {
@@ -192,8 +189,8 @@ class OwnerHeader extends Component {
                                     }}>{this.props.team.category.label} {this.props.team.division.label}</Text> :
                                     null
                                 }
-                                <View style={{flexDirection: 'row'}}>
-                                    <Image resizeMode="contain" style={{height: 15, width: 15}}
+                                <View style={{flexDirection: 'row', alignItems:'center',justifyContent:'center'}}>
+                                    <Image resizeMode="contain" style={{height: 10, width: 10}}
                                            source={require('../../../../assets/img/picto/actualite/picto-time-gris.png')}/>
                                     <Text style={PostStyle.timeText}>{this.state.displayDate}</Text>
                                 </View>

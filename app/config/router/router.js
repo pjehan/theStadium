@@ -57,6 +57,7 @@ import ArticleTabHeader from "../../components/TimeLine/Post/PostModal/postArtic
 import conclusion from "../../components/TimeLine/Post/PostModal/postArticle/conclusion";
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
 import ArticleTabFooter from "../../components/TimeLine/Post/PostModal/postArticle/ArticleTabFooter";
+import {ChoiceModalContainer} from "../../components/ChoiceModal/index";
 const ArticleTabInside = TabNavigator({
     Setup: {
         screen:  props => <Setup {...props} />,
@@ -451,13 +452,30 @@ export const Navigator = StackNavigator({
         headerMode: "screen"
     });
 
+class Root extends Component {
+    render() {
+        return (
+            <View ref={c => (this._root = c)} {...this.props} style={{ flex: 1 }}>
+                {this.props.children}
+                <ChoiceModalContainer
+                    ref={c => {
+                        if (c)
+                            ChoiceModalContainer.choiceModalInstance = c;
+                    }}
+                />
+            </View>
+        )
+    }
+}
 class AppNavigation extends Component {
     render() {
         const {navigationState, dispatch} = this.props;
         return (
-            <Navigator
-                navigation={addNavigationHelpers({dispatch, state: navigationState})}
-            />
+            <Root >
+                <Navigator
+                    navigation={addNavigationHelpers({dispatch, state: navigationState})}
+                />
+            </Root>
         );
     }
 }

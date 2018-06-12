@@ -28,6 +28,7 @@ export default class SearchDropDown extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps
+        console.log(this.props)
         if(!nextProps.dataList){
 
         }

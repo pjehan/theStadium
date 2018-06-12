@@ -130,20 +130,21 @@ class Actus extends Component {
                                this._displayPath(utils._isUser(state.currentUser, state.inspectedUser)).profilepicture ?
                                    {uri: utilsC.NODEJS + this._displayPath(utils._isUser(state.currentUser, state.inspectedUser)).profilepicture} :
                                    require('../assets/img/thestadium/placeholder.jpg') } >
-                        {utils._isUser(state.currentUser, state.inspectedUser) ?
-                            <TouchableOpacity onPress={() => this._addMedia()} style={{
-                                height: 30,
-                                width: 30,
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-                                position: 'absolute',
-                                right: 0,
-                                bottom: 0,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-                                <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
-                            </TouchableOpacity> : null}
+
                     </Image>
+                    {utils._isUser(state.currentUser, state.inspectedUser) ?
+                        <TouchableOpacity onPress={() => this._addMedia()} style={{
+                            height: 30,
+                            width: 30,
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            position: 'absolute',
+                            right: 0,
+                            bottom: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
+                        </TouchableOpacity> : null}
                 </View>);
         } else {
             return (

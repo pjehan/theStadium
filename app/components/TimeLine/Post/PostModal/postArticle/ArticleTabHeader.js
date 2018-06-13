@@ -8,6 +8,7 @@ import {postActions} from "../../../../../_actions/post";
 
 
 import { NavigationActions } from "react-navigation";
+import {Avatar} from "../../../../User/Avatar/index";
 const labels= [
     'Introduction',
     'Première mi-temps',
@@ -81,9 +82,7 @@ class ArticleTabHeader extends Component {
                     <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
                         <View
                             style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
-                            {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
-                                   source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
-                                <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
+                            <Avatar user={this.props.currentUser} />
                             <View style={{flexDirection: 'column'}}>
                                 <Text style={timeLineStyle.title}>{this.props.currentUser.teams[0].team.club.name}</Text>
                                 <Text style={{

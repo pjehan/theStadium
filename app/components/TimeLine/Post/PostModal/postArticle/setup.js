@@ -16,6 +16,7 @@ import { Header } from 'react-navigation';
 
 import {connect} from "react-redux";
 import SearchDropDown from "../../../../SearchDropdown/index";
+import Spinner from "react-native-number-spinner";
 class Setup extends Component {
     constructor(props){
         super(props);
@@ -86,7 +87,7 @@ class Setup extends Component {
     _guessClub(){
         if(this.state.guessClub){
             return (
-                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{width:'25%',alignItems:'center'}}>
+                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{flexDirection:'row',alignItems:'center'}}>
                     {this.state.guessClub.profilePicture ?<Image style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}
                                                                  source={{uri:this.state.guessClub.profilePicture}}/> : <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]}/> }
                     <Text style={timeLineStyle.title}>{this.state.guessClub.name}</Text>
@@ -94,7 +95,7 @@ class Setup extends Component {
             )
         }else {
             return (
-                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{width:'25%',alignItems:'center'}}>
+                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{flexDirection:'row',alignItems:'center'}}>
                     <View style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}/>
                     <Text style={[timeLineStyle.title, {fontSize:14,textAlign:'center'}]}>Nom du club</Text>
                 </TouchableOpacity>
@@ -111,37 +112,36 @@ class Setup extends Component {
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Score du match</Text>
                 </View>
-                <View style={{justifyContent:'space-between', paddingVertical:40,paddingHorizontal:10,flexDirection:'row'}}>
-                    <View style={{alignItems:'center',width:'25%'}}>
+                <View style={{justifyContent:'space-between', paddingVertical:40,paddingHorizontal:10,flexDirection:'column'}}>
+                    <View style={{justifyContent:'space-between',alignItems:'center',width:'100%',flexDirection:'row'}}>
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
                         {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
                                                                                            source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
                             <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
                         <Text
-                            style={timeLineStyle.title}>Fc Guichen</Text>
-                        <CustomInput
-                            container={''}
-                            textColor={'#333333'}
-                            borderColor={'transparent'}
-                            backgroundColor={'#eeeeee'}
-                            placeholder={'0'}
-                            keyboardType={'numeric'}
-                            input={GLOBAL_STYLE.numericInput}
-                            state={'homeScore'}
-                            onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
-                        />
+                            style={timeLineStyle.title}>{this.props.currentUser.teams[0].team.club.name}</Text>
+                        </View>
+                        <Spinner max={99}
+                                 min={0}
+                                 default={0}
+                                 color="#003366"
+                                 numColor="#003366"
+                                 onNumChange={(num) => {
+                                     this.setState({homeScore: num});
+                                 }}/>
                     </View>
+                    <View style={{height:1,backgroundColor:'#cccccc',width:'50%',alignSelf:'center', marginVertical:20}}/>
+                    <View style={{justifyContent:'space-between',alignItems:'center',width:'100%',flexDirection:'row'}}>
                     {this._guessClub(clubData,clubQuery)}
-                    <CustomInput
-                        container={''}
-                        textColor={'#333333'}
-                        borderColor={'transparent'}
-                        backgroundColor={'#eeeeee'}
-                        placeholder={'0'}
-                        keyboardType={'numeric'}
-                        input={GLOBAL_STYLE.numericInput}
-                        state={'guessScore'}
-                        onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
-                    />
+                    <Spinner max={99}
+                             min={0}
+                             default={0}
+                             color="#003366"
+                             numColor="#003366"
+                             onNumChange={(num) => {
+                                 this.setState({guessScore: num});
+                             }}/>
+                    </View>
                 </View>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Titre de l'article</Text>

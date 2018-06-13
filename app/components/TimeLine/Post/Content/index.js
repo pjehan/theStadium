@@ -216,19 +216,29 @@ export default class Content extends Component {
         return (
             <View>
                 <TouchableOpacity onPress={() => {this.setState({visible:true})}}>
-                    <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10,height:150, backgroundColor:'rgba(0,0,0,0.5)'}}>
-                        <View style={{position:'absolute',top:-20,zIndex:15,borderRadius:5,width:100,backgroundColor:'#00A65B',paddingHorizontal:2,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
-                            <Text style={{color:'#ffffff'}}>Résumé</Text>
+
+                    <Image source={{uri: utils.NODEJS + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                    <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10}}>
+                        <View style={{position:'absolute',top:0,zIndex:15,borderRadius:5,flexDirection:'row',backgroundColor:'#00A65B',paddingHorizontal:15,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
+                            <Image style={{
+                                height: 15,
+                                width: 15,
+                                marginRight: 10}} resizeMode='contain'
+                                   source={require('../../../../assets/img/picto/menu/actions/interview_white.png')}/>
+                            <Text style={{fontWeight:'bold',color:'#ffffff'}}>Résumé</Text>
                         </View>
-                        <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
+
+                        <View style={{marginTop:15,paddingVertical:20,backgroundColor:'rgba(0,0,0,0.5)',width:'100%'}}>
+                            <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
                             <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub.name} {content.homeScore} - {content.guessScore} {content.guessClub.name}</Text>
                             <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))}</Text>
+                            </View>
 
-                            </View>
-                            </View>
-                            <Image source={{uri: utils.NODEJS + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
-                        </TouchableOpacity>
+                        </View>
+                    </View>
+                 </TouchableOpacity>
+
                 </View>
         )
     }

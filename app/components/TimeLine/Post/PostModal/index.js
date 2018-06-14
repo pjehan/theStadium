@@ -19,8 +19,9 @@ import {connect} from "react-redux";
 import SearchDropDown from "../../../SearchDropdown";
 import {Icon} from "react-native-elements";
 import {Avatar} from "../../../User/Avatar/index";
+import {ChoiceModalContainer} from "../../../ChoiceModal/index";
+import InterviewModal from "../../../InterviewModal";
 
-let ModalContent;
 const InitialState = {
     post: {
         title: '',
@@ -35,9 +36,12 @@ const InitialState = {
     medias: null,
     height: 50,
     goals_assists: false,
-    visible: false
+    visible: false,
+    media:null,
+    interviewVisible:false
 };
 
+const INTERVIEW_BTN = ["Choisir une Vidéo", "Prendre une Vidéo"];
 class PostModal extends Component {
     constructor(props) {
         super(props);
@@ -147,6 +151,27 @@ class PostModal extends Component {
         }
     }
 
+    _addInterview = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: 'Videos'
+        });
+        if (!result.cancelled) {
+            this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
+            this.setState({interviewVisible: true});
+        } else {
+        }
+    };
+
+    _shootInterview = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: 'Videos'
+        });
+        if (!result.cancelled) {
+            this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
+            this.setState({interviewVisible: true});
+        } else {
+        }
+    };
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
@@ -199,7 +224,7 @@ class PostModal extends Component {
             <View
                 style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
                 <Avatar user={this.props.currentUser} />
-                {this.props.owner.userType.label === 'Joueur' ? <Text
+                {this.props.owner.userType.label !== 'Coach' ? <Text
                         style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text> :
                     <View>
                         <Text style={timeLineStyle.title}>{this.props.owner.teams[0].team.club.name}</Text>
@@ -331,7 +356,61 @@ class PostModal extends Component {
                                       size={25}
                                       name={'chevron-right'}/>
                             </TouchableOpacity>
-                        </View> : null}
+                        </View> : this.props.owner.userType.label === 'Coach' ?
+                            <View>
+                                <TouchableOpacity onPress={() => {
+                                    ChoiceModalContainer.show(
+                                        {
+                                            options: INTERVIEW_BTN,
+                                            title: "Interview",
+                                            message: "Vous êtes sur le point de publier une interview, vous pouvez utiliser votre gallerie ou bien faire la vidéo dès maintenant !"
+                                        },
+                                        buttonIndex => {
+                                            buttonIndex === 0 ? this._addInterview() : buttonIndex === 1 ? this._shootInterview() : null
+                                        }
+                                    )
+                                }} style={{
+                                    borderColor: '#cccccc',
+                                    borderTopWidth: 0.5,
+                                    height: 50,
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}>
+
+                                    <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}}
+                                           resizeMode={'contain'}
+                                           source={require('../../../../assets/img/picto/menu/actions/interview.png')}/>
+                                    <Text style={{color: '#0cae69'}}>Interview</Text>
+                                    <Icon style={{marginRight:20}}
+                                          color='#003366'
+                                          size={25}
+                                          name={'chevron-right'}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => {
+                                    this.toggleModal(false, type);
+                                    this.props.navigation.navigate('ArticleTab')
+                                }} style={{
+                                    borderColor: '#cccccc',
+                                    borderTopWidth: 0.5,
+                                    borderBottomWidth: 0.5,
+                                    height: 50,
+                                    alignItems: 'center',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}>
+
+                                    <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}}
+                                           resizeMode={'contain'}
+                                           source={require('../../../../assets/img/picto/menu/actions/article.png')}/>
+                                    <Text style={{color: '#0cae69'}}>Ecrire un résumé</Text>
+                                    <Icon style={{marginRight:20}}
+                                          color='#003366'
+                                          size={25}
+                                          name={'chevron-right'}/>
+                                </TouchableOpacity>
+                            </View>
+                            :null}
                     <TouchableOpacity onPress={() => {
                         this._addMedia('Images', this.displaySimpleArticle);
                     }} style={{
@@ -519,11 +598,12 @@ class PostModal extends Component {
                    onRequestClose={() => {
                        console.log("Modal has been closed.")
                    }}>
-
+                <InterviewModal onClose={() => this.setState({interviewVisible: false})} interviewVisible={this.state.interviewVisible} media={this.state.media}/>
                 <SearchDropDown title={'Club affronté'} dataList={this.state.clubList} visible={this.state.visible}
                                 onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
                 <ScrollView>
                     {this.conditionalRender()}
+
                     {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
                         <View style={[{marginLeft: '7.5%', height: 100, width: '85%'}]}>
                             <TouchableOpacity style={styles.autocompleteContainer} onPress={() => {

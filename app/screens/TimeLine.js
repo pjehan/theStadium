@@ -92,7 +92,7 @@ class TimeLine extends Component {
             this.setState({interviewVisible: true});
         } else {
         }
-    }
+    };
 
     _interviewModal() {
         if (this.state.media) {
@@ -207,7 +207,7 @@ class TimeLine extends Component {
     _renderModal() {
         if (this.state.modalVisible && this.state.modalType) {
             return (
-                <PostModal owner={this.props.currentUser} type={this.state.modalType} visible={this.state.modalVisible}
+                <PostModal navigation={this.props.navigation} owner={this.props.currentUser} type={this.state.modalType} visible={this.state.modalVisible}
                            toggleModal={(visible, type) => {
                                this.onToggleModal(visible, type)
                            }}/>)
@@ -347,7 +347,7 @@ class TimeLine extends Component {
                 {this._interviewModal()}
                 {this.props.currentUser.userType.label === "Joueur" ? this._renderPlayerHeader() : this.props.currentUser.userType.label === 'Coach' ? this._renderCoachHeader() : null}
                 <ScrollView contentContainerStyle={{flex: 1}}
-                            style={{paddingTop: 10, paddingBottom: 35, paddingHorizontal: 10, height: '100%'}}>
+                            style={{paddingHorizontal: 10, height: '100%'}}>
                     {
                         this.props.posts ? this._renderList() :
                             !this.postsFetched && !this.props.posts ? this._renderLoading() :

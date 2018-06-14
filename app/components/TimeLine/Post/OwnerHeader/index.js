@@ -179,15 +179,17 @@ class OwnerHeader extends Component {
                             <Text style={PostStyle.title}>{this.props.Owner}</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 {this.props.team ?
+                                    <View style={{flexDirection:'row', alignItems: 'center'}}>
                                     <Text style={{
                                         paddingVertical: 2,
                                         paddingHorizontal: 5,
                                         fontSize: 10,
                                         backgroundColor: '#003366',
-                                        color: '#ffffff',
-                                        marginRight: 10
-                                    }}>{this.props.team.category.label} {this.props.team.division.label}</Text> :
-                                    null
+                                        color: '#ffffff'
+                                    }}>{this.props.team.category.label} {this.props.team.division.label}</Text>
+                                    <View style={{width:5,height:5,backgroundColor:'#cccccc',marginHorizontal:8,borderRadius:5}} />
+                                    </View>
+                                    : null
                                 }
                                 <View style={{flexDirection: 'row', alignItems:'center',justifyContent:'center'}}>
                                     <Image resizeMode="contain" style={{height: 10, width: 10}}

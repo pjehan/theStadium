@@ -157,6 +157,7 @@ class Setup extends Component {
                                  borderColor={'#cccccc'}
                                  backgroundColor={'#ffffff'}
                                  security={false}
+                                 returnKeyType={'done'}
                                  onChangeSizeParent={(size)=>{
                                      this.setState({height:size})
                                  }}

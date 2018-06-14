@@ -227,6 +227,7 @@ const MainStack = TabNavigator({
                     style={{height: 20}}/>
             },
             showLabel: true,
+
             tabBarLabel: 'Rechercher'
         })
     },
@@ -268,8 +269,9 @@ const MainStack = TabNavigator({
         activeTintColor: '#003366',
         inactiveTintColor: '#cccccc',
         upperCaseLabel: false,
+        allowFontScaling:true,
         labelStyle: {
-            fontSize: 12,
+            fontSize: 10,
             marginTop: 5,
             marginBottom: 0,
         },

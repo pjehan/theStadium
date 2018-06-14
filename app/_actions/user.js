@@ -180,6 +180,28 @@ function getInspected(id){
     function success(user) { return { type: userConstants.INSPECT_USER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.INSPECT_USER_FAILURE, error } }
 }
+
+function getInspectedTeam(id){
+    return dispatch => {
+        dispatch(request({ id }));
+        userService.getTeam(id)
+            .then(
+                team => {
+                    dispatch(success(team));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(team) { return { type: userConstants.INSPECT_USER_REQUEST, team } }
+    function success(team) { return { type: userConstants.INSPECT_USER_SUCCESS, team } }
+    function failure(error) { return { type: userConstants.INSPECT_USER_FAILURE, error } }
+}
+
+
 function removePlayer() {
     return {type: userConstants.REMOVE_INSPECTED};
 }

@@ -11,7 +11,8 @@ export const userService = {
     putPlayer,
     putUser,
     searchUser,
-    toggleFollow
+    toggleFollow,
+    getTeam
 };
 import jwt_decode from 'jwt-decode'
 import {utils} from "../_constants/utils";
@@ -49,6 +50,15 @@ function getUser(id) {
         }).catch((error) => {
         })
 }
+
+function getTeam(id) {
+    return instance.get("/api/teams/"+id)
+        .then(response => {
+            return response.data;
+        }).catch((error) => {
+        })
+}
+
 function getUserType(id) {
     return instance.get("/api/players?user=" + id)
         .then(response => {

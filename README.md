@@ -56,7 +56,8 @@ Option | Required ? | Type
 options | Yes | Array or Object Array
 title | No | String
 message | No | String
-<br/>
+
+
 ```js
 
 import React, {Component} from 'react';
@@ -102,5 +103,3 @@ return(
 }
 
 ```
-<br />
-  

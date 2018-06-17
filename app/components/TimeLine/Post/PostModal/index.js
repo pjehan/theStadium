@@ -37,11 +37,12 @@ const InitialState = {
     height: 50,
     goals_assists: false,
     visible: false,
-    media:null,
-    interviewVisible:false
+    media: null,
+    interviewVisible: false
 };
 
 const INTERVIEW_BTN = ["Choisir une Vidéo", "Prendre une Vidéo"];
+
 class PostModal extends Component {
     constructor(props) {
         super(props);
@@ -84,14 +85,14 @@ class PostModal extends Component {
         switch (type) {
             case TypeEnum.goals:
                 post.postType = 1;
-                this.setState({post:{...this.state.post,assistsNbr:0} });
+                this.setState({post: {...this.state.post, assistsNbr: 0}});
                 break;
             case TypeEnum.simple:
                 post.postType = 2;
                 break;
             case TypeEnum.assists:
                 post.postType = 4;
-                    this.setState({post:{...this.state.post,goalsNbr:0}});
+                this.setState({post: {...this.state.post, goalsNbr: 0}});
                 break;
             case TypeEnum.interview:
                 post.postType = 5;
@@ -175,7 +176,6 @@ class PostModal extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
-        console.log(this.state, this.props)
         switch (this.props.type) {
             case TypeEnum.goals:
                 this.displayGoalsAssists(TypeEnum.goals);
@@ -206,13 +206,13 @@ class PostModal extends Component {
                 <TouchableOpacity onPress={() => {
                     this.toggleModal(false, type)
                 }}>
-                    <Text style={{fontSize:16}}>Annuler</Text>
+                    <Text style={{fontSize: 16}}>Annuler</Text>
                 </TouchableOpacity>
-                <Text style={{fontSize:16,fontWeight: '600'}}>{Title}</Text>
+                <Text style={{fontSize: 16, fontWeight: '600'}}>{Title}</Text>
                 <TouchableOpacity onPress={() => {
                     this.publishModal(type)
                 }}>
-                    <Text style={{fontWeight: '600', color: '#003366', fontSize:16}}>Publiez</Text>
+                    <Text style={{fontWeight: '600', color: '#003366', fontSize: 16}}>Publiez</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -223,7 +223,7 @@ class PostModal extends Component {
         return (
             <View
                 style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
-                <Avatar user={this.props.currentUser} />
+                <Avatar user={this.props.currentUser}/>
                 {this.props.owner.userType.label !== 'Coach' ? <Text
                         style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text> :
                     <View>
@@ -271,7 +271,7 @@ class PostModal extends Component {
                                  color="#003366"
                                  numColor="#003366"
                                  onNumChange={(num) => {
-                                     this.setState({post:{...this.state.post, [type + "Nbr"]: num}});
+                                     this.setState({post: {...this.state.post, [type + "Nbr"]: num}});
                                      console.log(this.state)
                                  }}/>
                     </View>
@@ -330,7 +330,7 @@ class PostModal extends Component {
                                        resizeMode={'contain'}
                                        source={require('../../../../assets/img/picto/menu/actions/goal.png')}/>
                                 <Text style={{color: '#0cae69'}}>Partagez un But</Text>
-                                <Icon style={{marginRight:20}}
+                                <Icon style={{marginRight: 20}}
                                       color='#003366'
                                       size={25}
                                       name={'chevron-right'}/>
@@ -351,7 +351,7 @@ class PostModal extends Component {
                                        resizeMode={'contain'}
                                        source={require('../../../../assets/img/picto/menu/actions/assist.png')}/>
                                 <Text style={{color: '#0cae69'}}>Partagez une Passe Décisive</Text>
-                                <Icon style={{marginRight:20}}
+                                <Icon style={{marginRight: 20}}
                                       color='#003366'
                                       size={25}
                                       name={'chevron-right'}/>
@@ -382,7 +382,7 @@ class PostModal extends Component {
                                            resizeMode={'contain'}
                                            source={require('../../../../assets/img/picto/menu/actions/interview.png')}/>
                                     <Text style={{color: '#0cae69'}}>Interview</Text>
-                                    <Icon style={{marginRight:20}}
+                                    <Icon style={{marginRight: 20}}
                                           color='#003366'
                                           size={25}
                                           name={'chevron-right'}/>
@@ -404,13 +404,13 @@ class PostModal extends Component {
                                            resizeMode={'contain'}
                                            source={require('../../../../assets/img/picto/menu/actions/article.png')}/>
                                     <Text style={{color: '#0cae69'}}>Ecrire un résumé</Text>
-                                    <Icon style={{marginRight:20}}
+                                    <Icon style={{marginRight: 20}}
                                           color='#003366'
                                           size={25}
                                           name={'chevron-right'}/>
                                 </TouchableOpacity>
                             </View>
-                            :null}
+                            : null}
                     <TouchableOpacity onPress={() => {
                         this._addMedia('Images', this.displaySimpleArticle);
                     }} style={{
@@ -423,7 +423,7 @@ class PostModal extends Component {
                         <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}} resizeMode={'contain'}
                                source={require('../../../../assets/img/picto/menu/actions/photo.png')}/>
                         <Text style={{color: '#003366'}}>Ajoutez un média</Text>
-                        <Icon style={{marginRight:20}}
+                        <Icon style={{marginRight: 20}}
                               color='#003366'
                               size={25}
                               name={'chevron-right'}/>
@@ -575,48 +575,6 @@ class PostModal extends Component {
         }
     }
 
-    searchClosed(visible, data) {
-        this.setState({visible: visible});
-        console.log(data)
-        if (data) {
-            this.setState({
-                clubQuery: data.name,
-                club: data.name,
-                post: {...this.state.post,content: data.name},
-            });
-        }
-        this.forceUpdate();
-    }
-
-    render() {
-        const {clubQuery, clubList} = this.state;
-        const clubData = this._filterClub(clubQuery, clubList);
-        return (
-            <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
-                   visible={this.props.visible}
-
-                   onRequestClose={() => {
-                       console.log("Modal has been closed.")
-                   }}>
-                <InterviewModal onClose={() => this.setState({interviewVisible: false})} interviewVisible={this.state.interviewVisible} media={this.state.media}/>
-                <SearchDropDown title={'Club affronté'} dataList={this.state.clubList} visible={this.state.visible}
-                                onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
-                <ScrollView>
-                    {this.conditionalRender()}
-
-                    {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
-                        <View style={[{marginLeft: '7.5%', height: 100, width: '85%'}]}>
-                            <TouchableOpacity style={styles.autocompleteContainer} onPress={() => {
-                                this.setState({visible:true});
-                                this.forceUpdate()}}>
-                                <Text>{this.state.club ? this.state.club : 'Nom du club adverse'}</Text>
-                            </TouchableOpacity>
-                        </View> : null}
-                </ScrollView>
-            </Modal>
-        )
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
         return this.state.medias !== nextState.medias;
     }
@@ -695,7 +653,14 @@ class PostModal extends Component {
                     });
                 }
             } else {
-                this.setState({medias: [{type: result.type, uri: result.uri, width: result.width, height: result.height}]}, () => {
+                this.setState({
+                    medias: [{
+                        type: result.type,
+                        uri: result.uri,
+                        width: result.width,
+                        height: result.height
+                    }]
+                }, () => {
                     callback();
                 });
             }
@@ -704,6 +669,84 @@ class PostModal extends Component {
             console.log('uri', result.uri, this.state.post.medias[0])
         }
     };
+
+    _renderSelectedTeam() {
+        if (this.state.team) {
+            return (
+                <TouchableOpacity onPress={() => {
+                    this.setState({visible: true});
+                    this.forceUpdate();
+                }}>
+                    <Avatar user={this.state.team.club}/>
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={timeLineStyle.title}>{this.state.team.club.name}</Text>
+                        <Text style={{
+                            paddingVertical: 2,
+                            paddingHorizontal: 5,
+                            fontSize: 10,
+                            backgroundColor: '#003366',
+                            color: '#ffffff',
+                            marginRight: 10
+                        }}>{this.state.team.category.label} {this.state.team.division.label}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        } else {
+            return (
+                <TouchableOpacity onPress={() => {
+                    this.setState({visible: true});
+                    this.forceUpdate();
+                }} style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/>
+                    <Text style={[timeLineStyle.title, {color: '#979797'}]}>Entrez le nom du club adverse</Text>
+                </TouchableOpacity>
+            )
+        }
+    }
+
+    searchClosed(visible, data) {
+        this.setState({visible: visible});
+
+        if (data) {
+            const NAME = data.club.name + data.category.label + data.division.label;
+            this.setState({
+                clubQuery: data.club.name,
+                club: data,
+                team: data,
+                post: {...this.state.post, content: NAME},
+            });
+        }
+        this.forceUpdate();
+    }
+
+    render() {
+        const {clubQuery, clubList} = this.state;
+        const clubData = this._filterClub(clubQuery, clubList);
+        return (
+            <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
+                   visible={this.props.visible}
+
+                   onRequestClose={() => {
+                       console.log("Modal has been closed.")
+                   }}>
+                <InterviewModal onClose={() => this.setState({interviewVisible: false})}
+                                interviewVisible={this.state.interviewVisible} media={this.state.media}/>
+                <SearchDropDown title={'Club affronté'} dataList={this.state.clubList} visible={this.state.visible}
+                                onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
+                <ScrollView>
+                    {this.conditionalRender()}
+
+                    {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
+                        <View style={[{marginLeft: '7.5%', height: 100, width: '85%'}]}>
+                            {this._renderSelectedTeam()}
+
+                        </View> : null}
+                </ScrollView>
+            </Modal>
+        )
+    }
+
+
 }
 
 /**
@@ -725,8 +768,8 @@ export default connect(mapStateToProps)(PostModal);
 const styles = StyleSheet.create({
     autocompleteContainer: {
         backgroundColor: '#eeeeee',
-        paddingLeft:5,
-        paddingVertical:10,
+        paddingLeft: 5,
+        paddingVertical: 10,
     },
     itemText: {
         fontSize: 15,

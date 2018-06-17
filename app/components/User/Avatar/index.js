@@ -14,23 +14,32 @@ class Avatar extends Component {
         this._renderUser = this._renderUser.bind(this);
     }
     _renderTeam() {
-        if(this.props.user.teams[0].club.profilepicture) {
+        if(this.props.user.teams[0].club.profilepicture && this.props.user.profilepicture !== "") {
             return (
                 <View style={[style.profilePic, {backgroundColor: '#cccccc'}]}/> )
         }else {
             return(
-            <Image style={style.profilePic} source={{uri: this.props.user.teams[0].club.profilePicture}}/>
+            <Image style={style.profilePic} source={{uri: this.props.user.teams[0].club.profilepicture}}/>
             )
         }
     }
-
+    _renderClub(){
+        if(!this.props.user.profilepicture) {
+            return(
+                <Image style={style.profilePic} source={{uri: this.props.profilepicture}}/>
+            )
+        }else {
+            return (
+                <View style={[style.profilePic, {backgroundColor: '#cccccc'}]}/> )
+        }
+    }
     _renderUser() {
-        if(this.props.user.profilepicture) {
+        if(this.props.user.profilepicture && this.props.user.profilepicture !== "") {
             return (
                 <View style={[style.profilePic, {backgroundColor: '#cccccc'}]}/> )
         }else {
             return(
-                <Image style={style.profilePic} source={{uri: this.props.user.profilepicture}}/>
+                <Image style={[style.profilePic, {backgroundColor:'#cccccc'}]} source={{uri: this.props.user.profilepicture}}/>
             )
         }
     }
@@ -38,6 +47,7 @@ class Avatar extends Component {
         return (
             this.props.userType === 'Coach' ?
                 this._renderTeam() :
+                this.props.user["@type"] === 'Club' ? this._renderClub() :
                 this._renderUser()
         )
     }

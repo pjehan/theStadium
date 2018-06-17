@@ -98,12 +98,10 @@ export class AvoidArticle extends Component {
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={-50}
-                style={{flex: 1,
-                    justifyContent: 'flex-end',backgroundColor:'white',}}
+                style={{flex: 1,backgroundColor:'white',}}
                 contentContainerStyle={{
                     flex: 1,
-                    width:"100%",
-                    justifyContent: 'flex-end',backgroundColor:'white',
+                    width:"100%",backgroundColor:'white',
                 }}
                 behavior="position" enabled>
                 <ArticleTabInside />

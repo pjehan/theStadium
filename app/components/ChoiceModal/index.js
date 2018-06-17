@@ -60,10 +60,10 @@ class ChoiceModalContainer extends Component {
                         this.setState({ modalVisible: false });
                     }}
                     style={{
-                        backgroundColor: "rgba(0,0,0,0.4)",
+                        backgroundColor: "rgba(0,0,0,0.6)",
                         flex: 1,
                         alignItems:'center',
-                        justifyContent: "flex-end"
+                        justifyContent: "center"
                     }}
                 >
                     <TouchableOpacity
@@ -76,6 +76,7 @@ class ChoiceModalContainer extends Component {
                             paddingTop:15,
                             width:'90%',
                             elevation: 4,
+                            marginTop:'auto',
                             borderRadius:10,
                         }}
                     >
@@ -94,7 +95,7 @@ class ChoiceModalContainer extends Component {
                                             this.setState({ modalVisible: false });
                                         }}
                                         style={{alignItems:'center',justifyContent:'center',width:'100%', height:50,backgroundColor:'#ffffff'}}>
-                                        <Text style={{color:'#1E82FF',fontSize:16,fontWeight:'bold'}}>{item}</Text>
+                                        <Text style={{color:'#003366',fontSize:16,fontWeight:'bold'}}>{item}</Text>
                                     </TouchableOpacity>
                                 ) : (
                                     <TouchableOpacity
@@ -110,11 +111,11 @@ class ChoiceModalContainer extends Component {
                         />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{alignItems:'center',justifyContent:'center',borderRadius:10,marginVertical:6,height:50,backgroundColor:'#ffffff', width:'90%'}} onPress={() => {
+                    <TouchableOpacity style={{marginTop:'auto',alignItems:'center',justifyContent:'center',borderRadius:10,marginVertical:6,height:50,backgroundColor:'#ffffff', width:'90%'}} onPress={() => {
                         this.state.callback(this.state.cancelButtonIndex);
                         this.setState({ modalVisible: false });
                     }}>
-                        <Text style={{color:'#1E82FF',fontSize:16,fontWeight:'bold'}}>Annuler</Text>
+                        <Text style={{color:'#FF0000',fontSize:16,fontWeight:'bold'}}>Annuler</Text>
                     </TouchableOpacity>
                 </TouchableOpacity>
             </Modal>

@@ -12,6 +12,7 @@ import {
     Modal, FlatList
 } from 'react-native';
 import CustomInput from "../CustomInput";
+import AccordionSearch from "../AccordionSearch/index";
 const initialState = {
     dataList: [],
     query: '',
@@ -63,6 +64,7 @@ export default class SearchDropDown extends Component {
     _renderResult(data) {
         return (
             <FlatList
+                style={{paddingHorizontal:10}}
                 data={data}
                 renderItem={({item}) => this._renderItem(item)}
             />
@@ -71,9 +73,12 @@ export default class SearchDropDown extends Component {
 
     _renderItem(item){
         return (
-            <TouchableOpacity onPress={() => this._onClose(false, item)}>
-                <Text>{item.name}</Text>
-            </TouchableOpacity>
+            <AccordionSearch itemSelected={(team,club) => {
+                delete club.teams;
+                team.club = club;
+
+                this._onClose(false, team);
+            }} item={item}/>
         )
     }
 

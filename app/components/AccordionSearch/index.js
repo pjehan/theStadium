@@ -52,6 +52,10 @@ export default class AccordionSearch extends Component {
         }
     }
 
+    selectItem(item, club){
+        this.props.itemSelected(item, club);
+    }
+
     goToProfile(item) {
         if (GLOBAL._isUser(this.props.currentUser, item)) {
             const users = {
@@ -69,11 +73,11 @@ export default class AccordionSearch extends Component {
         }
     }
 
-    _renderClubTeam(item){
+    _renderClubTeam(item, club){
+        console.log(item, club)
         return (
-            <View style={{justifyContent: 'space-between', paddingVertical:10, borderTopWidth:1,borderColor:'#cccccc',flexDirection: 'row', alignItems: 'center'}}
-                  key={this.props.userList.indexOf(item)}>
-                <TouchableOpacity style={searchStyle.tabs} onPress={() => this.props.search ? this.goToProfile(item) : console.log(item)}>
+            <View style={{justifyContent: 'space-between', paddingVertical:10, borderTopWidth:1,borderColor:'#cccccc',flexDirection: 'row', alignItems: 'center'}} >
+                <TouchableOpacity style={searchStyle.tabs} onPress={() => this.props.search ? this.goToProfile(item) : this.selectItem(item, club)}>
                     <ProfilePic user={item}/>
                     <Text>{item.club.name}</Text>
                     <Text style={{
@@ -93,12 +97,12 @@ export default class AccordionSearch extends Component {
         )
     }
 
-    _renderClubList(item){
+    _renderClubList(club){
         return <FlatList
             style={{paddingLeft:20}}
-            data={item.teams}
-            extraData={item.teams}
-            renderItem={({item}) => this._renderClubTeam(item)}
+            data={club.teams}
+            extraData={club.teams}
+            renderItem={({item}) => this._renderClubTeam(item, club)}
         />
     }
     render() {
@@ -106,7 +110,7 @@ export default class AccordionSearch extends Component {
         return (
             <View style={{borderBottomWidth:1,borderColor:'#cccccc',
                 flexDirection: 'column'}}
-                  key={this.props.userList.indexOf(item)}>
+                  >
                 <TouchableOpacity onPress={() => {this.setState({displayTeam: !this.state.displayTeam});this.forceUpdate()}} style={{flexDirection: 'row',justifyContent: 'space-between', alignItems: 'center',paddingVertical:10,}}>
                     <View style={searchStyle.tabs} >
                         <ProfilePic user={item}/>

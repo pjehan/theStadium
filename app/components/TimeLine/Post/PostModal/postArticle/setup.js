@@ -97,7 +97,7 @@ class Setup extends Component {
             return (
                 <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{flexDirection:'row',alignItems:'center'}}>
                     <View style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}/>
-                    <Text style={[timeLineStyle.title, {fontSize:14,textAlign:'center'}]}>Nom du club</Text>
+                    <Text style={[timeLineStyle.title, {color:'#979797', fontSize:14,textAlign:'center'}]}>Entrez le nom du club...</Text>
                 </TouchableOpacity>
             )
         }
@@ -106,8 +106,8 @@ class Setup extends Component {
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
         return (
-            <View>
-                <SearchDropDown title={'Club affronté'} dataList={this.state.clubList} visible={this.state.guessVisible}
+            <ScrollView contentContainerStyle={{flex:1}}>
+                <SearchDropDown title={'Club affronté'} searchTeam={true} dataList={this.state.clubList} visible={this.state.guessVisible}
                                 onModalClose={(visible, data) => this._setClub(visible, data)}/>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Score du match</Text>
@@ -127,10 +127,13 @@ class Setup extends Component {
                                  color="#003366"
                                  numColor="#003366"
                                  onNumChange={(num) => {
-                                     this.setState({homeScore: num});
+                                     this.onChangeInfos('homeScore',num);
                                  }}/>
                     </View>
-                    <View style={{height:1,backgroundColor:'#cccccc',width:'50%',alignSelf:'center', marginVertical:20}}/>
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                    <Text style={{marginLeft:15,color:'#003366',fontSize:18}}>vs</Text>
+                    <View style={{marginLeft: '18%',height:1,backgroundColor:'#cccccc',width:'50%',alignSelf:'center', marginVertical:20}}/>
+                    </View>
                     <View style={{justifyContent:'space-between',alignItems:'center',width:'100%',flexDirection:'row'}}>
                     {this._guessClub(clubData,clubQuery)}
                     <Spinner max={99}
@@ -139,7 +142,8 @@ class Setup extends Component {
                              color="#003366"
                              numColor="#003366"
                              onNumChange={(num) => {
-                                 this.setState({guessScore: num});
+                                 console.log(this.state);
+                                 this.onChangeInfos('guessScore',num);
                              }}/>
                     </View>
                 </View>
@@ -165,7 +169,7 @@ class Setup extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </View>
+            </ScrollView>
         )
     };
 }

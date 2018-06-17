@@ -241,7 +241,6 @@ class TimeLine extends Component {
                         {
                             options: INTERVIEW_BTN,
                             title: "Interview",
-                            message: "Vous êtes sur le point de publier une interview, vous pouvez utiliser votre gallerie ou bien faire la vidéo dès maintenant !"
                         },
                         buttonIndex => {
                             console.log(buttonIndex)

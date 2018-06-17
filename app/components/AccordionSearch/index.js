@@ -74,7 +74,6 @@ export default class AccordionSearch extends Component {
     }
 
     _renderClubTeam(item, club){
-        console.log(item, club)
         return (
             <View style={{justifyContent: 'space-between', paddingVertical:10, borderTopWidth:1,borderColor:'#cccccc',flexDirection: 'row', alignItems: 'center'}} >
                 <TouchableOpacity style={searchStyle.tabs} onPress={() => this.props.search ? this.goToProfile(item) : this.selectItem(item, club)}>

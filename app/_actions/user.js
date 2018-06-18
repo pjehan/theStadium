@@ -2,7 +2,8 @@ import { userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from './';
 import {teamService} from "../_services";
-//import { history } from '../_helpers';
+import {utils} from '../_constants';
+const {messageType} = utils;
 
 export const userActions = {
     login,
@@ -18,7 +19,7 @@ export const userActions = {
 
 function login(username, password) {
     let currentUser = {stats:{}};
-    return dispatch => {
+    return (dispatch,getState, {emit}) => {
         dispatch(request({ username, password }));
 
         userService.login(username, password)

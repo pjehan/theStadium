@@ -9,7 +9,7 @@ import {connect} from "react-redux";
 import {postActions} from "../../../_actions";
 import {userActions} from "../../../_actions/user";
 import utils from "../../../config/utils";
-
+import {Icon} from "react-native-elements";
 
 class Post extends Component {
     constructor(props) {
@@ -75,6 +75,20 @@ class Post extends Component {
             }
         }
     }
+
+    toggleLike() {
+        !this.isLiked() ? this.setState({likes: this.state.likes + 1}, () => {
+
+            this.setState({post:{likes: this.state.post.likes + 1}, ...this.state});
+            this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked));
+            this.forceUpdate();
+        }) : this.setState({likes: this.state.likes - 1}, () => {
+            this.props.likes = this.state.post.likes - 1;
+            this.setState({post:{likes: this.state.post.likes - 1}, ...this.state});
+            this.forceUpdate();
+        });
+    }
+
     render() {
         return (
             <View style={[PostStyle.container, {shadowOffset: { width: 10, height: 10 },
@@ -93,27 +107,41 @@ class Post extends Component {
                <UserActions postID={this.props.post.id} userID={this.props.currentUser.id} isLiked={this.isLiked()} likes={this.state.post.postsLiked.length} shares={this.state.post.postsShared.length}
                              comments={this.state.post.comments.length}/>
                 <View style={PostStyle.userActionText}>
-                    <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity>
-                            <Text style={PostStyle.text}>J'aime</Text>
+                    <View style={{flexDirection: 'row',justifyContent:'space-between',flex:1}}>
+                        <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => this.toggleLike()}>
+                            <Image resizeMode="contain" style={{height: 30, width: 30,marginRight:10}}
+                                   source={require('../../../assets/img/picto/actualite/picto-jaime-gris.png')}/>
+                            <Text style={[PostStyle.text,{fontSize:14,color:'#cccccc',fontWeight:'600'}]}>J'aime</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                             this.onToggleComment(true, true)
                         }}>
-                            <Text style={[PostStyle.text, {marginHorizontal:10}]}>Commenter</Text>
+
+                            <Image resizeMode="contain" style={{height: 40, width: 40,marginRight:10}}
+                                   source={require('../../../assets/img/picto/actualite/comment-gris.png')}/>
+                            <Text style={[PostStyle.text,{fontSize:14,color:'#cccccc',fontWeight:'600'}]}>Commenter</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                             this.onToggleComment(true, true)
                         }}>
-                            <Text style={[PostStyle.text]}>Partager</Text>
+
+                            <Image resizeMode="contain" style={{height: 30, width: 30,marginRight:10}}
+                                   source={require('../../../assets/img/picto/actualite/partage-gris.png')}/>
+                            <Text style={[PostStyle.text,{fontSize:14,color:'#cccccc',fontWeight:'600'}]}>Partager</Text>
                         </TouchableOpacity>
 
                     </View>
-                    <TouchableOpacity onPress={() => {
+                </View>
+                <View style={{borderTopColor:'#cccccc',borderTopWidth:1,marginTop:10,paddingTop:10}}>
+                    <TouchableOpacity style={{flexDirection:'column',alignItems:'center',justifyContent:'center'}} onPress={() => {
                         this.onToggleComment(true, false)
                     }}>
-                        <Text style={[PostStyle.text]}>Lire les commentaires</Text>
+                        <Text style={{color:'#003366'}}>Afficher tous les commentaires</Text>
+                        <Icon style={{transform: [{ rotate: '90deg'}]}}
+                              color='#003366'
+                              size={25}
+                              name={'chevron-right'}/>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -128,6 +156,13 @@ mapStateToProps = (state) => {
         postList: state.postList.posts,
     };
 };
+/*
+<TouchableOpacity onPress={() => {
+                        this.onToggleComment(true, false)
+                    }}>
+                        <Text style={[PostStyle.text]}>Lire les commentaires</Text>
+                    </TouchableOpacity>
+ */
 export default connect(mapStateToProps)(Post);
 const PostStyle = StyleSheet.create({
     container: {

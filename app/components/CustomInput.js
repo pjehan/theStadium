@@ -141,6 +141,7 @@ export default class CustomInput extends Component {
         else {
             Input = <TextInput
                 {...this.props}
+                ref={i => {this.props.refArr = i}}
                 multiline={this.props.multiple}
                 placeholderTextColor={this.props.placeholderTextColor || this.props.textColor}
                 onChangeText={(value) => this.onChange(value)}

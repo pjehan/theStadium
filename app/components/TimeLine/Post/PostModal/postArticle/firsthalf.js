@@ -113,7 +113,9 @@ export default class SecondHalf extends Component {
     render() {
         return (
 
-            <View>
+            <ScrollView ref={(c) => {
+                this.scrollView = c;
+            }} contentContainerStyle={{flex:1}} style={{paddingTop:10,paddingBottom: 35,paddingHorizontal:10,height:'100%'}}>
 
                 <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
                     <Text style={{color: '#000000', fontWeight: '600'}}>Photo de couverture</Text>
@@ -143,7 +145,7 @@ export default class SecondHalf extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </View>
+            </ScrollView>
         )
     };
 }

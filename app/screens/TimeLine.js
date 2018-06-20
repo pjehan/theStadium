@@ -9,7 +9,8 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    Keyboard
 } from 'react-native';
 
 import {GLOBAL_STYLE, timeLineStyle} from '../assets/css/global';
@@ -21,8 +22,10 @@ import {TypeEnum} from "../components/TimeLine/Post/contentType/index";
 import {ImagePicker, Video} from "expo";
 import CustomInput from "../components/CustomInput";
 import {ChoiceModalContainer} from "../components/ChoiceModal/index";
+import PublishHeader from "../components/publishHeader/index";
 
 const INTERVIEW_BTN = ["Choisir une Vidéo", "Prendre une Vidéo"];
+const PHOTO_BTN = ["Choisir une Photo", "Prendre une Photo"];
 
 class TimeLine extends Component {
     constructor(props) {
@@ -94,6 +97,38 @@ class TimeLine extends Component {
         }
     };
 
+    _publishPhoto() {
+        if (this.state.media) {
+            this.props.dispatch(postActions.add(this.props.currentUser.id, {
+                postType: 1,
+                title: this.state.title
+            }, this.state.media));
+            this.setState({media: null, interviewVisible: false})
+        }
+    }
+
+    _addPhoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: 'Photos'
+        });
+        if (!result.cancelled) {
+            this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
+            // this.setState({interviewVisible: true});
+        } else {
+        }
+    };
+
+    _shootPhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: 'Photos'
+        });
+        if (!result.cancelled) {
+            this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
+            this.setState({interviewVisible: true});
+        } else {
+        }
+    };
+
     _interviewModal() {
         if (this.state.media) {
             let originalWidth;
@@ -146,15 +181,25 @@ class TimeLine extends Component {
                                 onChangeParent={(state, newvalue) => {
                                     this.onChangeInfos(state, newvalue)
                                 }}/>
-                            <Video source={{uri: this.state.media}}
-                                   rate={1.0}
-                                   volume={0}
-                                   muted={true}
-                                   resizeMode="cover"
-                                   shouldPlay
-                                   isLooping
-                                   style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}
+                            {this.state.media.type === 'Video' ? <Video source={{uri: this.state.media}}
+                                                                        rate={1.0}
+                                                                        volume={0}
+                                                                        muted={true}
+                                                                        resizeMode="cover"
+                                                                        shouldPlay
+                                                                        isLooping
+                                                                        style={{
+                                                                            width: originalWidth * widthChange,
+                                                                            height: originalHeight * widthChange
+                                                                        }}
+                            /> : <Image source={{uri: this.state.media.uri}}
+                                        resizeMode="cover"
+                                        style={{
+                                            width: originalWidth * widthChange,
+                                            height: originalHeight * widthChange
+                                        }}
                             />
+                            }
 
                             <View style={{borderTopWidth: 1, flexDirection: 'row'}}>
                                 <TouchableOpacity
@@ -185,7 +230,14 @@ class TimeLine extends Component {
     }
 
     _renderItem(item) {
-        return <Post style={[timeLineStyle.singlePost]} navigation={this.props.navigation}
+        return <Post scrollTo={(size) => {
+            this.flatList.scrollToIndex({
+                animated: true,
+                index: this.props.posts.posts.indexOf(item),
+                viewOffset: size ? (-230 - size) : -230,
+                viewPosition: 1
+            })
+        }} style={[timeLineStyle.singlePost]} navigation={this.props.navigation}
                      key={this.props.posts.posts.indexOf(item)} id={this.props.posts.posts.indexOf(item)} post={item}/>
     }
 
@@ -194,6 +246,12 @@ class TimeLine extends Component {
         const {posts} = this.props;
         return (
             <FlatList
+                style={{marginHorizontal: 10, height: '100%'}}
+                ref={
+                    (c) => {
+                        this.flatList = c;
+                    }
+                }
                 onRefresh={() => {
                     this.props.dispatch(postActions.getAll())
                 }}
@@ -207,7 +265,8 @@ class TimeLine extends Component {
     _renderModal() {
         if (this.state.modalVisible && this.state.modalType) {
             return (
-                <PostModal navigation={this.props.navigation} owner={this.props.currentUser} type={this.state.modalType} visible={this.state.modalVisible}
+                <PostModal navigation={this.props.navigation} owner={this.props.currentUser} type={this.state.modalType}
+                           visible={this.state.modalVisible}
                            toggleModal={(visible, type) => {
                                this.onToggleModal(visible, type)
                            }}/>)
@@ -216,143 +275,117 @@ class TimeLine extends Component {
         }
     }
 
-    _renderLoading() {
-        return (
-            <View>
-                <ActivityIndicator
-                    size={'large'}/>
-                <Text>Chargement de votre TimeLine</Text>
-            </View>
+    choiceModal(BTN, title, function1, function2) {
+        console.log('test')
+        ChoiceModalContainer.show(
+            {
+                options: BTN,
+                title: title,
+            },
+            buttonIndex => {
+                buttonIndex === 0 ? function1() : buttonIndex === 1 ? function2() : null
+            }
         )
     }
 
-    _renderCoachHeader() {
-        return (
-            <View style={[timeLineStyle.tabContainer, {
-                shadowOffset: {width: 210, height: 10},
-                shadowColor: 'black',
-                shadowOpacity: 1,
-                elevation: 5
-            }]}>
-
-
-                <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                    ChoiceModalContainer.show(
-                        {
-                            options: INTERVIEW_BTN,
-                            title: "Interview",
-                        },
-                        buttonIndex => {
-                            console.log(buttonIndex)
-                            buttonIndex === 0 ? this._addInterview() : buttonIndex === 1 ? this._shootInterview() : null
-                        }
-                    )
-                }}>
-                    <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                           source={require('../assets/img/picto/menu/actions/interview.png')}/>
-                    <Text style={timeLineStyle.tabButtonText}>Interview</Text>
-                </TouchableOpacity>
-                <View style={timeLineStyle.buttonBorder}/>
-                <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                    this.props.navigation.navigate('ArticleTab')
-                }}>
-                    <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                           source={require('../assets/img/picto/menu/actions/article.png')}/>
-                    <Text style={timeLineStyle.tabButtonText}>Résumé</Text>
-                </TouchableOpacity>
-                <View style={timeLineStyle.buttonBorder}/>
-                <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                    this.onToggleModal(true, TypeEnum.simple)
-                }}>
-                    <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                           source={require('../assets/img/picto/menu/actions/post.png')}/>
-                    <Text style={timeLineStyle.tabButtonText}>Publier</Text>
-                </TouchableOpacity>
-            </View>)
+    _supporterActions(action) {
+        switch (action) {
+            case 'video':
+                this.choiceModal(INTERVIEW_BTN, "Video", this._addInterview, this._shootInterview);
+                break;
+            case 'photos':
+                this.choiceModal(PHOTO_BTN, "Photo", this._addPhoto(), this._shootPhoto());
+                break;
+            case 'simple':
+                this.onToggleModal(true, TypeEnum.simple);
+                break;
+        }
     }
 
-    _renderSupporterHeader() {
-        return (<View style={[timeLineStyle.tabContainer, {
-            shadowOffset: {width: 210, height: 10},
-            shadowColor: 'black',
-            shadowOpacity: 1,
-            elevation: 5
-        }]}>
-
-
-            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                this._addInterview();
-            }}>
-                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                       source={require('../assets/img/picto/menu/actions/interview.png')}/>
-                <Text style={timeLineStyle.tabButtonText}>Interview</Text>
-            </TouchableOpacity>
-            <View style={timeLineStyle.buttonBorder}/>
-            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                this.props.navigation.navigate('ArticleTab')
-            }}>
-                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                       source={require('../assets/img/picto/menu/actions/article.png')}/>
-                <Text style={timeLineStyle.tabButtonText}>Résumé</Text>
-            </TouchableOpacity>
-            <View style={timeLineStyle.buttonBorder}/>
-            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                this.onToggleModal(true, TypeEnum.simple)
-            }}>
-                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                       source={require('../assets/img/picto/menu/actions/post.png')}/>
-                <Text style={timeLineStyle.tabButtonText}>Publier</Text>
-            </TouchableOpacity>
-        </View>)
+    _coachActions(action) {
+        switch (action) {
+            case 'interview':
+                this.choiceModal(INTERVIEW_BTN, "Interview", this._addInterview, this._shootInterview);
+                break;
+            case 'simple':
+                this.onToggleModal(true, TypeEnum.simple);
+                break;
+            case 'article':
+                this.props.navigation.navigate('ArticleTab');
+                break;
+        }
     }
 
-    _renderPlayerHeader() {
-        return (<View style={[timeLineStyle.tabContainer, {
-            shadowOffset: {width: 210, height: 10},
-            shadowColor: 'black',
-            shadowOpacity: 1,
-            elevation: 5
-        }]}><TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-            this.onToggleModal(true, TypeEnum.assists)
-        }}>
-            <Image style={[timeLineStyle.tabButtonPicto, {height: 20, width: 20}]} resizeMode='contain'
-                   source={require('../assets/img/picto/menu/actions/assist.png')}/>
-            <Text style={timeLineStyle.tabButtonText}>Passe dé.</Text>
-        </TouchableOpacity>
-            <View style={timeLineStyle.buttonBorder}/>
-            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                this.onToggleModal(true, TypeEnum.goals)
-            }}>
-                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                       source={require('../assets/img/picto/menu/actions/goal.png')}/>
-                <Text style={timeLineStyle.tabButtonText}>But</Text>
-            </TouchableOpacity>
-            <View style={timeLineStyle.buttonBorder}/>
-            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                this.onToggleModal(true, TypeEnum.simple)
-            }}>
-                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                       source={require('../assets/img/picto/menu/actions/post.png')}/>
-                <Text style={timeLineStyle.tabButtonText}>Publier</Text>
-            </TouchableOpacity>
-        </View>)
+    _playerActions(action) {
+        switch (action) {
+            case 'assists':
+                this.onToggleModal(true, TypeEnum.assists);
+                break;
+            case 'simple':
+                this.onToggleModal(true, TypeEnum.simple);
+                break;
+            case 'goals':
+                this.onToggleModal(true, TypeEnum.simple);
+                break;
+        }
     }
 
     render() {
+        const PLAYERTABS = [
+            {
+                label: 'Passe dé.',
+                dim: {height: 20, width: 20},
+                picto: require('../assets/img/picto/menu/actions/assist.png'),
+                action: 'assists'
+            },
+            {label: 'But', picto: require('../assets/img/picto/menu/actions/goal.png'), action: 'goals'},
+            {label: 'Publier', picto: require('../assets/img/picto/menu/actions/post.png'), action: 'simple'}
+        ];
+        const COACHTABS = [
+            {label: 'Interview', picto: require('../assets/img/picto/menu/actions/interview.png'), action: 'interview'},
+            {label: 'Résumé', picto: require('../assets/img/picto/menu/actions/article.png'), action: 'article'},
+            {label: 'Publier', picto: require('../assets/img/picto/menu/actions/post.png'), action: 'simple'}
+        ];
+
+        const SUPPORTERTABS = [
+            {label: 'Vidéo', picto: require('../assets/img/picto/menu/actions/photo.png'), action: 'video'},
+            {label: 'Photo', picto: require('../assets/img/picto/menu/actions/photo.png'), action: 'photo'},
+            {label: 'Publier', picto: require('../assets/img/picto/menu/actions/post.png'), action: 'simple'}
+        ];
+
+        let TABS;
+
+        if (this.props.currentUser.userType.label === "Joueur") {
+            TABS = PLAYERTABS;
+        } else if (this.props.currentUser.userType.label === 'Supporter') {
+            TABS = SUPPORTERTABS;
+        } else {
+            TABS = COACHTABS;
+        }
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
+                {TABS && <PublishHeader tabs={TABS} onAction={(action) => {
+                    switch (this.props.currentUser.userType.label) {
+                        case 'Coach':
+                            this._coachActions(action);
+                            break;
+                        case 'Joueur':
+                            this._playerActions(action);
+                            break;
+                        case 'Supporter':
+                            this._supporterActions(action);
+                            break;
 
+                    }
+                }}/>}
                 {this._renderModal()}
                 {this._interviewModal()}
-                {this.props.currentUser.userType.label === "Joueur" ? this._renderPlayerHeader() : this.props.currentUser.userType.label === 'Coach' ? this._renderCoachHeader() : null}
-                <ScrollView contentContainerStyle={{flex: 1}}
-                            style={{paddingHorizontal: 10, height: '100%'}}>
-                    {
-                        this.props.posts ? this._renderList() :
-                            !this.postsFetched && !this.props.posts ? this._renderLoading() :
-                                <Text>Aucun résultat trouvé </Text>
-                    }
-                </ScrollView>
+
+                {
+                    this.props.posts ? this._renderList() :
+                        !this.postsFetched && !this.props.posts ? null :
+                            <Text>Aucun résultat trouvé </Text>
+                }
             </View>
         )
     }

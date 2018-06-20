@@ -346,7 +346,7 @@ class Actus extends Component {
     render() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        console.log(utils._isUser(state.currentUser, state.inspectedUser));
+
         return (
             <View>
                 {this._renderHeader()}

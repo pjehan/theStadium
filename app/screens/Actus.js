@@ -20,6 +20,7 @@ import PostModal from '../components/TimeLine/Post/PostModal';
 import {postActions} from "../_actions/post";
 import utils from "../config/utils";
 import {utils as utilsC} from "../_constants/utils";
+import PublishHeader from "../components/publishHeader";
 let ImageCover = null;
 let {width} = Dimensions.get('window');
 
@@ -196,83 +197,21 @@ class Actus extends Component {
         const state = navigation.state.params;
         let type = state.currentUser.userType.label;
         if (utils._isUser(state.currentUser, state.inspectedUser)) {
-            if (type === 'Joueur') {
-                return (
-                    <View style={{width: width / 1.25, alignSelf: 'center'}}>
-                        <View style={timeLineStyle.tabContainer}>
-                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.onToggleModal(true, 'assists')
-                            }}>
-                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/assist.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>Passe dé.</Text>
-                            </TouchableOpacity>
-                            <View style={timeLineStyle.buttonBorder}/>
-                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.onToggleModal(true, 'goals')
-                            }}>
-                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/goal.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>But</Text>
-                            </TouchableOpacity>
-                            <View style={timeLineStyle.buttonBorder}/>
-                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.onToggleModal(true, 'simple')
-                            }}>
-                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/post.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>Publier</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )
-            } else if (type === 'Coach')
-            {
-                return (
-                    <View style={{width: width / 1.25, alignSelf: 'center'}}>
-                        <View style={timeLineStyle.tabContainer}>
-                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.onToggleModal(true, 'interview')
-                            }}>
-                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/interview.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>Interview</Text>
-                            </TouchableOpacity>
-                            <View style={timeLineStyle.buttonBorder}/>
-                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.props.navigation.navigate('ArticleTab')
-                            }}>
-                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/article.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>Résumé</Text>
-                            </TouchableOpacity>
-                            <View style={timeLineStyle.buttonBorder}/>
-                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.onToggleModal(true, 'simple')
-                            }}>
-                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/post.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>Publier</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )
-            }
-            else {
-                return (
-                    <View style={{width: width / 1.25, alignSelf: 'center'}}>
-                        <View style={timeLineStyle.tabContainer}>
-                            <TouchableOpacity style={timeLineStyle.tabButton} onPress={() => {
-                                this.onToggleModal(true, 'simple')
-                            }}>
-                                <Image style={timeLineStyle.tabButtonPicto} resizeMode='contain'
-                                       source={require('../assets/img/picto/menu/actions/post.png')}/>
-                                <Text style={timeLineStyle.tabButtonText}>Publier</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )
-            }
+           return( utils._userTABS(this.props.currentUser) && <PublishHeader tabs={utils._userTABS(this.props.currentUser)} onAction={(action) => {
+                switch (this.props.currentUser.userType.label) {
+                    case 'Coach':
+                        this._coachActions(action);
+                        break;
+                    case 'Joueur':
+                        this._playerActions(action);
+                        break;
+                    case 'Supporter':
+                        this._supporterActions(action);
+                        break;
+
+                }
+            }}/>
+        )
         } else if(state.inspectedUser.userType.label !== 'Supporter'){
             return (
                 <View style={{width: width / 2, alignSelf: 'center'}}>

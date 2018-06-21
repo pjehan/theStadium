@@ -23,6 +23,7 @@ import {ImagePicker, Video} from "expo";
 import CustomInput from "../components/CustomInput";
 import {ChoiceModalContainer} from "../components/ChoiceModal/index";
 import PublishHeader from "../components/publishHeader/index";
+import _userTABS from "../config/utils";
 
 const INTERVIEW_BTN = ["Choisir une Vidéo", "Prendre une Vidéo"];
 const PHOTO_BTN = ["Choisir une Photo", "Prendre une Photo"];
@@ -55,9 +56,7 @@ class TimeLine extends Component {
     }
 
     onToggleModal(visible, type) {
-        this.setState({modalVisible: visible});
-        this.setState({modalType: type});
-
+        this.setState({modalVisible: visible,modalType: type});
         this.forceUpdate();
     }
 
@@ -65,66 +64,34 @@ class TimeLine extends Component {
         this.setState({[state]: newvalue})
     }
 
-    _publishInterview() {
+    _publishMedia() {
         if (this.state.media) {
             this.props.dispatch(postActions.add(this.props.currentUser.id, {
-                postType: 5,
+                postType: this.state.publishType,
                 title: this.state.title
             }, this.state.media));
-            this.setState({media: null, interviewVisible: false})
+            this.setState({media: null, interviewVisible: false,publishType:null})
         }
     }
 
-    _addInterview = async () => {
+    _addMedia = async (type, postType) => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: 'Videos'
+            mediaTypes: type
         });
         if (!result.cancelled) {
             this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
-            this.setState({interviewVisible: true});
+            this.setState({interviewVisible: true,publishType:postType});
         } else {
         }
     };
 
-    _shootInterview = async () => {
+    _shootMedia = async (type, postType) => {
         let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: 'Videos'
+            mediaTypes: type
         });
         if (!result.cancelled) {
             this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
-            this.setState({interviewVisible: true});
-        } else {
-        }
-    };
-
-    _publishPhoto() {
-        if (this.state.media) {
-            this.props.dispatch(postActions.add(this.props.currentUser.id, {
-                postType: 1,
-                title: this.state.title
-            }, this.state.media));
-            this.setState({media: null, interviewVisible: false})
-        }
-    }
-
-    _addPhoto = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: 'Photos'
-        });
-        if (!result.cancelled) {
-            this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
-            // this.setState({interviewVisible: true});
-        } else {
-        }
-    };
-
-    _shootPhoto = async () => {
-        let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: 'Photos'
-        });
-        if (!result.cancelled) {
-            this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
-            this.setState({interviewVisible: true});
+            this.setState({interviewVisible: true, publishType:postType});
         } else {
         }
     };
@@ -209,7 +176,7 @@ class TimeLine extends Component {
                                     }}>
                                     <Text>Annuler</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this._publishInterview()}
+                                <TouchableOpacity onPress={() => this._publishMedia()}
                                                   style={{
                                                       justifyContent: 'center',
                                                       alignItems: 'center',
@@ -275,15 +242,14 @@ class TimeLine extends Component {
         }
     }
 
-    choiceModal(BTN, title, function1, function2) {
-        console.log('test')
+    choiceModal(BTN, title, function1, function2,type, postType) {
         ChoiceModalContainer.show(
             {
                 options: BTN,
                 title: title,
             },
             buttonIndex => {
-                buttonIndex === 0 ? function1() : buttonIndex === 1 ? function2() : null
+                buttonIndex === 0 ? function1(type, postType) : buttonIndex === 1 ? function2(type, postType) : null
             }
         )
     }
@@ -291,10 +257,10 @@ class TimeLine extends Component {
     _supporterActions(action) {
         switch (action) {
             case 'video':
-                this.choiceModal(INTERVIEW_BTN, "Video", this._addInterview, this._shootInterview);
+                this.choiceModal(INTERVIEW_BTN, "Vidéo", this._addMedia, this._shootMedia, 'Videos', 1);
                 break;
             case 'photos':
-                this.choiceModal(PHOTO_BTN, "Photo", this._addPhoto(), this._shootPhoto());
+                this.choiceModal(PHOTO_BTN, "Photo", this._addMedia, this._shootMedia, 'Photos', 1);
                 break;
             case 'simple':
                 this.onToggleModal(true, TypeEnum.simple);
@@ -305,7 +271,7 @@ class TimeLine extends Component {
     _coachActions(action) {
         switch (action) {
             case 'interview':
-                this.choiceModal(INTERVIEW_BTN, "Interview", this._addInterview, this._shootInterview);
+                this.choiceModal(INTERVIEW_BTN, "Interview", this._addMedia, this._shootMedia, 'Videos', 5);
                 break;
             case 'simple':
                 this.onToggleModal(true, TypeEnum.simple);
@@ -331,40 +297,10 @@ class TimeLine extends Component {
     }
 
     render() {
-        const PLAYERTABS = [
-            {
-                label: 'Passe dé.',
-                dim: {height: 20, width: 20},
-                picto: require('../assets/img/picto/menu/actions/assist.png'),
-                action: 'assists'
-            },
-            {label: 'But', picto: require('../assets/img/picto/menu/actions/goal.png'), action: 'goals'},
-            {label: 'Publier', picto: require('../assets/img/picto/menu/actions/post.png'), action: 'simple'}
-        ];
-        const COACHTABS = [
-            {label: 'Interview', picto: require('../assets/img/picto/menu/actions/interview.png'), action: 'interview'},
-            {label: 'Résumé', picto: require('../assets/img/picto/menu/actions/article.png'), action: 'article'},
-            {label: 'Publier', picto: require('../assets/img/picto/menu/actions/post.png'), action: 'simple'}
-        ];
 
-        const SUPPORTERTABS = [
-            {label: 'Vidéo', picto: require('../assets/img/picto/menu/actions/photo.png'), action: 'video'},
-            {label: 'Photo', picto: require('../assets/img/picto/menu/actions/photo.png'), action: 'photo'},
-            {label: 'Publier', picto: require('../assets/img/picto/menu/actions/post.png'), action: 'simple'}
-        ];
-
-        let TABS;
-
-        if (this.props.currentUser.userType.label === "Joueur") {
-            TABS = PLAYERTABS;
-        } else if (this.props.currentUser.userType.label === 'Supporter') {
-            TABS = SUPPORTERTABS;
-        } else {
-            TABS = COACHTABS;
-        }
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
-                {TABS && <PublishHeader tabs={TABS} onAction={(action) => {
+                {_userTABS(this.props.currentUser) && <PublishHeader tabs={_userTABS(this.props.currentUser)} onAction={(action) => {
                     switch (this.props.currentUser.userType.label) {
                         case 'Coach':
                             this._coachActions(action);

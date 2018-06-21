@@ -185,7 +185,7 @@ class Post extends Component {
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
                         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}
                                           onPress={() => this.toggleLike()}>
-                            <Image resizeMode="contain" style={{height: 30, width: 30, marginRight: 10}}
+                            <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}
                                    source={require('../../../assets/img/picto/actualite/picto-jaime-gris.png')}/>
                             <Text style={[PostStyle.text, {
                                 fontSize: 14,
@@ -197,7 +197,7 @@ class Post extends Component {
                             this.onToggleComment(true, true)
                         }}>
 
-                            <Image resizeMode="contain" style={{height: 40, width: 40, marginRight: 10}}
+                            <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}
                                    source={require('../../../assets/img/picto/actualite/comment-gris.png')}/>
                             <Text style={[PostStyle.text, {fontSize: 14, color: '#cccccc', fontWeight: '600'}]}>Commenter</Text>
                         </TouchableOpacity>
@@ -206,7 +206,7 @@ class Post extends Component {
                             this.onToggleComment(true, true)
                         }}>
 
-                            <Image resizeMode="contain" style={{height: 30, width: 30, marginRight: 10}}
+                            <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}
                                    source={require('../../../assets/img/picto/actualite/partage-gris.png')}/>
                             <Text style={[PostStyle.text, {
                                 fontSize: 14,

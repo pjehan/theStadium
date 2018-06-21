@@ -81,7 +81,7 @@ function add(user, post, media) {
         if (media) {
             data.append('post_id', response.data.id);
             return axios.post(url, data).then(
-                response => {
+                resp => {
                     return response;
                 })
         }

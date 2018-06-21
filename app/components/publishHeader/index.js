@@ -21,6 +21,7 @@ export default class PublishHeader extends Component {
                         shadowOpacity: 1,
                         elevation: 5
                     }}
+                    scrollEnabled={false}
                     data={TABS}
                     renderItem={(data) => (
                         <View style={[Style.tabButton,{width:width/TABS.length}]}>

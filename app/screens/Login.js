@@ -18,6 +18,7 @@ import CustomInput from '../components/CustomInput';
 import {connect} from 'react-redux';
 import {userActions} from "../_actions/user";
 import axios from "axios";
+import Expo, {Notifications,Permissions } from 'expo';
 import {clubAction} from "../_actions/club";
 
 class Login extends Component {
@@ -59,19 +60,44 @@ class Login extends Component {
 
         }
     }
-componentWillMount() {
-    //this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
-    this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
-    //this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
-    this.setModalVisible(true);
-    this.props.dispatch(clubAction.getAll());
 
-}
+    register = async () => {
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+        let finalStatus = existingStatus;
+
+        // only ask if permissions have not already been determined, because
+        // iOS won't necessarily prompt the user a second time.
+        if (existingStatus !== 'granted') {
+            // Android remote notification permissions are granted during the app
+            // install, so this will only ask on iOS
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            return;
+        }
+        // Get the token that uniquely identifies this device
+        let token = await Notifications.getExpoPushTokenAsync();
+        console.log(token);
+    };
+
+    componentWillMount() {
+        this.register();
+        //this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
+        this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
+        //this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
+        this.setModalVisible(true);
+        this.props.dispatch(clubAction.getAll());
+
+    }
+
     loginIn() {
         //fetch to databse
         this.props.dispatch(userActions.login(this.state.email, this.state.password));
-       // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
-       // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
+        // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
+        // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
         this.setModalVisible(true);
     }
 

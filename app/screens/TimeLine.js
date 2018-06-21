@@ -23,7 +23,7 @@ import {ImagePicker, Video} from "expo";
 import CustomInput from "../components/CustomInput";
 import {ChoiceModalContainer} from "../components/ChoiceModal/index";
 import PublishHeader from "../components/publishHeader/index";
-import _userTABS from "../config/utils";
+import utils from "../config/utils";
 
 const INTERVIEW_BTN = ["Choisir une Vidéo", "Prendre une Vidéo"];
 const PHOTO_BTN = ["Choisir une Photo", "Prendre une Photo"];
@@ -36,14 +36,13 @@ class TimeLine extends Component {
             modalType: '',
             media: null,
             interviewVisible: false,
+            publishType:0
         };
         this.onToggleModal = this.onToggleModal.bind(this);
         this._renderItem = this._renderItem.bind(this);
         this._renderList = this._renderList.bind(this);
         this._renderModal = this._renderModal.bind(this);
-        this._interviewModal = this._interviewModal.bind(this);
-        this._publishInterview = this._publishInterview.bind(this);
-        this._shootInterview = this._shootInterview.bind(this);
+        this._mediaModal = this._mediaModal.bind(this);
     }
 
     componentWillMount() {
@@ -76,7 +75,8 @@ class TimeLine extends Component {
 
     _addMedia = async (type, postType) => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: type
+            mediaTypes: type,
+            allowsEditing: true
         });
         if (!result.cancelled) {
             this.setState({media: {uri: result.uri, width: result.width, height: result.height, type: result.type}});
@@ -96,7 +96,7 @@ class TimeLine extends Component {
         }
     };
 
-    _interviewModal() {
+    _mediaModal() {
         if (this.state.media) {
             let originalWidth;
             let originalHeight;
@@ -128,7 +128,7 @@ class TimeLine extends Component {
                                 justifyContent: 'center'
                             }}>
                                 <Text style={{fontWeight: "bold", color: '#003366', fontSize: 16}}>
-                                    Interview
+                                    {this.state.publishType === 5 ? 'Interview' : this.state.media.type === 'Photos' ? 'Photo' : 'Vidéo'}
                                 </Text>
                             </View>
                             <CustomInput
@@ -259,7 +259,7 @@ class TimeLine extends Component {
             case 'video':
                 this.choiceModal(INTERVIEW_BTN, "Vidéo", this._addMedia, this._shootMedia, 'Videos', 1);
                 break;
-            case 'photos':
+            case 'photo':
                 this.choiceModal(PHOTO_BTN, "Photo", this._addMedia, this._shootMedia, 'Photos', 1);
                 break;
             case 'simple':
@@ -297,10 +297,11 @@ class TimeLine extends Component {
     }
 
     render() {
+        console.log(utils._userTABS(this.props.currentUser))
 
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
-                {_userTABS(this.props.currentUser) && <PublishHeader tabs={_userTABS(this.props.currentUser)} onAction={(action) => {
+                {utils._userTABS(this.props.currentUser) && <PublishHeader tabs={utils._userTABS(this.props.currentUser)} onAction={(action) => {
                     switch (this.props.currentUser.userType.label) {
                         case 'Coach':
                             this._coachActions(action);
@@ -314,8 +315,9 @@ class TimeLine extends Component {
 
                     }
                 }}/>}
+
+                {this._mediaModal()}
                 {this._renderModal()}
-                {this._interviewModal()}
 
                 {
                     this.props.posts ? this._renderList() :

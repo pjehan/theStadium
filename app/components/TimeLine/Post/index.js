@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    StyleSheet, Image, Text, View,TouchableOpacity,
+    StyleSheet, Image, Text, View, TouchableOpacity,
     findNodeHandle,
     NativeModules
 } from 'react-native';
@@ -61,9 +61,11 @@ class Post extends Component {
             return null;
         }
     }
+
     onChange(state, newvalue) {
         this.setState({[state]: newvalue})
     }
+
     onSendComment() {
         const COMMENTTOADD = {
             user: this.props.currentUser.id,
@@ -71,24 +73,53 @@ class Post extends Component {
             createdAt: new Date(),
             post: this.props.post.id,
         };
-        this.state.userMessage ? this.props.dispatch(postActions.addComment(COMMENTTOADD,this.props.id)) : null;
+        this.state.userMessage ? this.props.dispatch(postActions.addComment(COMMENTTOADD, this.props.id)) : null;
     }
+
     _renderInput() {
-        const name = this.props.currentUser.userType.label !== 'Coach' ? this.props.currentUser.firstname + ' ' + this.props.currentUser.lastname : null;
+        const name = this.props.currentUser.userType.label !== 'Coach' ? this.props.currentUser.firstname + ' ' + this.props.currentUser.lastname : this.props.currentUser.teams[0].team.club.name;
         return (
-            <View style={[PostStyle.containerTest, {height: Math.max(75, this.state.height + 35)}]}>
+            <View style={[PostStyle.containerTest, {height: Math.max(80, this.state.height + 35)}]}>
                 <Avatar user={this.props.currentUser}/>
-                <View style={{flex: 1,flexDirection: 'column', alignItems: 'flex-start'}}>
-                    <Text style={{paddingLeft:5,marginBottom:5}}>{name}</Text>
-                    <View style={{flex: 1,backgroundColor:'white',
-                        borderRadius: 15,borderWidth:1,borderColor:'#979797',paddingHorizontal:10,flexDirection: 'row',width:'100%', alignItems: 'center'}}>
+                <View style={{flex: 1, flexDirection: 'column', alignItems: 'flex-start'}}>
+                    <View style={{flexDirection: 'row',alignItems:'center',justifyContent:'center'}}>
+                        <Text style={{paddingLeft: 5,fontSize: 14}}>{name}  </Text>
+                        {this.props.currentUser.userType.label === 'Coach' ?
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={{
+                                    paddingVertical: 2,
+                                    paddingHorizontal: 5,
+                                    fontSize: 10,
+                                    backgroundColor: '#003366',
+                                    color: '#ffffff'
+                                }}>{this.props.currentUser.teams[0].team.category.label} {this.props.currentUser.teams[0].team.division.label}</Text>
+                            </View>
+                            : null
+                        }
+                    </View>
+                    <View style={{
+                        flex: 1,
+                        backgroundColor: 'white',
+                        borderRadius: 15,
+                        borderWidth: 1,
+                        borderColor: '#979797',
+                        paddingHorizontal: 10,
+                        marginTop:5,
+                        flexDirection: 'row',
+                        width: '100%',
+                        alignItems: 'center'
+                    }}>
                         <CustomInput
-                            container={{justifyContent: 'flex-start',
-                                width:'100%',
-                                paddingVertical:this.state.height > 35 ? 10 : 0, flex: 1, height: Math.max(35, this.state.height)}}
+                            container={{
+                                justifyContent: 'flex-start',
+                                width: '100%',
+                                paddingVertical: this.state.height > 35 ? 10 : 0,
+                                flex: 1,
+                                height: Math.max(35, this.state.height)
+                            }}
                             input={{
                                 flex: 1,
-                                width:'100%',
+                                width: '100%',
                             }}
                             textColor={'#333333'}
                             placeholder={'Commentez...'}
@@ -98,14 +129,18 @@ class Post extends Component {
                             security={false}
                             onChangeSizeParent={(size) => {
                                 this.setState({height: size});
-                                if(size > 35){
+                                if (size > 35) {
                                     this.props.scrollTo(size - 35);
                                 }
                             }}
                             onChangeParent={(state, newvalue) => this.onChange(state, newvalue)}
                         />
                         <TouchableOpacity
-                            style={{height: Math.max(35, this.state.height),justifyContent:'center', alignItems:'center'}}
+                            style={{
+                                height: Math.max(35, this.state.height),
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}
                             onPress={() => {
                                 this.onSendComment(this.state.userMessage);
                             }}
@@ -217,18 +252,20 @@ class Post extends Component {
 
                     </View>
                 </View>
-                <View style={{borderTopColor: '#cccccc', borderTopWidth: 1, marginTop: 10, paddingTop: 10}}>
-                    <TouchableOpacity style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}
-                                      onPress={() => {
-                                          this.onToggleComment(true, false)
-                                      }}>
-                        <Text style={{color: '#003366'}}>Afficher tous les commentaires</Text>
-                        <Icon style={{transform: [{rotate: '90deg'}]}}
-                              color='#003366'
-                              size={25}
-                              name={'chevron-right'}/>
-                    </TouchableOpacity>
-                </View>
+                {this.props.post.comments.length > 0 ?
+                    <View style={{borderTopColor: '#cccccc', borderTopWidth: 1, marginTop: 10, paddingTop: 10}}>
+                        <TouchableOpacity
+                            style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}
+                            onPress={() => {
+                                this.onToggleComment(true, false)
+                            }}>
+                            <Text style={{color: '#003366'}}>Afficher tous les commentaires</Text>
+                            <Icon style={{transform: [{rotate: '90deg'}]}}
+                                  color='#003366'
+                                  size={25}
+                                  name={'chevron-right'}/>
+                        </TouchableOpacity>
+                    </View> : null}
                 {this._renderInput()}
             </View>
         )
@@ -259,7 +296,7 @@ const PostStyle = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         paddingVertical: 10,
-        paddingHorizontal:10,
+        paddingHorizontal: 10,
         alignItems: 'center',
     },
     container: {

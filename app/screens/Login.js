@@ -84,7 +84,7 @@ class Login extends Component {
     };
 
     componentWillMount() {
-        this.register();
+        //this.register();
         //this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
         this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
         //this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));

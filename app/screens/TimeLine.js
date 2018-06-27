@@ -257,10 +257,10 @@ class TimeLine extends Component {
     _supporterActions(action) {
         switch (action) {
             case 'video':
-                this.choiceModal(INTERVIEW_BTN, "Vidéo", this._addMedia, this._shootMedia, 'Videos', 1);
+                this.choiceModal(INTERVIEW_BTN, "Vidéo", this._addMedia, this._shootMedia, 'Videos', 2);
                 break;
             case 'photo':
-                this.choiceModal(PHOTO_BTN, "Photo", this._addMedia, this._shootMedia, 'Photos', 1);
+                this.choiceModal(PHOTO_BTN, "Photo", this._addMedia, this._shootMedia, 'Photos', 2);
                 break;
             case 'simple':
                 this.onToggleModal(true, TypeEnum.simple);
@@ -291,14 +291,12 @@ class TimeLine extends Component {
                 this.onToggleModal(true, TypeEnum.simple);
                 break;
             case 'goals':
-                this.onToggleModal(true, TypeEnum.simple);
+                this.onToggleModal(true, TypeEnum.goals);
                 break;
         }
     }
 
     render() {
-        console.log(utils._userTABS(this.props.currentUser))
-
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
                 {utils._userTABS(this.props.currentUser) && <PublishHeader tabs={utils._userTABS(this.props.currentUser)} onAction={(action) => {

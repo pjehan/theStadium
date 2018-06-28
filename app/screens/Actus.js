@@ -18,6 +18,7 @@ import {utils as utilsC} from "../_constants/utils";
 import PublishHeader from "../components/publishHeader";
 import {TypeEnum} from "../components/TimeLine/Post/contentType/index";
 import {ChoiceModalContainer} from "../components/ChoiceModal/index";
+import CustomInput from "../components/CustomInput";
 
 let ImageCover = null;
 let {width} = Dimensions.get('window');
@@ -132,9 +133,7 @@ class Actus extends Component {
                            source={
                                this._displayPath(utils._isUser(state.currentUser, state.inspectedUser)).profilepicture ?
                                    {uri: utilsC.NODEJS + this._displayPath(utils._isUser(state.currentUser, state.inspectedUser)).profilepicture} :
-                                   require('../assets/img/thestadium/placeholder.jpg') } >
-
-                    </Image>
+                                   require('../assets/img/thestadium/placeholder.jpg') } />
                     {utils._isUser(state.currentUser, state.inspectedUser) ?
                         <TouchableOpacity onPress={() => this._addMedia()} style={{
                             height: 30,
@@ -153,7 +152,7 @@ class Actus extends Component {
             return (
                 <View>
                     <Image style={{height: 250, width: width}} resizeMode={'cover'}
-                           source={this.props.inspectedUser.profilepicture ? {uri: 'http://192.168.43.103:3000/' +this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')}>
+                           source={this.props.inspectedUser.profilepicture ? {uri: 'http://192.168.43.103:3000/' +this.props.inspectedUser.profilepicture} : require('../assets/img/thestadium/placeholder.jpg')} />
                         <View style={{
                             height: 250,
                             width: width / 2.5,
@@ -188,7 +187,6 @@ class Actus extends Component {
                         }}>
                             <Icon size={20} type={'entypo'} name={'camera'} color={'#ffffff'}/>
                         </TouchableOpacity>
-                    </Image>
                 </View>
             )
         }

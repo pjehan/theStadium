@@ -102,7 +102,6 @@ class Contact extends Component {
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
-        const trainingHours = JSON.parse(team.trainingHours);
         return (
             <View style={{
                 backgroundColor: '#ffffff',
@@ -373,7 +372,7 @@ class Contact extends Component {
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
-        const trainingHours = JSON.parse(team.trainingHours);
+        const trainingHours = team.trainingHours ? JSON.parse(team.trainingHours) : {};
         return (
             <View>
 

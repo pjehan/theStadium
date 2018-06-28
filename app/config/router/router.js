@@ -12,7 +12,7 @@ import Menu from '../../components/Main/Menu'
 /** SIGN IN**/
 import SignIn from '../../screens/SignIn/SignIn';
 import UserBasic from '../../screens/SignIn/UserBasic'
-import Header from '../../layout/Header.js';
+import Header from '../../components/layout/Header.js';
 import UserInfos from '../../screens/SignIn/UserInfos';
 import PlayerClub from '../../screens/SignIn/Player/PlayerClub';
 import Congratz from '../../screens/SignIn/Congratz';
@@ -58,6 +58,7 @@ import conclusion from "../../components/TimeLine/Post/PostModal/postArticle/con
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
 import ArticleTabFooter from "../../components/TimeLine/Post/PostModal/postArticle/ArticleTabFooter";
 import {ChoiceModalContainer} from "../../components/ChoiceModal/index";
+import MyAccount from "../../screens/MyAccount";
 const ArticleTabInside = TabNavigator({
     Setup: {
         screen:  props => <Setup {...props} />,
@@ -401,6 +402,12 @@ export const Navigator = StackNavigator({
             screen: SecondHalf,
             navigationOptions: {
                 header: null
+            }
+        },
+        MyAccount: {
+            screen: MyAccount,
+            navigationOptions: {
+                header:null
             }
         },
         SignIn: {

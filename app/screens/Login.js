@@ -79,8 +79,8 @@ class Login extends Component {
             return;
         }
         // Get the token that uniquely identifies this device
+
         let token = await Notifications.getExpoPushTokenAsync();
-        console.log(token);
     };
 
     componentWillMount() {

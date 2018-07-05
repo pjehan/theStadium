@@ -15,6 +15,7 @@ import {emit, init as websocketInit} from './app/_actions/websockets';
 import {styles} from './app/assets/css/global';
 import {ChoiceModalContainer} from "./app/components/ChoiceModal/index";
 import {utils} from "./app/_constants/utils";
+import {Notifications} from "expo";
 
 
 function initialize() {
@@ -36,6 +37,20 @@ export default class App extends Component {
 
         this.socket = SocketIOClient(utils.NODEJS);
     }
+
+    componentDidMount() {
+
+        // Handle notifications that are received or selected while the app
+        // is open. If the app was closed and then opened by tapping the
+        // notification (rather than just tapping the app icon to open it),
+        // this function will fire on the next tick after the app starts
+        // with the notification data.
+        this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    }
+
+    _handleNotification = (notification) => {
+        console.log(notification)
+    };
 
   render() {
 

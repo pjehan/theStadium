@@ -20,7 +20,7 @@ import {userActions} from "../_actions/user";
 import axios from "axios";
 import Expo, {Notifications,Permissions } from 'expo';
 import {clubAction} from "../_actions/club";
-
+import utils from '../config/utils';
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -54,6 +54,7 @@ class Login extends Component {
 
         if (nextProps.userFetched && nextProps.currentUser) {
             this.setModalVisible(false);
+            utils.registerForPushNotificationsAsync(nextProps.currentUser.id);
             navigate("Main", {});
         } else {
             this.setModalVisible(false);
@@ -84,7 +85,6 @@ class Login extends Component {
     };
 
     componentWillMount() {
-        this.register();
         //this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
         this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
         //this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
@@ -94,11 +94,23 @@ class Login extends Component {
     }
 
     loginIn() {
-        //fetch to databse
         this.props.dispatch(userActions.login(this.state.email, this.state.password));
         // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
         // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
         this.setModalVisible(true);
+        /*
+        this.props.dispatch(
+            userActions.login(this.state.email, this.state.password, (error, response) => {
+                if (error) {
+                    this.setModalVisible(false);
+                } else {
+                    registerForPushNotificationsAsync(this.props.currentUser.id);
+                    this.setModalVisible(false);
+                    navigate("Main", {});
+                }
+            })
+        );
+         */
     }
 
     render() {
@@ -110,8 +122,7 @@ class Login extends Component {
                     animationType="slide"
                     transparent={false}
                     visible={this.state.modalVisible}
-                    onRequestClose={() => this.setModalVisible(false)}
-                >
+                    onRequestClose={() => this.setModalVisible(false)}>
                     <View style={[GLOBAL_STYLE.mainColorBG, GLOBAL_STYLE.justifyMiddle]}>
                         <ActivityIndicator color="#ffffff" size="large"/>
                         <Text style={{color: '#ffffff', fontSize: 16}}>Connexion</Text>

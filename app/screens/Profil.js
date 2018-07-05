@@ -16,6 +16,7 @@ import CustomInput from "../components/CustomInput";
 import {userActions} from "../_actions/user";
 import Moment from "moment";
 import {connect} from "react-redux";
+import utils from "../config/utils";
 
 
 let strongFoot = ['Gauche', 'Droit', 'Ambidextre'];
@@ -97,9 +98,9 @@ class Profil extends Component {
                     <TouchableOpacity  onPress={() => {
                         utils._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
-                        <Text style={STYLE.tabText}>Attaquant, 25ans</Text>
+                        <Text style={STYLE.tabText}>{stats.position.label}, 25ans</Text>
                         {utils._isUser(state.currentUser, state.inspectedUser) ?
-                            <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
+                            <Icon style={{marginLeft:'auto'}} name="create" size={20}
                                   color="#003366"/> : null}
                     </TouchableOpacity>
                 </Placeholder.Line>
@@ -207,8 +208,8 @@ class Profil extends Component {
         return (
             <View>
                 <TouchableOpacity onPress={() => this._confirmChange()} style={[STYLE.tab, {justifyContent: 'center'}]}>
-                    <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
-                    <Icon style={{right: 20, position: 'absolute'}} name="create" size={20} color="#003366"/>
+                    <Text style={STYLE.tabText}>{stats.position.label}, 25ans</Text>
+                    <Icon style={{marginLeft:'auto'}} name="create" size={20} color="#003366"/>
                 </TouchableOpacity>
                 <View style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>Nombre de buts</Text>

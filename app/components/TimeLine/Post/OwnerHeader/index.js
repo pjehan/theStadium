@@ -7,6 +7,7 @@ import {userActions} from "../../../../_actions/user";
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
 import utils from "../../../../config/utils";
+import {Avatar} from "../../../User/Avatar/index";
 
 let team = null;
 
@@ -170,11 +171,7 @@ class OwnerHeader extends Component {
                     <TouchableOpacity style={PostStyle.ownerStyle} onPress={() => {
                         this.goToProfile()
                     }}>
-                        {(this.props.team && !this.props.team.club.profilePicture) || (!this.props.team && !this.props.Owner.profilepicture) ?
-                            <View style={[PostStyle.profilePic, {backgroundColor: '#cccccc'}]}/> :
-                            <Image style={PostStyle.profilePic}
-                                   source={{uri: !this.props.team ? this.props.Owner.profilepicture : this.props.team.club.profilePicture}}/>
-                        }
+                        <Avatar user={this.props.owner}/>
                         <View>
                             <Text style={PostStyle.title}>{this.props.Owner}</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>

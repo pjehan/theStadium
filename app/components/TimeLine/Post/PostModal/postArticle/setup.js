@@ -17,6 +17,7 @@ import { Header } from 'react-navigation';
 import {connect} from "react-redux";
 import SearchDropDown from "../../../../SearchDropdown/index";
 import Spinner from "react-native-number-spinner";
+import {Avatar} from "../../../../User/Avatar/index";
 class Setup extends Component {
     constructor(props){
         super(props);
@@ -41,6 +42,13 @@ class Setup extends Component {
             }))
         });
     }
+    componentWillMount() {
+        AsyncStorage.getItem('clubList').then(
+            value => {
+                this.setState({clubList: JSON.parse(value)});
+                this.forceUpdate();
+            });
+    }
     componentDidMount() {
         AsyncStorage.getItem('clubList').then(
             value => {
@@ -59,7 +67,7 @@ class Setup extends Component {
         this.setState({guessVisible: visible});
         if(item) {
             this.setState({
-                clubQuery: item.name,
+                clubQuery: item.club.name,
                 guessClub: item,
             }, () => {
                 this.props.navigation.dispatch(NavigationActions.setParams({
@@ -85,39 +93,51 @@ class Setup extends Component {
         }
     }
     _guessClub(){
-        if(this.state.guessClub){
+        if (this.state.guessClub) {
             return (
-                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{flexDirection:'row',alignItems:'center'}}>
-                    {this.state.guessClub.profilePicture ?<Image style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}
-                                                                 source={{uri:this.state.guessClub.profilePicture}}/> : <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]}/> }
-                    <Text style={timeLineStyle.title}>{this.state.guessClub.name}</Text>
+                <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={() => {
+                    this.setState({guessVisible: true});
+                    this.forceUpdate();
+                }}>
+                    <Avatar user={this.state.guessClub.club}/>
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={timeLineStyle.title}>{this.state.guessClub.club.name}</Text>
+                        <Text style={{
+                            paddingVertical: 2,
+                            paddingHorizontal: 5,
+                            fontSize: 10,
+                            backgroundColor: '#003366',
+                            color: '#ffffff',
+                            marginRight: 10
+                        }}>{this.state.guessClub.category.label} {this.state.guessClub.division.label}</Text>
+                    </View>
                 </TouchableOpacity>
             )
-        }else {
+        } else {
             return (
-                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{flexDirection:'row',alignItems:'center'}}>
-                    <View style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}/>
-                    <Text style={[timeLineStyle.title, {color:'#979797', fontSize:14,textAlign:'center'}]}>Entrez le nom du club...</Text>
+                <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={() => {
+                    this.setState({guessVisible: true});
+                    this.forceUpdate();
+                }} style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/>
+                    <Text style={[timeLineStyle.title, {color: '#979797'}]}>Entrez le nom du club adverse</Text>
                 </TouchableOpacity>
             )
         }
     }
     render() {
         const {clubQuery, clubList} = this.state;
-        const clubData = this._filterClub(clubQuery, clubList);
         return (
             <ScrollView contentContainerStyle={{flex:1}}>
-                <SearchDropDown title={'Club affronté'} searchTeam={true} dataList={this.state.clubList} visible={this.state.guessVisible}
-                                onModalClose={(visible, data) => this._setClub(visible, data)}/>
+                <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.guessVisible}
+                                     onModalClose={(visible, data) => this._setClub(visible, data)}/>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Score du match</Text>
                 </View>
                 <View style={{justifyContent:'space-between', paddingVertical:40,paddingHorizontal:10,flexDirection:'column'}}>
                     <View style={{justifyContent:'space-between',alignItems:'center',width:'100%',flexDirection:'row'}}>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
-                        {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
-                                                                                           source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
-                            <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
+                        <Avatar user={this.props.currentUser.teams[0].team.club}/>
                         <Text
                             style={timeLineStyle.title}>{this.props.currentUser.teams[0].team.club.name}</Text>
                         </View>
@@ -135,7 +155,7 @@ class Setup extends Component {
                     <View style={{marginLeft: '18%',height:1,backgroundColor:'#cccccc',width:'50%',alignSelf:'center', marginVertical:20}}/>
                     </View>
                     <View style={{justifyContent:'space-between',alignItems:'center',width:'100%',flexDirection:'row'}}>
-                    {this._guessClub(clubData,clubQuery)}
+                    {this._guessClub()}
                     <Spinner max={99}
                              min={0}
                              default={0}

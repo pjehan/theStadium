@@ -66,7 +66,7 @@ class ArticleTabHeader extends Component {
 
     displayAlert(){
         Alert.alert(
-            'Une erreur est survenue',
+            'Oups !',
             'Veuillez vérifier que vous avez bien rempli tout les champs',
             [
                 {text: 'OK', onPress: () => console.log('OK Pressed')},

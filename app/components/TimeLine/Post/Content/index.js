@@ -168,7 +168,7 @@ export default class Content extends Component {
                            source={require('../../../../assets/img/picto/menu/actions/white_assist.png')}/>
                     <Text style={PostStyle.assist_and_goals_text}>Passe Décisive</Text>
                 </View>
-                <Text>
+                <Text style={{paddingHorizontal:10,textAlign:'center'}}>
                     {owner.firstName} a {scored} <Text  style={{fontWeight:'600'}}> {assists_nbr}</Text> contre <Text  style={{fontWeight:'600'}}>{club}</Text>
                 </Text>
             </View>
@@ -199,7 +199,7 @@ export default class Content extends Component {
                            source={require('../../../../assets/img/picto/menu/actions/white_goal.png')}/>
                     <Text style={PostStyle.assist_and_goals_text}>But</Text>
                 </View>
-                <Text>
+                <Text style={{paddingHorizontal:10,textAlign:'center'}}>
                     {owner.firstName} a {scored}  <Text style={{fontWeight:'600'}}>{goals_nbr}</Text> contre <Text  style={{fontWeight:'600'}}> {club} </Text>
                 </Text>
             </View>
@@ -233,7 +233,7 @@ export default class Content extends Component {
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
                             <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub.name} {content.homeScore} - {content.guessScore} {content.guessClub.name}</Text>
                                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))}</Text>
+                            <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))} {'...Plus'}</Text>
                                 </View>
                             </View>
 

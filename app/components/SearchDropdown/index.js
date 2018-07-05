@@ -15,7 +15,6 @@ import CustomInput from "../CustomInput";
 import AccordionSearch from "../AccordionSearch/index";
 const initialState = {
     dataList: [],
-    query: '',
 }
 export default class SearchDropDown extends Component {
 
@@ -28,8 +27,7 @@ export default class SearchDropDown extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.props = nextProps
-        console.log(this.props)
+        this.props = nextProps;
         if(!nextProps.dataList){
 
         }
@@ -40,7 +38,7 @@ export default class SearchDropDown extends Component {
     }
 
     _filterClub(query, dataSource) {
-        if (query === '') {
+        if (query === '' || !query) {
             return [];
         }else{
         let data = dataSource;
@@ -54,10 +52,10 @@ export default class SearchDropDown extends Component {
     _onClose(canceled, data) {
         if(!canceled) {
             this.props.onModalClose(false, data);
-            this.setState(initialState)
+            //this.setState(initialState)
         }else {
             this.props.onModalClose(false, null);
-            this.setState(initialState)
+            //this.setState(initialState)
         }
     }
 
@@ -76,7 +74,6 @@ export default class SearchDropDown extends Component {
             <AccordionSearch itemSelected={(team,club) => {
                 delete club.teams;
                 team.club = club;
-
                 this._onClose(false, team);
             }} item={item}/>
         )

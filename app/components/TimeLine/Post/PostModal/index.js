@@ -141,16 +141,6 @@ class PostModal extends Component {
         }
     }
 
-    _filterClub(query, dataSource) {
-        if (query === '') {
-            return [];
-        }
-        let data = dataSource;
-        const regex = new RegExp(`${query.trim()}`, 'i');
-        if (data) {
-            return data.filter(data => data.name.search(regex) >= 0);
-        }
-    }
 
     _addInterview = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -272,7 +262,6 @@ class PostModal extends Component {
                                  numColor="#003366"
                                  onNumChange={(num) => {
                                      this.setState({post: {...this.state.post, [type + "Nbr"]: num}});
-                                     console.log(this.state)
                                  }}/>
                     </View>
 
@@ -708,7 +697,7 @@ class PostModal extends Component {
         this.setState({visible: visible});
 
         if (data) {
-            const NAME = data.club.name + data.category.label + data.division.label;
+            const NAME = data.club.name + ' ' + data.category.label + ' ' + data.division.label;
             this.setState({
                 clubQuery: data.club.name,
                 club: data,
@@ -720,8 +709,6 @@ class PostModal extends Component {
     }
 
     render() {
-        const {clubQuery, clubList} = this.state;
-        const clubData = this._filterClub(clubQuery, clubList);
         return (
             <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
                    visible={this.props.visible}
@@ -731,7 +718,7 @@ class PostModal extends Component {
                    }}>
                 <InterviewModal onClose={() => this.setState({interviewVisible: false})}
                                 interviewVisible={this.state.interviewVisible} media={this.state.media}/>
-                <SearchDropDown title={'Club affronté'} dataList={this.state.clubList} visible={this.state.visible}
+                <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.visible}
                                 onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
                 <ScrollView>
                     {this.conditionalRender()}

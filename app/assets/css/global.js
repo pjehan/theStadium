@@ -40,7 +40,7 @@ export const GLOBAL_STYLE = StyleSheet.create({
     alignItems: 'center',
   },
   greyColorBG: {
-      backgroundColor: '#cccccc',
+      backgroundColor: '#eeeeee',
       flex:1,
       alignItems: 'center',
   },

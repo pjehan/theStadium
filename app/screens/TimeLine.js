@@ -214,7 +214,7 @@ class TimeLine extends Component {
         return (
             <FlatList
                 style={{marginHorizontal: 10, height: '100%'}}
-                contentContainerStyle={{paddingBottom:50}}
+                contentContainerStyle={{paddingBottom:20}}
                 ref={
                     (c) => {
                         this.flatList = c;
@@ -299,7 +299,7 @@ class TimeLine extends Component {
 
     render() {
         return (
-            <View style={[GLOBAL_STYLE.greyColorBG, {paddingBottom:40}]}>
+            <View style={[GLOBAL_STYLE.greyColorBG]}>
                 {utils._userTABS(this.props.currentUser) && <PublishHeader tabs={utils._userTABS(this.props.currentUser)} onAction={(action) => {
                     switch (this.props.currentUser.userType.label) {
                         case 'Coach':
@@ -314,10 +314,11 @@ class TimeLine extends Component {
 
                     }
                 }}/>}
+                <View>
 
+                })}</View>
                 {this._mediaModal()}
                 {this._renderModal()}
-
                 {
                     this.props.posts ? this._renderList() :
                         !this.postsFetched && !this.props.posts ? null :

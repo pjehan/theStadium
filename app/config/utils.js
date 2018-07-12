@@ -1,16 +1,18 @@
-import { Permissions, Notifications } from 'expo';
+import {Permissions, Notifications} from 'expo';
 import instance from "./axiosConfig";
+import React from "react";
+import {TouchableOpacity} from "react-native";
 
-const _isUser = (user, inspected) =>  {
+const _isUser = (user, inspected) => {
     return user.id === inspected.id;
 };
 
 const _isFollowing = (user, inspected) => {
     console.log(inspected)
     if (inspected["@type"] === 'User' && inspected.userType.label === 'Joueur') {
-        return user.players.some( e => e.id === inspected.player.id)
-    } else if(inspected["@type"] === 'Team') {
-        return user.teamsLiked.some( e => e.id === inspected.id)
+        return user.players.some(e => e.id === inspected.player.id)
+    } else if (inspected["@type"] === 'Team') {
+        return user.teamsLiked.some(e => e.id === inspected.id)
     }
 };
 
@@ -49,6 +51,85 @@ const SUPPORTERTABS = [
 const _isLiked = () => {
 
 };
+const renderIdentification = (str) => {
+    let results = [];
+        function getFromBetween(sub1, sub2) {
+            if (str.indexOf(sub1) < 0 || str.indexOf(sub2) < 0) {
+                return false;
+            }
+            var SP = str.indexOf(sub1) + sub1.length;
+            var string1 = str.substr(0, SP);
+            var string2 = str.substr(SP);
+            var TP = string1.length + string2.indexOf(sub2);
+            return str.substring(SP, TP);
+        }
+        function removeFromBetween(sub1, sub2) {
+            if (str.indexOf(sub1) < 0 || str.indexOf(sub2) < 0) {
+                return false;
+            }
+            var removal = sub1 + getFromBetween(sub1, sub2) + sub2;
+            str = str.replace(removal, "");
+        }
+        function getAllResults(sub1, sub2) {
+            // first check to see if we do have both substrings
+            if (str.indexOf(sub1) < 0 || str.indexOf(sub2) < 0) {
+                return;
+            }
+
+            // find one result
+            var result = getFromBetween(sub1, sub2);
+            // push it to the results array
+            results.push(result);
+            // remove the most recently found one from the string
+            removeFromBetween(sub1, sub2);
+
+            // if there's more substrings
+            if (str.indexOf(sub1) > -1 && str.indexOf(sub2) > -1) {
+                getAllResults(sub1, sub2);
+            }
+            else return;
+        }
+        function get(str, sub1, sub2)
+    {
+        results = [];
+        str = string;
+        getAllResults(sub1, sub2);
+        return (results);
+    }
+    let strArray = str.split(/[\[\]]/);
+    let identifiedUsers = get(str,"[","]");
+    let finalStr;
+    let keys = [];
+    for(let i = 0; i < strArray.length; i++){
+        for(let y = 0; y < identifiedUsers.length; y++){
+
+            if(strArray[i] === identifiedUsers[y]){
+                let ID = identifiedUsers[y].split(':').pop().split(';').shift();
+                let userStr = identifiedUsers[y].split(/[:;]/)[0];
+                strArray[i] = userStr;
+                keys.push({id:i,user:+ID});
+            }
+        }
+    }
+    return {strArray, keys};
+};
+
+/**
+ * USE STR MODIFIER
+ * { utils.renderIdentification().strArray.map((str, index)=> {
+                    for(let y = 0; y < utils.renderIdentification().keys.length; y++){
+                        if(utils.renderIdentification().keys[y].id === index ){
+                            return (
+                                <TouchableOpacity  onPress={() => {console.log(key.user)}}>
+                                    <Text style={{color:'#003366', fontWeight:'bold'}}>{str}</Text>
+                                </TouchableOpacity>);
+                        }else if(y === utils.renderIdentification().keys.length -1 && utils.renderIdentification().keys[y].id !== index){
+                            return (
+                                <Text>{str}</Text>
+                            )
+                        }
+                    }
+ */
 
 async function registerForPushNotificationsAsync(userID) {
     const {status: existingStatus} = await Permissions.getAsync(
@@ -81,12 +162,13 @@ async function registerForPushNotificationsAsync(userID) {
         return user;
     }).catch(
         error => {
-        console.log(error);
-    });
+            console.log(error);
+        });
 }
 
 export default {
     _isUser,
+    renderIdentification,
     _isFollowing,
     _userTABS,
     registerForPushNotificationsAsync

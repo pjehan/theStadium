@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {TypeEnum} from "../contentType";
-import LocalImage from './LocalImage';
-import {
-    View, Image, Dimensions, StyleSheet, Button, DatePickerAndroid, Text, TouchableOpacity,
-    Modal
-} from 'react-native';
+import {Dimensions, Image, Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import OpenContent from "../OpenContent";
 import ArticleDisplay from "../ArticleDisplay";
-import {utils} from "../../../../_constants/utils";
 import {Video} from "expo";
+
+import utils from "../../../../_constants/utils";
+import {utils as _utils} from "../../../../config/utils";
+
 let postContent;
 let {height} = Dimensions.get('window');
 const PostStyle = StyleSheet.create({
@@ -120,12 +119,26 @@ export default class Content extends Component {
             this.props.medias[0].path = this.props.medias[0].path.replace(new RegExp(/\\/g),"/");
             this.props.medias[0].path = this.props.medias[0].path.replace('public/', '');
         }
-
+        const content = _utils.renderIdentification(this.props.content);
+        console.log(content)
         return (
             <View>
-                <Text style={{padding: 10, paddingLeft: 5, paddingRight: 5}}>
-                    {this.props.content}
-                </Text>
+                <View style={{padding: 10, paddingLeft: 5, paddingRight: 5}}>
+                    { content.strArray.map((str, index)=> {
+                        for (let y = 0; y < content.keys.length; y++) {
+                            if (content.keys[y].id === index) {
+                                return (
+                                    <TouchableOpacity onPress={() => {console.log(content.keys[y].user);}}>
+                                        <Text style={{color: '#003366', fontWeight: 'bold'}}>{str}</Text>
+                                    </TouchableOpacity>);
+                            } else if (y === content.keys.length - 1 && content.keys[y].id !== index) {
+                                return (
+                                    <Text>{str}</Text>
+                                )
+                            }
+                        }
+                    })}
+                </View>
                 <OpenContent owner={{
                     lastName: this.props.owner.lastname,
                     firstName: this.props.owner.firstname

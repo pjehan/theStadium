@@ -152,14 +152,22 @@ class PlayerInfos extends Component {
                         input={GLOBAL_STYLE.input}
                         state={'password'}
                         textColor={'#333333'}
+<<<<<<< HEAD
                         descriptionColor={this._checkPasswordString(this.state.password)? "#ff0000": '#cccccc'}
                         borderColor={this._checkPasswordString(this.state.password)? "#ff0000": 'transparent'}
+=======
+                        borderColor={(this.state.password && this.state.password.length < 6 ) ? "#ff0000": 'transparent'}
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                         backgroundColor={'#eeeeee'}
                         security={false}
                         onChangeParent={(state, newvalue) => {
                             this.onChangeInfos(state, newvalue)
                         }}
+<<<<<<< HEAD
                         description={this._checkPasswordString(this.state.password) ? 'Votre mot de passe n\'est pas conforme. \nCombinaison de 6 caractères comportant au minimum : 1 lettre majuscule, 1 lettre minuscule ainsi qu\'un chiffre' : 'Combinaison de 6 caractères comportant au minimum : 1 lettre majuscule, 1 lettre minuscule ainsi qu\'un chiffre' }
+=======
+                        description={this.state.password && this.state.password.length < 6? 'Vous n\'avez pas 6 caractères \n Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.' : 'Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.' }
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                     />
                     <CustomInput
                         container={''}

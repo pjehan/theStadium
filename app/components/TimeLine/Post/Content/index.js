@@ -231,6 +231,7 @@ export default class Content extends Component {
                         <View style={{marginTop:15,paddingVertical:20,backgroundColor:'rgba(0,0,0,0.5)',width:'100%'}}>
                             <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
                             <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
+<<<<<<< HEAD
                             <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub.name} {content.homeScore} - {content.guessScore} {content.guessClub.name}</Text>
                                 <View style={{flexDirection:'row',alignItems:'center'}}>
                             <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))} {'...Plus'}</Text>
@@ -241,6 +242,14 @@ export default class Content extends Component {
                     </View>
                  </TouchableOpacity>
 
+=======
+                            <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub} {content.homeScore} - {content.guessScore} {content.guessClub}</Text>
+                            <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))}</Text>
+                            </View>
+                            </View>
+                            <Image source={{uri: this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                        </TouchableOpacity>
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                 </View>
         )
     }

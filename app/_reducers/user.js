@@ -114,7 +114,26 @@ export function inspectedUser(state = {
 }
 
 export function searchList(state = {
-    user: [ ],
+    user: [{
+        firstname: null,
+        email: null,
+        id: null,
+        mediasLiked: [],
+        mediasShared: [],
+        players: [],
+        postsLiked: [],
+        postsShared: [],
+        profilepicture: null,
+        sexe: null,
+        teams: [],
+        teamsLiked: [],
+        userType: null,
+        lastname: null,
+        birthdate: null,
+        password: null,
+        type: null,
+        poste: null,
+    }],
     error: null,
     fetching: false,
     fetched: false,
@@ -124,7 +143,7 @@ export function searchList(state = {
             return {...state, fetching: true, fetched: false};
             break;
         case userConstants.SEARCH_SUCCESS:
-            return {...state, fetching: false, fetched: true, user: action.user};
+            return {...state, fetching: false, fetched: true, user: action.payload};
             break;
         case userConstants.SEARCH_FAILURE:
             return {fetching: false, fetched: true, error: action.payload};

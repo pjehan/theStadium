@@ -98,9 +98,15 @@ class Profil extends Component {
                     <TouchableOpacity  onPress={() => {
                         utils._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
+<<<<<<< HEAD
                         <Text style={STYLE.tabText}>{stats.position.label}, 25ans</Text>
                         {utils._isUser(state.currentUser, state.inspectedUser) ?
                             <Icon style={{marginLeft:'auto'}} name="create" size={20}
+=======
+                        <Text style={STYLE.tabText}>Attaquant, 25ans</Text>
+                        {this._isUser(state.currentUser, state.inspectedUser) ?
+                            <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                                   color="#003366"/> : null}
                     </TouchableOpacity>
                 </Placeholder.Line>

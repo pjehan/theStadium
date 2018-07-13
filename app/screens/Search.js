@@ -4,20 +4,28 @@ import {
     TouchableOpacity,
     Text,
     View,
+<<<<<<< HEAD
     ScrollView, FlatList, StyleSheet, Image
+=======
+    ScrollView, FlatList
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
 } from 'react-native';
 import CustomInput from "../components/CustomInput";
 import {connect} from "react-redux";
 import {userActions} from "../_actions/user";
+<<<<<<< HEAD
 import ProfilePic from "../components/ProfilePic";
 import GLOBAL from "../config/utils";
 import AccordionSearch from "../components/AccordionSearch/index";
+=======
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
 
 class Search extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+<<<<<<< HEAD
             search: null,
             displayTeam: false
         };
@@ -204,19 +212,70 @@ class Search extends Component {
                 </TouchableOpacity>
             </View>
         )
+=======
+            search: null
+        }
+    }
+    onChangeInfos(state, newvalue) {
+        this.setState({[state]: newvalue});
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
     }
 
+    searchUser() {
+        this.props.navigation.dispatch(userActions.searchUser(this.state.search))
+    }
+    _renderItem(item) {
+        console.log(item);
+        return <View key={this.props.userList.indexOf(item)} ><Text>{item.firstname}</Text></View>
+    }
+
+    _renderList(){
+        const {userList} = this.props;
+
+        return(
+            <FlatList
+                data={userList}
+                renderItem={({item}) => this._renderItem(item)}
+            />
+        );
+    }
     render() {
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
+<<<<<<< HEAD
                 {this._renderInput()}
                 <ScrollView style={searchStyle.tabContainer}>
                     {this._renderList()}
+=======
+                <View>
+                <CustomInput
+                             container={{justifyContent: 'flex-start'}}
+                             placeholder={'Rechercher'}
+                             input={[{borderWidth:1, padding: 5, marginTop: 10}]}
+                             state={'search'}
+                             textColor={'#000000'}
+                             placeholderTextColor={'#cccccc'}
+                             borderColor={'#cccccc'}
+                             backgroundColor={'#ffffff'}
+                             security={false}
+                             onChangeParent={(state, newvalue) => {
+                                 this.onChangeInfos(state, newvalue)
+                             }}/>
+                <TouchableOpacity onPress={() => {this.searchUser()}}>
+                    <Text>
+                        Rechercher
+                    </Text>
+                </TouchableOpacity>
+                </View>
+                <ScrollView>
+                    {this.props.userList && !this.props.isFetching ? this._renderList() : null}
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                 </ScrollView>
             </View>
         )
     }
 }
+<<<<<<< HEAD
 
 const mapStateToProps = (state) => {
     return {
@@ -261,3 +320,12 @@ const searchStyle = StyleSheet.create({
         marginHorizontal: 10,
     },
 });
+=======
+const mapStateToProps = (state) => {
+    return {
+        userList: state.searchList.user,
+        isFetching: state.searchList.fetching
+    };
+};
+export default connect(mapStateToProps)(Search);
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8

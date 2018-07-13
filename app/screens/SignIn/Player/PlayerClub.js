@@ -72,6 +72,7 @@ class PlayerInfos extends Component {
     }
 
     _filterClub(query, dataSource) {
+        console.log(query,dataSource);
         if (query === '') {
             return [];
         }
@@ -205,13 +206,20 @@ class PlayerInfos extends Component {
                                 </TouchableOpacity>
                             )}
                         />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                     </View>
                     <View style={{backgroundColor: '#eeeeee', width: '85%'}}>
                         <Picker style={GLOBAL_STYLE.input}
                                 prompt="Poste joué"
                                 selectedValue={this.state.poste}
+<<<<<<< HEAD
                                 onValueChange={(itemValue) => this._setRole(itemValue) }>
+=======
+                                onValueChange={itemValue => this.setState({poste: itemValue})}>
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                             {ROLES.map((i, index) => (
                                 <Picker.Item key={index} label={i.label} value={i.value}/>
                             ))}

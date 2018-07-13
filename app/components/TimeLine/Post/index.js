@@ -165,13 +165,21 @@ class Post extends Component {
             } else {
                 this.props.navigation.navigate('Profile', users);
             }
+<<<<<<< HEAD
         } else {
+=======
+        }else {
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
             this.props.dispatch(userActions.getInspected(this.state.post.owner.id));
             const users = {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.state.post.owner,
             };
+<<<<<<< HEAD
             if (this.state.post.owner.userType.label === 'Coach') {
+=======
+            if ( this.state.post.owner.userType.label === 'Coach') {
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                 this.props.navigation.navigate("CoachProfile", users);
             } else {
                 this.props.navigation.navigate('Profile', users);
@@ -237,6 +245,7 @@ class Post extends Component {
                             <Text style={[PostStyle.text, {fontSize: 14, color: '#cccccc', fontWeight: '600'}]}>Commenter</Text>
                         </TouchableOpacity>
 
+<<<<<<< HEAD
                         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => {
                             this.onToggleComment(true, true)
                         }}>
@@ -250,6 +259,8 @@ class Post extends Component {
                             }]}>Partager</Text>
                         </TouchableOpacity>
 
+=======
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                     </View>
                 </View>
                 {this.props.post.comments.length > 0 ?

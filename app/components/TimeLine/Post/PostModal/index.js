@@ -209,12 +209,24 @@ class PostModal extends Component {
     }
 
     _renderOwner() {
+<<<<<<< HEAD
 
         return (
             <View
                 style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
                 <Avatar user={this.props.currentUser}/>
                 {this.props.owner.userType.label !== 'Coach' ? <Text
+=======
+        console.log(this.props.owner)
+        return (
+            <View
+                style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
+                {this.props.owner.userType.label !== 'Coach' && !this.props.owner.profilepicture || !this.props.owner.teams[0].team.profilePicture ?
+                <Image style={timeLineStyle.profilePic}
+                       source={{uri: this.props.owner.userType.label !== 'Coach' ? this.props.owner.profilepicture : this.props.owner.teams[0].team.profilePicture}}/> :
+                   <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/> }
+                {this.props.owner.userType.label === 'Joueur' ? <Text
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                         style={timeLineStyle.title}>{this.props.owner.firstname + '\n' + this.props.owner.lastname}</Text> :
                     <View>
                         <Text style={timeLineStyle.title}>{this.props.owner.teams[0].team.club.name}</Text>
@@ -285,7 +297,11 @@ class PostModal extends Component {
                 <CustomInput multiple={true}
                              container={{justifyContent: 'flex-start'}}
                              placeholder={'Écrivez votre message'}
+<<<<<<< HEAD
                              input={[{flex: 1, padding: 20, marginTop: 10, height: Math.max(80, this.state.height)}]}
+=======
+                             input={[{flex: 1, padding: 20, marginTop: 10,height: Math.max(80, this.state.height)}]}
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                              state={'content'}
                              textColor={'#000000'}
                              borderColor={'transparent'}

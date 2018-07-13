@@ -112,10 +112,14 @@ export default class SecondHalf extends Component {
 
     render() {
         return (
+<<<<<<< HEAD
 
             <ScrollView ref={(c) => {
                 this.scrollView = c;
             }} contentContainerStyle={{flex:1}} style={{paddingTop:10,paddingBottom: 35,paddingHorizontal:10,height:'100%'}}>
+=======
+            <KeyboardAvoidingView behavior="padding" style={{flex:1,backgroundColor: '#ffffff'}}>
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
 
                 <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
                     <Text style={{color: '#000000', fontWeight: '600'}}>Photo de couverture</Text>

@@ -73,7 +73,11 @@ export default class CustomInput extends Component {
             DatePickerAndroid.open({
                 date: this.state.date,
                 mode: 'spinner',
+<<<<<<< HEAD
                 maxDate: Moment().subtract(13, 'years').toDate()
+=======
+                maxDate: new Date('2006')
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
             }).then(this.onDatePicked);
         }
     }

@@ -95,6 +95,13 @@ class OwnerHeader extends Component {
         }
     }
 
+<<<<<<< HEAD
+=======
+    _isUser(user, inspected) {
+        return user === inspected.id;
+    }
+
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
     _displayTools() {
         return (
             <Modal animationType={"slide"} transparent={true}

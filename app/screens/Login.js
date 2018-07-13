@@ -94,9 +94,15 @@ class Login extends Component {
     }
 
     loginIn() {
+<<<<<<< HEAD
         this.props.dispatch(userActions.login(this.state.email, this.state.password));
         // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
         // this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
+=======
+        //fetch to databse
+        //this.props.dispatch(userActions.login(this.state.email, this.state.password));
+        //this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
         this.setModalVisible(true);
         /*
         this.props.dispatch(

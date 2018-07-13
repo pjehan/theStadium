@@ -98,7 +98,11 @@ class Actus extends Component {
         } else {
 
             if (this._isLiked(user, inspected)) {
+<<<<<<< HEAD
                 user.players.splice(user.players.indexOf(inspected, 1));
+=======
+                user.players.splice(user.teamsLiked.indexOf('/api/players/' + inspected.id), 1);
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                 this.props.dispatch(userActions.putUser(user));
             } else {
 

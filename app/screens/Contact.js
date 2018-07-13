@@ -14,7 +14,10 @@ import CustomInput from "../components/CustomInput";
 import {GLOBAL_STYLE} from "../assets/css/global";
 import {Icon} from "react-native-elements";
 import DateTimePicker from 'react-native-modal-datetime-picker';
+<<<<<<< HEAD
 import utils from "../config/utils";
+=======
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
 
 
 class Contact extends Component {
@@ -102,6 +105,10 @@ class Contact extends Component {
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
+<<<<<<< HEAD
+=======
+        const trainingHours = JSON.parse(team.trainingHours);
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
         return (
             <View style={{
                 backgroundColor: '#ffffff',
@@ -115,7 +122,11 @@ class Contact extends Component {
                     this.setState({isEditing: !this.state.isEditing});
                     this.forceUpdate()
                 }}>
+<<<<<<< HEAD
                     {utils._isUser(state.currentUser, state.inspectedUser) ?
+=======
+                    {this._isUser(state.currentUser, state.inspectedUser) ?
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                         <Icon name="create" size={20}
                               color="#003366"/> : null}
                 </TouchableOpacity>
@@ -372,7 +383,11 @@ class Contact extends Component {
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
+<<<<<<< HEAD
         const trainingHours = team.trainingHours ? JSON.parse(team.trainingHours) : {};
+=======
+        const trainingHours = JSON.parse(team.trainingHours);
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
         return (
             <View>
 

@@ -21,11 +21,14 @@ class ArticleDisplay extends Component {
         const  originalWidth2 = this.props.medias[1].width;
         const originalHeight2 = this.props.medias[1].height;
         const widthChange2 = (windowWidth - 10) / originalWidth2;
+<<<<<<< HEAD
         this.props.medias[0].path = this.props.medias[0].path.replace(new RegExp(/\\/g),"/");
         this.props.medias[0].path = this.props.medias[0].path.replace('public/', '');
 
         this.props.medias[1].path = this.props.medias[1].path.replace(new RegExp(/\\/g),"/");
         this.props.medias[1].path = this.props.medias[1].path.replace('public/', '');
+=======
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
         return (
             <View>
                 <TouchableOpacity style={{position: 'absolute', left: 10, top: 10,justifyContent:'center',alignItems:'center', zIndex:100, backgroundColor:'rgba(0,0,0,0.5)', height:40,width:40, borderRadius:20}}
@@ -35,7 +38,11 @@ class ArticleDisplay extends Component {
                 </TouchableOpacity>
                 <ScrollView>
 
+<<<<<<< HEAD
                 <Image source={{uri: utils.NODEJS + this.props.medias[0].path.replace('public', '')}} style={{width: originalWidth1 * widthChange1, height: originalHeight1 * widthChange1}}/>
+=======
+                <Image source={{uri: this.props.medias[0].path}} style={{width: originalWidth1 * widthChange1, height: originalHeight1 * widthChange1}}/>
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                 <View
                     style={{flexDirection: 'row', paddingVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
                     <Image style={{width: 20, height: 30}} resizeMode='contain'
@@ -58,7 +65,11 @@ class ArticleDisplay extends Component {
                             <Text style={{textAlign: 'left'}}>{content.firstHalf_content}</Text>
                         </View>
 
+<<<<<<< HEAD
                     <Image source={{uri: utils.NODEJS + this.props.medias[1].path.replace('public', '')}} style={{width: originalWidth2 * widthChange2, height: originalHeight2 * widthChange2}}/>
+=======
+                    <Image source={{uri: this.props.medias[1].path}} style={{width: originalWidth2 * widthChange2, height: originalHeight2 * widthChange2}}/>
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
                     <View style={style.half}>
                         <Text style={style.title}>2 ème Mi-Temps</Text>
                         <Text style={{textAlign: 'left'}}>{content.secondHalf_content}</Text>

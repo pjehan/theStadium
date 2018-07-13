@@ -32,11 +32,19 @@ import FirstHalf from '../../components/TimeLine/Post/PostModal/postArticle/firs
 import SecondHalf from '../../components/TimeLine/Post/PostModal/postArticle/secondhalf';
 
 const SignInTabBar = {
+<<<<<<< HEAD
     tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
     tabBarVisible: false,
     tabBarPosition: 'bottom',
     swipeEnabled: false,
 };
+=======
+        tabBarComponent: ({navigation}) => <PlayerSignInTabView navigation={navigation}/>,
+        tabBarVisible: false,
+        tabBarPosition: 'bottom',
+    swipeEnabled:false,
+      };
+>>>>>>> 7ba5b86bd6eddd635316e3dcef155d4316c3d6c8
 const PROFILETAB = {
     tabBarComponent: ({navigation}) => <ProfileTabBar focused={'focused'}
                                                       activeLabelColor="#333333"

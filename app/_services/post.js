@@ -124,18 +124,18 @@ function getComments(id) {
 function toggleLikePost(postID, userID, liked) {
     if (!liked) {
         return instance.post("/api/user_likes_posts", {
-            creationDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
             userLikes: userID,
             postsLiked: postID
         })
             .then(response => {
+                console.log(response.data);
                 return response.data;
             }).catch((error) => {
                 console.error(error);
             });
 
     } else {
-        return instance.get("/api/user_likes_post/"+ userID + "/" + postID)
+        return instance.delete("/api/user_likes_post/"+ userID + "/" + postID)
             .then(response => {
                 return response.data;
             }).catch((error) => {

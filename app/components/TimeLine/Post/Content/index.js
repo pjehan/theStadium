@@ -6,8 +6,8 @@ import OpenContent from "../OpenContent";
 import ArticleDisplay from "../ArticleDisplay";
 import {Video} from "expo";
 
-import utils from "../../../../_constants/utils";
-import {utils as _utils} from "../../../../config/utils";
+import {utils as _utils} from "../../../../_constants/utils";
+import utils from "../../../../config/utils";
 
 let postContent;
 let {height} = Dimensions.get('window');
@@ -43,7 +43,7 @@ export default class Content extends Component {
             url: null,
             openContent: false,
             actualImg: null,
-            visible:false,
+            visible: false,
         };
         this.returnSimplePost = this.returnSimplePost.bind(this);
         this.returnArticle = this.returnArticle.bind(this);
@@ -58,34 +58,54 @@ export default class Content extends Component {
         img ? this.setState({actualImg: img}) : '';
         this.forceUpdate();
     }
+
     returnInterview(title) {
-        const  originalWidth = this.props.medias[0].width;
+        const originalWidth = this.props.medias[0].width;
         const originalHeight = this.props.medias[0].height;
         const windowWidth = Dimensions.get('window').width;
         const widthChange = (windowWidth - 10) / originalWidth;
         return (
             <View>
-                <TouchableOpacity onPress={() => {}}>
-                    <Video   rate={1.0}
-                             volume={0}
-                             muted={true}
-                             resizeMode="cover"
-                             shouldPlay
-                             isLooping source={{uri: utils.NODEJS + this.props.medias[0].path}}
-                             style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
-                    <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10}}>
-                        <View style={{position:'absolute',top:0,zIndex:15,borderRadius:5,flexDirection:'row',backgroundColor:'#00A65B',paddingHorizontal:15,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
+                <TouchableOpacity onPress={() => {
+                }}>
+                    <Video rate={1.0}
+                           volume={0}
+                           muted={true}
+                           resizeMode="cover"
+                           shouldPlay
+                           isLooping source={{uri: _utils.NODEJS + this.props.medias[0].path}}
+                           style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                    <View
+                        style={{position: 'absolute', bottom: 0, left: 0, right: 0, alignItems: 'center', zIndex: 10}}>
+                        <View style={{
+                            position: 'absolute',
+                            top: 0,
+                            zIndex: 15,
+                            borderRadius: 5,
+                            flexDirection: 'row',
+                            backgroundColor: '#00A65B',
+                            paddingHorizontal: 15,
+                            paddingVertical: 5,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
                             <Image style={{
                                 height: 15,
                                 width: 15,
-                                marginRight: 10}} resizeMode='contain'
+                                marginRight: 10
+                            }} resizeMode='contain'
                                    source={require('../../../../assets/img/picto/menu/actions/interview_white.png')}/>
-                            <Text style={{fontWeight:'bold',color:'#ffffff'}}>Interview</Text>
+                            <Text style={{fontWeight: 'bold', color: '#ffffff'}}>Interview</Text>
                         </View>
-                        <View style={{marginTop:15,paddingVertical:15,backgroundColor:'rgba(0,0,0,0.5)',width:'100%'}}>
-                        <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
-                            <Text style={{color:'#ffffff',fontSize:16, fontWeight:'600'}}>{title}</Text>
-                        </View>
+                        <View style={{
+                            marginTop: 15,
+                            paddingVertical: 15,
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            width: '100%'
+                        }}>
+                            <View style={{alignSelf: 'flex-start', marginLeft: 5, justifyContent: 'flex-end'}}>
+                                <Text style={{color: '#ffffff', fontSize: 16, fontWeight: '600'}}>{title}</Text>
+                            </View>
                         </View>
                     </View>
 
@@ -116,25 +136,31 @@ export default class Content extends Component {
             originalWidth = this.props.medias[0].width;
             originalHeight = this.props.medias[0].height;
             widthChange = (windowWidth - 10) / originalWidth;
-            this.props.medias[0].path = this.props.medias[0].path.replace(new RegExp(/\\/g),"/");
+            this.props.medias[0].path = this.props.medias[0].path.replace(new RegExp(/\\/g), "/");
             this.props.medias[0].path = this.props.medias[0].path.replace('public/', '');
         }
-        const content = _utils.renderIdentification(this.props.content);
-        console.log(content)
+        const content = utils.renderIdentification(this.props.content);
         return (
             <View>
                 <View style={{padding: 10, paddingLeft: 5, paddingRight: 5}}>
-                    { content.strArray.map((str, index)=> {
-                        for (let y = 0; y < content.keys.length; y++) {
-                            if (content.keys[y].id === index) {
-                                return (
-                                    <TouchableOpacity onPress={() => {console.log(content.keys[y].user);}}>
-                                        <Text style={{color: '#003366', fontWeight: 'bold'}}>{str}</Text>
-                                    </TouchableOpacity>);
-                            } else if (y === content.keys.length - 1 && content.keys[y].id !== index) {
-                                return (
-                                    <Text>{str}</Text>
-                                )
+                    {content.strArray.map((str, index) => {
+                        if (content.keys.length < 1) {
+                            return <Text>{str}</Text>
+                        } else {
+                            for (let y = 0; y < content.keys.length; y++) {
+
+                                if (content.keys[y].id === index) {
+                                    return (
+                                        <TouchableOpacity onPress={() => {
+                                            this.props.goToProfileParent(content.keys[y].user);
+                                        }}>
+                                            <Text style={{color: '#003366', fontWeight: 'bold'}}>{str}</Text>
+                                        </TouchableOpacity>);
+                                } else if (content.keys[y].id !== index) {
+                                    return (
+                                        <Text>{str}</Text>
+                                    )
+                                }
                             }
                         }
                     })}
@@ -153,7 +179,11 @@ export default class Content extends Component {
                 <TouchableOpacity onPress={() => {
                     this.onToggleModal(true, url);
                 }}>
-                    {this.props.medias.length > 0 ? <Image source={{uri: utils.NODEJS + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}} /> : null}
+                    {this.props.medias.length > 0 ? <Image source={{uri: _utils.NODEJS + this.props.medias[0].path}}
+                                                           style={{
+                                                               width: originalWidth * widthChange,
+                                                               height: originalHeight * widthChange
+                                                           }}/> : null}
                 </TouchableOpacity>
             </View>);
     }
@@ -181,8 +211,9 @@ export default class Content extends Component {
                            source={require('../../../../assets/img/picto/menu/actions/white_assist.png')}/>
                     <Text style={PostStyle.assist_and_goals_text}>Passe Décisive</Text>
                 </View>
-                <Text style={{paddingHorizontal:10,textAlign:'center'}}>
-                    {owner.firstName} a {scored} <Text  style={{fontWeight:'600'}}> {assists_nbr}</Text> contre <Text  style={{fontWeight:'600'}}>{club}</Text>
+                <Text style={{paddingHorizontal: 10, textAlign: 'center'}}>
+                    {owner.firstName} a {scored} <Text style={{fontWeight: '600'}}> {assists_nbr}</Text> contre <Text
+                    style={{fontWeight: '600'}}>{club}</Text>
                 </Text>
             </View>
         )
@@ -212,8 +243,9 @@ export default class Content extends Component {
                            source={require('../../../../assets/img/picto/menu/actions/white_goal.png')}/>
                     <Text style={PostStyle.assist_and_goals_text}>But</Text>
                 </View>
-                <Text style={{paddingHorizontal:10,textAlign:'center'}}>
-                    {owner.firstName} a {scored}  <Text style={{fontWeight:'600'}}>{goals_nbr}</Text> contre <Text  style={{fontWeight:'600'}}> {club} </Text>
+                <Text style={{paddingHorizontal: 10, textAlign: 'center'}}>
+                    {owner.firstName} a {scored} <Text style={{fontWeight: '600'}}>{goals_nbr}</Text> contre <Text
+                    style={{fontWeight: '600'}}> {club} </Text>
                 </Text>
             </View>
         )
@@ -221,42 +253,76 @@ export default class Content extends Component {
 
     returnArticle() {
         let content = JSON.parse(JSON.stringify(eval("(" + this.props.content.toString() + ")")));
-        const  originalWidth = this.props.medias[0].width;
+        const originalWidth = this.props.medias[0].width;
         const originalHeight = this.props.medias[0].height;
         const windowWidth = Dimensions.get('window').width;
         const widthChange = (windowWidth - 10) / originalWidth;
         let previewStr = content.firstHalf_content + '\n' + content.secondHalf_content;
         return (
             <View>
-                <TouchableOpacity onPress={() => {this.setState({visible:true})}}>
+                <TouchableOpacity onPress={() => {
+                    this.setState({visible: true})
+                }}>
 
-                    <Image source={{uri: utils.NODEJS + this.props.medias[0].path}} style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
-                    <View style={{position:'absolute',bottom:0,left:0,right:0,alignItems:'center',zIndex:10}}>
-                        <View style={{position:'absolute',top:0,zIndex:15,borderRadius:5,flexDirection:'row',backgroundColor:'#00A65B',paddingHorizontal:15,paddingVertical:5,justifyContent:'center',alignItems:'center'}}>
+                    <Image source={{uri: _utils.NODEJS + this.props.medias[0].path}}
+                           style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}/>
+                    <View
+                        style={{position: 'absolute', bottom: 0, left: 0, right: 0, alignItems: 'center', zIndex: 10}}>
+                        <View style={{
+                            position: 'absolute',
+                            top: 0,
+                            zIndex: 15,
+                            borderRadius: 5,
+                            flexDirection: 'row',
+                            backgroundColor: '#00A65B',
+                            paddingHorizontal: 15,
+                            paddingVertical: 5,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
                             <Image style={{
                                 height: 20,
                                 width: 20,
-                                marginRight: 5}} resizeMode='contain'
+                                marginRight: 5
+                            }} resizeMode='contain'
                                    source={require('../../../../assets/img/picto/menu/actions/article_white.png')}/>
-                            <Text style={{fontWeight:'bold',color:'#ffffff'}}>Résumé</Text>
+                            <Text style={{fontWeight: 'bold', color: '#ffffff'}}>Résumé</Text>
                         </View>
 
-                        <View style={{marginTop:15,paddingVertical:20,backgroundColor:'rgba(0,0,0,0.5)',width:'100%'}}>
-                            <View style={{alignSelf:'flex-start',marginLeft:5,justifyContent:'flex-end'}}>
-                            <Text style={{color:'#ffffff',fontSize:18, fontWeight:'600'}}>{this.props.title}</Text>
-                            <Text  style={{color:'#ffffff',fontSize:14,marginBottom:5}}>{content.homeClub.name} {content.homeScore} - {content.guessScore} {content.guessClub.name}</Text>
-                                <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <Text  style={{color:'#ffffff',fontSize:12}}> {previewStr.substring(0, Math.min(previewStr.length, 200))} {'...Plus'}</Text>
+                        <View style={{
+                            marginTop: 15,
+                            paddingVertical: 20,
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            width: '100%'
+                        }}>
+                            <View style={{alignSelf: 'flex-start', marginLeft: 5, justifyContent: 'flex-end'}}>
+                                <Text style={{
+                                    color: '#ffffff',
+                                    fontSize: 18,
+                                    fontWeight: '600'
+                                }}>{this.props.title}</Text>
+                                <Text style={{
+                                    color: '#ffffff',
+                                    fontSize: 14,
+                                    marginBottom: 5
+                                }}>{content.homeClub.name} {content.homeScore}
+                                    - {content.guessScore} {content.guessClub.name}</Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Text style={{
+                                        color: '#ffffff',
+                                        fontSize: 12
+                                    }}> {previewStr.substring(0, Math.min(previewStr.length, 200))} {'...Plus'}</Text>
                                 </View>
                             </View>
 
                         </View>
                     </View>
-                 </TouchableOpacity>
+                </TouchableOpacity>
 
-                </View>
+            </View>
         )
     }
+
     checkType() {
         const TYPE = this.props.postType.label;
         if (TYPE === TypeEnum.simple) {
@@ -279,6 +345,7 @@ export default class Content extends Component {
     componentWillMount() {
         this.checkType();
     }
+
     _renderArticleModal() {
         return (
             <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
@@ -287,10 +354,13 @@ export default class Content extends Component {
                    onRequestClose={() => {
                        console.log("Modal has been closed.")
                    }}>
-                <ArticleDisplay disband={(value) => {this.setState({visible:value})}} {...this.props} owner={this.props.owner} />
+                <ArticleDisplay disband={(value) => {
+                    this.setState({visible: value})
+                }} {...this.props} owner={this.props.owner}/>
             </Modal>
         )
     }
+
     render() {
         const TYPE = this.props.postType.label;
         return (
@@ -299,9 +369,9 @@ export default class Content extends Component {
                 {this._renderArticleModal()}
                 {TYPE === TypeEnum.simple ? this.returnSimplePost() :
                     TYPE === TypeEnum.article ? this.returnArticle() :
-                        TYPE === TypeEnum.goals ?  this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content) :
+                        TYPE === TypeEnum.goals ? this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content) :
                             TYPE === TypeEnum.assists ? this.returnAssistPost(this.props.owner, this.props.passNbr, this.props.content) :
-                    TYPE === TypeEnum.interview ? this.returnInterview(this.props.title): null}
+                                TYPE === TypeEnum.interview ? this.returnInterview(this.props.title) : null}
             </View>
         )
     }

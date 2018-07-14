@@ -25,6 +25,7 @@ function login(username, password) {
         userService.login(username, password)
             .then(
                 user => {
+                    console.log(user);
                     userService.getUserType(user.id)
                         .then(
                             userStats => {

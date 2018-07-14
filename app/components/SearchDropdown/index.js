@@ -43,6 +43,7 @@ export default class SearchDropDown extends Component {
         }else{
         let data = dataSource;
         const regex = new RegExp(`${query.trim()}`, 'i');
+        console.log(data);
         if (data) {
             return data.filter(data => data.name.search(regex) >= 0);
         }

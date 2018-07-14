@@ -314,9 +314,6 @@ class TimeLine extends Component {
 
                     }
                 }}/>}
-                <View>
-
-                })}</View>
                 {this._mediaModal()}
                 {this._renderModal()}
                 {

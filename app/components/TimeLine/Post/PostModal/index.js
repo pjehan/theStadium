@@ -21,6 +21,7 @@ import {Icon} from "react-native-elements";
 import {Avatar} from "../../../User/Avatar/index";
 import {ChoiceModalContainer} from "../../../ChoiceModal/index";
 import InterviewModal from "../../../InterviewModal";
+import SelectedTeam from "../../../renderSelectedTeam/index";
 
 const InitialState = {
     post: {
@@ -73,6 +74,7 @@ class PostModal extends Component {
     }
 
     componentDidMount() {
+        this.setState({clubList: this.props.clubList});
         AsyncStorage.getItem('clubList').then(
             value => {
                 this.setState({clubList: JSON.parse(value)});
@@ -659,53 +661,25 @@ class PostModal extends Component {
         }
     };
 
-    _renderSelectedTeam() {
-        if (this.state.team) {
-            return (
-                <TouchableOpacity onPress={() => {
-                    this.setState({visible: true});
-                    this.forceUpdate();
-                }}>
-                    <Avatar user={this.state.team.club}/>
-                    <View style={{flexDirection: 'column'}}>
-                        <Text style={timeLineStyle.title}>{this.state.team.club.name}</Text>
-                        <Text style={{
-                            paddingVertical: 2,
-                            paddingHorizontal: 5,
-                            fontSize: 10,
-                            backgroundColor: '#003366',
-                            color: '#ffffff',
-                            marginRight: 10
-                        }}>{this.state.team.category.label} {this.state.team.division.label}</Text>
-                    </View>
-                </TouchableOpacity>
-            )
-        } else {
-            return (
-                <TouchableOpacity onPress={() => {
-                    this.setState({visible: true});
-                    this.forceUpdate();
-                }} style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/>
-                    <Text style={[timeLineStyle.title, {color: '#979797'}]}>Entrez le nom du club adverse</Text>
-                </TouchableOpacity>
-            )
-        }
-    }
 
     searchClosed(visible, data) {
-        this.setState({visible: visible});
 
         if (data) {
             const NAME = data.club.name + ' ' + data.category.label + ' ' + data.division.label;
             this.setState({
                 clubQuery: data.club.name,
-                club: data,
+                club: data.club,
                 team: data,
                 post: {...this.state.post, content: NAME},
+            }, () => {
+                this.setState({visible: visible});
+                this.forceUpdate()
             });
+        }else {
+            this.setState({visible: visible});
+            this.forceUpdate()
         }
-        this.forceUpdate();
+
     }
 
     render() {
@@ -724,10 +698,10 @@ class PostModal extends Component {
                     {this.conditionalRender()}
 
                     {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
-                        <View style={[{marginLeft: '7.5%', height: 100, width: '85%'}]}>
-                            {this._renderSelectedTeam()}
 
-                        </View> : null}
+                        <TouchableOpacity onPress={() => {this.setState({visible:true});this.forceUpdate()}} style={[{width: '85%'}]}>
+                        <SelectedTeam team={this.state.team}  placeholder={'Entrez le nom du club adverse'}/>
+                        </TouchableOpacity>: null}
                 </ScrollView>
             </Modal>
         )
@@ -748,6 +722,7 @@ PostModal.propTypes = {
 const mapStateToProps = (state) => {
     return {
         currentUser: state.currentUser.user,
+        clubList: state.clubList
     };
 };
 export default connect(mapStateToProps)(PostModal);

@@ -26,6 +26,8 @@ class UserActions extends Component {
         }) : this.setState({likes: this.state.likes - 1}, () => {
             this.props.likes = this.props.likes - 1;
             this.forceUpdate();
+
+            this.props.dispatch(postActions.toggleLikePost(this.props.postID, this.props.userID));
         });
     }
 

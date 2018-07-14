@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Button, Text, View, StatusBar, Image, TouchableOpacity, Modal} from 'react-native';
+import {Button, Text, View, StatusBar, Image, TouchableOpacity, Modal, ActivityIndicator} from 'react-native';
 import {GLOBAL_STYLE} from '../../assets/css/global';
 import {userActions} from '../../_actions';
 import {connect} from 'react-redux';
+import utils from "../../config/utils";
 
 class Congratz extends Component {
     constructor(props) {
@@ -14,6 +15,18 @@ class Congratz extends Component {
 
     setModalVisible(visible) {
         this.setState({modalVisible: visible});
+    }
+    componentWillReceiveProps(nextProps) {
+        const {navigate} = this.props.navigation;
+
+        if (nextProps.userFetched && nextProps.currentUser) {
+            this.setModalVisible(false);
+            utils.registerForPushNotificationsAsync(nextProps.currentUser.id);
+            navigate("Main", {});
+        } else {
+            this.setModalVisible(false);
+
+        }
     }
 
     render() {
@@ -54,7 +67,8 @@ class Congratz extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.registeringUser
+        user: state.registeringUser.user,
+        currentUser: state.currentUser
     };
 };
 export default connect(mapStateToProps)(Congratz);

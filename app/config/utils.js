@@ -92,7 +92,6 @@ const renderIdentification = (str) => {
         function get(str, sub1, sub2)
     {
         results = [];
-        str = string;
         getAllResults(sub1, sub2);
         return (results);
     }

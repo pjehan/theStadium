@@ -180,6 +180,7 @@ class Post extends Component {
     }
 
     toggleLike() {
+        console.log(this.isLiked())
         !this.isLiked() ? this.setState({likes: this.state.likes + 1}, () => {
 
             this.setState({post: {likes: this.state.post.likes + 1}, ...this.state});
@@ -188,6 +189,7 @@ class Post extends Component {
         }) : this.setState({likes: this.state.likes - 1}, () => {
             this.props.likes = this.state.post.likes - 1;
             this.setState({post: {likes: this.state.post.likes - 1}, ...this.state});
+            this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked));
             this.forceUpdate();
         });
     }

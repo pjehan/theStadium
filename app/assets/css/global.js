@@ -133,6 +133,7 @@ innerContainer: {
         height: 85,
     }
 });
+
 export const timeLineStyle = StyleSheet.create({
     tabContainer: {
         justifyContent: 'space-between',
@@ -167,7 +168,8 @@ export const timeLineStyle = StyleSheet.create({
     },
     singlePost: {
         marginBottom: 200,
-    }, profilePic: {
+    },
+    profilePic: {
         width: 45,
         height: 45,
         borderRadius: 45,

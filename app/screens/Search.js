@@ -36,6 +36,7 @@ class Search extends Component {
     }
 
     goToProfile(item) {
+        console.log(this.props);
         if (GLOBAL._isUser(this.props.currentUser, item)) {
             const users = {
                 currentUser: this.props.currentUser,
@@ -159,7 +160,7 @@ class Search extends Component {
             </View>)
         } else if (item["@type"] === 'Club') {
             return (
-                <AccordionSearch currentUser={this.props.currentUser} search={true} userList={this.props.userList}
+                <AccordionSearch currentUser={this.props.currentUser} navigation={this.props.navigation} search={true} userList={this.props.userList}
                                  item={item}/>
             )
         }

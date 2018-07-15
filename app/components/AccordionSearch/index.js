@@ -57,6 +57,7 @@ export default class AccordionSearch extends Component {
     }
 
     goToProfile(item) {
+        console.log(this.props)
         if (GLOBAL._isUser(this.props.currentUser, item)) {
             const users = {
                 currentUser: this.props.currentUser,

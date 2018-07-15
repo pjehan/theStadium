@@ -8,6 +8,8 @@ import Autocomplete from 'react-native-autocomplete-input';
 import {NavigationActions}from "react-navigation";
 import {PlayerSignInStack} from "../../config/router/router";
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
+import SelectedTeam from "../../components/renderSelectedTeam/index";
+import SearchDropDown from "../../components/SearchDropdown/index";
 
 
 class userBasic extends Component {
@@ -70,33 +72,32 @@ class userBasic extends Component {
             return data.filter(data => data.name.search(regex) >= 0);
         }
     }
+
+
+    searchClosed(visible, data) {
+        this.setState({visible: visible});
+
+        if (data) {
+            this.setState({
+                clubQuery: data.club.name,
+                club: data,
+                team: data,
+            });
+
+            this.props.user.club = data.club.id;
+            this.props.user.team = data.id;
+        }
+
+        this.forceUpdate();
+    }
     render() {
       let Coach = null;
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
       if(this.props.navigation.state.params.coach) {
-        Coach = <View style={[{height: 100, width: 300}]}>
-            <Autocomplete
-                placeholderTextColor='#333333'
-                autoCapitalize="none"
-                autoCorrect={false}
-                containerStyle={styles.autocompleteContainer}
-                inputContainerStyle={styles.inputContainer}
-                style={[GLOBAL_STYLE.input, {borderWidth:0,backgroundColor:'#eeeeee',color:'#000000'}]}
-                data={clubData}
-                underlineColorAndroid="transparent"
-                defaultValue={clubQuery}
-                placeholder={'Nom de votre Club'}
-                onChangeText={text => this.setState({clubQuery: text})}
-                hideResults={this.state.hideClub}
-                renderItem={item => (
-
-                    <TouchableOpacity style={{height:30}} onPress={() => this._setClub(item)}>
-                        <Text>{item.name}</Text>
-                    </TouchableOpacity>
-                )}
-            />
-        </View>
+        Coach = (<TouchableOpacity onPress={() => {this.setState({visible:true}); this.forceUpdate()}} style={[{width: '100%'}]}>
+            <SelectedTeam team={this.state.team} placeholder={'Entrez le nom de votre club'}/>
+        </TouchableOpacity>)
       }
         return (
             <KeyboardAvoidingView
@@ -105,7 +106,8 @@ class userBasic extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',backgroundColor:'white', paddingLeft: 30, paddingRight: 30}}
                 behavior="padding">
-
+                <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.visible}
+                                onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
                 <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Création de votre profil</Text>
                     <Text style={[GLOBAL_STYLE.miniDescription]}>

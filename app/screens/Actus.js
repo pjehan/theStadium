@@ -3,7 +3,7 @@ import {
     ActivityIndicator, Dimensions, FlatList, Image, Modal, ScrollView, Text, TouchableOpacity,
     View
 } from 'react-native';
-import {ImagePicker} from 'expo';
+import {ImagePicker, Video} from 'expo';
 
 import Placeholder from 'rn-placeholder';
 import {Icon} from 'react-native-elements';
@@ -87,12 +87,14 @@ class Actus extends Component {
     }
 
     toggleFollow(user, inspected) {
-        if (inspected.userType === 'Coach') {
+        console.log(user, inspected, this._isLiked(user, inspected))
+        if (inspected.userType.label === 'Coach') {
             if (this._isLiked(user, inspected)) {
                 user.teamsLiked.splice(user.teamsLiked.indexOf('/api/teams/' + inspected.teams[inspected.teams.length - 1].id), 1);
                 this.props.dispatch(userActions.putUser(user));
             } else {
-                user.teamsLiked.push('/api/teams/' + inspected.teams[0].id);
+                this.props.navigation.state.params.currentUser.teamsLiked.push('/api/teams/' + inspected.teams[0].id);
+                console.log(this.props.navigation.state.params.currentUser.teamsLiked);
                 this.props.dispatch(userActions.putUser(user));
             }
         } else {
@@ -476,7 +478,9 @@ class Actus extends Component {
                     shadowOpacity: 1,
                     elevation: 5
                 }]}>
-                    {!utils._isUser(state.currentUser, state.inspectedUser) ?
+
+                    {state.inspectedUser.userType.label !== 'Coach' ?
+                    !utils._isUser(state.currentUser, state.inspectedUser) ?
                     <Placeholder.Paragraph
                         color="#003366"
                         textSize={14}
@@ -491,7 +495,7 @@ class Actus extends Component {
                             this.props.done && state.inspectedUser.userType.label !== 'Coach' ?
                             this.renderName() : null
                         }
-                    </Placeholder.Paragraph> : this.renderName()}
+                    </Placeholder.Paragraph> : this.renderName() : null}
 
                     {utils._isUser(state.currentUser, state.inspectedUser) && this._mediaModal()}
                     {this._renderActions()}
@@ -499,7 +503,7 @@ class Actus extends Component {
                 </View>
                 {
                     (this.props.posts && this.props.isFetched) ? this._renderList() :
-                        (!this.props.postsFetching && this.props.isFetched)  ? this._renderLoading() : <Text>Aucun résultat trouvé </Text>
+                        (!this.props.postsFetching && this.props.isFetched)  ? this._renderLoading() : <Text>... </Text>
                 }
             </ScrollView>
         )

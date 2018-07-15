@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
-import Autocomplete from 'react-native-autocomplete-input';
 import {
-    View, StyleSheet, AsyncStorage, Text, KeyboardAvoidingView, TouchableOpacity, Picker, Item,
-    Modal, ActivityIndicator,Linking
+    ActivityIndicator,
+    AsyncStorage,
+    Item,
+    KeyboardAvoidingView,
+    Modal,
+    Picker,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import {GLOBAL_STYLE} from '../../../assets/css/global';
-import CustomInput from '../../../components/CustomInput';
 import {connect} from "react-redux";
 import SearchDropDown from "../../../components/SearchDropdown/index";
 import SelectedTeam from "../../../components/renderSelectedTeam/index";
@@ -27,14 +33,14 @@ const style = StyleSheet.create({
 });
 
 const ROLES = [
-    {label:"Gardien", value:1},
-    {label:"Latéral gauche",value:2},
-    {label:"Latéral droit", value:3},
-    {label:"Arrière axe", value:4},
-    {label:"Milieu axe", value:5},
-    {label:"Milieu gauche", value:6},
-    {label:"Milieu droit", value:7},
-    {label:"Attaquant", value:8},
+    {label: "Gardien", value: 1},
+    {label: "Latéral gauche", value: 2},
+    {label: "Latéral droit", value: 3},
+    {label: "Arrière axe", value: 4},
+    {label: "Milieu axe", value: 5},
+    {label: "Milieu gauche", value: 6},
+    {label: "Milieu droit", value: 7},
+    {label: "Attaquant", value: 8},
 ];
 
 class PlayerInfos extends Component {
@@ -80,17 +86,18 @@ class PlayerInfos extends Component {
         }
         let data = dataSource;
         const regex = new RegExp(`${query.trim()}`, 'i');
-        if(data) {
+        if (data) {
             return data.filter(data => data.name.search(regex) >= 0);
         }
     }
+
     _filterTeam(query, dataSource) {
         if (query === '') {
             return [];
         }
         let data = dataSource;
         const regex = new RegExp(`${query.trim()}`, 'i');
-        if(data) {
+        if (data) {
             return data.filter(data => data.category.label.search(regex) >= 0);
         }
     }
@@ -99,32 +106,14 @@ class PlayerInfos extends Component {
         const {navigate} = this.props.navigation;
 
         if (!nextProps.user.fetching && nextProps.user && nextProps.user.done && !nextProps.user.error) {
+            console.log(nextProps.user)
             navigate('Congratz');
         }
-    }
-
-
-    _setTeam(item){
-        this.setState({
-                teamQuery: item.category.label + ' ' +item.division.label,
-                hideTeam: true,
-                team:item.id
-            });
-        this.props.user.team = item.id;
     }
 
     _setRole(itemValue) {
         this.setState({poste: itemValue});
         this.props.user.poste = itemValue;
-    }
-    _setClub(item) {
-        this.setState({
-            clubQuery: item.name,
-            club: item.id,
-            hideClub: true,
-            teamList: item.teams
-        });
-        this.props.user.club = item.id;
     }
     searchClosed(visible, data) {
         this.setState({visible: visible});
@@ -184,14 +173,17 @@ class PlayerInfos extends Component {
                     style={{flex: 3, justifyContent: 'space-around', alignItems: 'center'}}
                     behavior="padding">
 
-                    <TouchableOpacity onPress={() => {this.setState({visible:true}); this.forceUpdate()}} style={[{width: '100%'}]}>
+                    <TouchableOpacity onPress={() => {
+                        this.setState({visible: true});
+                        this.forceUpdate()
+                    }} style={[{width: '100%'}]}>
                         <SelectedTeam team={this.state.team} placeholder={'Entrez le nom de votre club'}/>
                     </TouchableOpacity>
                     <View style={{backgroundColor: '#eeeeee', width: '85%'}}>
                         <Picker style={GLOBAL_STYLE.input}
                                 prompt="Poste joué"
                                 selectedValue={this.state.poste}
-                                onValueChange={(itemValue) => this._setRole(itemValue) }>
+                                onValueChange={(itemValue) => this._setRole(itemValue)}>
                             {ROLES.map((i, index) => (
                                 <Picker.Item key={index} label={i.label} value={i.value}/>
                             ))}
@@ -203,6 +195,7 @@ class PlayerInfos extends Component {
     }
 
 }
+
 const mapStateToProps = (state) => {
     return {
         user: state.registeringUser,
@@ -230,11 +223,11 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1,
-        borderWidth:0,
+        borderWidth: 0,
     },
     inputContainer: {
         backgroundColor: '#cccccc',
-        borderWidth:0,
+        borderWidth: 0,
     },
     itemText: {
         fontSize: 15,

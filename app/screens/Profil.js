@@ -14,7 +14,7 @@ import Placeholder from 'rn-placeholder';
 import Spinner from 'react-native-number-spinner';
 import CustomInput from "../components/CustomInput";
 import {userActions} from "../_actions/user";
-import Moment from "moment";
+import moment from 'moment'
 import {connect} from "react-redux";
 import utils from "../config/utils";
 
@@ -98,7 +98,7 @@ class Profil extends Component {
                     <TouchableOpacity  onPress={() => {
                         utils._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
-                        <Text style={STYLE.tabText}>{stats.position.label}, 25ans</Text>
+                        <Text style={STYLE.tabText}>{stats.position.label}, {this.renderDate(stats.birthdate)}</Text>
                         {utils._isUser(state.currentUser, state.inspectedUser) ?
                             <Icon style={{marginLeft:'auto'}} name="create" size={20}
                                   color="#003366"/> : null}
@@ -201,6 +201,12 @@ class Profil extends Component {
         )
     }
 
+    renderDate(date) {
+        let now = moment(new Date());
+        let birth = moment(date);
+        return now.diff(birth, 'years') + 'ans';
+    }
+
     _renderChange() {
         const {navigation} = this.props;
         const state = navigation.state.params;
@@ -208,7 +214,7 @@ class Profil extends Component {
         return (
             <View>
                 <TouchableOpacity onPress={() => this._confirmChange()} style={[STYLE.tab, {justifyContent: 'center'}]}>
-                    <Text style={STYLE.tabText}>{stats.position.label}, 25ans</Text>
+                    <Text style={STYLE.tabText}>{stats.position.label}, {this.renderDate(stats.birthdate)}</Text>
                     <Icon style={{marginLeft:'auto'}} name="create" size={20} color="#003366"/>
                 </TouchableOpacity>
                 <View style={[STYLE.tab, STYLE.even]}>
@@ -305,13 +311,13 @@ class Profil extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
         return (
-            <View style={{backgroundColor: '#ffffff'}}>
+            <ScrollView style={{backgroundColor: '#ffffff'}}>
                 <Image style={{height: 200, width: width}} resizeMode={'cover'}
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
                 {this.props.isFetching || !state.inspectedUser.stats ? null : this.stateSetting.bind(this)}
 
                 {this.state.change ? this._renderChange() : this._renderStats()}
-            </View>
+            </ScrollView>
         )
     }
 };

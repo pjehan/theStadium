@@ -56,7 +56,6 @@ export const GLOBAL_STYLE = StyleSheet.create({
     resizeMode: 'contain'
   },
     headerMiddleLogo: {
-        width: 150,
         resizeMode: 'contain',
     },
   sponsor: {

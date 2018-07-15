@@ -82,8 +82,8 @@ class Post extends Component {
             <View style={[PostStyle.containerTest, {height: Math.max(80, this.state.height + 35)}]}>
                 <Avatar user={this.props.currentUser}/>
                 <View style={{flex: 1, flexDirection: 'column', alignItems: 'flex-start'}}>
-                    <View style={{flexDirection: 'row',alignItems:'center',justifyContent:'center'}}>
-                        <Text style={{paddingLeft: 5,fontSize: 14}}>{name}  </Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style={{paddingLeft: 5, fontSize: 14}}>{name}  </Text>
                         {this.props.currentUser.userType.label === 'Coach' ?
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{
@@ -104,7 +104,7 @@ class Post extends Component {
                         borderWidth: 1,
                         borderColor: '#979797',
                         paddingHorizontal: 10,
-                        marginTop:5,
+                        marginTop: 5,
                         flexDirection: 'row',
                         width: '100%',
                         alignItems: 'center'
@@ -180,18 +180,25 @@ class Post extends Component {
     }
 
     toggleLike() {
-        console.log(this.isLiked())
-        !this.isLiked() ? this.setState({likes: this.state.likes + 1}, () => {
+        if (this.isLiked() === true) {
+            this.setState({post: {likes: this.state.post.likes - 1}, ...this.state}, () => {
+                this.props.post.postsLiked.find((likes, index) => {
+                    if (likes.userLikes.id === this.props.currentUser.id) {
+                        this.props.post.postsLiked.splice(index,1);
+                        this.setState({post: this.props.post});
 
+                        this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked()));
+                    }
+                });
+                //this.props.post.postsLiked.push({userLikes: {id: this.props.currentUser.id}});
+                this.forceUpdate();
+            });
+        } else {
             this.setState({post: {likes: this.state.post.likes + 1}, ...this.state});
-            this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked));
+            this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked()));
+            this.props.post.postsLiked.push({userLikes: {id: this.props.currentUser.id}});
             this.forceUpdate();
-        }) : this.setState({likes: this.state.likes - 1}, () => {
-            this.props.likes = this.state.post.likes - 1;
-            this.setState({post: {likes: this.state.post.likes - 1}, ...this.state});
-            this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked));
-            this.forceUpdate();
-        });
+        }
     }
 
     render() {
@@ -223,10 +230,10 @@ class Post extends Component {
                         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}
                                           onPress={() => this.toggleLike()}>
                             <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}
-                                   source={require('../../../assets/img/picto/actualite/picto-jaime-gris.png')}/>
+                                   source={this.isLiked() ? require('../../../assets/img/picto/actualite/like.png') : require('../../../assets/img/picto/actualite/picto-jaime-gris.png')}/>
                             <Text style={[PostStyle.text, {
                                 fontSize: 14,
-                                color: '#cccccc',
+                                color: this.isLiked() ? '#ff0000' : '#cccccc',
                                 fontWeight: '600'
                             }]}>J'aime</Text>
                         </TouchableOpacity>

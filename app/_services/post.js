@@ -122,13 +122,12 @@ function getComments(id) {
 }
 
 function toggleLikePost(postID, userID, liked) {
-    if (!liked) {
+    if (liked === false) {
         return instance.post("/api/user_likes_posts", {
             userLikes: userID,
             postsLiked: postID
         })
             .then(response => {
-                console.log(response.data);
                 return response.data;
             }).catch((error) => {
                 console.error(error);

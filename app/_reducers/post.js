@@ -43,6 +43,19 @@ export function postList(state = {
             return {...state, fetching: false, fetched: true};
             break;
         case postConstants.LIKES_SUCCESS:
+           return state.posts.posts.find((post,index) => {
+                if(post.id === action.payload.postsLiked.id){
+                    post.postsLiked.find((like,id) => {
+                        if(like.userLikes.id === action.payload.userLikes.id){
+                            state.posts.posts[index].postsLiked[id] = action.payload;
+                            console.log(state);
+                            return {state};
+                        }
+                    })
+                }
+            });
+
+
             break;
         case postConstants.ADD_COMMENT_SUCCESS:
             state.posts.posts[action.payload.postID].comments.push(action.payload.commentID);

@@ -133,6 +133,7 @@ function toggleLikePost(postID, userID, liked) {
         postService.toggleLikePost(postID, userID, liked)
             .then(
                 response => {
+                    console.log(response)
                     dispatch(success(response));
                 }
             )

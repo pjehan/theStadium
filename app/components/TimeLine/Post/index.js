@@ -188,15 +188,17 @@ class Post extends Component {
                         this.setState({post: this.props.post});
 
                         this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked()));
+
+                        this.forceUpdate();
                     }
                 });
                 //this.props.post.postsLiked.push({userLikes: {id: this.props.currentUser.id}});
-                this.forceUpdate();
             });
         } else {
             this.setState({post: {likes: this.state.post.likes + 1}, ...this.state});
-            this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked()));
+
             this.props.post.postsLiked.push({userLikes: {id: this.props.currentUser.id}});
+            this.props.dispatch(postActions.toggleLikePost(this.state.post.id, this.props.currentUser.id, this.isLiked()));
             this.forceUpdate();
         }
     }

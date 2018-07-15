@@ -46,9 +46,10 @@ export function postList(state = {
            return state.posts.posts.find((post,index) => {
                 if(post.id === action.payload.postsLiked.id){
                     post.postsLiked.find((like,id) => {
+
+                        console.log(state,like);
                         if(like.userLikes.id === action.payload.userLikes.id){
                             state.posts.posts[index].postsLiked[id] = action.payload;
-                            console.log(state);
                             return {state};
                         }
                     })

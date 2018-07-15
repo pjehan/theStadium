@@ -122,12 +122,13 @@ function getComments(id) {
 }
 
 function toggleLikePost(postID, userID, liked) {
-    if (liked === false) {
+    if (liked === true) {
         return instance.post("/api/user_likes_posts", {
             userLikes: userID,
             postsLiked: postID
         })
             .then(response => {
+                console.log(response);
                 return response.data;
             }).catch((error) => {
                 console.error(error);
@@ -136,6 +137,7 @@ function toggleLikePost(postID, userID, liked) {
     } else {
         return instance.delete("/api/user_likes_post/"+ userID + "/" + postID)
             .then(response => {
+                console.log(response);
                 return response.data;
             }).catch((error) => {
                 console.error(error);

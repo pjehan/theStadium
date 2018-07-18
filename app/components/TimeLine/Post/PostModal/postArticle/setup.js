@@ -12,8 +12,12 @@ import {NavigationActions}from "react-navigation";
 import Autocomplete from "react-native-autocomplete-input";
 import CustomInput from "../../../../CustomInput";
 import {GLOBAL_STYLE} from '../../../../../assets/css/global';
-import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
+import { Header } from 'react-navigation';
+
 import {connect} from "react-redux";
+import SearchDropDown from "../../../../SearchDropdown/index";
+import Spinner from "react-native-number-spinner";
+import {Avatar} from "../../../../User/Avatar/index";
 class Setup extends Component {
     constructor(props){
         super(props);
@@ -38,6 +42,13 @@ class Setup extends Component {
             }))
         });
     }
+    componentWillMount() {
+        AsyncStorage.getItem('clubList').then(
+            value => {
+                this.setState({clubList: JSON.parse(value)});
+                this.forceUpdate();
+            });
+    }
     componentDidMount() {
         AsyncStorage.getItem('clubList').then(
             value => {
@@ -52,19 +63,24 @@ class Setup extends Component {
             key: "conclusion"
         }))
     }
-    _setClub(item) {
-        this.setState({
-            clubQuery: item.name,
-            guessClub: item,
-            hideClub: true,
-        }, () => {
-            this.props.navigation.dispatch(NavigationActions.setParams({
-                params:{
-                    guessClub: this.state.guessClub
-                },
-                key: "conclusion"
-            }))});
-
+    _setClub(visible, item) {
+        this.setState({guessVisible: visible});
+        if(item) {
+            this.setState({
+                clubQuery: item.club.name,
+                guessClub: item,
+            }, () => {
+                this.props.navigation.dispatch(NavigationActions.setParams({
+                    params: {
+                        guessClub: {
+                            name: this.state.guessClub.name,
+                            id: this.state.guessClub.id
+                        }
+                    },
+                    key: "conclusion"
+                }))
+            });
+        }
     }
     _filterClub(query, dataSource) {
         if (query === '') {
@@ -77,115 +93,83 @@ class Setup extends Component {
         }
     }
     _guessClub(){
-        if(this.state.guessClub){
+        if (this.state.guessClub) {
             return (
-                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{width:'25%',alignItems:'center'}}>
-                    {this.state.guessClub.profilePicture ?<Image style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}
-                                                                 source={{uri:this.state.guessClub.profilePicture}}/> : <View stlye={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}/> }
-                    <Text style={timeLineStyle.title}>{this.state.guessClub.name}</Text>
+                <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={() => {
+                    this.setState({guessVisible: true});
+                    this.forceUpdate();
+                }}>
+                    <Avatar user={this.state.guessClub.club}/>
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={timeLineStyle.title}>{this.state.guessClub.club.name}</Text>
+                        <Text style={{
+                            paddingVertical: 2,
+                            paddingHorizontal: 5,
+                            fontSize: 10,
+                            backgroundColor: '#003366',
+                            color: '#ffffff',
+                            marginRight: 10
+                        }}>{this.state.guessClub.category.label} {this.state.guessClub.division.label}</Text>
+                    </View>
                 </TouchableOpacity>
             )
-        }else {
+        } else {
             return (
-                <TouchableOpacity onPress={() => {this.setState({guessVisible:true})}} style={{width:'25%',alignItems:'center'}}>
-                    <View style={[timeLineStyle.profilePic,{backgroundColor:'#cccccc'}]}/>
-                    <Text style={[timeLineStyle.title, {fontSize:14,textAlign:'center'}]}>Sélectionner un club</Text>
+                <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={() => {
+                    this.setState({guessVisible: true});
+                    this.forceUpdate();
+                }} style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/>
+                    <Text style={[timeLineStyle.title, {color: '#979797'}]}>Entrez le nom du club adverse</Text>
                 </TouchableOpacity>
             )
         }
     }
     render() {
         const {clubQuery, clubList} = this.state;
-        const clubData = this._filterClub(clubQuery, clubList);
         return (
-            <KeyboardAwareScrollView
-                style={{ backgroundColor: '#ffffff' }}
-                resetScrollToCoords={{ x: 0, y: 0 }}
-                extraHeight={500}
-                >
-                <Modal
-                    transparent={true}
-                    animationType={'none'}
-                    visible={this.state.guessVisible}
-                    onRequestClose={() => {
-                        console.log('close modal')
-                    }}>
-                    <View style={STYLE.modalBackground}>
-                        <View style={[STYLE.activityIndicatorWrapper,{width:'60%',alignItems:'center',justifyContent:'flex-end'}]}>
-                            <Autocomplete
-
-                                underlineColorAndroid="transparent"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                containerStyle={[styles.autocompleteContainer,{width:'90%',marginLeft:'10%'}]}
-                                data={clubData}
-                                defaultValue={clubQuery}
-                                placeholder={'Nom de votre Club'}
-                                onChangeText={text => this.setState({clubQuery: text,hideClub:false})}
-                                hideResults={this.state.hideClub}
-                                renderItem={item => (
-
-                                    <TouchableOpacity onPress={() => this._setClub(item)}>
-                                        <Text>{item.name}</Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-
-                            <View style={{flexDirection:'row',alignContent:'center',justifyContent:'center'}}>
-                                <TouchableOpacity style={{width:'50%',alignItems:'center',borderRightWidth:0.5}} onPress={() => {this.setState({guessVisible:false})}}>
-                                    <Text>Annuler</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{width:'50%',alignItems:'center',borderLeftWidth:0.5}} onPress={() => {this.setState({guessVisible:false})}}>
-                                    <Text>Ok</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                    </View>
-
-                </Modal>
+            <ScrollView contentContainerStyle={{flex:1}}>
+                <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.guessVisible}
+                                     onModalClose={(visible, data) => this._setClub(visible, data)}/>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Score du match</Text>
                 </View>
-                <View style={{justifyContent:'space-between', paddingVertical:40,paddingHorizontal:10,flexDirection:'row'}}>
-                    <View style={{alignItems:'center',width:'25%'}}>
-                        {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
-                                                                                          source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
-                        <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
+                <View style={{justifyContent:'space-between', paddingVertical:40,paddingHorizontal:10,flexDirection:'column'}}>
+                    <View style={{justifyContent:'space-between',alignItems:'center',width:'100%',flexDirection:'row'}}>
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <Avatar user={this.props.currentUser.teams[0].team.club}/>
                         <Text
-                            style={timeLineStyle.title}>Fc Guichen</Text>
+                            style={timeLineStyle.title}>{this.props.currentUser.teams[0].team.club.name}</Text>
+                        </View>
+                        <Spinner max={99}
+                                 min={0}
+                                 default={0}
+                                 color="#003366"
+                                 numColor="#003366"
+                                 onNumChange={(num) => {
+                                     this.onChangeInfos('homeScore',num);
+                                 }}/>
                     </View>
-                    <View style={{flexDirection:'row',alignItems:'center',width:'30%', justifyContent:'space-between'}}>
-                        <CustomInput
-                            container={''}
-                            textColor={'#333333'}
-                            borderColor={'transparent'}
-                            backgroundColor={'#eeeeee'}
-                            placeholder={'0'}
-                            keyboardType={'numeric'}
-                            input={GLOBAL_STYLE.numericInput}
-                            state={'homeScore'}
-                            onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
-                        />
-                        <Text> - </Text>
-                        <CustomInput
-                            container={''}
-                            textColor={'#333333'}
-                            borderColor={'transparent'}
-                            backgroundColor={'#eeeeee'}
-                            placeholder={'0'}
-                            keyboardType={'numeric'}
-                            input={GLOBAL_STYLE.numericInput}
-                            state={'guessScore'}
-                            onChangeParent={(state,newvalue) => {this.onChangeInfos(state, newvalue)}}
-                        />
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                    <Text style={{marginLeft:15,color:'#003366',fontSize:18}}>vs</Text>
+                    <View style={{marginLeft: '18%',height:1,backgroundColor:'#cccccc',width:'50%',alignSelf:'center', marginVertical:20}}/>
                     </View>
-                    {this._guessClub(clubData,clubQuery)}
+                    <View style={{justifyContent:'space-between',alignItems:'center',width:'100%',flexDirection:'row'}}>
+                    {this._guessClub()}
+                    <Spinner max={99}
+                             min={0}
+                             default={0}
+                             color="#003366"
+                             numColor="#003366"
+                             onNumChange={(num) => {
+                                 console.log(this.state);
+                                 this.onChangeInfos('guessScore',num);
+                             }}/>
+                    </View>
                 </View>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
                     <Text style={{color:'#000000', fontWeight:'600'}}>Titre de l'article</Text>
                 </View>
-
                 <View style={{paddingVertical:10,paddingHorizontal:15}}>
                     <CustomInput multiple={true}
                                  container={{justifyContent: 'flex-start'}}
@@ -197,6 +181,7 @@ class Setup extends Component {
                                  borderColor={'#cccccc'}
                                  backgroundColor={'#ffffff'}
                                  security={false}
+                                 returnKeyType={'done'}
                                  onChangeSizeParent={(size)=>{
                                      this.setState({height:size})
                                  }}
@@ -204,7 +189,7 @@ class Setup extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </KeyboardAwareScrollView>
+            </ScrollView>
         )
     };
 }

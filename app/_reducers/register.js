@@ -31,7 +31,7 @@ export function registeringUser(state = {
         return {...state, fetching:false,done:true};
         break;
     case userConstants.REGISTER_FAILURE:
-      return {};
+      return {...state, fetching:false,done:true, error: action.payload};
     default:
       return state
   }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {Text,Share, View, ScrollView, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 import connect from "react-redux/es/connect/connect";
 
@@ -11,12 +11,12 @@ const MENU = [
     },
     {
         label: 'Partager à mes amis',
-        action: 'oui',
+        action: 'Share',
         params: {},
     },
     {
         label: 'Réglages',
-        action: 'za',
+        action: 'MyAccount',
         params: {},
     },
     {
@@ -43,10 +43,26 @@ class Menu extends Component {
             inspectedUser: this.props.currentUser,
         };
 
-        if (this.props.currentUser.userType.label === 'Coach') {
+        if (action === 'Profile' && this.props.currentUser.userType.label === 'Coach') {
             navigate("CoachProfile", users);
-        } else {
-            navigate(action, users);
+        } else if(action === 'Profile' && this.props.currentUser.userType.label === 'Supporter') {
+            navigate("FanProfile", users);
+        }else if (action === 'Share'){
+            Share.share({
+                message: 'The stadium une appli vraiment cool',
+                url: 'www.google.com',
+                title: 'Inscrivez vous sur cette appli !!!'
+            },{
+                // Android only:
+                dialogTitle: 'Partager à vos amis',
+                // iOS only:
+                excludedActivityTypes: [
+                    'com.apple.UIKit.activity.PostToTwitter'
+                ]
+            })
+        }
+        else {
+            navigate(action, users)
         }
     }
 

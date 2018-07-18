@@ -40,7 +40,7 @@ export const GLOBAL_STYLE = StyleSheet.create({
     alignItems: 'center',
   },
   greyColorBG: {
-      backgroundColor: '#cccccc',
+      backgroundColor: '#eeeeee',
       flex:1,
       alignItems: 'center',
   },
@@ -56,7 +56,6 @@ export const GLOBAL_STYLE = StyleSheet.create({
     resizeMode: 'contain'
   },
     headerMiddleLogo: {
-        width: 150,
         resizeMode: 'contain',
     },
   sponsor: {
@@ -111,6 +110,7 @@ inputContainer: {
         width: 300,
         paddingLeft:20,
         paddingRight: 20,
+        marginVertical:5,
         height: 40,
         borderWidth: 1,
         borderColor: 'transparent',
@@ -132,13 +132,14 @@ innerContainer: {
         height: 85,
     }
 });
+
 export const timeLineStyle = StyleSheet.create({
     tabContainer: {
         justifyContent: 'space-between',
         backgroundColor: '#ffffff',
         flexDirection: 'row',
         width: '100%',
-        height: 40
+        height: 40,
     },
     tabButton: {
         backgroundColor: 'white',
@@ -151,6 +152,7 @@ export const timeLineStyle = StyleSheet.create({
     tabButtonText: {
         color: '#003366',
         fontWeight: '400',
+        fontSize:16,
     },
     tabButtonPicto: {
         height: 15,
@@ -165,7 +167,8 @@ export const timeLineStyle = StyleSheet.create({
     },
     singlePost: {
         marginBottom: 200,
-    }, profilePic: {
+    },
+    profilePic: {
         width: 45,
         height: 45,
         borderRadius: 45,

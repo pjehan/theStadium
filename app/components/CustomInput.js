@@ -73,7 +73,7 @@ export default class CustomInput extends Component {
             DatePickerAndroid.open({
                 date: this.state.date,
                 mode: 'spinner',
-                maxDate: new Date('2006')
+                maxDate: Moment().subtract(13, 'years').toDate()
             }).then(this.onDatePicked);
         }
     }
@@ -141,6 +141,7 @@ export default class CustomInput extends Component {
         else {
             Input = <TextInput
                 {...this.props}
+                ref={i => {this.props.refArr = i}}
                 multiline={this.props.multiple}
                 placeholderTextColor={this.props.placeholderTextColor || this.props.textColor}
                 onChangeText={(value) => this.onChange(value)}
@@ -148,9 +149,9 @@ export default class CustomInput extends Component {
                 onContentSizeChange={(event) => {
                    this.props.onChangeSizeParent ? this.onChangeSize(event.nativeEvent.contentSize.height) : null
                 }}
+                value={this.props.value}
                 style={[this.props.input, {backgroundColor: this.props.backgroundColor, borderColor: this.props.borderColor,color: this.props.textColor}]}
                 secureTextEntry={this.props.security}
-                keyboardType={this.props.keyboardType}
                 underlineColorAndroid="transparent"
             />
 

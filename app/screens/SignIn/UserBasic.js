@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {View,AsyncStorage,StyleSheet,Button,DatePickerAndroid,Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
+import {View,AsyncStorage,StyleSheet,Button,DatePickerAndroid,ScrollView,Text,KeyboardAvoidingView,TouchableOpacity} from 'react-native';
 import {GLOBAL_STYLE} from '../../assets/css/global';
 import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
@@ -8,6 +8,8 @@ import Autocomplete from 'react-native-autocomplete-input';
 import {NavigationActions}from "react-navigation";
 import {PlayerSignInStack} from "../../config/router/router";
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
+import SelectedTeam from "../../components/renderSelectedTeam/index";
+import SearchDropDown from "../../components/SearchDropdown/index";
 
 
 class userBasic extends Component {
@@ -21,10 +23,13 @@ class userBasic extends Component {
           birthdate: '',
             clubQuery: '',
             clubList: '',
+            club:'',
+            visible:false
         };
         this.onChangeInfos = this.onChangeInfos.bind(this);
 
         this._filterClub = this._filterClub.bind(this);
+        this._setClub = this._setClub.bind(this);
     }
     onChangeInfos(state, newvalue) {
         this.props.user[state] = newvalue;
@@ -39,6 +44,7 @@ class userBasic extends Component {
             });
     }
     _setClub(item) {
+        console.log(item)
         this.setState({
             clubQuery: item.name,
             club: item.id,
@@ -48,6 +54,7 @@ class userBasic extends Component {
         this.props.navigation.setParams({
             teamList: item.teams
         });
+        console.log(this.props.user)
         this.props.navigation.dispatch(NavigationActions.setParams({
             params:{
                 coach:true,
@@ -66,47 +73,51 @@ class userBasic extends Component {
             return data.filter(data => data.name.search(regex) >= 0);
         }
     }
+
+
+    searchClosed(visible, data) {
+        this.setState({visible: visible});
+
+        if (data) {
+            this.setState({
+                clubQuery: data.club.name,
+                club: data,
+                team: data,
+            });
+
+            this.props.user.club = data.club.id;
+            this.props.user.team = data.id;
+        }
+
+        this.forceUpdate();
+    }
     render() {
       let Coach = null;
         const {clubQuery, clubList} = this.state;
         const clubData = this._filterClub(clubQuery, clubList);
       if(this.props.navigation.state.params.coach) {
-        Coach = <View style={[{height: 40, width: 300}]}>
-            <Autocomplete
-                placeholdertextColor='#000000'
-                autoCapitalize="none"
-                autoCorrect={false}
-                containerStyle={styles.autocompleteContainer}
-                inputContainerStyle={styles.inputContainer}
-                style={[GLOBAL_STYLE.input, {borderWidth:0,backgroundColor:'#eeeeee',color:'#000000'}]}
-                data={clubData}
-                underlineColorAndroid="transparent"
-                defaultValue={clubQuery}
-                placeholder={'Nom de votre Club'}
-                onChangeText={text => this.setState({clubQuery: text})}
-                hideResults={this.state.hideClub}
-                renderItem={item => (
-
-                    <TouchableOpacity onPress={() => this._setClub(item)}>
-                        <Text>{item.name}</Text>
-                    </TouchableOpacity>
-                )}
-            />
-        </View>
+        Coach = (<TouchableOpacity onPress={() => {this.setState({visible:true}); this.forceUpdate()}} style={[{width: '100%'}]}>
+            <SelectedTeam team={this.state.team} placeholder={'Entrez le nom de votre club'}/>
+        </TouchableOpacity>)
       }
         return (
-            <KeyboardAwareScrollView contentContainerStyle={{flexGrow: 1,backgroundColor:'white', paddingLeft: 30, paddingRight: 30}}>
-
-                <View style={{flex: 2, justifyContent: 'center'}}>
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={90}
+                style={{flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',backgroundColor:'white', paddingLeft: 30, paddingRight: 30}}
+                behavior="padding">
+                <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.visible}
+                                onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
+                <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Création de votre profil</Text>
                     <Text style={[GLOBAL_STYLE.miniDescription]}>
-                        Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
+                        Ajoutez de vraies informations pour vous permettre d'échanger avec les joueurs et les clubs
                     </Text>
                 </View>
 
-                <KeyboardAvoidingView
-                    style={{flex:3, justifyContent: 'space-around', alignItems:'center'}}
-                    behavior="padding">
+                <View
+                    style={{flex:2, justifyContent: 'space-around', alignItems:'center'}}>
                     <CustomInput
                         container={''}
                         textColor={'#333333'}
@@ -141,8 +152,8 @@ class userBasic extends Component {
                     />
 
                     {Coach}
-                </KeyboardAvoidingView>
-            </KeyboardAwareScrollView>
+                </View>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -160,7 +171,8 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1,
-        borderWidth:0
+        borderWidth:0,
+        height:60
     },
     inputContainer: {
         backgroundColor: '#cccccc',

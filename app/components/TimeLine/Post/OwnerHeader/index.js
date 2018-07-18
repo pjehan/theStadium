@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import {userActions} from "../../../../_actions/user";
 import {postActions} from "../../../../_actions";
 import {connect} from "react-redux";
+import utils from "../../../../config/utils";
+import {Avatar} from "../../../User/Avatar/index";
 
 let team = null;
 
@@ -39,12 +41,9 @@ class OwnerHeader extends Component {
 
         if (seconds < 100) {
             switch (true) {
-                case seconds < 2:
-                    this.state.displayDate = seconds + ' seconde';
+                case seconds < 100:
+                    this.state.displayDate = 'Il y a quelques secondes';
                     break;
-                case seconds > 1:
-                    this.state.displayDate = seconds + ' secondes';
-                    break
             }
         } else if (minutes < 60) {
             switch (true) {
@@ -96,10 +95,6 @@ class OwnerHeader extends Component {
         }
     }
 
-    _isUser(user, inspected) {
-        return user === inspected.id;
-    }
-
     _displayTools() {
         return (
             <Modal animationType={"slide"} transparent={true}
@@ -121,7 +116,7 @@ class OwnerHeader extends Component {
                         backgroundColor: '#ffffff',
                         justifyContent: 'center'
                     }}>
-                        {this._isUser(this.props.ownerID, this.props.currentUser) ?
+                        {utils._isUser(this.props.owner, this.props.currentUser) ?
                             <TouchableOpacity style={{
                                 justifyContent: 'center',
                                 height: 40,
@@ -130,8 +125,7 @@ class OwnerHeader extends Component {
                                 borderBottomColor: '#cccccc',
                                 borderBottomWidth: 0.5
                             }}
-                                              onPress={() => {
-                                              }}>
+                                              onPress={() => {this.props.dispatch(postActions.deletePost(this.props.post.id));this.setState({tools:false})}}>
                                 <Text style={{textAlign: 'center', color: '#003366'}}>Supprimer</Text>
                             </TouchableOpacity> : null}
                         <TouchableOpacity style={{
@@ -176,25 +170,25 @@ class OwnerHeader extends Component {
                     <TouchableOpacity style={PostStyle.ownerStyle} onPress={() => {
                         this.goToProfile()
                     }}>
-                        {(this.props.team && !this.props.team.club.profilePicture) || (!this.props.team && !this.props.Owner.profilepicture) ?
-                            <View style={[PostStyle.profilePic, {backgroundColor: '#cccccc'}]}/> :
-                            <Image style={PostStyle.profilePic}
-                                   source={{uri: !this.props.team ? this.props.Owner.profilepicture : this.props.team.club.profilePicture}}/>
-                        }
+                        <Avatar user={this.props.owner}/>
                         <View>
                             <Text style={PostStyle.title}>{this.props.Owner}</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 {this.props.team ?
+                                    <View style={{flexDirection:'row', alignItems: 'center'}}>
                                     <Text style={{
                                         paddingVertical: 2,
                                         paddingHorizontal: 5,
                                         fontSize: 10,
                                         backgroundColor: '#003366',
-                                        color: '#ffffff',
-                                        marginRight: 10
-                                    }}>{this.props.team.category.label} {this.props.team.division.label}</Text> : null}
-                                <View style={{flexDirection: 'row'}}>
-                                    <Image resizeMode="contain" style={{height: 15, width: 15}}
+                                        color: '#ffffff'
+                                    }}>{this.props.team.category.label} {this.props.team.division.label}</Text>
+                                    <View style={{width:5,height:5,backgroundColor:'#cccccc',marginHorizontal:8,borderRadius:5}} />
+                                    </View>
+                                    : null
+                                }
+                                <View style={{flexDirection: 'row', alignItems:'center',justifyContent:'center'}}>
+                                    <Image resizeMode="contain" style={{height: 10, width: 10}}
                                            source={require('../../../../assets/img/picto/actualite/picto-time-gris.png')}/>
                                     <Text style={PostStyle.timeText}>{this.state.displayDate}</Text>
                                 </View>

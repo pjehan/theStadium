@@ -1,19 +1,101 @@
 import React, {Component} from 'react';
 import {Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
-import {View, StyleSheet, Text, KeyboardAvoidingView, TouchableOpacity, Image} from 'react-native';
+import {View,Alert, StyleSheet, Text, KeyboardAvoidingView, TouchableOpacity, Image} from 'react-native';
 
 import {GLOBAL_STYLE} from '../../../../../assets/css/global';
 import {postActions} from "../../../../../_actions/post";
 
 
+import { NavigationActions } from "react-navigation";
+import {Avatar} from "../../../../User/Avatar/index";
 const labels= [
     'Introduction',
     'Première mi-temps',
     'Deuxième mi-temps',
     'En bref'
-]
+];
+const SETUP = [
+    'title',
+    'guessScore',
+    'homeScore',
+    'guessClub'
+];
+const FIRSTHALF = [
+    'firstHalf_content',
+    'firstHalf_coverPhoto'
+];
+
+const SECONDHALF = [
+    'secondHalf_content',
+    'secondHalf_coverPhoto'
+];
+
+const CONCLUSION = [
+    SETUP,
+    FIRSTHALF,
+    SECONDHALF,
+    'conclusion'
+];
 class ArticleTabHeader extends Component {
+
+    constructor() {
+        super();
+    }
+
+    objectContains(ELEMENTS) {
+        return ELEMENTS.every((element) => {
+            return !!this.props.navigation.state.routes[3].params[element];
+        });
+    }
+
+    checkIfComplete(routeName) {
+        switch (routeName) {
+            case 'firstHalf':
+                return this.objectContains(SETUP);
+                break;
+            case 'secondHalf':
+                return this.objectContains(FIRSTHALF);
+                break;
+            case 'conclusion':
+                return this.objectContains(SECONDHALF);
+            default:
+                return null;
+        }
+    }
+
+    displayAlert(){
+        Alert.alert(
+            'Oups !',
+            'Veuillez vérifier que vous avez bien rempli tout les champs',
+            [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+        )
+    }
+
+    postArticle() {
+        const params = this.props.navigation.state.routes[3].params;
+        const content = JSON.stringify({
+            homeScore: params.homeScore,
+            guessScore: params.guessScore,
+            firstHalf_content: params.firstHalf_content,
+            secondHalf_content: params.secondHalf_content,
+            guessClub: params.guessClub,
+            homeClub:{name:this.props.currentUser.teams[0].team.club.name, id:this.props.currentUser.teams[0].team.club.id},
+            conclusion: params.conclusion
+        });
+        const post = {
+            title: params.title,
+            content: content,
+            postType: 3,
+            medias: []
+        };
+        this.props.dispatch(postActions.add(this.props.currentUser.id,post, [params.firstHalf_coverPhoto, params.secondHalf_coverPhoto]));
+        this.props.dispatch(NavigationActions.back());
+    }
+
     render() {
         const {routes} = this.props.navigation.state;
         const index = this.props.navigation.state.index;
@@ -29,36 +111,20 @@ class ArticleTabHeader extends Component {
                 }}>
 
                         <TouchableOpacity onPress={() => {
-                            if(index > 0) {
-                                this.props.navigation.navigate(routes[index - 1].key, {});
+                            if(index === 0) {
+                                this.props.dispatch(NavigationActions.back());
                             } else {
-                                this.props.navigation.goBack();
+                                this.props.navigation.navigate(routes[index - 1].key, {});
                             }
                         }}>
                             <Text style={{color:'#cccccc'}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
                         </TouchableOpacity>
-                    <Text style={{fontWeight: '600'}}>Article</Text>
+                    <Text style={{fontWeight: '600'}}>Résumé</Text>
                     <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                         if(index + 1 !== routes.length){
-                            this.props.navigation.navigate(routes[index + 1].key, {});
+                            this.checkIfComplete(routes[index + 1].key) ? this.props.navigation.navigate(routes[index + 1].key, {}) : this.displayAlert();
                         } else if(index + 1 === routes.length){
-                            const params = this.props.navigation.state.routes[3].params;
-                            const content = `{
-                            "homeScore": ${params.homeScore},
-                            "guessScore":${params.guessScore},
-                            "firstHalf_content":  \' ${params.firstHalf_content} \',
-                            "secondHalf_content": \' ${params.secondHalf_content} \',
-                            "guessClub": \'${params.guessClub.name}\',
-                            "homeClub": \'${this.props.currentUser.teams[0].team.club.name}\',
-                            "conclusion": \'${params.conclusion}\'
-                            }`;
-                            const post = {
-                                title: params.title,
-                                content: content,
-                                postType: 3,
-                                medias: []
-                            };
-                            this.props.dispatch(postActions.add(this.props.currentUser.id,post))
+                           this.postArticle();
                         }
                     }}
                     >
@@ -69,9 +135,7 @@ class ArticleTabHeader extends Component {
                     <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
                         <View
                             style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>
-                            {this.props.currentUser.teams[0].team.club.profilePicture ? <Image style={timeLineStyle.profilePic}
-                                   source={{uri:this.props.currentUser.teams[0].team.club.profilePicture}}/> :
-                                <View style={[{backgroundColor:'#cccccc'},timeLineStyle.profilePic]} />}
+                            <Avatar user={this.props.currentUser} />
                             <View style={{flexDirection: 'column'}}>
                                 <Text style={timeLineStyle.title}>{this.props.currentUser.teams[0].team.club.name}</Text>
                                 <Text style={{
@@ -113,8 +177,7 @@ class ArticleTabHeader extends Component {
 
                         </View>
                         <View style={{marginBottom:20}}>
-                                    <Text style={{color:'#003366',fontWeight:'500'}}>Etape {index+1} : {labels[index]} </Text>
-
+                            <Text style={{color:'#003366',fontWeight:'500'}}>Etape {index+1} : {labels[index]} </Text>
                         </View>
                         </View>
                     </View>

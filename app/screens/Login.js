@@ -18,8 +18,9 @@ import CustomInput from '../components/CustomInput';
 import {connect} from 'react-redux';
 import {userActions} from "../_actions/user";
 import axios from "axios";
+import Expo, {Notifications,Permissions } from 'expo';
 import {clubAction} from "../_actions/club";
-
+import utils from '../config/utils';
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -53,20 +54,46 @@ class Login extends Component {
 
         if (nextProps.userFetched && nextProps.currentUser) {
             this.setModalVisible(false);
+            utils.registerForPushNotificationsAsync(nextProps.currentUser.id);
             navigate("Main", {});
         } else {
             this.setModalVisible(false);
+
         }
     }
-componentWillMount() {
-    this.props.dispatch(userActions.login('papa@gmail.com', 'papa'));
-    this.setModalVisible(true);
-    this.props.dispatch(clubAction.getAll());
-}
+
+    register = async () => {
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+        let finalStatus = existingStatus;
+
+        // only ask if permissions have not already been determined, because
+        // iOS won't necessarily prompt the user a second time.
+        if (existingStatus !== 'granted') {
+            // Android remote notification permissions are granted during the app
+            // install, so this will only ask on iOS
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            return;
+        }
+        // Get the token that uniquely identifies this device
+
+        let token = await Notifications.getExpoPushTokenAsync();
+    };
+
+    componentWillMount() {
+        this.props.dispatch(userActions.login('joueur@gmail.com', 'Azerty123'));
+        //this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
+        //this.setModalVisible(true);
+        this.props.dispatch(clubAction.getAll());
+
+    }
+
     loginIn() {
-        //fetch to databse
-        //this.props.dispatch(userActions.login(this.state.email, this.state.password));
-        //this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
+        this.props.dispatch(userActions.login(this.state.email, this.state.password));
         this.setModalVisible(true);
     }
 
@@ -79,8 +106,7 @@ componentWillMount() {
                     animationType="slide"
                     transparent={false}
                     visible={this.state.modalVisible}
-                    onRequestClose={() => this.setModalVisible(false)}
-                >
+                    onRequestClose={() => this.setModalVisible(false)}>
                     <View style={[GLOBAL_STYLE.mainColorBG, GLOBAL_STYLE.justifyMiddle]}>
                         <ActivityIndicator color="#ffffff" size="large"/>
                         <Text style={{color: '#ffffff', fontSize: 16}}>Connexion</Text>
@@ -92,7 +118,6 @@ componentWillMount() {
                 </View>
                 <KeyboardAvoidingView
                     behavior="padding">
-                    {alert}
                     <View>
                         <Text>{this.state.databse}</Text>
                         <CustomInput

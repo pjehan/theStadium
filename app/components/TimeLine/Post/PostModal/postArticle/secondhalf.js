@@ -42,7 +42,8 @@ export default class SecondHalf extends Component {
     _addMedia = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [16,9]
+            aspect: [16,9],
+            mediaTypes: 'Images'
         });
 
         if (!result.cancelled) {
@@ -52,8 +53,10 @@ export default class SecondHalf extends Component {
                 this.props.navigation.dispatch(NavigationActions.setParams({
                     params:{
                         secondHalf_coverPhoto: {
-                            path:result.uri,
-                            mainMedia: false,
+                            type: result.type,
+                            uri:result.uri,
+                            width: result.width,
+                            height: result.height
                         }
                     },
                     key: "conclusion"
@@ -61,7 +64,6 @@ export default class SecondHalf extends Component {
             });
 
         } else {
-            console.log('uri', result.uri, this.state.post.medias[0])
         }
     };
 
@@ -74,15 +76,12 @@ export default class SecondHalf extends Component {
                 <TouchableOpacity onPress={() => {
                     this._addMedia()
                 }} style={{
-                    paddingVertical: 40,
-                    paddingHorizontal: 10,
                     flex: 1,
-                    borderWidth: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderStyle: 'dashed'
                 }}>
-                    <Image style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}
+                    <Image style={{borderWidth: 3,
+                        borderColor:'#000000',width: originalWidth * widthChange, height: originalHeight * widthChange}}
                            source={{uri: this.state.secondHalf_coverPhoto}}/>
                 </TouchableOpacity>
             )

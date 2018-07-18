@@ -42,7 +42,22 @@ export function postList(state = {
         case postConstants.ADD_POST_SUCCESS:
             return {...state, fetching: false, fetched: true};
             break;
+        case postConstants.LIKES_SUCCESS:
+           return state.posts.posts.find((post,index) => {
+                if(post.id === action.payload.postsLiked.id){
+                    post.postsLiked.find((like,id) => {
 
+                        console.log(state,like);
+                        if(like.userLikes.id === action.payload.userLikes.id){
+                            state.posts.posts[index].postsLiked[id] = action.payload;
+                            return {state};
+                        }
+                    })
+                }
+            });
+
+
+            break;
         case postConstants.ADD_COMMENT_SUCCESS:
             state.posts.posts[action.payload.postID].comments.push(action.payload.commentID);
             return {...state, fetching:false, fetched:true};
@@ -90,7 +105,7 @@ export function ownerList(state = {
 }
 
 export function commentList(state = {
-    post_comments: [{
+    comments: [{
         user: {
             id:null,
             lastname: null,
@@ -115,7 +130,6 @@ export function commentList(state = {
             return {...state, fetching:false, fetched:false, error:action.payload};
             break;
         case postConstants.GETALL_COMMENTS_SUCCESS:
-
             return {...state, fetching:false, fetched:true, comments: action.payload};
             break;
         // ADD
@@ -126,7 +140,7 @@ export function commentList(state = {
             return {...state, fetching:false, fetched: false, error: action.payload};
             break;
         case postConstants.ADD_COMMENT_SUCCESS:
-            state.comments.comments[0].push(action.payload.comments);
+            state.comments.push(action.payload.comments);
             return {...state, fetching:false, fetched:true};
             break;
         // REMOVE
@@ -137,7 +151,7 @@ export function commentList(state = {
             return {...state, fetching:false, fetched: false, error: action.payload};
             break;
         case postConstants.DELETE_COMMENT_SUCCESS:
-            state.comments.comments.splice(action.payload.commentID,1);
+            state.comments.splice(action.payload.commentID,1);
             return {...state, fetching:false, fetched:true};
             break;
         default:

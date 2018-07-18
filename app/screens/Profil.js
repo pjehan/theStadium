@@ -7,60 +7,18 @@ import {
     ScrollView,
     Dimensions,
     StyleSheet,
-    Picker, ActivityIndicator, Modal
+    Picker, ActivityIndicator, Modal, KeyboardAvoidingView
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import Placeholder from 'rn-placeholder';
 import Spinner from 'react-native-number-spinner';
 import CustomInput from "../components/CustomInput";
 import {userActions} from "../_actions/user";
-import Moment from "moment";
+import moment from 'moment'
 import {connect} from "react-redux";
+import utils from "../config/utils";
 
-const STYLE = StyleSheet.create({
-    tab: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 30,
-        paddingRight: 30,
-        justifyContent: 'space-between',
-        height: 50,
-        borderBottomColor: '#cccccc',
-        borderBottomWidth: 1,
-    },
-    role: {flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 30,
-        paddingRight: 30,
-        height: 50,
-        justifyContent: 'center',
-        borderBottomColor: '#cccccc',
-        borderBottomWidth: 1,
-    },
-    tabText: {
-        color: '#003366',
-        fontWeight: '700'
-    },
-    even: {
-        backgroundColor: '#E7E7E7',
-    },
-    modalBackground: {
-        flex: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        backgroundColor: '#00000040'
-    },
-    activityIndicatorWrapper: {
-        backgroundColor: '#FFFFFF',
-        height: 100,
-        padding: 10,
-        borderRadius: 10,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around'
-    }
-});
+
 let strongFoot = ['Gauche', 'Droit', 'Ambidextre'];
 
 
@@ -72,6 +30,7 @@ const initialState = {
     strongFoot: strongFoot[1],
     weight: null,
     height: null,
+    change: false
 }
 
 class Profil extends Component {
@@ -81,7 +40,7 @@ class Profil extends Component {
         this.state = initialState;
         this._renderStats = this._renderStats.bind(this);
         this._renderChange = this._renderChange.bind(this);
-        this._confirmChange = this._renderStats.bind(this);
+        this._confirmChange = this._confirmChange.bind(this);
         this.stateSetting = this.stateSetting.bind(this);
     }
 
@@ -111,7 +70,7 @@ class Profil extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
 
-        if (this._isUser(state.currentUser, state.inspectedUser)) {
+        if (utils._isUser(state.currentUser, state.inspectedUser)) {
             stats = state.inspectedUser.stats;
         } else if (this.props.inspectedUser && this.props.inspectedUser.id) {
             stats = this.props.inspectedUser.stats;
@@ -127,6 +86,7 @@ class Profil extends Component {
     _renderStats() {
         const {navigation} = this.props;
         const state = navigation.state.params;
+        console.log(stats);
         return (
             <View>
                 <View style={STYLE.role}>
@@ -137,11 +97,11 @@ class Profil extends Component {
                     style={{alignSelf:'center'}}
                     onReady={this.state.goalsNbr || this.state.goalsNbr === 0}>
                     <TouchableOpacity  onPress={() => {
-                        this._isUser(state.currentUser, state.inspectedUser) ? this._renderChange() : null
+                        utils._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
-                        <Text style={STYLE.tabText}>Attaquant, 25ans</Text>
-                        {this._isUser(state.currentUser, state.inspectedUser) ?
-                            <Icon style={{right: 20, position: 'absolute'}} name="create" size={20}
+                        <Text style={STYLE.tabText}>{stats.position.label}, {this.renderDate(stats.birthdate)}</Text>
+                        {utils._isUser(state.currentUser, state.inspectedUser) ?
+                            <Icon style={{marginLeft:'auto'}} name="create" size={20}
                                   color="#003366"/> : null}
                     </TouchableOpacity>
                 </Placeholder.Line>
@@ -213,13 +173,12 @@ class Profil extends Component {
 
     _confirmChange() {
         this.props.dispatch(userActions.putPlayer(stats));
-        statsComponent = null;
-        this._renderStats();
+        this.setState({change:false});
+        this.forceUpdate();
     }
 
     onChange(state, newvalue) {
         this.setState({[state]: newvalue});
-
         stats[state] = newvalue;
     }
 
@@ -243,17 +202,21 @@ class Profil extends Component {
         )
     }
 
+    renderDate(date) {
+        let now = moment(new Date());
+        let birth = moment(date);
+        return now.diff(birth, 'years') + 'ans';
+    }
+
     _renderChange() {
         const {navigation} = this.props;
         const state = navigation.state.params;
         stats = this.props.inspectedUser.stats || state.inspectedUser.stats;
-        statsComponent = (
-            <View>
-                <TouchableOpacity onPress={() => {
-                    this._confirmChange()
-                }} style={[STYLE.tab, {justifyContent: 'center'}]}>
-                    <Text style={STYLE.tabText}>Milieu axial, 25ans</Text>
-                    <Icon style={{right: 20, position: 'absolute'}} name="create" size={20} color="#003366"/>
+        return (
+            <KeyboardAvoidingView>
+                <TouchableOpacity onPress={() => this._confirmChange()} style={[STYLE.tab, {justifyContent: 'center'}]}>
+                    <Text style={STYLE.tabText}>{stats.position.label}, {this.renderDate(stats.birthdate)}</Text>
+                    <Icon style={{marginLeft:'auto'}} name="create" size={20} color="#003366"/>
                 </TouchableOpacity>
                 <View style={[STYLE.tab, STYLE.even]}>
                     <Text style={STYLE.tabText}>Nombre de buts</Text>
@@ -335,14 +298,12 @@ class Profil extends Component {
                     padding: 10,
                     backgroundColor: '#003366'
                 }} onPress={() => {
-                    this.props.navigation.dispatch(userActions.putPlayer(stats));
-                    this._renderStats();
+                    this._confirmChange()
                 }}>
-                    <Text>Valider</Text>
+                    <Text style={{color:'#ffffff'}}>Valider</Text>
                 </TouchableOpacity>
-            </View>
+            </KeyboardAvoidingView>
         );
-        this.forceUpdate();
     }
 
     render() {
@@ -350,13 +311,13 @@ class Profil extends Component {
         const {navigation} = this.props;
         const state = navigation.state.params;
         return (
-            <View style={{backgroundColor: '#ffffff'}}>
+            <ScrollView style={{backgroundColor: '#ffffff'}}>
                 <Image style={{height: 200, width: width}} resizeMode={'cover'}
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
                 {this.props.isFetching || !state.inspectedUser.stats ? null : this.stateSetting.bind(this)}
 
-                {this._renderStats()}
-            </View>
+                {this.state.change ? this._renderChange() : this._renderStats()}
+            </ScrollView>
         )
     }
 };
@@ -368,3 +329,48 @@ const mapStateToProps = (state) => {
     };
 };
 export default connect(mapStateToProps)(Profil);
+
+const STYLE = StyleSheet.create({
+    tab: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        justifyContent: 'space-between',
+        height: 50,
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    },
+    role: {flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
+        height: 50,
+        justifyContent: 'center',
+        borderBottomColor: '#cccccc',
+        borderBottomWidth: 1,
+    },
+    tabText: {
+        color: '#003366',
+        fontWeight: '700'
+    },
+    even: {
+        backgroundColor: '#E7E7E7',
+    },
+    modalBackground: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#00000040'
+    },
+    activityIndicatorWrapper: {
+        backgroundColor: '#FFFFFF',
+        height: 100,
+        padding: 10,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    }
+});

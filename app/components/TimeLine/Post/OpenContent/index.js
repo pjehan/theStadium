@@ -6,10 +6,11 @@ import {
     StyleSheet,
     Modal,
     Image,
-    TextInput
+    TextInput, Dimensions
 } from 'react-native';
 import {Icon} from 'react-native-elements'
 import LocalImage from "../Content/LocalImage/index";
+import {utils as _utils} from "../../../../_constants/utils";
 
 const PostStyle = StyleSheet.create({
     container: {
@@ -89,6 +90,18 @@ class OpenContent extends Component {
     }
 
     render() {
+        let originalWidth;
+        let originalHeight;
+        let widthChange;
+        let windowWidth = Dimensions.get('window').width;
+        if (this.props.medias && this.props.medias.length > 0) {
+            url = this.props.medias[0].path;
+            originalWidth = this.props.medias[0].width;
+            originalHeight = this.props.medias[0].height;
+            widthChange = (windowWidth - 10) / originalWidth;
+            this.props.medias[0].path = this.props.medias[0].path.replace(new RegExp(/\\/g), "/");
+            this.props.medias[0].path = this.props.medias[0].path.replace('public/', '');
+        }
         return (
             <Modal style={{backgroundColor: '#000000'}} animationType={"slide"} transparent={false}
                    visible={this.props.visible}
@@ -108,7 +121,11 @@ class OpenContent extends Component {
                     <Text style={{marginLeft: '10%', width: '80%', marginTop: 20, marginBottom: 20, color: '#ffffff'}}>
                         {this.props.content}
                     </Text>
-                    <LocalImage source={this.props.media}/>
+                    <Image source={{uri: _utils.NODEJS + this.props.medias[0].path}}
+                           style={{
+                               width: originalWidth * widthChange,
+                               height: originalHeight * widthChange
+                           }}/>
                     <View style={{ justifyContent: 'space-around', height: '20%'}}>
                         <View style={{
                             flexDirection: 'row',
@@ -138,7 +155,7 @@ class OpenContent extends Component {
                             <View style={PostStyle.userActionText}>
 
                                 <TouchableOpacity>
-                                    <Text style={PostStyle.text}>Jaime</Text>
+                                    <Text style={PostStyle.text}>J'aime</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity>
                                     <Text style={[PostStyle.text, {marginLeft: 5, marginRight: 5}]}>Commenter</Text>

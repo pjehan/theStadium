@@ -42,7 +42,9 @@ export default class SecondHalf extends Component {
     _addMedia = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [16,9]
+            aspect: [16,9],
+
+            mediaTypes: 'Images'
         });
 
         if (!result.cancelled) {
@@ -52,8 +54,11 @@ export default class SecondHalf extends Component {
                     this.props.navigation.dispatch(NavigationActions.setParams({
                         params:{
                             firstHalf_coverPhoto: {
-                                path:result.uri,
-                                mainMedia: true,
+                                type: result.type,
+                                uri:result.uri,
+                                mainMedia: 1,
+                                width: result.width,
+                                height: result.height
                             }
                         },
                         key: "conclusion"
@@ -75,15 +80,13 @@ export default class SecondHalf extends Component {
                 <TouchableOpacity onPress={() => {
                     this._addMedia()
                 }} style={{
-                    paddingVertical: 40,
-                    paddingHorizontal: 10,
+
                     flex: 1,
-                    borderWidth: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderStyle: 'dashed'
                 }}>
-                    <Image style={{width: originalWidth * widthChange, height: originalHeight * widthChange}}
+                    <Image style={{borderWidth: 3,
+                        borderColor:'#000000',width: originalWidth * widthChange, height: originalHeight * widthChange}}
                            source={{uri: this.state.firstHalf_coverPhoto}}/>
                 </TouchableOpacity>
             )
@@ -109,7 +112,10 @@ export default class SecondHalf extends Component {
 
     render() {
         return (
-            <KeyboardAvoidingView behavior="padding" style={{flex:1,backgroundColor: '#ffffff'}}>
+
+            <ScrollView ref={(c) => {
+                this.scrollView = c;
+            }} contentContainerStyle={{flex:1}} style={{paddingTop:10,paddingBottom: 35,paddingHorizontal:10,height:'100%'}}>
 
                 <View style={{backgroundColor: '#e9e9e9', paddingHorizontal: 15, paddingVertical: 10}}>
                     <Text style={{color: '#000000', fontWeight: '600'}}>Photo de couverture</Text>
@@ -139,7 +145,7 @@ export default class SecondHalf extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </KeyboardAvoidingView>
+            </ScrollView>
         )
     };
 }

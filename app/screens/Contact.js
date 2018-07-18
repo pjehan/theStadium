@@ -14,6 +14,7 @@ import CustomInput from "../components/CustomInput";
 import {GLOBAL_STYLE} from "../assets/css/global";
 import {Icon} from "react-native-elements";
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import utils from "../config/utils";
 
 
 class Contact extends Component {
@@ -101,7 +102,6 @@ class Contact extends Component {
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
-        const trainingHours = JSON.parse(team.trainingHours);
         return (
             <View style={{
                 backgroundColor: '#ffffff',
@@ -115,7 +115,7 @@ class Contact extends Component {
                     this.setState({isEditing: !this.state.isEditing});
                     this.forceUpdate()
                 }}>
-                    {this._isUser(state.currentUser, state.inspectedUser) ?
+                    {utils._isUser(state.currentUser, state.inspectedUser) ?
                         <Icon name="create" size={20}
                               color="#003366"/> : null}
                 </TouchableOpacity>
@@ -372,7 +372,7 @@ class Contact extends Component {
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
-        const trainingHours = JSON.parse(team.trainingHours);
+        const trainingHours = team.trainingHours ? JSON.parse(team.trainingHours) : {};
         return (
             <View>
 

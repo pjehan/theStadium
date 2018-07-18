@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import {
     View, StyleSheet, Text, KeyboardAvoidingView, TouchableOpacity, Picker, Modal,
     ActivityIndicator
@@ -49,8 +48,8 @@ class PlayerInfos extends Component {
         this.forceUpdate();
         const {navigate} = this.props.navigation;
 
-        if (!nextProps.user.fetching && nextProps.user && nextProps.user.done) {
-            navigate('Congratz');
+        if (!nextProps.user.fetching && nextProps.user && nextProps.user.done && !nextProps.user.error) {
+            navigate('Congratz', {user: nextProps.user});
         } else {
             console.log('efafaefeafae')
         }
@@ -71,28 +70,23 @@ class PlayerInfos extends Component {
         this.setState({team: item});
         this.props.user.team = item
     }
+
+    _checkPasswordString(string){
+
+        if(string) {
+            return !string.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9]{6,}$/);
+        }
+
+    }
     render() {
         const teamList = this.props.navigation.state.params.teamList ? this.props.navigation.state.params.teamList : null;
         const {teamQuery} = this.state;
         const teamData = this._filterTeam(teamQuery, teamList);
         let Coach = null;
+        let Fan = null;
         if (this.props.navigation.state.params.coach && teamList) {
             Coach = <View>
-                    <Modal
-                        transparent={true}
-                        animationType={'none'}
-                        visible={!this.props.user.done && this.props.user.fetching}
-                        onRequestClose={() => {
-                            console.log('close modal')
-                        }}>
-                        <View style={STYLE.modalBackground}>
-                            <View style={STYLE.activityIndicatorWrapper}>
-                                <ActivityIndicator
-                                    size={'large'}/>
-                                <Text>Enregistrement en cours</Text>
-                            </View>
-                        </View>
-                    </Modal>
+
                     <View style={{backgroundColor: '#eeeeee'}}>
                         <Picker style={GLOBAL_STYLE.input}
                                 prompt="Equipe en charge"
@@ -107,26 +101,37 @@ class PlayerInfos extends Component {
                 </View>;
         }
         return (
-            <KeyboardAwareScrollView
-                style={{ backgroundColor: '#ffffff' }}
-                resetScrollToCoords={{ x: 500, y: 500 }}
-                extraHeight={500}
-                contentContainerStyle={{
-                    flexGrow:1,
-                backgroundColor: 'white',
-                paddingLeft: 30,
-                paddingRight: 30
-            }}>
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={90}
+                style={{flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',backgroundColor:'white', paddingLeft: 30, paddingRight: 30}}
+                behavior="padding">
+                <Modal
+                    transparent={true}
+                    animationType={'none'}
+                    visible={!this.props.user.done && this.props.user.fetching}
+                    onRequestClose={() => {
+                        console.log('close modal')
+                    }}>
+                    <View style={STYLE.modalBackground}>
+                        <View style={STYLE.activityIndicatorWrapper}>
+                            <ActivityIndicator
+                                size={'large'}/>
+                            <Text>Enregistrement en cours</Text>
+                        </View>
+                    </View>
+                </Modal>
 
-                <View style={{flex: 2, justifyContent: 'center'}}>
+                <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Création de votre profil</Text>
                     <Text style={[GLOBAL_STYLE.miniDescription]}>
-                        Ajoutez de vraies informations pour vous permettre déchanger avec les joueurs et les clubs
+                        Ajoutez de vraies informations pour vous permettre d'échanger avec les joueurs et les clubs
                     </Text>
                 </View>
 
-                <KeyboardAvoidingView
-                    style={{flex: 3, justifyContent: 'space-around', alignItems: 'center'}}
+                <View
+                    style={{flex: 2, justifyContent: 'space-between', alignItems: 'center'}}
                     behavior="padding">
                     <CustomInput
                         container={''}
@@ -134,11 +139,12 @@ class PlayerInfos extends Component {
                         input={GLOBAL_STYLE.input}
                         state={'email'}
                         textColor={'#333333'}
-                        borderColor={'transparent'}
+                        borderColor={ this.state.email && !this.state.email.includes('@') ? "#ff0000": 'transparent'}
                         backgroundColor={'#eeeeee'}
                         onChangeParent={(state, newvalue) => {
                             this.onChangeInfos(state, newvalue)
                         }}
+                        description={this.state.email && !this.state.email.includes('@')? 'Veuillez rentrer une addresse e-mail valide' : '' }
                     />
                     <CustomInput
                         container={''}
@@ -146,13 +152,14 @@ class PlayerInfos extends Component {
                         input={GLOBAL_STYLE.input}
                         state={'password'}
                         textColor={'#333333'}
-                        borderColor={(this.state.password && this.state.password.length < 6 ) ? "#ff0000": 'transparent'}
+                        descriptionColor={this._checkPasswordString(this.state.password)? "#ff0000": '#cccccc'}
+                        borderColor={this._checkPasswordString(this.state.password)? "#ff0000": 'transparent'}
                         backgroundColor={'#eeeeee'}
-                        security={true}
+                        security={false}
                         onChangeParent={(state, newvalue) => {
                             this.onChangeInfos(state, newvalue)
                         }}
-                        description={this.state.password && this.state.password.length < 6? 'Vous n\'avez pas 6 caractères \n Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.' : 'Combinaison de 6 caractères minimum. Lettres et chiffres obligatoires.' }
+                        description={this._checkPasswordString(this.state.password) ? 'Votre mot de passe n\'est pas conforme. \nCombinaison de 6 caractères comportant au minimum : 1 lettre majuscule, 1 lettre minuscule ainsi qu\'un chiffre' : 'Combinaison de 6 caractères comportant au minimum : 1 lettre majuscule, 1 lettre minuscule ainsi qu\'un chiffre' }
                     />
                     <CustomInput
                         container={''}
@@ -163,15 +170,15 @@ class PlayerInfos extends Component {
                         textColor={'#333333'}
                         borderColor={(this.state.password !== this.state.passwordConfirm) ? "#ff0000": 'transparent'}
                         backgroundColor={'#eeeeee'}
-                        security={true}
+                        security={false}
                         description={this.state.password === this.state.passwordConfirm ? '' : 'Les deux mots de passe ne correspondent pas'}
                         onChangeParent={(state, newvalue) => {
                             this.onChangeInfos(state, newvalue)
                         }}
                     />
                     {Coach}
-                </KeyboardAvoidingView>
-            </KeyboardAwareScrollView>
+                </View>
+            </KeyboardAvoidingView>
         )
     }
 

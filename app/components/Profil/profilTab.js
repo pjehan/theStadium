@@ -15,7 +15,14 @@ const styles = StyleSheet.create({
     },
 
 });
+/*
+<SearchBar
+                        lightTheme
+                        round
 
+                        containerStyle={{width:'90%', backgroundColor:'rgba(0,0,0,0)',borderBottomWidth:0,borderTopWidth:0}}
+                        placeholder='Rechercher' />
+ */
 export default class ProfileTabBar extends Component {
     constructor(props) {
         super(props);
@@ -34,12 +41,7 @@ export default class ProfileTabBar extends Component {
                           size={40}
                           name={'chevron-left'}
                           onPress={() => this.props.navigation.goBack(null)}/>
-                    <SearchBar
-                        lightTheme
-                        round
 
-                        containerStyle={{width:'90%', backgroundColor:'rgba(0,0,0,0)',borderBottomWidth:0,borderTopWidth:0}}
-                        placeholder='Rechercher' />
                 </View>
 
                 <View style={styles.tabContainer}>

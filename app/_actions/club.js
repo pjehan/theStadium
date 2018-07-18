@@ -24,7 +24,7 @@ function getAll() {
     }
 
     function request() {return { type: clubConstants.GETALL_CLUB_REQUEST } }
-    function success(posts) { return { type: clubConstants.GETALL_CLUB_SUCCESS, payload: posts} }
+    function success(clubs) { return { type: clubConstants.GETALL_CLUB_SUCCESS, payload: clubs} }
     function failure(error) { return { type: clubConstants.GETALL_CLUB_FAILURE, payload: error} }
 
 

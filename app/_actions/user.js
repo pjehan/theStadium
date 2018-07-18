@@ -2,7 +2,8 @@ import { userConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from './';
 import {teamService} from "../_services";
-//import { history } from '../_helpers';
+import {utils} from '../_constants';
+const {messageType} = utils;
 
 export const userActions = {
     login,
@@ -13,16 +14,18 @@ export const userActions = {
     removePlayer,
     putUser,
     searchUser,
+    toggleFollow
 };
 
 function login(username, password) {
     let currentUser = {stats:{}};
-    return dispatch => {
+    return (dispatch,getState, {emit}) => {
         dispatch(request({ username, password }));
 
         userService.login(username, password)
             .then(
                 user => {
+                    console.log(user);
                     userService.getUserType(user.id)
                         .then(
                             userStats => {
@@ -48,7 +51,6 @@ function login(username, password) {
     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
 }
 function register(user) {
-
     return dispatch => {
         dispatch(request(user));
         userService.register(user)
@@ -69,7 +71,6 @@ function register(user) {
                         );
                 },
                 error => {
-                    console.log(error);
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }
@@ -87,7 +88,7 @@ function putPlayer(player){
         userService.putPlayer(player)
             .then(
                 user => {
-                    dispatch(success({player}));
+                    dispatch(success(user));
 
                     dispatch(alertActions.success('Registration successful'));
                 },
@@ -102,15 +103,35 @@ function putPlayer(player){
     function success(player) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, player } }
     function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
 }
+function toggleFollow(bool, user, followed){
+    return dispatch => {
+        dispatch(request(user));
 
-function putUser(player){
+        userService.toggleFollow(bool, user, followed)
+            .then(
+                response => {
+                    dispatch(success(response));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.PUT_REQUEST, user } }
+    function success(user) { return { type: userConstants.PUT_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.PUT_FAILURE, error } }
+}
+function putUser(player, media){
     return dispatch => {
         dispatch(request(player));
 
-        userService.putUser(player)
+        userService.putUser(player, media)
             .then(
                 user => {
-                    dispatch(success({player}));
+                    console.log(user)
+                    dispatch(success(user));
 
                     dispatch(alertActions.success('Registration successful'));
                 },
@@ -121,12 +142,12 @@ function putUser(player){
             );
     };
 
-    function request(player) { return { type: userConstants.PLAYER_ADD_STATS_REQUEST, player } }
-    function success(player) { return { type: userConstants.PLAYER_ADD_STATS_SUCCESS, player } }
-    function failure(error) { return { type: userConstants.PLAYER_ADD_STATS_FAILURE, error } }
+    function request(player) { return { type: userConstants.USER_PUT_REQUEST, player } }
+    function success(user) { return { type: userConstants.USER_PUT_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.USER_PUT_FAILURE, error } }
 }
 
-function getInspected(id){
+function getInspected(id, callback){
     let inspectedUser = {stats:{}}
     return dispatch => {
         dispatch(request({ id }));
@@ -141,6 +162,7 @@ function getInspected(id){
                                 inspectedUser.stats = userStats;
 
                                 dispatch(success(inspectedUser));
+                                callback();
                             },
                             error => {
                                 dispatch(failure(error));
@@ -161,6 +183,28 @@ function getInspected(id){
     function success(user) { return { type: userConstants.INSPECT_USER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.INSPECT_USER_FAILURE, error } }
 }
+
+function getInspectedTeam(id){
+    return dispatch => {
+        dispatch(request({ id }));
+        userService.getTeam(id)
+            .then(
+                team => {
+                    dispatch(success(team));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(team) { return { type: userConstants.INSPECT_USER_REQUEST, team } }
+    function success(team) { return { type: userConstants.INSPECT_USER_SUCCESS, team } }
+    function failure(error) { return { type: userConstants.INSPECT_USER_FAILURE, error } }
+}
+
+
 function removePlayer() {
     return {type: userConstants.REMOVE_INSPECTED};
 }
@@ -193,8 +237,7 @@ function searchUser(query){
         userService.searchUser(query)
             .then(
                 user => {
-                    console.log(user);
-                    dispatch(success({user}));
+                    dispatch(success(user));
 
                     dispatch(alertActions.success('Registration successful'));
                 },

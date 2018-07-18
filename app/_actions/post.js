@@ -9,6 +9,8 @@ export const postActions = {
     getComments,
     deleteComment,
     toggleLikePost,
+    sharePost,
+    deletePost
 };
 function getAll() {
 
@@ -51,12 +53,13 @@ function getOwnerList(id) {
     function failure(error) { return { type: postConstants.GETALL_OWNER_FAILURE, payload: error} }
 }
 
-function add(user, post) {
+function add(user, post, media) {
     return (dispatch) => {
         dispatch(request());
-        postService.add(user, post)
+        postService.add(user, post, media)
             .then(
-                posts => dispatch(success({posts})),
+                posts => {
+                    dispatch(success({posts}))},
                 error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error))
@@ -69,6 +72,27 @@ function add(user, post) {
     function failure(error) { return { type: postConstants.ADD_POST_FAILURE, payload: error} }
 }
 
+
+function deletePost(post) {
+    return (dispatch) => {
+        dispatch(request());
+        postService.deletePost(post)
+            .then(
+                posts => {
+                    dispatch(success({posts}))},
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error))
+                }
+            );
+    };
+
+    function request() {return { type: postConstants.DELETE_POST_REQUEST } }
+    function success(posts) { return { type: postConstants.DELETE_POST_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.DELETE_POST_SUCCESS, payload: error} }
+}
+
+
 function addComment(comment,postID) {
     return (dispatch) => {
         dispatch(request());
@@ -78,7 +102,6 @@ function addComment(comment,postID) {
                     dispatch(success({postID:postID, comments: comments, commentID: comments["@id"]}))
                 },
                 error => {
-                    console.log(error);
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }
@@ -114,7 +137,7 @@ function getComments(id) {
         postService.getComments(id)
             .then(
                 comments => {
-                   dispatch(success({comments}))},
+                   dispatch(success(comments))},
                 error=>{
                     dispatch(failure(error));
                 }
@@ -127,17 +150,36 @@ function getComments(id) {
 }
 
 function toggleLikePost(postID, userID, liked) {
-    console.log(postID,userID,liked)
     return (dispatch) => {
         dispatch(request());
         postService.toggleLikePost(postID, userID, liked)
             .then(
                 response => {
-                    dispatch(success({}));
+                    console.log(response)
+                    dispatch(success(response));
                 }
             )
     };
     function request() {return { type: postConstants.LIKES_REQUEST } }
     function success(posts) { return { type: postConstants.LIKES_SUCCESS, payload: posts} }
     function failure(error) { return { type: postConstants.LIKES_FAILURE, payload: error} }
+}
+
+function sharePost(postID, userID){
+    return (dispatch) => {
+        dispatch(request());
+        postService.sharePost(postID, userID)
+            .then(
+                response => {
+                    dispatch(success({}));
+                }
+            ).catch(
+                error => {
+                    dispatch(failure(error))
+                }
+        )
+    };
+    function request() {return { type: postConstants.SHARES_REQUEST } }
+    function success(posts) { return { type: postConstants.SHARES_SUCCESS, payload: posts} }
+    function failure(error) { return { type: postConstants.SHARES_FAILURE, payload: error} }
 }

@@ -10,9 +10,12 @@ export const userService = {
     getUserType,
     putPlayer,
     putUser,
-    searchUser
+    searchUser,
+    toggleFollow,
+    getTeam
 };
 import jwt_decode from 'jwt-decode'
+import {utils} from "../_constants/utils";
 let currentUser = {stats:{}};
 _onTokenChange = async(item, selectedValue) => {
     try {
@@ -34,6 +37,7 @@ function login(username, password) {
             setAuthorizationToken(token);
             return token;
         }).then(responseJSON => {
+            console.log(responseJSON)
             return this.getUser(jwt_decode(responseJSON).id)
         }).catch((error) => {
             return Promise.reject(error);
@@ -41,17 +45,24 @@ function login(username, password) {
 }
 
 function getUser(id) {
-    console.log(instance)
     return instance.get("/api/users/"+id)
         .then(response => {
                return response.data;
         }).catch((error) => {
         })
 }
+
+function getTeam(id) {
+    return instance.get("/api/teams/"+id)
+        .then(response => {
+            return response.data;
+        }).catch((error) => {
+        })
+}
+
 function getUserType(id) {
     return instance.get("/api/players?user=" + id)
         .then(response => {
-            console.log(response)
             return response.data["hydra:member"][0];
         }).catch(err => console.log(err))
 }
@@ -82,14 +93,10 @@ function register(user) {
 
             return user;
         });
-    /*return Promise.resolve({
-        then: function(onFulfill, onReject) { onFulfill(user);onReject('erreur') }
-    });*/
 
 }
 function putPlayer(player) {
-    console.log(player.id);
-    return instance.put("/api/players/" + player.id,player)
+    return instance.put("/api/players/" + player.id,{...player, position:player.position["@id"]})
         .then(response => {
             Object.assign(currentUser.stats, response.data);
             return currentUser;
@@ -98,32 +105,86 @@ function putPlayer(player) {
             console.error(error);
         })
 }
+function toggleFollow(bool, user, followed){
+    if(!bool){
+        return instance.delete("/api/user_follows_player/" + user.id +"/"+ followed.player.id )
+            .then(response => {
+                user.players.some( e => {
+                    if(e.id === followed.player.id){
+                        user.players.splice(user.players.indexOf(e), 1);
+                        return user;
+                    }
+                });
+            }).catch((error) => {
+                console.error(error);
+            });
+    } else {
+        return instance.post("/api/user_follows_player", {users:user.id,players:followed.id})
+            .then(response => {
+                return response;
 
-function putUser(player) {
+            }).catch((error) => {
+                console.error(error);
+            });
+    }
+}
+function putUser(player, media) {
     const user = {
         firstname: player.firstname,
         lastname: player.lastname,
         email: player.email,
         profilepicture: player.profilepicture,
-        sexe: player.sexe,
-        userType: player.userType,
-        players: player.players,
-        teamsLiked: player.teamsLiked
+        sexe: player.sexe["@id"],
+        userType: player.userType["@id"],
+        //players: player.players,
+        //teamsLiked: player.teamsLiked.map(teams => teams["@id"])
     };
-    console.log(user)
-    return instance.put("/api/users/" + player.id,user)
+    if(media){
+        let uriParts = media.uri.split('.');
+        let fileType = uriParts[uriParts.length - 1];
+
+        let data = new FormData ();
+        data.append('media',{
+            uri:media.uri,
+            name: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + `.${fileType}`,
+            type: `image/${fileType}`
+        });
+        data.append('width', media.width);
+        data.append('height', media.height);
+        return axios.post(utils.NODEJS + "media/upload/", data).then(response => {
+            user.profilepicture = response.data;
+            return userRequest(player, user);
+        });
+
+
+        }else {
+            return userRequest(player, user);
+        }
+
+
+}
+function userRequest(p,u) {
+    return instance.put("/api/users/" + p.id, u)
         .then(response => {
+            console.log(response.data)
             return response.data;
 
         }).catch((error) => {
             console.error(error);
-        })
+        });
 }
 function searchUser(query){
+    let array = [];
     return instance.get("/api/users?firstname=" +query)
         .then(response => {
-            console.log(response.data["hydra:member"])
-            return response.data["hydra:member"];
+            array = response.data["hydra:member"];
+
+            return instance.get("/api/clubs?name=" + query)
+                .then(club => {
+                    return array.concat(club.data["hydra:member"]);
+                }).catch((error) => {
+                   console.log(error);
+            })
         }).catch((error) => {
             console.error(error);
         })

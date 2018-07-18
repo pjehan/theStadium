@@ -19,7 +19,7 @@ export const userActions = {
 
 function login(username, password) {
     let currentUser = {stats:{}};
-    return (dispatch,getState, {emit}) => {
+    return dispatch => {
         dispatch(request({ username, password }));
 
         userService.login(username, password)
@@ -236,8 +236,8 @@ function searchUser(query){
         userService.searchUser(query)
             .then(
                 user => {
-                    console.log(user)
-                    dispatch(success(user));
+                    console.log(user);
+                    dispatch(success({user}));
 
                     dispatch(alertActions.success('Registration successful'));
                 },

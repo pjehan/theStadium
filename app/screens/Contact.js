@@ -101,7 +101,6 @@ class Contact extends Component {
         const type = state.inspectedUser ? state.inspectedUser.userType.label : this.props.inspectedUser.userType.label;
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
-
         return (
             <View style={{
                 backgroundColor: '#ffffff',

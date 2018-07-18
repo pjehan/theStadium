@@ -99,6 +99,7 @@ class Profil extends Component {
                         utils._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
                     }} style={STYLE.tab}>
                         <Text style={STYLE.tabText}>{stats.position.label}, {this.renderDate(stats.birthdate)}</Text>
+
                         {utils._isUser(state.currentUser, state.inspectedUser) ?
                             <Icon style={{marginLeft:'auto'}} name="create" size={20}
                                   color="#003366"/> : null}

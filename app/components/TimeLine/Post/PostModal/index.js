@@ -211,7 +211,6 @@ class PostModal extends Component {
     }
 
     _renderOwner() {
-
         return (
             <View
                 style={[timeLineStyle.ownerStyle, {flexDirection: 'row', marginTop: 20, marginBottom: 20}]}>

@@ -85,7 +85,7 @@ class Login extends Component {
     };
 
     componentWillMount() {
-        this.props.dispatch(userActions.login('papa@gmail.com', 'Lock5600'));
+        this.props.dispatch(userActions.login('joueur@gmail.com', 'Azerty123'));
          //this.props.dispatch(userActions.login('tehpanaa@gmail.com', 'zizi'));
         //this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
         this.setModalVisible(true);

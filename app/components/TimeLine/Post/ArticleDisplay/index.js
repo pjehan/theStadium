@@ -34,7 +34,6 @@ class ArticleDisplay extends Component {
                            source={require('../../../../assets/img/picto/white-cross.png')} />
                 </TouchableOpacity>
                 <ScrollView>
-
                 <Image source={{uri: utils.NODEJS + this.props.medias[0].path.replace('public', '')}} style={{width: originalWidth1 * widthChange1, height: originalHeight1 * widthChange1}}/>
                 <View
                     style={{flexDirection: 'row', paddingVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
@@ -57,8 +56,8 @@ class ArticleDisplay extends Component {
                             <Text style={style.title}>1 ère Mi-Temps</Text>
                             <Text style={{textAlign: 'left'}}>{content.firstHalf_content}</Text>
                         </View>
-
                     <Image source={{uri: utils.NODEJS + this.props.medias[1].path.replace('public', '')}} style={{width: originalWidth2 * widthChange2, height: originalHeight2 * widthChange2}}/>
+
                     <View style={style.half}>
                         <Text style={style.title}>2 ème Mi-Temps</Text>
                         <Text style={{textAlign: 'left'}}>{content.secondHalf_content}</Text>

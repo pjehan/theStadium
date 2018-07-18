@@ -207,6 +207,24 @@ class Search extends Component {
         )
     }
 
+    searchUser() {
+        this.props.navigation.dispatch(userActions.searchUser(this.state.search))
+    }
+    _renderItem(item) {
+        console.log(item);
+        return <View key={this.props.userList.indexOf(item)} ><Text>{item.firstname}</Text></View>
+    }
+
+    _renderList(){
+        const {userList} = this.props;
+
+        return(
+            <FlatList
+                data={userList}
+                renderItem={({item}) => this._renderItem(item)}
+            />
+        );
+    }
     render() {
         return (
             <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
@@ -218,7 +236,6 @@ class Search extends Component {
         )
     }
 }
-
 const mapStateToProps = (state) => {
     return {
         userList: state.searchList.user,

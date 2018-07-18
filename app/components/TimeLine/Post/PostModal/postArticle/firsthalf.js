@@ -112,7 +112,6 @@ export default class SecondHalf extends Component {
 
     render() {
         return (
-
             <ScrollView ref={(c) => {
                 this.scrollView = c;
             }} contentContainerStyle={{flex:1}} style={{paddingTop:10,paddingBottom: 35,paddingHorizontal:10,height:'100%'}}>

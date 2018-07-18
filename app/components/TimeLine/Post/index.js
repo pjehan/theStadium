@@ -171,7 +171,7 @@ class Post extends Component {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.state.post.owner,
             };
-            if (this.state.post.owner.userType.label === 'Coach') {
+            if ( this.state.post.owner.userType.label === 'Coach') {
                 this.props.navigation.navigate("CoachProfile", users);
             } else {
                 this.props.navigation.navigate('Profile', users);
@@ -247,7 +247,6 @@ class Post extends Component {
                                    source={require('../../../assets/img/picto/actualite/comment-gris.png')}/>
                             <Text style={[PostStyle.text, {fontSize: 14, color: '#cccccc', fontWeight: '600'}]}>Commenter</Text>
                         </TouchableOpacity>
-
                         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => {
                             this.onToggleComment(true, true)
                         }}>
@@ -260,7 +259,6 @@ class Post extends Component {
                                 fontWeight: '600'
                             }]}>Partager</Text>
                         </TouchableOpacity>
-
                     </View>
                 </View>
                 {this.props.post.comments.length > 0 ?

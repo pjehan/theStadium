@@ -288,7 +288,6 @@ export default class Content extends Component {
                                    source={require('../../../../assets/img/picto/menu/actions/article_white.png')}/>
                             <Text style={{fontWeight: 'bold', color: '#ffffff'}}>Résumé</Text>
                         </View>
-
                         <View style={{
                             marginTop: 15,
                             paddingVertical: 20,
@@ -312,34 +311,63 @@ export default class Content extends Component {
                                         color: '#ffffff',
                                         fontSize: 12
                                     }}> {previewStr.substring(0, Math.min(previewStr.length, 200))} {'...Plus'}</Text>
+                                    <View style={{
+                                        marginTop: 15,
+                                        paddingVertical: 20,
+                                        backgroundColor: 'rgba(0,0,0,0.5)',
+                                        width: '100%'
+                                    }}>
+                                        <View style={{
+                                            alignSelf: 'flex-start',
+                                            marginLeft: 5,
+                                            justifyContent: 'flex-end'
+                                        }}>
+                                            <Text style={{
+                                                color: '#ffffff',
+                                                fontSize: 18,
+                                                fontWeight: '600'
+                                            }}>{this.props.title}</Text>
+                                            <Text style={{
+                                                color: '#ffffff',
+                                                fontSize: 14,
+                                                marginBottom: 5
+                                            }}>{content.homeClub.name} {content.homeScore}
+                                                - {content.guessScore} {content.guessClub.name}</Text>
+                                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                                <Text style={{
+                                                    color: '#ffffff',
+                                                    fontSize: 12
+                                                }}> {previewStr.substring(0, Math.min(previewStr.length, 200))} {'...Plus'}</Text>
+                                            </View>
+                                        </View>
+
+                                    </View>
                                 </View>
                             </View>
-
                         </View>
                     </View>
                 </TouchableOpacity>
-
             </View>
-        )
+    )
     }
 
     checkType() {
         const TYPE = this.props.postType.label;
         if (TYPE === TypeEnum.simple) {
-            this.returnSimplePost()
-        }
+        this.returnSimplePost()
+    }
         else if (TYPE === TypeEnum.article) {
-            this.returnArticle()
-        }
+        this.returnArticle()
+    }
         else if (TYPE === TypeEnum.goals) {
-            this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content)
-        }
+        this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content)
+    }
         else if (TYPE === TypeEnum.assists) {
-            this.returnAssistPost(this.props.owner, this.props.assistsNbr, this.props.content)
-        }
+        this.returnAssistPost(this.props.owner, this.props.assistsNbr, this.props.content)
+    }
         else if (TYPE === TypeEnum.interview) {
-            this.returnInterview(this.props.title)
-        }
+        this.returnInterview(this.props.title)
+    }
     }
 
     componentWillMount() {
@@ -348,42 +376,42 @@ export default class Content extends Component {
 
     _renderArticleModal() {
         return (
-            <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
-                   visible={this.state.visible}
+        <Modal style={{flex: 1}} animationType={"slide"} transparent={false}
+        visible={this.state.visible}
 
-                   onRequestClose={() => {
-                       console.log("Modal has been closed.")
-                   }}>
-                <ArticleDisplay disband={(value) => {
-                    this.setState({visible: value})
-                }} {...this.props} owner={this.props.owner}/>
-            </Modal>
+        onRequestClose={() => {
+            console.log("Modal has been closed.")
+        }}>
+        <ArticleDisplay disband={(value) => {
+            this.setState({visible: value})
+        }} {...this.props} owner={this.props.owner}/>
+        </Modal>
         )
     }
 
     render() {
         const TYPE = this.props.postType.label;
         return (
-            <View>
+        <View>
 
-                {this._renderArticleModal()}
-                {TYPE === TypeEnum.simple ? this.returnSimplePost() :
-                    TYPE === TypeEnum.article ? this.returnArticle() :
-                        TYPE === TypeEnum.goals ? this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content) :
-                            TYPE === TypeEnum.assists ? this.returnAssistPost(this.props.owner, this.props.passNbr, this.props.content) :
-                                TYPE === TypeEnum.interview ? this.returnInterview(this.props.title) : null}
-            </View>
+        {this._renderArticleModal()}
+        {TYPE === TypeEnum.simple ? this.returnSimplePost() :
+            TYPE === TypeEnum.article ? this.returnArticle() :
+                TYPE === TypeEnum.goals ? this.returnGoalPost(this.props.owner, this.props.goalsNbr, this.props.content) :
+                    TYPE === TypeEnum.assists ? this.returnAssistPost(this.props.owner, this.props.passNbr, this.props.content) :
+                        TYPE === TypeEnum.interview ? this.returnInterview(this.props.title) : null}
+        </View>
         )
     }
-}
-/**
- * Props
- */
-Content.propTypes = {
-    owner: PropTypes.object,
-    club: PropTypes.string,
-    //postType: PropTypes.number, /* Content Type */
-    //content: PropTypes.string, /* Content */
-    goals_nbr: PropTypes.number, /* number of goals */
-    assist_nbr: PropTypes.number, /* number of assists */
-};
+    }
+        /**
+         * Props
+         */
+    Content.propTypes = {
+        owner: PropTypes.object,
+        club: PropTypes.string,
+        //postType: PropTypes.number, /* Content Type */
+        //content: PropTypes.string, /* Content */
+        goals_nbr: PropTypes.number, /* number of goals */
+        assist_nbr: PropTypes.number, /* number of assists */
+    };

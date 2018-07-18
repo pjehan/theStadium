@@ -81,6 +81,7 @@ class PlayerInfos extends Component {
     }
 
     _filterClub(query, dataSource) {
+        console.log(query,dataSource);
         if (query === '') {
             return [];
         }
@@ -172,13 +173,13 @@ class PlayerInfos extends Component {
                 <KeyboardAvoidingView
                     style={{flex: 3, justifyContent: 'space-around', alignItems: 'center'}}
                     behavior="padding">
-
                     <TouchableOpacity onPress={() => {
                         this.setState({visible: true});
                         this.forceUpdate()
                     }} style={[{width: '100%'}]}>
                         <SelectedTeam team={this.state.team} placeholder={'Entrez le nom de votre club'}/>
                     </TouchableOpacity>
+
                     <View style={{backgroundColor: '#eeeeee', width: '85%'}}>
                         <Picker style={GLOBAL_STYLE.input}
                                 prompt="Poste joué"

@@ -160,6 +160,7 @@ class PlayerInfos extends Component {
                             this.onChangeInfos(state, newvalue)
                         }}
                         description={this._checkPasswordString(this.state.password) ? 'Votre mot de passe n\'est pas conforme. \nCombinaison de 6 caractères comportant au minimum : 1 lettre majuscule, 1 lettre minuscule ainsi qu\'un chiffre' : 'Combinaison de 6 caractères comportant au minimum : 1 lettre majuscule, 1 lettre minuscule ainsi qu\'un chiffre' }
+
                     />
                     <CustomInput
                         container={''}

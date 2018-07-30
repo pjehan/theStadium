@@ -171,7 +171,7 @@ const ProfileTab = TabNavigator({
             tabBarLabel: 'Actualitées'
         })
     },
-    Caracteristique: {
+    Caracteristiques: {
         screen: Profil,
         navigationOptions: {
             header: null,

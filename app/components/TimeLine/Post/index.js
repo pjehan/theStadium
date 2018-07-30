@@ -154,8 +154,9 @@ class Post extends Component {
         )
     }
 
-    goToProfile() {
-        if (utils._isUser(this.props.currentUser, this.state.post.owner)) {
+    goToProfile(data) {
+        let id = data ? data : this.state.post.owner;
+        if (utils._isUser(this.props.currentUser, id)) {
             const users = {
                 currentUser: this.props.currentUser,
                 inspectedUser: this.props.currentUser,
@@ -166,12 +167,13 @@ class Post extends Component {
                 this.props.navigation.navigate('Profile', users);
             }
         } else {
-            this.props.dispatch(userActions.getInspected(this.state.post.owner.id, () => {
+            this.props.dispatch(userActions.getInspected(id, (inspectedUser) => {
 
                 const users = {
                     currentUser: this.props.currentUser,
-                    inspectedUser: this.state.post.owner,
+                    inspectedUser: inspectedUser,
                 };
+                console.log(users);
                 if (this.state.post.owner.userType.label === 'Coach') {
                     this.props.navigation.navigate("CoachProfile", users);
                 } else {
@@ -225,7 +227,7 @@ class Post extends Component {
                                  team={this.state.post.owner.userType.label === 'Coach' ? this.state.post.owner.teams[0].team : null}/>
                 </View>
 
-                <Content {...this.state.post} {...this.props.navigation} />
+                <Content {...this.state.post} {...this.props.navigation} goToProfileParent={(id) => {this.goToProfile(id)}} />
 
                 <UserActions postID={this.props.post.id} userID={this.props.currentUser.id} isLiked={this.isLiked()}
                              likes={this.state.post.postsLiked.length} shares={this.state.post.postsShared.length}

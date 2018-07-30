@@ -8,10 +8,11 @@ const styles = StyleSheet.create({
         borderWidth:0,
         flexDirection: 'row',
         alignItems:'center',
-        justifyContent:'center',
+        justifyContent:'space-around',
     },
     tab: {
         backgroundColor:'#003366',
+
     },
 
 });

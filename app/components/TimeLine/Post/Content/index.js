@@ -144,7 +144,7 @@ export default class Content extends Component {
         const content = utils.renderIdentification(this.props.content);
         return (
             <View>
-                <View style={{padding: 10, paddingLeft: 5, paddingRight: 5}}>
+                <View style={{flexDirection:'row',padding: 10, paddingLeft: 5, paddingRight: 5}}>
                     {content.strArray.map((str, index) => {
                         if (content.keys.length < 1) {
                             return <Text>{str}</Text>
@@ -167,17 +167,6 @@ export default class Content extends Component {
                         }
                     })}
                 </View>
-                {this.props.medias.length > 0 ? <OpenContent owner={{
-                    lastName: this.props.owner.lastname,
-                    firstName: this.props.owner.firstname
-                }} visible={this.state.openContent}
-                             like={this.props.postsLiked.length}
-                             share={this.props.postsShared.length}
-                             comments={this.props.comments.length}
-                             medias={this.props.medias}
-                             toggleModal={(visible) => {
-                                 this.onToggleModal(visible)
-                             }}/> :null}
                 <TouchableOpacity onPress={() => {
                     this.onToggleModal(true, url);
                 }}>

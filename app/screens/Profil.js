@@ -86,7 +86,7 @@ class Profil extends Component {
     _renderStats() {
         const {navigation} = this.props;
         const state = navigation.state.params;
-        console.log(stats);
+        stats = this.props.inspectedUser.stats || state.inspectedUser.stats;
         return (
             <View>
                 <View style={STYLE.role}>
@@ -316,6 +316,7 @@ class Profil extends Component {
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
                 {this.props.isFetching || !state.inspectedUser.stats ? null : this.stateSetting.bind(this)}
 
+                <Text style={{color:'#003366', fontWeight:'600'}}>Actualitées</Text>
                 {this.state.change ? this._renderChange() : this._renderStats()}
             </ScrollView>
         )

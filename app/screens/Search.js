@@ -184,7 +184,7 @@ class Search extends Component {
 
                 <CustomInput
                     container={{justifyContent: 'flex-start', flex: 1}}
-                    placeholder={'Rechercher'}
+                    placeholder={'Entrez le nom d\'un(e) joueur, joueuse, équipe'}
                     input={[{flex: 1, padding: 5}]}
                     state={'search'}
                     textColor={'#000000'}
@@ -201,7 +201,7 @@ class Search extends Component {
                     }}
                     accessibilityTraits="button"
                 >
-                    <View><Text style={[searchStyle.commentInputText]}>Envoyer</Text></View>
+                    <View><Text style={[searchStyle.commentInputText]}>Rechercher</Text></View>
                 </TouchableOpacity>
             </View>
         )
@@ -248,7 +248,6 @@ const searchStyle = StyleSheet.create({
         justifyContent: 'flex-start',
         borderWidth: 1,
         borderColor: '#cccccc',
-        backgroundColor: 'white',
         flexDirection: 'row',
         paddingVertical: 10,
         alignItems: 'center',

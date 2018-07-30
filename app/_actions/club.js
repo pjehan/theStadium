@@ -29,3 +29,20 @@ function getAll() {
 
 
 }
+
+function update() {
+    return (dispatch) => {
+        dispatch(request());
+        clubService.update()
+            .then(
+                clubs => {
+                    dispatch(success({clubs}))
+                },error => {
+                    console.error(error);
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error))
+                });
+
+    };
+
+}

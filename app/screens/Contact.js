@@ -7,7 +7,7 @@ import {
     ScrollView,
     Keyboard,
     TimePickerAndroid,
-    Platform, Modal
+    Platform, Modal, KeyboardAvoidingView
 } from 'react-native';
 import {connect} from "react-redux";
 import CustomInput from "../components/CustomInput";
@@ -92,7 +92,6 @@ class Contact extends Component {
             trainingAddress: this.state.trainingAddress,
             matchAddress: this.state.matchAddress,
         };
-        console.log(trainingHours)
     }
 
     render() {
@@ -103,7 +102,7 @@ class Contact extends Component {
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
         return (
-            <View style={{
+            <KeyboardAvoidingView style={{
                 backgroundColor: '#ffffff',
                 flex: 1,
                 paddingTop: 20,
@@ -120,7 +119,7 @@ class Contact extends Component {
                               color="#003366"/> : null}
                 </TouchableOpacity>
                 {!this.state.isEditing ? this.renderContact() : this.renderEdit()}
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 
@@ -134,7 +133,7 @@ class Contact extends Component {
         const trainingHours = JSON.parse(team.trainingHours);
         return (
             <ScrollView>
-
+<KeyboardAvoidingView>
                 <View style={{paddingVertical: 10}}>
                     <Text style={{color: '#003366', fontSize: 14, fontWeight: '600'}}>Téléphone (Accueil Club)</Text>
                     <CustomInput
@@ -352,15 +351,25 @@ class Contact extends Component {
                         </View>
                     </View>
                 </View>
-                <View style={{justifyContent:'space-between',flexDirection:'row'}}>
-                <TouchableOpacity style={{padding:10, backgroundColor:'#cccccc'}}>
-                    <Text>Annuler</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity style={{padding:10, backgroundColor:'#003366'}} onPress={() => {this._contactSend()}}>
-                    <Text style={{color:'#ffffff'}}>Confirmer</Text>
-                </TouchableOpacity>
+                <View style={{height: 1, backgroundColor: '#cccccc'}}/>
+                <View style={{alignItems:'center',flexDirection:'row'}}>
+
+
+                    <TouchableOpacity onPress={() => {
+                        this.setState({isEditing: !this.state.isEditing});
+                        this.forceUpdate()
+                    }} style={{alignItems:'center',borderTopLeftRadius:10,borderBottomLeftRadius:10, justifyContent:'center',marginVertical:10,padding:10,width:'50%', backgroundColor:'#cccccc'}}>
+                        <Text>Annuler</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{alignItems:'center',borderTopRightRadius:10,borderBottomRightRadius:10, justifyContent:'center',marginVertical:10,padding:10,width:'50%', backgroundColor:'#003366'}} onPress={() => {this._contactSend()
+                        this.setState({isEditing: !this.state.isEditing});
+                        this.forceUpdate()
+                    }}>
+                        <Text style={{color:'#ffffff',fontWeight:'600'}}>Confirmer</Text>
+                    </TouchableOpacity>
                 </View>
+</KeyboardAvoidingView>
             </ScrollView>
         )
     }
@@ -374,7 +383,7 @@ class Contact extends Component {
 
         const trainingHours = team.trainingHours ? JSON.parse(team.trainingHours) : {};
         return (
-            <View>
+            <KeyboardAvoidingView>
 
                 <View style={{paddingVertical: 10}}>
                     <Text style={{color: '#003366', fontSize: 14, fontWeight: '600'}}>Téléphone (Accueil Club)</Text>
@@ -452,7 +461,7 @@ class Contact extends Component {
                             style={{alignSelf: 'flex-end'}}>{trainingHours.vendredi ? trainingHours.vendredi : 'Repos'}</Text>
                     </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }

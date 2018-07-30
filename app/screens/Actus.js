@@ -449,6 +449,7 @@ class Actus extends Component {
     _renderList(){
         const state = this.props.navigation.state.params;
         return(
+
             <FlatList
                 style={{marginHorizontal:10,height: '100%'}}
                 ref={

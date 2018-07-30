@@ -114,7 +114,7 @@ class Login extends Component {
                 </Modal>
                 <View>
                     <Image style={GLOBAL_STYLE.middleLogo} source={require('../assets/img/thestadium/logo-blanc.png')}/>
-                    <Text style={GLOBAL_STYLE.slogant}>Partagez et suivez lactualité du foot amateur</Text>
+                    <Text style={GLOBAL_STYLE.slogant}>Partagez et suivez l'actualitée du foot amateur</Text>
                 </View>
                 <KeyboardAvoidingView
                     behavior="padding">

@@ -73,7 +73,7 @@ class Setup extends Component {
                 this.props.navigation.dispatch(NavigationActions.setParams({
                     params: {
                         guessClub: {
-                            name: this.state.guessClub.name,
+                            name: this.state.guessClub.club.name,
                             id: this.state.guessClub.id
                         }
                     },

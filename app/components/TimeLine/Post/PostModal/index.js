@@ -287,12 +287,15 @@ class PostModal extends Component {
     idClosed(visible, data) {
     if(data){
         if(data["@type"] === 'User'){
-            let str = this.state.post.content + `[ ${data.firstname} ${data.lastname}:${data.id};]`;
+            let content = this.state.post.content.substring(0,this.state.post.content.length - 1);
+            let str = content.substring(0,content.length - 1) + `[ ${data.firstname} ${data.lastname}:${data.id};]`;
 
-            this.onChangeInfos('content',str)
+            this.onChangeInfos('content',str);
                 this.setState({visibleId: visible});
                 this.forceUpdate();
 
+        } else {
+            console.log(data)
         }
     } else {
         this.setState({visibleId: visible});
@@ -320,7 +323,6 @@ class PostModal extends Component {
                              placeholder={'Écrivez votre message'}
                              input={[{flex: 1, padding: 20, marginTop: 10, height: Math.max(80, this.state.height)}]}
                              state={'content'}
-                             ref={}
                              textColor={'#000000'}
                              borderColor={'transparent'}
                              backgroundColor={'#ffffff'}
@@ -332,8 +334,6 @@ class PostModal extends Component {
                              onChangeParent={(state, newvalue) => {
                                  this.onChangeInfos(state, newvalue)
                              }}/>
-
-                <Text>{this.state.post.content}</Text>
                 {this.state.select ?
                     <TouchableOpacity onPress={() => {
                         this.setState({visibleId: true});this.forceUpdate()
@@ -737,7 +737,7 @@ class PostModal extends Component {
                    }}>
                 <InterviewModal onClose={() => this.setState({interviewVisible: false})}
                                 interviewVisible={this.state.interviewVisible} media={this.state.media}/>
-                <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.visible}
+                <SearchDropDown title={'Equipe rencontré'} dataList={this.state.clubList} visible={this.state.visible}
                                 onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
                 <ScrollView>
                     {this.conditionalRender()}

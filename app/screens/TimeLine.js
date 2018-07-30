@@ -102,9 +102,10 @@ class TimeLine extends Component {
             let originalHeight;
             let windowWidth = Dimensions.get('window').width;
             let widthChange;
-            originalWidth = this.state.media.width;
-            originalHeight = this.state.media.height;
+            originalWidth = this.state.media[0].width;
+            originalHeight = this.state.media[0].height;
             widthChange = (windowWidth - 10) / originalWidth;
+            console.log(this.state.media)
             return (
                 <Modal
                     transparent={true}
@@ -148,7 +149,7 @@ class TimeLine extends Component {
                                 onChangeParent={(state, newvalue) => {
                                     this.onChangeInfos(state, newvalue)
                                 }}/>
-                            {this.state.media.type === 'Video' ? <Video source={{uri: this.state.media[0]}}
+                            {this.state.media[0].type === 'video' ? <Video source={{uri: this.state.media[0]}}
                                                                         rate={1.0}
                                                                         volume={0}
                                                                         muted={true}

@@ -68,7 +68,7 @@ class SearchDropDown extends Component {
         return (
             <FlatList
                 refreshing={ (!data)}
-                style={{paddingHorizontal:10}}
+                style={{paddingHorizontal:10,alignSelf:'flex-start'}}
                 data={data}
                 renderItem={({item}) => this._renderItem(item)}
             />
@@ -114,15 +114,15 @@ class SearchDropDown extends Component {
                 alignItems: 'center',
                 height: 40
             }}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity style={{fontSize:18}} onPress={() => {
                     this._onClose(true)
                 }}>
                     <Text>Annuler</Text>
                 </TouchableOpacity>
-                <Text style={{fontWeight: '600'}}>{this.props.title}</Text>
+                <Text style={{fontWeight: '600',fontSize:18}}>{this.props.title}</Text>
                 <TouchableOpacity onPress={() => {
                 }}>
-                    <Text style={{fontWeight: '600', color: '#003366'}}>Valider</Text>
+                    <Text style={{fontWeight: '600',fontSize:18, color: '#003366'}}>Valider</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -146,7 +146,7 @@ class SearchDropDown extends Component {
 
                 {this.props.willRequest ?
                 <View style={[searchStyle.inputContainer]}>
- <View style={[searchStyle.inputContainer]}>
+                        <View style={[searchStyle.inputContainer]}>
 
                         <CustomInput
                             container={{justifyContent: 'flex-start', flex: 1}}

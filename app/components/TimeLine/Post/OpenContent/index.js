@@ -121,11 +121,11 @@ class OpenContent extends Component {
                     <Text style={{marginLeft: '10%', width: '80%', marginTop: 20, marginBottom: 20, color: '#ffffff'}}>
                         {this.props.content}
                     </Text>
-                    <Image source={{uri: _utils.NODEJS + this.props.medias[0].path}}
+                    {this.props.media.length > 0 ? <Image source={{uri: _utils.NODEJS + this.props.medias[0].path}}
                            style={{
                                width: originalWidth * widthChange,
                                height: originalHeight * widthChange
-                           }}/>
+                           }}/> :null }
                     <View style={{ justifyContent: 'space-around', height: '20%'}}>
                         <View style={{
                             flexDirection: 'row',

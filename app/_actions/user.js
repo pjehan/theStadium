@@ -160,9 +160,8 @@ function getInspected(id, callback){
                             userStats => {
                                 Object.assign(inspectedUser, user);
                                 inspectedUser.stats = userStats;
-
                                 dispatch(success(inspectedUser));
-                                callback();
+                                callback( Object.assign({stats: userStats}, inspectedUser));
                             },
                             error => {
                                 dispatch(failure(error));

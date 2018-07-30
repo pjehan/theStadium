@@ -17,8 +17,6 @@ const labels= [
 ];
 const SETUP = [
     'title',
-    'guessScore',
-    'homeScore',
     'guessClub'
 ];
 const FIRSTHALF = [
@@ -105,7 +103,8 @@ class ArticleTabHeader extends Component {
                     flexDirection: 'row',
                     borderBottomWidth: 0.5,
                     borderColor: '#cccccc',
-                    justifyContent: 'space-around',
+                    width:'95%',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
                     height: 40
                 }}>
@@ -117,9 +116,9 @@ class ArticleTabHeader extends Component {
                                 this.props.navigation.navigate(routes[index - 1].key, {});
                             }
                         }}>
-                            <Text style={{color:'#cccccc'}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
+                            <Text style={{color:'#cccccc',fontSize:18}}>{index === 0 ? 'Annuler' : 'Precedent'}</Text>
                         </TouchableOpacity>
-                    <Text style={{fontWeight: '600'}}>Résumé</Text>
+                    <Text style={{fontWeight: '600',fontSize:18}}>Résumé</Text>
                     <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={() => {
                         if(index + 1 !== routes.length){
                             this.checkIfComplete(routes[index + 1].key) ? this.props.navigation.navigate(routes[index + 1].key, {}) : this.displayAlert();
@@ -128,7 +127,7 @@ class ArticleTabHeader extends Component {
                         }
                     }}
                     >
-                        <Text style={{fontWeight: '600', color: '#003366'}} >{index + 1 === routes.length ? 'Publier' : 'Suivant'}</Text>
+                        <Text style={{fontWeight: '600', color: '#003366',fontSize:18}} >{index + 1 === routes.length ? 'Publier' : 'Suivant'}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{paddingLeft: 20, paddingRight: 20}}>

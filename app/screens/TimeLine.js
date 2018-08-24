@@ -78,6 +78,7 @@ class TimeLine extends Component {
             mediaTypes: type,
             allowsEditing: true
         });
+        console.log(result);
         if (!result.cancelled) {
             this.setState({media: [{uri: result.uri, width: result.width, height: result.height, type: result.type}]});
             this.setState({interviewVisible: true,publishType:postType});

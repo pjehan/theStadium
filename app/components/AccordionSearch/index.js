@@ -110,7 +110,8 @@ export default class AccordionSearch extends Component {
             <View style={{borderBottomWidth:1,borderColor:'#cccccc',
                 flexDirection: 'column'}}
                   >
-                <TouchableOpacity onPress={() => {this.setState({displayTeam: !this.state.displayTeam});this.forceUpdate()}} style={{flexDirection: 'row',justifyContent: 'space-between', alignItems: 'center',paddingVertical:10,}}>
+                <TouchableOpacity onPress={() => {this.setState({displayTeam: !this.state.displayTeam});this.forceUpdate()}}
+                                  style={{flexDirection: 'row',justifyContent: 'space-between', alignItems: 'center',paddingVertical:10,width:'100%'}}>
                     <View style={searchStyle.tabs} >
                         <ProfilePic user={item}/>
                         <Text style={searchStyle.tabText}>{item.name}</Text>

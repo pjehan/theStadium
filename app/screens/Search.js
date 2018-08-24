@@ -27,16 +27,22 @@ class Search extends Component {
         this._renderItem = this._renderItem.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(this.props.navigation)
+    }
+
     onChangeInfos(state, newvalue) {
         this.setState({[state]: newvalue});
     }
 
     searchUser() {
-        this.props.navigation.dispatch(userActions.searchUser(this.state.search))
+        if (this.state.search) {
+            this.props.navigation.dispatch(userActions.searchUser(this.state.search))
+        }
+        ;
     }
 
     goToProfile(item) {
-        console.log(this.props);
         if (GLOBAL._isUser(this.props.currentUser, item)) {
             const users = {
                 currentUser: this.props.currentUser,
@@ -160,16 +166,17 @@ class Search extends Component {
             </View>)
         } else if (item["@type"] === 'Club') {
             return (
-                <AccordionSearch currentUser={this.props.currentUser} navigation={this.props.navigation} search={true} userList={this.props.userList}
+                <AccordionSearch currentUser={this.props.currentUser} navigation={this.props.navigation} search={true}
+                                 userList={this.props.userList}
                                  item={item}/>
             )
         }
     }
 
     _renderList() {
-
         return (
             <FlatList
+                style={{paddingVertical: this.props.userList.length > 0 ? 15 : 0}}
                 data={this.props.userList}
                 extraData={this.props.userList}
                 refreshing={this.props.isFetching}
@@ -183,6 +190,7 @@ class Search extends Component {
             <View style={[searchStyle.inputContainer]}>
 
                 <CustomInput
+                    returnKeyType={'send'}
                     container={{justifyContent: 'flex-start', flex: 1}}
                     placeholder={'Entrez le nom d\'un(e) joueur, joueuse, équipe'}
                     input={[{flex: 1, padding: 5}]}
@@ -192,6 +200,11 @@ class Search extends Component {
                     borderColor={'#cccccc'}
                     backgroundColor={'#ffffff'}
                     security={false}
+                    ref={
+                        (c) => {
+                            this.searchInput = c;
+                        }
+                    }
                     onChangeParent={(state, newvalue) => this.onChangeInfos(state, newvalue)}
                 />
                 <TouchableOpacity
@@ -242,9 +255,10 @@ const searchStyle = StyleSheet.create({
     tabContainer: {
         backgroundColor: '#FFF',
         paddingHorizontal: 10,
-        paddingVertical: 15
+        //paddingVertical: 15
     },
     inputContainer: {
+        backgroundColor:'#ffffff',
         justifyContent: 'flex-start',
         borderWidth: 1,
         borderColor: '#cccccc',

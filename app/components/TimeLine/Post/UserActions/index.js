@@ -142,6 +142,44 @@ class UserActions extends Component {
         )
     }
 }
+export const UserActionBottom = props => (
+    <View style={PostStyle.userActionText}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}
+                              onPress={() => props.toggleLike()}>
+                <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}
+                       source={props.isLiked ? require('../../../../assets/img/picto/actualite/like.png') : require('../../../../assets/img/picto/actualite/picto-jaime-gris.png')}/>
+                <Text style={[PostStyle.text, {
+                    fontSize: 14,
+                    color: props.isLiked ? '#ff0000' : '#cccccc',
+                    fontWeight: '600'
+                }]}>J'aime</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => {
+                props.onToggleComment(true, true)
+            }}>
+
+                <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}
+                       source={require('../../../../assets/img/picto/actualite/comment-gris.png')}/>
+                <Text style={[PostStyle.text, {fontSize: 14, color: '#cccccc', fontWeight: '600'}]}>Commenter</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => {
+                props.onToggleComment(true, true)
+            }}>
+
+                <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}
+                       source={require('../../../../assets/img/picto/actualite/partage-gris.png')}/>
+                <Text style={[PostStyle.text, {
+                    fontSize: 14,
+                    color: '#cccccc',
+                    fontWeight: '600'
+                }]}>Partager</Text>
+            </TouchableOpacity>
+
+        </View>
+    </View>
+)
 
 mapStateToProps = (state) => {
     return {

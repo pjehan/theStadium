@@ -96,12 +96,12 @@ class Profil extends Component {
                     textSize={14}
                     style={{alignSelf:'center'}}
                     onReady={this.state.goalsNbr || this.state.goalsNbr === 0}>
-                    <TouchableOpacity  onPress={() => {
+                    <TouchableOpacity onPress={() => {
                         utils._isUser(state.currentUser, state.inspectedUser) ? this.setState({change:true}) : null
-                    }} style={STYLE.tab}>
-                        <Text style={STYLE.tabText}>{stats.position.label}, {this.renderDate(stats.birthdate)}</Text>
+                    }} style={[STYLE.tab, {width:'100%',justifyContent:'center'}]}>
+                        <Text style={[STYLE.tabText]}>{stats.position.label}, {this.renderDate(stats.birthdate)}</Text>
                         {utils._isUser(state.currentUser, state.inspectedUser) ?
-                            <Icon style={{marginLeft:'auto'}} name="create" size={20}
+                            <Icon style={{position:'absolute', right:5}} name="create" size={20}
                                   color="#003366"/> : null}
                     </TouchableOpacity>
                 </Placeholder.Line>
@@ -316,7 +316,6 @@ class Profil extends Component {
                        source={require('../assets/img/thestadium/profil.jpeg')}/>
                 {this.props.isFetching || !state.inspectedUser.stats ? null : this.stateSetting.bind(this)}
 
-                <Text style={{color:'#003366', fontWeight:'600'}}>Actualitées</Text>
                 {this.state.change ? this._renderChange() : this._renderStats()}
             </ScrollView>
         )

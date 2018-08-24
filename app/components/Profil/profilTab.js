@@ -48,7 +48,7 @@ export default class ProfileTabBar extends Component {
                 <View style={styles.tabContainer}>
 
                     {routes.map((route, Index, key) => (
-                            <TouchableOpacity style={ index === Index ? {borderBottomWidth:2, borderBottomColor:'red',paddingBottom:8} :{paddingBottom:10} }>
+                            <TouchableOpacity onPress={() => {this.props.navigation.navigate(route.routeName)}} style={ index === Index ? {borderBottomWidth:2, borderBottomColor:'red',paddingBottom:8} :{paddingBottom:10} }>
                                 <Text style={{color:'#ffffff', fontSize:14, fontWeight:'bold', marginLeft:10, marginRight:10}}>{route.routeName}</Text>
                             </TouchableOpacity>
                     ))}

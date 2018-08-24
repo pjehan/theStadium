@@ -445,24 +445,30 @@ class Actus extends Component {
     _renderItem(item) {
         return <Post style={[timeLineStyle.singlePost]} navigation={this.props.navigation} key={item.id} id={item.id} post={item} />
     }
-
-    _renderList(){
-        const state = this.props.navigation.state.params;
-        return(
-
-            <FlatList
+/*
+<FlatList
                 style={{marginHorizontal:10,height: '100%'}}
                 ref={
                     (c) => {
                         this.flatList = c;
                     }
                 }
+                showsHorizontalScrollIndicator={false}
                 scrollEnabled={false}
                 onRefresh={() => {}}
                 refreshing={this.props.postsFetching}
                 data={this.props.posts}
                 renderItem={({item}) => this._renderItem(item)}
             />
+ */
+    _renderList(){
+        const state = this.props.navigation.state.params;
+        return(
+            <View style={{marginHorizontal:10,height: '100%'}}>
+                {this.props.posts ? this.props.posts.map((item) => {
+                   return  this._renderItem(item);
+                }) : null }
+            </View>
         );
     }
     render() {
@@ -470,7 +476,7 @@ class Actus extends Component {
         const state = navigation.state.params;
 
         return (
-            <ScrollView contentContainerStyle={{flex:1}}>
+            <ScrollView>
                 {this._renderHeader()}
                 {this._renderModal()}
                 <View style={[{paddingHorizontal: 15,paddingTop:15, backgroundColor: '#ffffff',
@@ -502,6 +508,8 @@ class Actus extends Component {
                     {this._renderActions()}
 
                 </View>
+
+                <Text style={{alignSelf:'center', marginTop:20,color:'#003366', fontWeight:'600'}}>Actualités</Text>
                 {
                     (this.props.posts && this.props.isFetched) ? this._renderList() :
                         (!this.props.postsFetching && this.props.isFetched)  ? this._renderLoading() : <Text>... </Text>

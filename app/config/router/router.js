@@ -477,6 +477,7 @@ class Root extends Component {
 class AppNavigation extends Component {
     render() {
         const {navigationState, dispatch} = this.props;
+        console.log(this.props)
         return (
             <Root >
                 <Navigator

@@ -3,7 +3,7 @@ import instance from "./axiosConfig";
 import React from "react";
 import {TouchableOpacity} from "react-native";
 
-const _isUser = (user, inspected) => {
+export const _isUser = (user, inspected) => {
     return user.id === inspected.id;
 };
 
@@ -112,7 +112,9 @@ const renderIdentification = (str) => {
     }
     return {strArray, keys};
 };
+const toggleLike = () => {
 
+}
 /**
  * USE STR MODIFIER
  * { utils.renderIdentification().strArray.map((str, index)=> {

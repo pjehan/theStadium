@@ -21,12 +21,25 @@ import {Notifications} from "expo";
 function initialize() {
 
     const middleware = [ thunkMiddleware.withExtraArgument({ emit }) ];
+        middleware.push(createLogger())
     let store = createStore(appReducer, applyMiddleware(promise(), ...middleware));
     websocketInit(store);
 
     return store
 }
 
+function getActiveRouteName(navigationState) {
+    console.log(navigationState);
+    if (!navigationState) {
+        return null;
+    }
+    const route = navigationState.routes[navigationState.index];
+    // dive into nested navigators
+    if (route.routes) {
+        return getActiveRouteName(route);
+    }
+    return route.routeName;
+}
 export default class App extends Component {
 
     constructor() {
@@ -53,7 +66,7 @@ export default class App extends Component {
 
     return (
       <Provider ref={c => (this._root = c)}  store={initialize()}>
-        <AppNavigation/>
+        <AppNavigation />
       </Provider>
 
     );

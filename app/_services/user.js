@@ -37,8 +37,7 @@ function login(username, password) {
             setAuthorizationToken(token);
             return token;
         }).then(responseJSON => {
-            console.log(responseJSON)
-            return this.getUser(jwt_decode(responseJSON).id)
+            return this.getUser(jwt_decode(responseJSON).id);
         }).catch((error) => {
             return Promise.reject(error);
         })
@@ -47,6 +46,7 @@ function login(username, password) {
 function getUser(id) {
     return instance.get("/api/users/"+id)
         .then(response => {
+            console.log(response.data);
                return response.data;
         }).catch((error) => {
         })

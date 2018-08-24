@@ -68,7 +68,7 @@ class SearchDropDown extends Component {
         return (
             <FlatList
                 refreshing={ (!data)}
-                style={{paddingHorizontal:10,alignSelf:'flex-start'}}
+                style={{paddingHorizontal:10,alignSelf:'flex-start',flex:1}}
                 data={data}
                 renderItem={({item}) => this._renderItem(item)}
             />
@@ -172,7 +172,7 @@ class SearchDropDown extends Component {
                     </View>
                 </View>
                     :<CustomInput
-                        container={{justifyContent:'flex-start',flex:1,paddingHorizontal:10}}
+                        container={{justifyContent:'flex-start',width:'100%',paddingHorizontal:10,marginBottom:10,paddingVertical:10,borderBottomWidth:1,borderBottomColor:'#cccccc'}}
                         placeholder={'Rechercher'}
                         state={'query'}
                         textColor={'#000000'}

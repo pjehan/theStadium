@@ -104,6 +104,7 @@ class ArticleTabHeader extends Component {
                     borderBottomWidth: 0.5,
                     borderColor: '#cccccc',
                     width:'95%',
+                    marginLeft:'2.5%',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     height: 40

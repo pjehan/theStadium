@@ -7,6 +7,7 @@ import {
     Image,
     Text,
     View,
+    Alert,
     ScrollView,
     TouchableOpacity,
     ActivityIndicator,
@@ -76,13 +77,22 @@ class TimeLine extends Component {
     _addMedia = async (type, postType) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: type,
-            allowsEditing: true
         });
         console.log(result);
-        if (!result.cancelled) {
+        if (!result.cancelled && result.type === 'video') {
             this.setState({media: [{uri: result.uri, width: result.width, height: result.height, type: result.type}]});
             this.setState({interviewVisible: true,publishType:postType});
-        } else {
+        } else if(type === 'Videos' && result.type !== 'video'){
+                Alert.alert(
+                    'Attention !',
+                    'Vous ne pouvez pas sélectionner une photo pour votre interview !',
+                    [
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    ],
+                    { cancelable: false }
+                )
+                //console.log('uri', result.uri, this.state.post.medias[0])
+
         }
     };
 
@@ -90,6 +100,8 @@ class TimeLine extends Component {
         let result = await ImagePicker.launchCameraAsync({
             mediaTypes: type
         });
+
+        console.log(result);
         if (!result.cancelled) {
             this.setState({media: [{uri: result.uri, width: result.width, height: result.height, type: result.type}]});
             this.setState({interviewVisible: true, publishType:postType});
@@ -245,11 +257,13 @@ class TimeLine extends Component {
         }
     }
 
-    choiceModal(BTN, title, function1, function2,type, postType) {
+    choiceModal(BTN, title, function1, function2,type, postType,message) {
         ChoiceModalContainer.show(
             {
                 options: BTN,
                 title: title,
+                message: message
+
             },
             buttonIndex => {
                 buttonIndex === 0 ? function1(type, postType) : buttonIndex === 1 ? function2(type, postType) : null

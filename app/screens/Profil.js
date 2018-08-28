@@ -51,6 +51,7 @@ class Profil extends Component {
     }
 
     componentWillMount() {
+        console.log(this.state, this.props)
         this.stateSetting();
         this.forceUpdate();
     }

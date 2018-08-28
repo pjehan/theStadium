@@ -120,7 +120,7 @@ class Setup extends Component {
                     this.forceUpdate();
                 }} style={{flexDirection: 'row', alignItems: 'center'}}>
                     <View style={[timeLineStyle.profilePic, {backgroundColor: '#cccccc'}]}/>
-                    <Text style={[timeLineStyle.title, {color: '#979797'}]}>Entrez le nom du club adverse</Text>
+                    <Text style={[timeLineStyle.title, {fontSize:14,color: '#979797'}]}>Entrez le nom du club adverse</Text>
                 </TouchableOpacity>
             )
         }
@@ -128,7 +128,7 @@ class Setup extends Component {
     render() {
         const {clubQuery, clubList} = this.state;
         return (
-            <ScrollView contentContainerStyle={{flex:1}}>
+            <View style={{flex:1,flexGrow:1}}>
                 <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.guessVisible}
                                      onModalClose={(visible, data) => this._setClub(visible, data)}/>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
@@ -189,7 +189,7 @@ class Setup extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </ScrollView>
+            </View>
         )
     };
 }

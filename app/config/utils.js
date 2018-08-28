@@ -15,7 +15,17 @@ const _isFollowing = (user, inspected) => {
         return user.teamsLiked.some(e => e.id === inspected.id)
     }
 };
-
+export const getActiveRouteName = (navigationState) => {
+    if (!navigationState) {
+        return null;
+    }
+    const route = navigationState.routes[navigationState.index];
+    // dive into nested navigators
+    if (route.routes) {
+        return getActiveRouteName(route);
+    }
+    return route.routeName;
+};
 const _userTABS = (user) => {
 
 

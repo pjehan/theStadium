@@ -40,8 +40,10 @@ class ArticleDisplay extends Component {
             };
             if (this.props.currentUser.userType.label === 'Coach') {
                 this.props.navigate("CoachProfile", users);
+                this.props.disband(false);
             } else {
                 this.props.navigate('Profile', users);
+                this.props.disband(false);
             }
         } else {
             this.props.dispatch(userActions.getInspected(id, (inspectedUser) => {
@@ -52,8 +54,10 @@ class ArticleDisplay extends Component {
                 };
                 if (this.props.owner.userType.label === 'Coach') {
                     this.props.navigate("CoachProfile", users);
+                    this.props.disband(false);
                 } else {
                     this.props.navigate('Profile', users);
+                    this.props.disband(false);
                 }
             }));
         }
@@ -69,7 +73,7 @@ class ArticleDisplay extends Component {
                 });
                 //this.props.post.postsLiked.push({userLikes: {id: this.props.currentUser.id}});
         } else {
-            this.props.postLiked.push({userLikes: {id: this.props.currentUser.id}});
+            this.props.postsLiked.push({userLikes: {id: this.props.currentUser.id}});
             this.props.dispatch(postActions.toggleLikePost(this.props.id, this.props.currentUser.id, this.isLiked()));
             this.forceUpdate();
         }
@@ -233,10 +237,14 @@ class ArticleDisplay extends Component {
                             <Text style={{textAlign: 'left'}}>{content.conclusion}</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={{alignSelf: 'flex-end'}} onPress={() => {
+                    <TouchableOpacity style={{flexDirection:'row',marginRight:10,alignSelf: 'flex-end', justifyContent:'center',marginVertical:10}} onPress={() => {
                         this.goToProfile()
                     }}>
-                        <Text>Accéder à la page de l'équipe</Text>
+                       <Text style={{color:'#003366'}}>Accéder à la page de l'équipe</Text>
+                           <Icon
+                                 color='#003366'
+                                 size={25}
+                                 name={'chevron-right'}/>
                     </TouchableOpacity>
                     <UserActions postID={this.props.id} userID={this.props.currentUser.id} isLiked={this.isLiked()}
                                  likes={this.props.postsLiked.length} shares={this.props.postsShared.length}

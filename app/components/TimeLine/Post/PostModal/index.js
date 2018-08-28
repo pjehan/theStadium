@@ -305,9 +305,9 @@ class PostModal extends Component {
 
     displaySimpleArticle(type) {
         return (
-            <ScrollView>
+            <ScrollView contentContainerStyle={{flexGrow:1}}>
                 {this._renderHeader(type, 'Publication')}
-                <View style={{flex: 1, paddingLeft: 20, paddingRight: 20}}>
+                <View style={{paddingLeft: 20, paddingRight: 20}}>
                     <View style={[GLOBAL_STYLE.modal, {alignItems: 'center'}]}>
                         {this._renderOwner()}
                         <Text style={GLOBAL_STYLE.text}>Partagez en toute simplicié</Text>
@@ -346,9 +346,8 @@ class PostModal extends Component {
                 </TouchableOpacity> : null}
                 <View>
                     {this.state.medias ? this.renderImage() : null}
-
                 </View>
-                <View>
+                <View style={{marginTop:'auto'}}>
                     {this.props.owner.userType.label === 'Joueur' ?
                         <View>
                             <TouchableOpacity onPress={() => {
@@ -662,7 +661,7 @@ class PostModal extends Component {
             allowsEditing: true,
             mediaTypes: 'Images'
         });
-
+        console.log(result)
         if (!result.cancelled) {
             if (this.state.medias) {
                 if (index) {
@@ -739,12 +738,12 @@ class PostModal extends Component {
                                 interviewVisible={this.state.interviewVisible} media={this.state.media}/>
                 <SearchDropDown title={'Equipe rencontré'} dataList={this.state.clubList} visible={this.state.visible}
                                 onModalClose={(visible, data) => this.searchClosed(visible, data)}/>
-                <ScrollView>
+                <ScrollView contentContainerStyle={{flexGrow:1}}>
                     {this.conditionalRender()}
 
                     {this.props.type === TypeEnum.goals || this.props.type === TypeEnum.assists ?
 
-                        <TouchableOpacity onPress={() => {this.setState({visible:true});this.forceUpdate()}} style={[{width: '85%'}]}>
+                        <TouchableOpacity onPress={() => {this.setState({visible:true});this.forceUpdate()}} style={[{width: '85%',flexDirection:'row'}]}>
                         <SelectedTeam team={this.state.team}  placeholder={'Entrez le nom du club adverse'}/>
                         </TouchableOpacity>: null}
                 </ScrollView>

@@ -8,7 +8,7 @@ export const teamAction = {
 };
 
 function addUser(userID, teamID, userStatus){
-    return dispatch => {
+    return (dispatch) => {
 
         dispatch(request(userID, teamID, userStatus));
         teamService.addUser(userID,teamID,userStatus)
@@ -26,15 +26,19 @@ function addUser(userID, teamID, userStatus){
 }
 
 function putTeam(teamID, team){
-    return dispatch => {
-
+    return (dispatch) => {
+        console.log(teamID);
+        dispatch(request());
         teamService.putTeam(teamID,team)
             .then(
-                user => {
-                    dispatch(success(user));
-                    return user;
+                team => {
+                    dispatch(success(team));
                 }
             )
     }
+
+    function request() { return { type: userConstants.USER_PUT_REQUEST,  } }
+    function success(team) { return { type: userConstants.USER_PUT_SUCCESS, team } }
+    function failure(error) { return { type: userConstants.USER_PUT_FAILURE, error } }
 
 }

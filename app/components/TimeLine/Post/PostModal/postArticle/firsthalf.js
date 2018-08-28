@@ -3,7 +3,7 @@ import {
     Text,
     View,
     TouchableOpacity,
-    StyleSheet,
+    StyleSheet,Alert,
     Modal, Dimensions,
     Image, ScrollView, KeyboardAvoidingView,
 } from 'react-native';
@@ -47,7 +47,7 @@ export default class SecondHalf extends Component {
             mediaTypes: 'Images'
         });
 
-        if (!result.cancelled) {
+        if (!result.cancelled && result.type === 'image') {
             originalHeight = result.height;
             originalWidth = result.width;
             this.setState({firstHalf_coverPhoto: result.uri}, () => {
@@ -66,8 +66,16 @@ export default class SecondHalf extends Component {
 
             });
 
-        } else {
-            console.log('uri', result.uri, this.state.post.medias[0])
+        } else if(result.type !== 'image') {
+            Alert.alert(
+                'Attention !',
+                'Vous ne pouvez pas sélectionner une vidéo en photo de couverture !',
+                [
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                ],
+                { cancelable: false }
+            )
+            //console.log('uri', result.uri, this.state.post.medias[0])
         }
     };
 

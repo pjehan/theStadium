@@ -6,7 +6,7 @@ import {Avatar} from "../User/Avatar/index";
 const Team = (props) => {
     return (
         <View style={[props.style, {marginLeft: '7.5%', height: 100, width: '85%'}]}>
-            <View>
+            <View style={{flexDirection:'row'}}>
                 <Avatar user={props.team.club}/>
                 <View style={{flexDirection: 'column'}}>
                     <Text style={timeLineStyle.title}>{props.team.club.name}</Text>

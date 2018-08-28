@@ -20,20 +20,13 @@ function addUser(userID, teamID, userStatus) {
         });
 }
 function putTeam(teamID, team) {
-    /*return instance.put("/api/teams/"+teamID, {
-        "division": "string",
-        "category": "string",
-        "season": "string",
-        "club": "string",
-        "sexe": "string",
-        "trainingHours": "string",
-        "trainingAddress": "string",
-        "matchAddress": "string"
-    })
+    console.log(teamID);
+    return instance.put("/api/teams/"+teamID, team)
         .then(response => {
             console.log(response);
             return response
         }).catch((error) => {
+        console.log(error);
             return error;
-        });*/
+        });
 }

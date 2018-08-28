@@ -4,13 +4,13 @@ import {
     TouchableOpacity,
     Text,
     View,
-    ScrollView, FlatList, StyleSheet, Image
+    ScrollView, FlatList, StyleSheet, Image, TextInput
 } from 'react-native';
 import CustomInput from "../components/CustomInput";
 import {connect} from "react-redux";
 import {userActions} from "../_actions/user";
 import ProfilePic from "../components/ProfilePic";
-import GLOBAL from "../config/utils";
+import GLOBAL, {getActiveRouteName} from "../config/utils";
 import AccordionSearch from "../components/AccordionSearch/index";
 
 class Search extends Component {
@@ -26,9 +26,14 @@ class Search extends Component {
         this._renderIsFollowed = this._renderIsFollowed.bind(this);
         this._renderItem = this._renderItem.bind(this);
     }
-
+    componentWillMount() {
+    }
     componentWillReceiveProps(nextProps) {
-        console.log(this.props.navigation)
+        if(getActiveRouteName(nextProps.NavigationReducer) === 'Rechercher'){
+            console.log(nextProps)
+            this.searchInput.focus();
+            this.forceUpdate();
+        };
     }
 
     onChangeInfos(state, newvalue) {
@@ -38,8 +43,7 @@ class Search extends Component {
     searchUser() {
         if (this.state.search) {
             this.props.navigation.dispatch(userActions.searchUser(this.state.search))
-        }
-        ;
+        };
     }
 
     goToProfile(item) {
@@ -188,24 +192,19 @@ class Search extends Component {
     _renderInput() {
         return (
             <View style={[searchStyle.inputContainer]}>
-
-                <CustomInput
-                    returnKeyType={'send'}
-                    container={{justifyContent: 'flex-start', flex: 1}}
+                <TextInput
+                    style={{paddingLeft:5,flex: 1,paddingVertical:5,fontSize:12}}
                     placeholder={'Entrez le nom d\'un(e) joueur, joueuse, équipe'}
-                    input={[{flex: 1, padding: 5}]}
-                    state={'search'}
+                    returnKeyType={ "send" }
                     textColor={'#000000'}
                     placeholderTextColor={'#cccccc'}
-                    borderColor={'#cccccc'}
-                    backgroundColor={'#ffffff'}
-                    security={false}
+                    blurOnSubmit={false}
                     ref={
                         (c) => {
                             this.searchInput = c;
                         }
                     }
-                    onChangeParent={(state, newvalue) => this.onChangeInfos(state, newvalue)}
+                    onChange={(value) => this.onChangeInfos('search', value)}
                 />
                 <TouchableOpacity
                     style={[searchStyle.commentInputContainer]}
@@ -236,7 +235,8 @@ const mapStateToProps = (state) => {
     return {
         userList: state.searchList.user,
         isFetching: state.searchList.fetching,
-        currentUser: state.currentUser.user
+        currentUser: state.currentUser.user,
+        NavigationReducer: state.NavigationReducer
     };
 };
 export default connect(mapStateToProps)(Search);

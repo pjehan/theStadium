@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, KeyboardAvoidingView, View} from 'react-native';
+import {Image, KeyboardAvoidingView, ScrollView,View} from 'react-native';
 import {StackNavigator, TabNavigator, addNavigationHelpers} from 'react-navigation';
 import {connect} from 'react-redux';
 import {Button, Text} from 'react-native';
@@ -97,17 +97,16 @@ const ArticleTabInside = TabNavigator({
 export class AvoidArticle extends Component {
     render() {
         return (
-            <KeyboardAvoidingView
-                keyboardVerticalOffset={-50}
-                style={{flex: 1,backgroundColor:'white',}}
+            <ScrollView
+                style={{
+                    flex: 1,flexGrow:1,backgroundColor:'white',}}
                 contentContainerStyle={{
-                    flex: 1,
-                    width:"100%",backgroundColor:'white',
-                }}
-                behavior="position" enabled>
+                    flex: 1,flexGrow:1,
+                    width:"100%",backgroundColor:'white'
+                }}>
                 <ArticleTabInside />
 
-            </KeyboardAvoidingView>
+            </ScrollView>
         )
     }
 }
@@ -130,7 +129,7 @@ const TeamProfile = TabNavigator({
             tabBarLabel: 'Actualitées'
         })
     },
-    Gallerie: {
+    Galerie: {
         screen: Gallery,
         navigationOptions: {
             header: null,
@@ -231,7 +230,7 @@ const MainStack = TabNavigator({
         })
     },
     Notifications: {
-        screen: Search,
+        screen: MenuStack,
         navigationOptions: ({navigation}) => ({
             header: props => <Header headerType="logo" backIcon={false} {...props} />,
             tabBarIcon: ({focused}) => {
@@ -477,7 +476,6 @@ class Root extends Component {
 class AppNavigation extends Component {
     render() {
         const {navigationState, dispatch} = this.props;
-        console.log(this.props)
         return (
             <Root >
                 <Navigator

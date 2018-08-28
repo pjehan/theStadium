@@ -19,7 +19,9 @@ export default class PublishHeader extends Component {
                         shadowOffset: {width: 210, height: 10},
                         shadowColor: 'black',
                         shadowOpacity: 1,
-                        elevation: 5
+                        elevation: 5,
+                        borderBottomWidth:0.1,
+                        borderBottomColor:'#cccccc'
                     }}
                     scrollEnabled={false}
                     data={TABS}
@@ -51,7 +53,7 @@ export const Style = StyleSheet.create({
         flexDirection: 'row',
         alignItems:'center',
         width: '100%',
-        height: 40,
+        height: 45,
     },
     tabButton: {
         backgroundColor: 'white',

@@ -12,6 +12,7 @@ import {userActions} from "../_actions/user";
 import ProfilePic from "../components/ProfilePic";
 import GLOBAL, {getActiveRouteName} from "../config/utils";
 import AccordionSearch from "../components/AccordionSearch/index";
+import { SearchBar } from 'react-native-elements'
 
 class Search extends Component {
     constructor(props) {
@@ -190,8 +191,37 @@ class Search extends Component {
     }
 
     _renderInput() {
+        return <SearchBar
+                round
+                lightTheme
+                clearIcon
+                onChangeText={(value) => this.onChangeInfos('search', value)}
+
+                    onClearText={() => {this.setState({search: ""})}}
+                ref={
+                    (c) => {
+                        this.searchInput = c;
+                    }
+                }
+                onSubmitEditing={() => {this.searchUser()}}
+                icon={{ type: 'font-awesome', name: 'search' }}
+                placeholder="Entrez le nom d'un(e) joueur, joueuse, équipe" />
+
+    }
+
+    render() {
         return (
-            <View style={[searchStyle.inputContainer]}>
+            <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
+                {this._renderInput()}
+                <ScrollView style={searchStyle.tabContainer}>
+                    {this._renderList()}
+                </ScrollView>
+            </View>
+        )
+    }
+}
+/*
+<View style={[searchStyle.inputContainer]}>
                 <TextInput
                     style={{paddingLeft:5,flex: 1,paddingVertical:5,fontSize:12}}
                     placeholder={'Entrez le nom d\'un(e) joueur, joueuse, équipe'}
@@ -216,21 +246,7 @@ class Search extends Component {
                     <View><Text style={[searchStyle.commentInputText]}>Rechercher</Text></View>
                 </TouchableOpacity>
             </View>
-        )
-    }
-
-    render() {
-        return (
-            <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
-                {this._renderInput()}
-                <ScrollView style={searchStyle.tabContainer}>
-                    {this._renderList()}
-                </ScrollView>
-            </View>
-        )
-    }
-}
-
+ */
 const mapStateToProps = (state) => {
     return {
         userList: state.searchList.user,

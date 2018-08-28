@@ -125,11 +125,18 @@ class Contact extends Component {
     };
 
     _contactSend() {
-        const lundi = (this.state.lundiStart && this.state.lundiEnd) ? this.state.lundiStart + '-' + this.state.lundiEnd : "";
-        const mardi = (this.state.mardiStart && this.state.mardiEnd) ? this.state.mardiStart + '-' + this.state.mardiEnd : "";
-        const mercredi = (this.state.mercrediStart && this.state.mercrediEnd) ? this.state.mercrediStart + '-' + this.state.mercrediEnd : "";
-        const jeudi = (this.state.jeudiStart && this.state.jeudiEnd) ? this.state.jeudiStart + '-' + this.state.jeudiEnd : "";
-        const vendredi = (this.state.vendrediStart && this.state.vendrediEnd) ? this.state.vendrediStart + '-' + this.state.vendrediEnd : "";
+        const {navigation} = this.props;
+        const state = navigation.state.params;
+        const teamP = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
+        const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
+
+        const trainingHoursP = teamP.trainingHours ? JSON.parse(teamP.trainingHours) : null;
+
+        const lundi = (this.state.lundiStart && this.state.lundiEnd) ? this.state.lundiStart + ' - ' + this.state.lundiEnd : trainingHoursP.lundi ? trainingHoursP.lundi : "";
+        const mardi = (this.state.mardiStart && this.state.mardiEnd) ? this.state.mardiStart + ' - ' + this.state.mardiEnd : trainingHoursP.mardi ? trainingHoursP.mardi : "";
+        const mercredi = (this.state.mercrediStart && this.state.mercrediEnd) ? this.state.mercrediStart + ' - ' + this.state.mercrediEnd : trainingHoursP.mercredi ? trainingHoursP.mercredi : "";
+        const jeudi = (this.state.jeudiStart && this.state.jeudiEnd) ? this.state.jeudiStart + ' - ' + this.state.jeudiEnd : trainingHoursP.jeudi ? trainingHoursP.jeudi : "";
+        const vendredi = (this.state.vendrediStart && this.state.vendrediEnd) ? this.state.vendrediStart + ' - ' + this.state.vendrediEnd : trainingHoursP.vendredi ? trainingHoursP.vendredi : "";
         const trainingHours = JSON.stringify({
             lundi: lundi,
             mardi: mardi,
@@ -146,10 +153,9 @@ class Contact extends Component {
             trainingAddress: this.state.trainingAddress,
             matchAddress: this.state.matchAddress,
         };
-        const newTeam = Object.assign(this.props.currentUser.teams[0].team, team, club);
-        console.log(newTeam);
+        Object.assign(this.props.currentUser.teams[0].team, team, club);
 
-        this.props.dispatch(teamAction.putTeam(this.props.currentUser.teams[0].team.id, newTeam));
+        this.props.dispatch(teamAction.putTeam(this.props.currentUser.teams[0].team.id, team));
     }
 
     resetTimer = (day) => {
@@ -171,15 +177,65 @@ class Contact extends Component {
                 flexDirection: 'column',
 
             }}>
+                {utils._isUser(state.currentUser, state.inspectedUser) ?
+                    (
+                        <View style={{flexDirection: 'row', justifyContent: this.state.isEditing ? 'space-between' : 'flex-end' }}>
+                            {this.state.isEditing ?
+                                <TouchableOpacity style={{alignSelf: 'flex-start', marginLeft: 10, paddingBottom: 10}}
+                                                  onPress={() => {
+                                                      if (this.state.isEditing) {
+                                                          Alert.alert(
+                                                              'Attention',
+                                                              'Êtes-vous sûr de vouloir annuler, les modifications effectuées seront perdues ?',
+                                                              [
+                                                                  {
+                                                                      text: 'Retour',
+                                                                      onPress: () => console.log('Cancel Pressed'),
+                                                                      style: 'cancel'
+                                                                  },
+                                                                  {
+                                                                      text: 'Oui', onPress: () => {
+                                                                      this.setState(initialState);
+                                                                      this.forceUpdate()
+                                                                  }
+                                                                  },
+                                                              ],
+                                                              {cancelable: true}
+                                                          )
+                                                      } else {
+                                                          this.setState({isEditing: !this.state.isEditing});
+                                                          this.forceUpdate()
+                                                      }
+                                                  }}>
+                                    <View
+                                        style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                        <Icon type='font-awesome' name='times' size={15}
+                                              color="#cccccc"/>
+                                        <Text style={{marginLeft: 5, color: "#cccccc"}}>Annuler</Text>
 
-                <TouchableOpacity style={{alignSelf: 'flex-end', paddingBottom: 10}} onPress={() => {
-                    this.setState({isEditing: !this.state.isEditing});
-                    this.forceUpdate()
-                }}>
-                    {utils._isUser(state.currentUser, state.inspectedUser) ?
-                        <Icon name="create" size={20}
-                              color="#003366"/> : null}
-                </TouchableOpacity>
+                                    </View>
+                                </TouchableOpacity>
+                            : null}
+                            <TouchableOpacity style={{alignSelf: 'flex-end', marginRight: 10, paddingBottom: 10}}
+                                              onPress={() => {
+                                                  if (this.state.isEditing) {
+                                                      this._contactSend();
+                                                  }
+                                                  this.setState({isEditing: !this.state.isEditing});
+                                                  this.forceUpdate()
+                                              }}><View
+                                style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Text style={{
+                                    marginRight: 5,
+                                    color: "#003366"
+                                }}>{this.state.isEditing ? 'Valider' : 'Modifier'}</Text>
+                                <Icon type='font-awesome' name={this.state.isEditing ? 'check' : 'pencil'} size={15}
+                                      color="#003366"/>
+                            </View>
+                            </TouchableOpacity>
+                        </View>
+                    )
+                    : null}
                 {!this.state.isEditing ? this.renderContact() : this.renderEdit()}
             </KeyboardAvoidingView>
         )
@@ -239,7 +295,7 @@ class Contact extends Component {
                         textColor={'#333333'}
                         borderColor={'transparent'}
                         backgroundColor={'#eeeeee'}
-                        placeholder={team.trainingAddress ? team.trainingAddress : 'Addresse d\'entraînement'}
+                        placeholder={team.trainingAddress ? team.trainingAddress : 'Adresse d\'entraînement'}
                         state={'trainingAddress'}
                         input={GLOBAL_STYLE.input}
                         onChangeParent={(state, newvalue) => {
@@ -276,7 +332,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('lundiDate')
                                               }}>
-                                <Text style={{color: '#ffffff'}}>Début : {this.state.lundiStart}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.lundiStart ? this.state.lundiStart : 'Début'}</Text>
 
                                 <DateTimePicker
                                     mode={'time'}
@@ -294,7 +351,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('lundiDateEnd')
                                               }}>
-                                <Text style={{color: '#ffffff'}}> Fin : {this.state.lundiEnd}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.lundiEnd ? this.state.lundiEnd : 'Fin'}</Text>
 
                                 <DateTimePicker
                                     mode={'time'}
@@ -329,7 +387,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('mardiDate')
                                               }}>
-                                <Text style={{color: '#ffffff'}}>Début : {this.state.mardiStart}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.mardiStart ? this.state.mardiStart : 'Début'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.mardiDate}
@@ -345,7 +404,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('mardiDateEnd')
                                               }}>
-                                <Text style={{color: '#ffffff'}}> Fin : {this.state.mardiEnd}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.mardiEnd ? this.state.mardiEnd : 'Fin'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.mardiDateEnd}
@@ -379,7 +439,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('mercrediDate')
                                               }}>
-                                <Text style={{color: '#ffffff'}}>Début : {this.state.mercrediStart}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.mercrediStart ? this.state.mercrediStart : 'Début'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.mercrediDate}
@@ -395,7 +456,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('mercrediDateEnd')
                                               }}>
-                                <Text style={{color: '#ffffff'}}> Fin : {this.state.mercrediEnd}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.mercrediEnd ? this.state.mercrediEnd : 'Fin'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.mercrediDateEnd}
@@ -430,7 +492,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('jeudiDate')
                                               }}>
-                                <Text style={{color: '#ffffff'}}>Début : {this.state.jeudiStart}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.jeudiStart ? this.state.jeudiStart : 'Début'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.jeudiDate}
@@ -446,7 +509,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('jeudiDateEnd')
                                               }}>
-                                <Text style={{color: '#ffffff'}}> Fin : {this.state.jeudiEnd}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.jeudiEnd ? this.state.jeudiEnd : 'Fin'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.jeudiDateEnd}
@@ -480,7 +544,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('vendrediDate')
                                               }}>
-                                <Text style={{color: '#ffffff'}}>Début : {this.state.vendrediStart}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.vendrediStart ? this.state.vendrediStart : 'Début'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.vendrediDate}
@@ -496,7 +561,8 @@ class Contact extends Component {
                                               onPress={() => {
                                                   this._showDateTimePicker('vendrediDateEnd')
                                               }}>
-                                <Text style={{color: '#ffffff'}}> Fin : {this.state.vendrediEnd}</Text>
+                                <Text
+                                    style={{color: '#ffffff'}}>{this.state.vendrediEnd ? this.state.vendrediEnd : 'Fin'}</Text>
                                 <DateTimePicker
                                     mode={'time'}
                                     isVisible={this.state.vendrediDateEnd}
@@ -565,7 +631,7 @@ class Contact extends Component {
                         this.setState({isEditing: !this.state.isEditing});
                         this.forceUpdate()
                     }}>
-                        <Text style={{color: '#ffffff', fontWeight: '600'}}>Confirmer</Text>
+                        <Text style={{color: '#ffffff', fontWeight: '600'}}>Valider</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

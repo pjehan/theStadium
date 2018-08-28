@@ -77,8 +77,8 @@ class TimeLine extends Component {
     _addMedia = async (type, postType) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: type,
+            allowEditing: type !== 'Videos'
         });
-        console.log(result);
         if (!result.cancelled && result.type === 'video') {
             this.setState({media: [{uri: result.uri, width: result.width, height: result.height, type: result.type}]});
             this.setState({interviewVisible: true,publishType:postType});
@@ -101,7 +101,6 @@ class TimeLine extends Component {
             mediaTypes: type
         });
 
-        console.log(result);
         if (!result.cancelled) {
             this.setState({media: [{uri: result.uri, width: result.width, height: result.height, type: result.type}]});
             this.setState({interviewVisible: true, publishType:postType});

@@ -236,7 +236,7 @@ class Post extends Component {
 
                 <UserActionBottom toggleLike={() => this.toggleLike()} onToggleComment={() => this.onToggleComment(true, true)} isLiked={this.isLiked()}/>
                 {this.props.post.comments.length > 0 ?
-                    <View style={{borderTopColor: '#cccccc', borderTopWidth: 1, marginTop: 10, paddingTop: 10}}>
+                    <View style={{borderTopColor: '#cccccc', borderTopWidth: 0.5, marginTop: 10, paddingTop: 10}}>
                         <TouchableOpacity
                             style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}
                             onPress={() => {

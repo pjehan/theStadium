@@ -88,7 +88,7 @@ class CommentModal extends Component {
 
                 <OwnerHeader
                     owner={this.props.post.owner}
-                    Owner={ this.props.post.owner.userType.label === 'Coach' ? this.props.post.owner.teams[0].team.club.name : this.props.post.owner.firstname + ' ' + this.props.post.owner.lastname}
+                    Owner={ this.props.post.owner.userType === '/api/types/1' ? this.props.post.owner.teams[0].team.club.name : this.props.post.owner.firstname + ' ' + this.props.post.owner.lastname}
                     ownerID={this.props.post.owner.id} postDate={this.props.post.creationDate} team={this.props.post.owner.userType.label === 'Coach' ? this.props.post.owner.teams[0].team : null}/>
 
                 <Content {...this.props.post} />

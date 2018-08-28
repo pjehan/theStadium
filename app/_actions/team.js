@@ -32,7 +32,6 @@ function putTeam(teamID, team){
         teamService.putTeam(teamID,team)
             .then(
                 team => {
-                    dispatch(success(team));
                 }
             )
     }

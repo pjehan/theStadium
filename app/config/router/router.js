@@ -92,21 +92,23 @@ const ArticleTabInside = TabNavigator({
     tabBarComponent: ArticleTabHeader,
     tabBarVisible: false,
     tabBarPosition: 'top',
+    lazy:true,
 });
 
 export class AvoidArticle extends Component {
     render() {
         return (
-            <ScrollView
-                style={{
-                    flex: 1,flexGrow:1,backgroundColor:'white',}}
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={20}
+                style={{flex: 1,backgroundColor:'white',}}
                 contentContainerStyle={{
-                    flex: 1,flexGrow:1,
-                    width:"100%",backgroundColor:'white'
-                }}>
+                    flexGrow:1,
+                    width:"100%",backgroundColor:'white',
+                }}
+                behavior="position" enabled>
                 <ArticleTabInside />
 
-            </ScrollView>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -126,7 +128,8 @@ const TeamProfile = TabNavigator({
         screen: Actus,
         navigationOptions: ({navigation}) => ({
             header: null,
-            tabBarLabel: 'Actualitées'
+            tabBarLabel: 'Actualité' +
+            's'
         })
     },
     Galerie: {

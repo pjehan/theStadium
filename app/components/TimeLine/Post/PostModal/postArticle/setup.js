@@ -128,7 +128,7 @@ class Setup extends Component {
     render() {
         const {clubQuery, clubList} = this.state;
         return (
-            <View style={{flex:1,flexGrow:1}}>
+            <ScrollView>
                 <SearchDropDown title={'Equipe adverse'} dataList={this.state.clubList} visible={this.state.guessVisible}
                                      onModalClose={(visible, data) => this._setClub(visible, data)}/>
                 <View style={{backgroundColor:'#e9e9e9',paddingHorizontal:15, paddingVertical:10}}>
@@ -189,7 +189,7 @@ class Setup extends Component {
                                      this.onChangeInfos(state, newvalue)
                                  }}/>
                 </View>
-            </View>
+            </ScrollView>
         )
     };
 }

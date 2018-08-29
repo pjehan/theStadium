@@ -1,17 +1,18 @@
 import {registeringUser} from './register';
 import {postList,commentList,ownerList} from './post'
-import NavigationReducer from './navigation'
+import {NavigationReducer, AuthenticationReducer} from './navigation'
 import { combineReducers } from 'redux';
 import {currentUser,inspectedUser,searchList} from "./user";
 import {clubList} from "./club";
 
 
-const appReducer = combineReducers({
+const AppReducer = combineReducers({
     registeringUser,
     inspectedUser,
     postList,
     ownerList,
     NavigationReducer,
+    AuthenticationReducer,
     commentList,
     currentUser,
     clubList,
@@ -20,4 +21,4 @@ const appReducer = combineReducers({
 });
 
 
-export default appReducer;
+export default AppReducer;

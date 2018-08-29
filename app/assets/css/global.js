@@ -8,7 +8,7 @@ export const GLOBAL_STYLE = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   justifyStretch: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     paddingTop:70,
     paddingBottom:50
  },
@@ -50,10 +50,14 @@ export const GLOBAL_STYLE = StyleSheet.create({
         alignItems: 'center',
     },
   middleLogo: {
-    width: 300,
+    /*width: 300,
     alignSelf: 'center',
     paddingLeft:50,
-    resizeMode: 'contain'
+    resizeMode: 'contain'*/
+      resizeMode: 'contain',
+      marginBottom: 20,
+      padding:10,
+      marginTop:20
   },
     headerMiddleLogo: {
         resizeMode: 'contain',

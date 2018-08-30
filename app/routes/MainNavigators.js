@@ -16,7 +16,7 @@ const middleware = createReactNavigationReduxMiddleware(
     state => state.NavigationReducer
 );
 
-const RootNavigator = createStackNavigator({
+const AppNavigator = createStackNavigator({
         Login: {
             screen: Login,
             navigationOptions: {
@@ -44,7 +44,7 @@ class Root extends Component {
         )
     }
 }
-class RootNavigator extends Component {
+class AppNavigator extends Component {
     render() {
         const {state, dispatch} = this.props;
         return (
@@ -57,11 +57,7 @@ class RootNavigator extends Component {
     }
 }
 */
-const AppWithNavigationState = reduxifyNavigator(RootNavigator, 'root');
-
-/*const mapStateToProps = state => ({
-    state: state.nav,
-});*/
+const AppWithNavigationState = reduxifyNavigator(AppNavigator, 'root');
 const mapStateToProps = state => {
     return {
         state: state.NavigationReducer,
@@ -70,7 +66,7 @@ const mapStateToProps = state => {
 
 const AppNavigator = connect(mapStateToProps)(AppWithNavigationState);
 
-export { RootNavigator, AppNavigator, middleware };
+export { AppNavigator, AppNavigator, middleware };
 
 
 

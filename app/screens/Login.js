@@ -6,6 +6,7 @@ import CustomInput from '../components/CustomInput';
 import {connect} from 'react-redux';
 import {userActions} from "../_actions/user";
 import utils from '../config/utils';
+import {_errorAlert} from "../_utils/alert";
 
 
 class Login extends Component {
@@ -45,8 +46,9 @@ class Login extends Component {
     }
 
     loginIn() {
-        this.props.dispatch(userActions.login(this.state.email, this.state.password));
-        this.setModalVisible(true);
+        _errorAlert('Mauvais mot de passe');
+       /* this.props.dispatch(userActions.login(this.state.email, this.state.password));
+        this.setModalVisible(true);*/
     }
 
 
@@ -54,13 +56,13 @@ class Login extends Component {
         const {navigate} = this.props.navigation;
 
         return (
-            <View style={{backgroundColor: '#003366',
+            <View style={{backgroundColor: '#003366',flex:1,
                 alignItems: 'center',justifyContent: 'space-between'}}>
             <KeyboardAvoidingView behavior="padding"
                                   style={{
-                                      flex: 2,
-                                      justifyContent: 'center',
-                                      paddingHorizontal: 60
+                                      flex:3,
+                                      justifyContent: 'space-between',
+                                      marginVertical: 40
                                   }}>
                 <View>
                     <Animated.Image source={require('../assets/img/thestadium/logo-blanc.png')}
@@ -68,7 +70,6 @@ class Login extends Component {
                     <Text style={GLOBAL_STYLE.slogant}>Partagez et suivez l'actualitée du foot amateur</Text>
                 </View>
                 <View>
-                    <Text>{this.state.databse}</Text>
                     <CustomInput
                         container={''}
                         placeholder={'Votre Identifiant'}
@@ -100,7 +101,7 @@ class Login extends Component {
 
             </KeyboardAvoidingView>
                 <View style={{
-                    flex: 2}}>
+                    flex: 1}}>
                     <Text style={{marginBottom: 20, color: 'white'}} onPress={() => navigate("Sexe", {})}>Pas encore
                         inscrit ?</Text>
                     <TouchableOpacity onPress={() => navigate("Sexe", {})} style={GLOBAL_STYLE.loginButton}>

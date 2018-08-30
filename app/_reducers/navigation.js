@@ -1,10 +1,10 @@
-import {RootNavigator} from '../routes/MainNavigators';
+import {AppNavigator} from '../routes/MainNavigators';
 import {NavigationActions} from "react-navigation";
 // Start with two routes: The Main screen, with the Login screen on top.
-const firstAction = RootNavigator.router.getActionForPathAndParams('Login');
-const tempNavState = RootNavigator.router.getStateForAction(firstAction);
-const secondAction = RootNavigator.router.getActionForPathAndParams('Login');
-const initialNavState = RootNavigator.router.getStateForAction(
+const firstAction = AppNavigator.router.getActionForPathAndParams('Login');
+const tempNavState = AppNavigator.router.getStateForAction(firstAction);
+const secondAction = AppNavigator.router.getActionForPathAndParams('Login');
+const initialNavState = AppNavigator.router.getStateForAction(
     secondAction,
     tempNavState
 );
@@ -13,19 +13,19 @@ function NavigationReducer(state = initialNavState, action) {
     let nextState;
     switch (action.type) {
         case 'Login':
-            nextState = RootNavigator.router.getStateForAction(
+            nextState = AppNavigator.router.getStateForAction(
                 NavigationActions.back(),
                 state
             );
             break;
         case 'Logout':
-            nextState = RootNavigator.router.getStateForAction(
+            nextState = AppNavigator.router.getStateForAction(
                 NavigationActions.navigate({routeName: 'Login'}),
                 state
             );
             break;
         default:
-            nextState = RootNavigator.router.getStateForAction(action, state);
+            nextState = AppNavigator.router.getStateForAction(action, state);
             break;
     }
 

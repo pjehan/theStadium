@@ -14,7 +14,8 @@ export const userActions = {
     removePlayer,
     putUser,
     searchUser,
-    toggleFollow
+    toggleFollow,
+    searchClean
 };
 
 function login(username, password) {
@@ -228,6 +229,13 @@ function addInfos(user) {
     function request(user) { return { type: userConstants.REGISTER_ADD_INFOS_REQUEST, user } }
     function success(user) { return { type: userConstants.REGISTER_ADD_INFOS_SUCCESS, user } }
     function failure(error) { return { type: userConstants.REGISTER_ADD_INFOS_FAILURE, error } }
+}
+function searchClean() {
+    return dispatch => {
+        dispatch(success([]))
+    }
+
+    function success(user) { return { type: userConstants.SEARCH_CLEAN, user } }
 }
 function searchUser(query){
     return dispatch => {

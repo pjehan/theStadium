@@ -165,7 +165,7 @@ export const UserActionBottom = props => (
             </TouchableOpacity>
 
             <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => {
-                props.onToggleComment(true, true)
+                props.toggleShare();
             }}>
 
                 <Image resizeMode="contain" style={{height: 20, width: 20, marginRight: 10}}

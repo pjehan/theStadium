@@ -447,6 +447,23 @@ class PostModal extends Component {
                             </View>
                             : null}
                     <TouchableOpacity onPress={() => {
+                        this._addMedia('Vidéo', this.displaySimpleArticle);
+                    }} style={{
+                        height: 50,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}>
+
+                        <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}} resizeMode={'contain'}
+                               source={require('../../../../assets/img/picto/menu/actions/video.png')}/>
+                        <Text style={{color: '#003366'}}>Ajoutez une vidéo</Text>
+                        <Icon style={{marginRight: 20}}
+                              color='#003366'
+                              size={25}
+                              name={'chevron-right'}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
                         this._addMedia('Images', this.displaySimpleArticle);
                     }} style={{
                         height: 50,
@@ -456,8 +473,8 @@ class PostModal extends Component {
                     }}>
 
                         <Image style={{marginLeft: 20, marginRight: 20, height: 20, width: 20}} resizeMode={'contain'}
-                               source={require('../../../../assets/img/picto/menu/actions/photo.png')}/>
-                        <Text style={{color: '#003366'}}>Ajoutez un média</Text>
+                               source={require('../../../../assets/img/picto/menu/actions/photo-green.png')}/>
+                        <Text style={{color: '#003366'}}>Ajoutez une photo</Text>
                         <Icon style={{marginRight: 20}}
                               color='#003366'
                               size={25}

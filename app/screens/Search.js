@@ -191,7 +191,8 @@ class Search extends Component {
     }
 
     _renderInput() {
-        return <SearchBar
+        return (
+            <View style={{flexDirection:'row',justifyContent:'flex-start', alignItems:'center'}}><SearchBar
                 round
                 lightTheme
                 clearIcon
@@ -203,15 +204,28 @@ class Search extends Component {
                         this.searchInput = c;
                     }
                 }
+                containerStyle={{flex:1,borderBottomWidth:0,borderTopWidth:0}}
                 onSubmitEditing={() => {this.searchUser()}}
                 icon={{ type: 'font-awesome', name: 'search' }}
                 placeholder="Entrez le nom d'un(e) joueur, joueuse, équipe" />
+
+                {this.state.search ?  <TouchableOpacity style={{padding:5,width:60,alignItems:'center'}} onPress={() => {
+                        this.setState({search: ""}, () => {
+                            this.searchInput.clearText();
+                            this.props.navigation.dispatch(userActions.searchClean());
+                            this.forceUpdate();
+                        })
+                    }
+                }>
+                    <Text>Annuler</Text>
+                </TouchableOpacity>  : null }
+        </View>)
 
     }
 
     render() {
         return (
-            <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG]}>
+            <View contentContainerStyle={[GLOBAL_STYLE.greyColorBG, {justifyContent:'flex-start'}]}>
                 {this._renderInput()}
                 <ScrollView style={searchStyle.tabContainer}>
                     {this._renderList()}

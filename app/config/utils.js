@@ -54,7 +54,7 @@ const COACHTABS = [
 ];
 
 const SUPPORTERTABS = [
-    {label: 'Vidéo', picto: require('../assets/img/picto/menu/actions/photo.png'), action: 'video'},
+    {label: 'Vidéo', picto: require('../assets/img/picto/menu/actions/video.png'), action: 'video'},
     {label: 'Photo', picto: require('../assets/img/picto/menu/actions/photo-green.png'), action: 'photo'},
     {label: 'Publier', picto: require('../assets/img/picto/menu/actions/post.png'), action: 'simple'}
 ];

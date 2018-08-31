@@ -129,6 +129,10 @@ export function searchList(state = {
         case userConstants.SEARCH_FAILURE:
             return {fetching: false, fetched: true, error: action.payload};
             break;
+        case userConstants.SEARCH_CLEAN:
+            state.user = [];
+            console.log(action)
+            return {fetching: false, fetched: false, user: []};
         default:
             return state;
     }

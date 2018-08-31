@@ -128,8 +128,7 @@ const TeamProfile = TabNavigator({
         screen: Actus,
         navigationOptions: ({navigation}) => ({
             header: null,
-            tabBarLabel: 'Actualité' +
-            's'
+            tabBarLabel: 'Actualités'
         })
     },
     Galerie: {
@@ -156,7 +155,7 @@ const SupporterProfile = TabNavigator({
             tabBarLabel: 'Actualitées'
         })
     },
-    Gallerie: {
+    Galerie: {
         screen: Gallery,
         navigationOptions: {
             header: null,
@@ -179,7 +178,7 @@ const ProfileTab = TabNavigator({
             header: null,
         }
     },
-    Gallerie: {
+    Galerie: {
         screen: Gallery,
         navigationOptions: {
             header: null,

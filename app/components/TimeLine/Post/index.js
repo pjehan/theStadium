@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    StyleSheet, Image, Text, View, TouchableOpacity,
+    StyleSheet, Alert,Image, Text, View, TouchableOpacity,
     findNodeHandle,
     NativeModules
 } from 'react-native';
@@ -208,6 +208,18 @@ class Post extends Component {
         }
     }
 
+    toggleShare() {
+        Alert.alert(
+            'Partager',
+            'Vous êtes sur le point de partager le post',
+            [
+                {text: 'Annuler', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'Partager', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: true }
+        )
+    }
+
     render() {
         return (
             <View style={[PostStyle.container, {
@@ -234,7 +246,7 @@ class Post extends Component {
                              likes={this.state.post.postsLiked.length} shares={this.state.post.postsShared.length}
                              comments={this.state.post.comments.length}/>
 
-                <UserActionBottom toggleLike={() => this.toggleLike()} onToggleComment={() => this.onToggleComment(true, true)} isLiked={this.isLiked()}/>
+                <UserActionBottom toggleShare={() => this.toggleShare()}toggleLike={() => this.toggleLike()} onToggleComment={() => this.onToggleComment(true, true)} isLiked={this.isLiked()}/>
                 {this.props.post.comments.length > 0 ?
                     <View style={{borderTopColor: '#cccccc', borderTopWidth: 0.5, marginTop: 10, paddingTop: 10}}>
                         <TouchableOpacity

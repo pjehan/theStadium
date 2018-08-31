@@ -20,8 +20,11 @@ function addUser(userID, teamID, userStatus) {
         });
 }
 function putTeam(teamID, team) {
-    console.log(teamID);
-    return instance.put("/api/teams/"+teamID, team)
+    let teamSend= team;
+    delete teamSend['sexe'];
+    delete teamSend['division'];
+    delete teamSend['category']
+    return instance.put("/api/teams/"+teamID, teamSend)
         .then(response => {
             console.log(response);
             return response

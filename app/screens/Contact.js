@@ -58,6 +58,31 @@ class Contact extends Component {
         this._handleDatePicked = this._handleDatePicked.bind(this);
     }
 
+    componentWillMount() {
+        const {navigation} = this.props;
+        const state = navigation.state.params;
+        const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
+        const trainingHoursP = team.trainingHours ? JSON.parse(team.trainingHours) : null;
+        this.setState({phoneNumber: team.club.phoneNumber, address: team.club.address, trainingAddress: team.trainingAddress, matchAddress:team.matchAddress});
+        this.setDateState(trainingHoursP);
+    }
+
+    setDateState(hours){
+        if(hours){
+            for(let key in hours){
+
+                if(hours[key]){
+                    var keySplit = hours[key].split(' - ');
+                    let start = key + 'Start';
+                    let end = key + 'End';
+                    this.setState({[start]: keySplit[0], [end]: keySplit[1]}, () => {
+
+                        console.log(this.state,key,start,end,keySplit)
+                    });
+                }
+            }
+        }
+    }
     onChangeInfos(state, newvalue) {
         this.setState({[state]: newvalue});
     }
@@ -131,12 +156,11 @@ class Contact extends Component {
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
         const trainingHoursP = teamP.trainingHours ? JSON.parse(teamP.trainingHours) : null;
-
-        const lundi = (this.state.lundiStart && this.state.lundiEnd) ? this.state.lundiStart + ' - ' + this.state.lundiEnd : trainingHoursP.lundi ? trainingHoursP.lundi : "";
-        const mardi = (this.state.mardiStart && this.state.mardiEnd) ? this.state.mardiStart + ' - ' + this.state.mardiEnd : trainingHoursP.mardi ? trainingHoursP.mardi : "";
-        const mercredi = (this.state.mercrediStart && this.state.mercrediEnd) ? this.state.mercrediStart + ' - ' + this.state.mercrediEnd : trainingHoursP.mercredi ? trainingHoursP.mercredi : "";
-        const jeudi = (this.state.jeudiStart && this.state.jeudiEnd) ? this.state.jeudiStart + ' - ' + this.state.jeudiEnd : trainingHoursP.jeudi ? trainingHoursP.jeudi : "";
-        const vendredi = (this.state.vendrediStart && this.state.vendrediEnd) ? this.state.vendrediStart + ' - ' + this.state.vendrediEnd : trainingHoursP.vendredi ? trainingHoursP.vendredi : "";
+        const lundi = (this.state.lundiStart && this.state.lundiEnd) ? this.state.lundiStart + ' - ' + this.state.lundiEnd :"";
+        const mardi = (this.state.mardiStart && this.state.mardiEnd) ? this.state.mardiStart + ' - ' + this.state.mardiEnd : "";
+        const mercredi = (this.state.mercrediStart && this.state.mercrediEnd) ? this.state.mercrediStart + ' - ' + this.state.mercrediEnd : "";
+        const jeudi = (this.state.jeudiStart && this.state.jeudiEnd) ? this.state.jeudiStart + ' - ' + this.state.jeudiEnd :  "";
+        const vendredi = (this.state.vendrediStart && this.state.vendrediEnd) ? this.state.vendrediStart + ' - ' + this.state.vendrediEnd : "";
         const trainingHours = JSON.stringify({
             lundi: lundi,
             mardi: mardi,
@@ -153,9 +177,11 @@ class Contact extends Component {
             trainingAddress: this.state.trainingAddress,
             matchAddress: this.state.matchAddress,
         };
-        Object.assign(this.props.currentUser.teams[0].team, team, club);
-
-        this.props.dispatch(teamAction.putTeam(this.props.currentUser.teams[0].team.id, team));
+        let test = Object.assign(this.props.currentUser.teams[0].team, team, club);
+         Object.assign(this.props.currentUser.teams[0].team.club, club);
+        console.log(this.state, this.props, test);
+        this.forceUpdate();
+        this.props.dispatch(teamAction.putTeam(this.props.currentUser.teams[0].team.id, test));
     }
 
     resetTimer = (day) => {
@@ -168,7 +194,7 @@ class Contact extends Component {
         const type = state.inspectedUser ? state.inspectedUser.userType.label : this.props.inspectedUser.userType.label;
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
         const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
-
+        const trainingHours = team.trainingHours ? JSON.parse(team.trainingHours) : null;
         return (
             <KeyboardAvoidingView style={{
                 backgroundColor: '#ffffff',
@@ -195,7 +221,9 @@ class Contact extends Component {
                                                                   },
                                                                   {
                                                                       text: 'Oui', onPress: () => {
-                                                                      this.setState(initialState);
+                                                                      this.setState(initialState, () => {
+                                                                          this.setDateState(trainingHours)
+                                                                      });
                                                                       this.forceUpdate()
                                                                   }
                                                                   },
@@ -221,6 +249,7 @@ class Contact extends Component {
                                                   if (this.state.isEditing) {
                                                       this._contactSend();
                                                   }
+                                                  this.setDateState(trainingHours);
                                                   this.setState({isEditing: !this.state.isEditing});
                                                   this.forceUpdate()
                                               }}><View
@@ -242,13 +271,12 @@ class Contact extends Component {
     }
 
     renderEdit() {
+
         const {navigation} = this.props;
         const state = navigation.state.params;
-        const type = state.inspectedUser ? state.inspectedUser.userType.label : this.props.inspectedUser.userType.label;
         const team = state.inspectedUser.teams ? state.inspectedUser.teams[0].team : this.props.inspectedUser.teams[0].team;
-        const user = state.inspectedUser ? state.inspectedUser : this.props.inspectedUser;
 
-        const trainingHours = team.trainingHours ? JSON.parse(team.trainingHours) : null;
+        const trainingHours = team.trainingHours ? JSON.parse(team.trainingHours) : {};
         return (
             <ScrollView contentContainerStyle={{
                 paddingHorizontal: 20, paddingVertical: 10
@@ -261,6 +289,7 @@ class Contact extends Component {
                         textColor={'#333333'}
                         borderColor={'transparent'}
                         backgroundColor={'#eeeeee'}
+                        value={this.state.phoneNumber}
                         placeholder={team.club.phoneNumber ? team.club.phoneNumber : 'Numéro du téléphone'}
                         state={'phoneNumber'}
                         input={GLOBAL_STYLE.input}
@@ -280,6 +309,7 @@ class Contact extends Component {
                         borderColor={'transparent'}
                         backgroundColor={'#eeeeee'}
                         placeholder={team.club.address ? team.club.address : 'Adresse du siège'}
+                        value={this.state.address}
                         state={'address'}
                         input={GLOBAL_STYLE.input}
                         onChangeParent={(state, newvalue) => {
@@ -296,6 +326,7 @@ class Contact extends Component {
                         borderColor={'transparent'}
                         backgroundColor={'#eeeeee'}
                         placeholder={team.trainingAddress ? team.trainingAddress : 'Adresse d\'entraînement'}
+                        value={this.state.trainingAddress}
                         state={'trainingAddress'}
                         input={GLOBAL_STYLE.input}
                         onChangeParent={(state, newvalue) => {
@@ -311,6 +342,7 @@ class Contact extends Component {
                         borderColor={'transparent'}
                         backgroundColor={'#eeeeee'}
                         placeholder={team.matchAddress ? team.matchAddress : 'Lieu de match'}
+                        value={this.state.matchAddress}
                         state={'matchAddress'}
                         input={GLOBAL_STYLE.input}
                         onChangeParent={(state, newvalue) => {
@@ -339,7 +371,7 @@ class Contact extends Component {
                                     mode={'time'}
                                     isVisible={this.state.lundiDate}
                                     onConfirm={(date) => {
-                                        this._handleTimePicked('lundiStart', date)
+                                        this._handleTimePicked('lundiStart', date);
                                     }}
                                     onCancel={() => {
                                         this._hideDateTimePicker('lundiDate')
@@ -598,6 +630,9 @@ class Contact extends Component {
                                 {
                                     text: 'Oui', onPress: () => {
                                     this.setState(initialState);
+                                    this.setState(initialState, () => {
+                                        this.setDateState(trainingHours)
+                                    });
                                     this.forceUpdate()
                                 }
                                 },
@@ -702,7 +737,7 @@ class Contact extends Component {
                     }}>
                         <Text>Mercredi:</Text>
                         <Text
-                            style={{alignSelf: 'flex-end'}}>{trainingHours.mercredi ? trainingHours.mercredi : 'Repos'}</Text>
+                            style={{alignSelf: 'flex-end'}}>{trainingHours.mercredi ? trainingHours.mercredi  : 'Repos'}</Text>
                     </View>
 
                     <View style={{
@@ -713,7 +748,7 @@ class Contact extends Component {
                     }}>
                         <Text>Jeudi:</Text>
                         <Text
-                            style={{alignSelf: 'flex-end'}}>{trainingHours.jeudi ? trainingHours.jeudi : 'Repos'}</Text>
+                            style={{alignSelf: 'flex-end'}}>{trainingHours.jeudi ? trainingHours.jeudi  : 'Repos'}</Text>
                     </View>
 
                     <View style={{
@@ -724,7 +759,7 @@ class Contact extends Component {
                     }}>
                         <Text>Vendredi:</Text>
                         <Text
-                            style={{alignSelf: 'flex-end'}}>{trainingHours.vendredi ? trainingHours.vendredi : 'Repos'}</Text>
+                            style={{alignSelf: 'flex-end'}}>{trainingHours.vendredi ? trainingHours.vendredi  : 'Repos'}</Text>
                     </View>
                 </View>
             </ScrollView>

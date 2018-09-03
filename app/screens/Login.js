@@ -7,6 +7,9 @@ import {connect} from 'react-redux';
 import {userActions} from "../_actions/user";
 import utils from '../config/utils';
 import {_errorAlert} from "../_utils/alert";
+import {NavigationActions} from "react-navigation";
+import ActionCreators from "../_actions/index";
+import {bindActionCreators} from "redux";
 
 
 class Login extends Component {
@@ -46,9 +49,9 @@ class Login extends Component {
     }
 
     loginIn() {
-        _errorAlert('Mauvais mot de passe');
-       /* this.props.dispatch(userActions.login(this.state.email, this.state.password));
-        this.setModalVisible(true);*/
+        console.log(this.props)
+        this.props.navigation.dispatch(userActions.login(this.state.email, this.state.password));
+        //this.setModalVisible(true);
     }
 
 
@@ -90,7 +93,7 @@ class Login extends Component {
                         state={'password'}
                         onChangeParent={(state, newvalue) => this.onChange(state, newvalue)}
                     />
-                    <TouchableOpacity disabled={(!(this.state.email && this.state.password))}
+                    <TouchableOpacity
                                       style={[GLOBAL_STYLE.loginButton, {backgroundColor: this.state.email && this.state.password ? '#ffffff' : '#cccccc'}]}
                                       onPress={() => {
                                           this.loginIn()
@@ -112,10 +115,11 @@ class Login extends Component {
         )
     }
 };
+const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 const mapStateToProps = (state) => {
     return {
         currentUser: state.currentUser.user,
         userFetched: state.currentUser.fetched,
     };
 };
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps,mapDispatchToProps)(Login);

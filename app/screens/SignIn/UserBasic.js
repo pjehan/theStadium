@@ -6,7 +6,7 @@ import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
 import Autocomplete from 'react-native-autocomplete-input';
 import {NavigationActions}from "react-navigation";
-import {PlayerSignInStack} from "../../routes/router";
+import {PlayerSignInStack} from "../../routes/AppRouteConfig";
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
 import SelectedTeam from "../../components/renderSelectedTeam/index";
 import SearchDropDown from "../../components/SearchDropdown/index";

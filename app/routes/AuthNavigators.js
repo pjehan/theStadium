@@ -14,14 +14,4 @@ const AuthStack = createStackNavigator({
         }
     },
 });
-
-export default createSwitchNavigator(
-    {
-        AuthLoading: AuthLoadingScreen,
-        App: AppNavigator,
-        Auth: AuthStack,
-    },
-    {
-        initialRouteName: 'AuthLoading',
-    }
-);
+export default AuthStack

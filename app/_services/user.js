@@ -33,17 +33,13 @@ function login(username, password) {
         headers: {'content-type': 'multipart/form-data; charset=UTF-8',}
     })
         .then((response) => {
-
-            console.log(response);
             const token = response.data.token;
             setAuthorizationToken(token);
             return token;
         }).then(responseJSON => {
-
-            console.log(responseJSON);
             return this.getUser(jwt_decode(responseJSON).id);
         }).catch((error) => {
-        console.log(error)
+            console.log(error)
             return Promise.reject(error);
         })
 }

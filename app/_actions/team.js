@@ -2,7 +2,7 @@
 import {teamService} from "../_services/team";
 import {userConstants} from "../_constants/user";
 
-export const teamAction = {
+export const teamActions = {
     addUser,
     putTeam
 };

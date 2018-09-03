@@ -3,6 +3,8 @@ import { userService } from '../_services';
 import { alertActions } from './';
 import {teamService} from "../_services";
 import {utils} from '../_constants';
+import {_errorAlert} from "../_utils/alert";
+import {NavigationActions} from "react-navigation";
 const {messageType} = utils;
 
 export const userActions = {
@@ -19,13 +21,13 @@ export const userActions = {
 
 function login(username, password) {
     let currentUser = {stats:{}};
-    return (dispatch,getState, {emit}) => {
+    return (dispatch) => {
+        dispatch(NavigationActions.navigate({routeName: 'AuthLoading'}));
         dispatch(request({ username, password }));
 
         userService.login(username, password)
             .then(
                 user => {
-                    console.log(user);
                     userService.getUserType(user.id)
                         .then(
                             userStats => {
@@ -36,12 +38,18 @@ function login(username, password) {
                             error => {
                                 dispatch(failure(error));
                                 dispatch(alertActions.error(error));
+                                console.log(error);
+                                dispatch(NavigationActions.goBack());
+                                _errorAlert(error);
                             }
                         )
                 },
                 error => {
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
+                    console.log(error);
+                    dispatch(NavigationActions.goBack());
+                    _errorAlert(error);
                 }
             );
     };
@@ -251,3 +259,4 @@ function searchUser(query){
     function success(user) { return { type: userConstants.SEARCH_SUCCESS, user } }
     function failure(error) { return { type: userConstants.SEARCH_FAILURE, error } }
 }
+

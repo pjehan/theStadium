@@ -3,7 +3,7 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {GLOBAL_STYLE} from '../assets/css/global';
 import CustomInput from '../components/CustomInput';
 import {connect} from 'react-redux';
-import Header from "../components/layout/Header";
+import Header from "../components/presentational/layout/Header";
 
 class MyAccount extends Component {
     constructor(props) {

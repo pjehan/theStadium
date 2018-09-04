@@ -3,17 +3,12 @@ import {Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {View, Alert, StyleSheet, Text, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 
-import {userActions} from '../../../_actions';
+import {userActions} from '../../../_actions/index';
+import {_errorAlert} from "../../../_utils/alert";
+import {bindActionCreators} from "redux";
+import ActionCreators from "../../../_actions/index";
 
-const styles = StyleSheet.create({
-    tabContainer: {
-        flexDirection: 'row',
-    },
-    tab: {
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-});
+
 const USERBASIC = [
     'firstname',
     'lastname',
@@ -42,7 +37,7 @@ const COACHINFOS = [
     'team',
 ];
 
-class PlayerSignInTabView extends Component {
+class SignUpTabView extends Component {
 
     constructor(props) {
         super(props);
@@ -54,27 +49,6 @@ class PlayerSignInTabView extends Component {
         this.checkIfComplete = this.checkIfComplete.bind(this);
         this.checkPlayerTabs = this.checkPlayerTabs.bind(this);
         this.objectContains = this.objectContains.bind(this);
-    }
-
-    displayAlert() {
-        Alert.alert(
-            'Une erreur est survenue',
-            'Vous n\'avez pas remplis tous les champs sur cette page !',
-            [
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ],
-            {cancelable: false}
-        )
-    }
-    displayError() {
-        Alert.alert(
-            'Une erreur est survenue',
-            'Veuillez vérifier vos informations',
-            [
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ],
-            {cancelable: false}
-        )
     }
 
     objectContains(ELEMENTS) {
@@ -116,14 +90,15 @@ class PlayerSignInTabView extends Component {
     }
 
     checkIfComplete(routeName) {
+        console.log(this.props.navigation)
         const ROUTE = this.props.navigation.state.routeName;
         switch (ROUTE) {
-            case 'PlayerSignIn':
+            case 'Player':
                 return this.checkPlayerTabs(routeName);
-            case 'FanSignIn':
+            case 'Fan':
                 return this.checkFanTabs(routeName);
                 break;
-            case 'CoachSignIn':
+            case 'Coach':
                 return this.checkCoachTabs(routeName);
                 break;
             default:
@@ -132,10 +107,9 @@ class PlayerSignInTabView extends Component {
     }
 
     render() {
-        if(this.props.user.error){
-            this.displayError();
-        }
+        console.log(this.props)
         const {routes} = this.props.navigation.state;
+        const {dispatch} = this.props.navigation.dispatch;
         const index = this.props.navigation.state.index;
         return (
             <View style={styles.tab}>
@@ -178,9 +152,9 @@ class PlayerSignInTabView extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => {
                         if (index + 1 !== routes.length) {
-                            this.checkIfComplete(routes[index + 1].key) ? this.props.navigation.navigate(routes[index + 1].key, {}) : this.displayAlert();
+                            this.checkIfComplete(routes[index + 1].key) ? this.props.navigation.navigate(routes[index + 1].key, {}) : _errorAlert('Vous n\'avez pas remplis tous les champs sur cette page !');
                         } else if (index + 1 === routes.length) {
-                            this.checkIfComplete('done') ? this.props.navigation.dispatch(userActions.register(this.props.user)) : this.displayAlert();
+                            this.checkIfComplete('done') ? dispatch(userActions.register(this.props.user)) : _errorAlert('Vous n\'avez pas remplis tous les champs sur cette page !');
                         }
                     }
                     }>
@@ -192,10 +166,21 @@ class PlayerSignInTabView extends Component {
         );
     }
 }
+const styles = StyleSheet.create({
+    tabContainer: {
+        flexDirection: 'row',
+    },
+    tab: {
+        alignItems: 'center',
+        backgroundColor: 'white',
+    },
+});
 
+const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 const mapStateToProps = (state) => {
     return {
         user: state.registeringUser
     };
 };
-export default connect(mapStateToProps)(PlayerSignInTabView);
+
+export default connect(mapDispatchToProps,mapStateToProps)(SignUpTabView);

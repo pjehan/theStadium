@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import {View, Platform, StatusBar, Image, Text, TouchableHighlight, TouchableOpacity} from 'react-native';
-import { GLOBAL_STYLE } from '../../assets/css/global';
+import { GLOBAL_STYLE } from '../../../assets/css/global';
 import {Icon} from 'react-native-elements';
 import Expo from 'expo';
 //[GLOBAL_STYLE.outerContainer]}
@@ -16,7 +16,7 @@ render() {
     var icon;
     if(this.props.headerType === 'logo') {
         headerText = <Image style={[GLOBAL_STYLE.headerMiddleLogo]}
-                            source={require('../../assets/img/thestadium/logo-blanc.png')} />;
+                            source={require('../../../assets/img/thestadium/logo-blanc.png')} />;
     } else {
         headerText = this.props.headerText ? this.props.headerText : 'TheStadium'
     }

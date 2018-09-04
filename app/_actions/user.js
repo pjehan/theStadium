@@ -37,18 +37,14 @@ function login(username, password) {
                             },
                             error => {
                                 dispatch(failure(error));
-                                dispatch(alertActions.error(error));
-                                console.log(error);
-                                dispatch(NavigationActions.goBack());
+                                dispatch(NavigationActions.navigate({routeName: 'Auth'}));
                                 _errorAlert(error);
                             }
                         )
                 },
                 error => {
                     dispatch(failure(error));
-                    dispatch(alertActions.error(error));
-                    console.log(error);
-                    dispatch(NavigationActions.goBack());
+                    dispatch(NavigationActions.navigate({routeName: 'Auth'}));
                     _errorAlert(error);
                 }
             );

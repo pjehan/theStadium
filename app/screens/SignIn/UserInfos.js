@@ -8,6 +8,8 @@ import CustomInput from '../../components/CustomInput';
 import {connect} from 'react-redux';
 import Autocomplete from "react-native-autocomplete-input";
 import KeyboardAwareScrollView from "react-native-keyboard-aware-scroll-view/lib/KeyboardAwareScrollView";
+import {bindActionCreators} from "redux";
+import ActionCreators from "../../_actions/index";
 
 const style = StyleSheet.create({
     tabContainer: {
@@ -47,12 +49,13 @@ class PlayerInfos extends Component {
     componentWillReceiveProps(nextProps) {
         this.forceUpdate();
         const {navigate} = this.props.navigation;
-
+/*
         if (!nextProps.user.fetching && nextProps.user && nextProps.user.done && !nextProps.user.error) {
             navigate('Congratz', {user: nextProps.user});
         } else {
             console.log('efafaefeafae')
         }
+    */
     }
 
     _filterTeam(query, dataSource) {
@@ -79,7 +82,7 @@ class PlayerInfos extends Component {
 
     }
     render() {
-        const teamList = this.props.navigation.state.params.teamList ? this.props.navigation.state.params.teamList : null;
+       /* const teamList = this.props.navigation.state.params.teamList ? this.props.navigation.state.params.teamList : null;
         const {teamQuery} = this.state;
         const teamData = this._filterTeam(teamQuery, teamList);
         let Coach = null;
@@ -99,7 +102,7 @@ class PlayerInfos extends Component {
                         </Picker>
                     </View>
                 </View>;
-        }
+        }*/
         return (
             <KeyboardAvoidingView
                 keyboardVerticalOffset={90}
@@ -107,21 +110,6 @@ class PlayerInfos extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',backgroundColor:'white', paddingLeft: 30, paddingRight: 30}}
                 behavior="padding">
-                <Modal
-                    transparent={true}
-                    animationType={'none'}
-                    visible={!this.props.user.done && this.props.user.fetching}
-                    onRequestClose={() => {
-                        console.log('close modal')
-                    }}>
-                    <View style={STYLE.modalBackground}>
-                        <View style={STYLE.activityIndicatorWrapper}>
-                            <ActivityIndicator
-                                size={'large'}/>
-                            <Text>Enregistrement en cours</Text>
-                        </View>
-                    </View>
-                </Modal>
 
                 <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={[GLOBAL_STYLE.h1, GLOBAL_STYLE.mainColor]}>Création de votre profil</Text>
@@ -176,7 +164,6 @@ class PlayerInfos extends Component {
                             this.onChangeInfos(state, newvalue)
                         }}
                     />
-                    {Coach}
                 </View>
             </KeyboardAvoidingView>
         )
@@ -189,7 +176,9 @@ const mapStateToProps = (state) => {
         user: state.registeringUser
     };
 };
-export default connect(mapStateToProps)(PlayerInfos);
+
+const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
+export default connect(mapDispatchToProps,mapStateToProps)(PlayerInfos);
 const styles = StyleSheet.create({
     autocompleteContainer: {
         flex: 1,
@@ -265,3 +254,22 @@ const STYLE = StyleSheet.create({
         justifyContent: 'space-around'
     }
 });
+
+/*
+
+                <Modal
+                    transparent={true}
+                    animationType={'none'}
+                    visible={!this.props.user.done && this.props.user.fetching}
+                    onRequestClose={() => {
+                        console.log('close modal')
+                    }}>
+                    <View style={STYLE.modalBackground}>
+                        <View style={STYLE.activityIndicatorWrapper}>
+                            <ActivityIndicator
+                                size={'large'}/>
+                            <Text>Enregistrement en cours</Text>
+                        </View>
+                    </View>
+                </Modal>
+ */

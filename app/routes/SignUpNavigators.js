@@ -7,9 +7,12 @@ import Sexe from "../screens/SignIn/Sexe";
 import SignUp from "../screens/SignIn/SignIn";
 import React from "react";
 import SignUpTabView from "../components/container/tabbars/SignUpTabView";
+import {bindActionCreators} from "redux";
+import ActionCreators from "../_actions/index";
+import {connect} from "react-redux";
 
 
-export const PlayerSignUpStack = createTabNavigator({
+const PlayerSignUpStack = createTabNavigator({
         Player: {
             screen: UserBasic,
         },
@@ -21,15 +24,14 @@ export const PlayerSignUpStack = createTabNavigator({
         }
     },
     {
-        tabBarComponent: ({navigation, ...options}) => {
+        tabBarComponent: (props) => {
             return (
-                <SignUpTabView navigation={navigation} {...options} />
+                <SignUpTabView screenProps={...props} />
             )
         },
         tabBarPosition: 'bottom',
     }
 );
-
 export const UserTypeSwitch = createSwitchNavigator({
     Player: {
         screen: PlayerSignUpStack

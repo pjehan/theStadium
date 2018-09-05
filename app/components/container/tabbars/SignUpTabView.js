@@ -106,6 +106,18 @@ class SignUpTabView extends Component {
         }
     }
 
+    _nextScreen() {
+
+        const {routes} = this.props.navigation.state;
+        const {dispatch} = this.props.navigation.dispatch;
+        const index = this.props.navigation.state.index;
+        if (index + 1 !== routes.length) {
+            this.checkIfComplete(routes[index + 1].key) ? this.props.navigation.navigate(routes[index + 1].key, {}) : _errorAlert('Vous n\'avez pas remplis tous les champs sur cette page !');
+        } else if (index + 1 === routes.length) {
+            this.checkIfComplete('done') ? dispatch(userActions.register(this.props.user)) : _errorAlert('Vous n\'avez pas remplis tous les champs sur cette page !');
+        }
+    }
+
     render() {
         console.log(this.props)
         const {routes} = this.props.navigation.state;
@@ -151,13 +163,8 @@ class SignUpTabView extends Component {
                         <Text style={{color: '#cccccc'}}>{index === 0 ? '' : 'Precedent'}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => {
-                        if (index + 1 !== routes.length) {
-                            this.checkIfComplete(routes[index + 1].key) ? this.props.navigation.navigate(routes[index + 1].key, {}) : _errorAlert('Vous n\'avez pas remplis tous les champs sur cette page !');
-                        } else if (index + 1 === routes.length) {
-                            this.checkIfComplete('done') ? dispatch(userActions.register(this.props.user)) : _errorAlert('Vous n\'avez pas remplis tous les champs sur cette page !');
-                        }
-                    }
-                    }>
+                        this._nextScreen()
+                    }}>
                         <Text>{index + 1 === routes.length ? 'Fin' : 'Suivant'}</Text>
                         <Icon name={'chevron-right'} color='#003366'/>
                     </TouchableOpacity>
@@ -166,6 +173,7 @@ class SignUpTabView extends Component {
         );
     }
 }
+
 const styles = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
@@ -183,4 +191,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapDispatchToProps,mapStateToProps)(SignUpTabView);
+export default connect(mapDispatchToProps, mapStateToProps)(SignUpTabView);

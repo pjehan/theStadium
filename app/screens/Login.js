@@ -52,9 +52,9 @@ class Login extends Component {
     componentWillReceiveProps(nextProps) {
         const {navigate} = this.props.navigation;
 
+        utils.registerForPushNotificationsAsync(1);
         if (nextProps.userFetched && nextProps.currentUser) {
             this.setModalVisible(false);
-            utils.registerForPushNotificationsAsync(nextProps.currentUser.id);
             navigate("Main", {});
         } else {
             this.setModalVisible(false);
@@ -73,6 +73,7 @@ class Login extends Component {
         if (existingStatus !== 'granted') {
             // Android remote notification permissions are granted during the app
             // install, so this will only ask on iOS
+            console.log('oui')
             const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
             finalStatus = status;
         }
@@ -85,10 +86,11 @@ class Login extends Component {
     };
 
     componentWillMount() {
-        this.props.dispatch(userActions.login('joueur@gmail.com', 'Azerty123'));
+        //this.props.dispatch(userActions.login('coach@gmail.com', 'Azerty123'));
         //this.props.dispatch(userActions.login('popo@gmail.com', 'Lock5600'));
-        this.setModalVisible(true);
-        this.props.dispatch(clubAction.getAll());
+        //this.setModalVisible(true);
+        this.register();
+            //this.props.dispatch(clubAction.getAll());
 
     }
 

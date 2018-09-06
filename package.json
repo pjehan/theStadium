@@ -28,7 +28,7 @@
     "moment": "^2.19.3",
     "native-base": "^2.5.1",
     "prop-types": "^15.6.0",
-    "react": "^16.4.1",
+    "react": "^16.4.2",
     "react-native": "^0.50.0",
     "react-native-autocomplete-input": "^3.5.0",
     "react-native-awesome-alerts": "^1.0.3",

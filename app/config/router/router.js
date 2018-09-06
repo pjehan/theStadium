@@ -152,7 +152,7 @@ const SupporterProfile = TabNavigator({
         screen: Actus,
         navigationOptions: ({navigation}) => ({
             header: null,
-            tabBarLabel: 'Actualitées'
+            tabBarLabel: 'Actualités'
         })
     },
     Galerie: {
@@ -169,7 +169,7 @@ const ProfileTab = TabNavigator({
         screen: Actus,
         navigationOptions: ({navigation}) => ({
             header: null,
-            tabBarLabel: 'Actualitées'
+            tabBarLabel: 'Actualités'
         })
     },
     Caracteristiques: {
@@ -213,7 +213,7 @@ const MainStack = TabNavigator({
                     style={{height: 20}}/>
             },
             showLabel: true,
-            tabBarLabel: 'Actualitée'
+            tabBarLabel: 'Actualité'
         }),
     },
     Rechercher: {

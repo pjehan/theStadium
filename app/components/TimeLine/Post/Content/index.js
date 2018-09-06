@@ -61,6 +61,7 @@ export default class Content extends Component {
     }
 
     returnInterview(title) {
+        console.log(this.props)
         const originalWidth = this.props.medias[0].width;
         const originalHeight = this.props.medias[0].height;
         const windowWidth = Dimensions.get('window').width;
